@@ -2,198 +2,17 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
 
-const translations = {
-  en: {
-    heroBadge: "Now serving 500+ institutions",
-    heroTitle: "All-in-One",
-    heroTitleAccent: "Smart Education",
-    heroTitleEnd: "Management Platform",
-    heroSub: "GenSchool unifies every corner of your institution — students, teachers, parents, and staff — into one beautifully simple platform.",
-    heroBtn1: "Get Started",
-    heroBtn2: "View Demo",
-    stat1: "Institutions",
-    stat2: "Students Managed",
-    stat3: "Uptime",
-    aboutLabel: "About GenSchool",
-    aboutTitle: "Education management, reimagined for the modern era",
-    aboutSub: "GenSchool was built to solve a fundamental challenge: institutions using dozens of disconnected tools, causing data loss, miscommunication, and wasted time. We built one platform to replace them all.",
-    acard1t: "Schools & Colleges",
-    acard1d: "Full academic lifecycle from admissions to graduation, all in one place.",
-    acard2t: "Coaching Centers",
-    acard2d: "Batch management, flexible scheduling, and fee tracking built for coaching.",
-    acard3t: "Universities",
-    acard3d: "Scalable multi-department management with powerful reporting tools.",
-    rolesTitle: "Multi-Role Access System",
-    whyTitle: "Why GenSchool?",
-    why1: "Replaces 10+ fragmented tools with one unified system",
-    why2: "Real-time communication between all stakeholders",
-    why3: "Configurable for any institution size or type",
-    featLabel: "Key Features",
-    featTitle: "Everything your institution needs",
-    featSub: "Powerful tools crafted for every role, every workflow, every institution type.",
-    f1t: "Multi-Role Login System",
-    f1d: "Secure, separate portals for admins, teachers, students, parents, and employees — each with tailored dashboards and access permissions.",
-    f2t: "Customizable Portals",
-    f2d: "Brand the platform with your institution's logo, colors, and domain. Configure workflows to match exactly how your school operates.",
-    f3t: "Student Management",
-    f3d: "Full student profiles, attendance tracking, grade books, report cards, and progress monitoring — everything a school needs in one view.",
-    f4t: "Teacher Management",
-    f4d: "Class scheduling, lesson planning, gradebook management, leave tracking, and performance evaluations all in one workspace.",
-    f5t: "Parent Communication",
-    f5d: "Keep parents informed with real-time updates on attendance, results, and announcements. In-app messaging and push notifications included.",
-    f6t: "Employee Management",
-    f6d: "HR workflows for non-teaching staff — payroll, leave management, task assignments, and performance tracking made effortless.",
-    benLabel: "Why Choose Us",
-    benTitle: "Built to make institutions thrive",
-    benSub: "GenSchool doesn't just digitize your school — it transforms how your institution operates, communicates, and grows.",
-    b1t: "Saves Time — 10+ hours/week",
-    b1d: "Automate repetitive tasks like attendance, fee reminders, and report generation. Focus on education, not paperwork.",
-    b2t: "Centralized System",
-    b2d: "One source of truth for all institutional data. No more scattered spreadsheets, missing records, or duplicate entries.",
-    b3t: "Easy to Use — No Training Needed",
-    b3d: "Designed with simplicity in mind. Staff can get started in minutes with our intuitive interface and guided onboarding.",
-    b4t: "Scales With Your Institution",
-    b4d: "Whether you manage 50 students or 50,000, GenSchool scales seamlessly. Add campuses, roles, and departments at any time.",
-    bn1: "Faster Reporting",
-    bn2: "Customer Satisfaction",
-    bn3: "Cost Reduction",
-    bn4: "Support Available",
-    testiLabel: "Testimonials",
-    testiTitle: "Trusted by institutions across Bangladesh",
-    t1q: "GenSchool transformed how we manage our school. Parent communication, attendance, and exams — all from one screen. I can&apos;t imagine going back.",
-    t1n: "Rafiqul Alam",
-    t1r: "Principal, Dhaka Model School",
-    t2q: "As a teacher, the gradebook and lesson planner alone are worth it. Parents get real-time updates and the admin load on us dropped by half.",
-    t2n: "Sharmila Nandi",
-    t2r: "Senior Teacher, Chittagong College",
-    t3q: "Finally a system that speaks my language — both literally and figuratively. The Bangla interface and local support made adoption smooth for our entire staff.",
-    t3n: "Mohammed Karim",
-    t3r: "Director, Sylhet Coaching Center",
-    t4q: "As a parent I can track my child's attendance, results, and fees from my phone. GenSchool keeps me connected to my child's education every single day.",
-    t4n: "Fatima Hossain",
-    t4r: "Parent, Rajshahi International School",
-    ctaTitle: "Ready to transform your institution?",
-    ctaSub: "Join 500+ schools already running smarter with GenSchool. Setup takes less than a day.",
-    ctaBtn1: "Start Free Trial",
-    ctaBtn2: "Explore Demo",
-    fp1: "Privacy",
-    fp2: "Terms",
-    fp3: "Support",
-    fp4: "Contact",
-    footerCopy: "© 2025 GenSchool. All rights reserved.",
-    modalTitle: "Choose Your Portal",
-    modalSub: "Select a role to explore the demo experience tailored just for you.",
-    r1n: "Admin",
-    r1d: "Full control",
-    r2n: "Teacher",
-    r2d: "Class & grades",
-    r3n: "Student",
-    r3d: "Learn & track",
-    r4n: "Parent",
-    r4d: "Stay informed",
-    r5n: "Employee",
-    r5d: "HR & tasks",
-    demoBtn: "Demo",
-  },
-  bn: {
-    heroBadge: "৫০০+ প্রতিষ্ঠানকে সেবা দিচ্ছে",
-    heroTitle: "সব-এক-তে",
-    heroTitleAccent: "স্মার্ট শিক্ষা",
-    heroTitleEnd: "ব্যবস্থাপনা প্ল্যাটফর্ম",
-    heroSub: "জেনস্কুল আপনার প্রতিষ্ঠানের শিক্ষার্থী, শিক্ষক, অভিভাবক এবং কর্মীদের একটি সুন্দর ও সহজ প্ল্যাটফর্মে একত্রিত করে।",
-    heroBtn1: "শুরু করুন",
-    heroBtn2: "ডেমো দেখুন",
-    stat1: "প্রতিষ্ঠান",
-    stat2: "শিক্ষার্থী পরিচালিত",
-    stat3: "আপটাইম",
-    aboutLabel: "জেনস্কুল সম্পর্কে",
-    aboutTitle: "আধুনিক যুগের জন্য পুনর্কল্পিত শিক্ষা ব্যবস্থাপনা",
-    aboutSub: "জেনস্কুল একটি মৌলিক সমস্যার সমাধান করতে তৈরি হয়েছে: প্রতিষ্ঠানগুলো অনেক আলাদা টুল ব্যবহার করে তথ্য হারায়, ভুল বোঝাবুঝি হয় এবং সময় নষ্ট হয়। আমরা সবগুলোকে প্রতিস্থাপন করতে একটি প্ল্যাটফর্ম তৈরি করেছি।",
-    acard1t: "স্কুল ও কলেজ",
-    acard1d: "ভর্তি থেকে স্নাতক পর্যন্ত সম্পূর্ণ একাডেমিক জীবনচক্র, সব এক জায়গায়।",
-    acard2t: "কোচিং সেন্টার",
-    acard2d: "ব্যাচ ম্যানেজমেন্ট, নমনীয় সময়সূচী এবং ফি ট্র্যাকিং।",
-    acard3t: "বিশ্ববিদ্যালয়",
-    acard3d: "শক্তিশালী রিপোর্টিং সহ স্কেলযোগ্য মাল্টি-বিভাগ ব্যবস্থাপনা।",
-    rolesTitle: "মাল্টি-রোল অ্যাক্সেস সিস্টেম",
-    whyTitle: "কেন জেনস্কুল?",
-    why1: "১০+ বিচ্ছিন্ন টুলকে একটি ঐক্যবদ্ধ সিস্টেমে প্রতিস্থাপন করে",
-    why2: "সকল স্টেকহোল্ডারের মধ্যে রিয়েল-টাইম যোগাযোগ",
-    why3: "যেকোনো প্রতিষ্ঠানের আকার বা ধরনের জন্য কনফিগারযোগ্য",
-    featLabel: "মূল বৈশিষ্ট্য",
-    featTitle: "আপনার প্রতিষ্ঠানের জন্য সব কিছু",
-    featSub: "প্রতিটি ভূমিকা, প্রতিটি ওয়ার্কফ্লো, প্রতিটি প্রতিষ্ঠানের ধরনের জন্য তৈরি শক্তিশালী টুল।",
-    f1t: "মাল্টি-রোল লগইন সিস্টেম",
-    f1d: "অ্যাডমিন, শিক্ষক, শিক্ষার্থী, অভিভাবক এবং কর্মীদের জন্য আলাদা নিরাপদ পোর্টাল — প্রতিটির জন্য কাস্টম ড্যাশবোর্ড এবং অ্যাক্সেস পারমিশন।",
-    f2t: "কাস্টমাইজযোগ্য পোর্টাল",
-    f2d: "আপনার প্রতিষ্ঠানের লোগো, রং এবং ডোমেইন দিয়ে প্ল্যাটফর্ম ব্র্যান্ড করুন। আপনার স্কুল যেভাবে কাজ করে সেই অনুযায়ী ওয়ার্কফ্লো কনফিগার করুন।",
-    f3t: "শিক্ষার্থী ব্যবস্থাপনা",
-    f3d: "সম্পূর্ণ প্রোফাইল, উপস্থিতি ট্র্যাকিং, গ্রেডবুক, রিপোর্ট কার্ড এবং অগ্রগতি পর্যবেক্ষণ — একটি ভিউতে একটি স্কুলের জন্য প্রয়োজনীয় সব কিছু।",
-    f4t: "শিক্ষক ব্যবস্থাপনা",
-    f4d: "ক্লাস শিডিউলিং, পাঠ পরিকল্পনা, গ্রেডবুক ব্যবস্থাপনা, ছুটি ট্র্যাকিং এবং পারফরম্যান্স ইভ্যালুয়েশন সব এক ওয়ার্কস্পেসে।",
-    f5t: "অভিভাবক যোগাযোগ",
-    f5d: "উপস্থিতি, ফলাফল এবং ঘোষণার রিয়েল-টাইম আপডেট দিয়ে অভিভাবকদের সচেতন রাখুন। ইন-অ্যাপ মেসেজিং এবং পুশ নোটিফিকেশন অন্তর্ভুক্ত।",
-    f6t: "কর্মী ব্যবস্থাপনা",
-    f6d: "শিক্ষণ-বহির্ভূত কর্মীদের জন্য HR ওয়ার্কফ্লো — বেতন, ছুটি ব্যবস্থাপনা, কাজ বরাদ্দ এবং পারফরম্যান্স ট্র্যাকিং সহজ।",
-    benLabel: "কেন আমাদের বেছে নেবেন",
-    benTitle: "প্রতিষ্ঠানকে সমৃদ্ধ করতে নির্মিত",
-    benSub: "জেনস্কুল শুধু আপনার স্কুলকে ডিজিটাইজ করে না — এটি আপনার প্রতিষ্ঠানের পরিচালনা, যোগাযোগ এবং বিকাশকে রূপান্তরিত করে।",
-    b1t: "সময় বাঁচায় — সপ্তাহে ১০+ ঘন্টা",
-    b1d: "উপস্থিতি, ফি রিমাইন্ডার এবং রিপোর্ট তৈরি করার মতো পুনরাবৃত্তিমূলক কাজগুলি স্বয়ংক্রিয় করুন। কাগজের কাজ নয়, শিক্ষার উপর মনোযোগ দিন।",
-    b2t: "কেন্দ্রীভূত সিস্টেম",
-    b2d: "সমস্ত প্রাতিষ্ঠানিক তথ্যের জন্য একটি সত্যের উৎস। আর বিক্ষিপ্ত স্প্রেডশিট, হারানো রেকর্ড বা ডুপ্লিকেট এন্ট্রি নেই।",
-    b3t: "ব্যবহার করা সহজ — কোনো প্রশিক্ষণ দরকার নেই",
-    b3d: "সরলতার কথা মাথায় রেখে ডিজাইন করা হয়েছে। কর্মীরা আমাদের সহজ ইন্টারফেস এবং গাইডেড অনবোর্ডিংয়ের মিনিটের মধ্যে শুরু করতে পারেন।",
-    b4t: "আপনার প্রতিষ্ঠানের সাথে স্কেল করে",
-    b4d: "আপনি ৫০ বা ৫০,০০০ শিক্ষার্থী পরিচালনা করুন না কেন, জেনস্কুল নির্বিঘ্নে স্কেল করে। যেকোনো সময় ক্যাম্পাস, রোল এবং বিভাগ যোগ করুন।",
-    bn1: "দ্রুততর রিপোর্টিং",
-    bn2: "গ্রাহক সন্তুষ্টি",
-    bn3: "খরচ কমানো",
-    bn4: "সাপোর্ট উপলব্ধ",
-    testiLabel: "প্রশংসাপত্র",
-    testiTitle: "বাংলাদেশের প্রতিষ্ঠানগুলোর বিশ্বাসের সঙ্গী",
-    t1q: "জেনস্কুল আমাদের স্কুল পরিচালনার পদ্ধতি পরিবর্তন করে দিয়েছে। অভিভাবক যোগাযোগ, উপস্থিতি, এবং পরীক্ষা — সব একটি স্ক্রিন থেকে। ফিরে যাওয়ার কথা ভাবতে পারি না।",
-    t1n: "রফিকুল আলম",
-    t1r: "অধ্যক্ষ, ঢাকা মডেল স্কুল",
-    t2q: "একজন শিক্ষক হিসেবে, গ্রেডবুক এবং পাঠ পরিকল্পনার টুল একাই মূল্যবান। অভিভাবকরা রিয়েল-টাইম আপডেট পায় এবং আমাদের প্রশাসনিক কাজের চাপ অর্ধেকে নেমে এসেছে।",
-    t2n: "শর্মিলা নন্দী",
-    t2r: "সিনিয়র শিক্ষক, চট্টগ্রাম কলেজ",
-    t3q: "অবশেষে একটি সিস্টেম যা আমার ভাষায় কথা বলে — আক্ষরিক এবং রূপক উভয় অর্থেই। বাংলা ইন্টারফেস এবং স্থানীয় সাপোর্ট আমাদের পুরো কর্মীদের জন্য গ্রহণ সহজ করেছে।",
-    t3n: "মোহাম্মদ করিম",
-    t3r: "পরিচালক, সিলেট কোচিং সেন্টার",
-    t4q: "একজন অভিভাবক হিসেবে আমি আমার ফোন থেকে আমার সন্তানের উপস্থিতি, ফলাফল এবং ফি ট্র্যাক করতে পারি। জেনস্কুল আমাকে প্রতিদিন আমার সন্তানের শিক্ষার সাথে সংযুক্ত রাখে।",
-    t4n: "ফাতিমা হোসেন",
-    t4r: "অভিভাবক, রাজশাহী ইন্টারন্যাশনাল স্কুল",
-    ctaTitle: "আপনার প্রতিষ্ঠান রূপান্তরিত করতে প্রস্তুত?",
-    ctaSub: "জেনস্কুলের সাথে ইতিমধ্যে ৫০০+ স্কুল স্মার্টভাবে চলছে। সেটআপ একদিনেরও কম সময়ে হয়।",
-    ctaBtn1: "বিনামূল্যে শুরু করুন",
-    ctaBtn2: "ডেমো অন্বেষণ করুন",
-    fp1: "গোপনীয়তা",
-    fp2: "শর্তাবলী",
-    fp3: "সাপোর্ট",
-    fp4: "যোগাযোগ",
-    footerCopy: "© ২০২৫ জেনস্কুল। সর্বস্বত্ব সংরক্ষিত।",
-    modalTitle: "আপনার পোর্টাল বেছে নিন",
-    modalSub: "আপনার জন্য কাস্টমাইজড ডেমো অভিজ্ঞতা অন্বেষণ করতে একটি ভূমিকা বেছে নিন।",
-    r1n: "অ্যাডমিন",
-    r1d: "সম্পূর্ণ নিয়ন্ত্রণ",
-    r2n: "শিক্ষক",
-    r2d: "ক্লাস ও গ্রেড",
-    r3n: "শিক্ষার্থী",
-    r3d: "শেখা ও ট্র্যাক",
-    r4n: "অভিভাবক",
-    r4d: "সচেতন থাকুন",
-    r5n: "কর্মী",
-    r5d: "HR ও কাজ",
-    demoBtn: "ডেমো",
-  },
-};
+import translationsData from '../data/translations.json';
+
+const translations: Record<string, any> = translationsData;
 
 export default function Home() {
   const [lang, setLang] = useState<"en" | "bn">("en");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const router = useRouter();
 
   const t = translations[lang];
 
@@ -232,7 +51,7 @@ export default function Home() {
             {lang === "en" ? "বাং" : "EN"}
           </button>
           <button
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => router.push("/demo")}
             className="px-5 py-2 rounded-[10px] bg-[#1a56e8] text-white border-none cursor-pointer text-[.9rem] font-medium transition-all hover:bg-[#0f3ab5] hover:translate-y-[-1px] hover:shadow-[0_4px_16px_rgba(26,86,232,0.35)] shadow-[0_2px_8px_rgba(26,86,232,0.25)]"
           >
             {t.demoBtn}
@@ -269,7 +88,7 @@ export default function Home() {
               <motion.button
                 whileHover={{ scale: 1.02, borderColor: "#1a56e8", color: "#1a56e8", backgroundColor: "#e8f0ff" }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => setIsModalOpen(true)}
+                onClick={() => router.push("/demo")}
                 className="px-7 py-3 rounded-xl bg-transparent text-[#0f172a] border-[1.5px] border-[#e2e8f0] cursor-pointer text-[1rem] font-medium transition-all"
               >
                 {t.heroBtn2}
@@ -620,7 +439,7 @@ export default function Home() {
             <motion.button
               whileHover={{ scale: 1.02, backgroundColor: "rgba(255,255,255,0.1)", borderColor: "#fff", y: -2 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => setIsModalOpen(true)}
+              onClick={() => router.push("/demo")}
               className="px-7 py-3 rounded-xl bg-transparent text-white border-[1.5px] border-white/50 cursor-pointer text-[1rem] font-medium transition-all"
             >
               {t.ctaBtn2}
