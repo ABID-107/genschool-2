@@ -105,6 +105,12 @@ export default function DemoPage() {
             {lang === "en" ? "বাং" : "EN"}
           </button>
           <button
+            onClick={() => router.push("/login")}
+            className="px-5 py-2 rounded-[10px] border border-[#1a56e8] text-[#1a56e8] cursor-pointer text-[.9rem] font-medium transition-all hover:bg-[#1a56e8] hover:text-white"
+          >
+            Login
+          </button>
+          <button
             onClick={() => router.push("/demo")}
             className="px-5 py-2 rounded-[10px] bg-[#1a56e8] text-white border-none cursor-pointer text-[.9rem] font-medium transition-all hover:bg-[#0f3ab5] hover:translate-y-[-1px] hover:shadow-[0_4px_16px_rgba(26,86,232,0.35)] shadow-[0_2px_8px_rgba(26,86,232,0.25)]"
           >
@@ -225,6 +231,14 @@ export default function DemoPage() {
                   <motion.button 
                     whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (card.id === 'teacher') {
+                        router.push('/demo/teacher');
+                      } else {
+                        alert('This demo is not yet available.');
+                      }
+                    }}
                     className="mt-8 self-start bg-[#1a56e8] text-white px-6 py-[10px] rounded-xl text-[.9rem] font-medium transition-all hover:bg-[#0f3ab5] shadow-[0_4px_16px_rgba(26,86,232,0.3)] hover:shadow-[0_8px_24px_rgba(26,86,232,0.4)] flex items-center gap-2 group/btn"
                   >
                     Launch Demo
@@ -291,6 +305,14 @@ export default function DemoPage() {
                 </p>
                 
                 <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (selectedCard === 'teacher') {
+                      router.push('/demo/teacher');
+                    } else {
+                      alert('This demo is not yet available.');
+                    }
+                  }}
                   className="w-full bg-[#1a56e8] text-white py-[14px] rounded-xl text-[1rem] font-medium transition-all hover:bg-[#0f3ab5] shadow-[0_4px_16px_rgba(26,86,232,0.3)] flex items-center justify-center gap-2 active:scale-95"
                 >
                   Launch Demo

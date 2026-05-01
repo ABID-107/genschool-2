@@ -51,6 +51,12 @@ export default function Home() {
             {lang === "en" ? "বাং" : "EN"}
           </button>
           <button
+            onClick={() => router.push("/login")}
+            className="px-5 py-2 rounded-[10px] border border-[#1a56e8] text-[#1a56e8] cursor-pointer text-[.9rem] font-medium transition-all hover:bg-[#1a56e8] hover:text-white"
+          >
+            Login
+          </button>
+          <button
             onClick={() => router.push("/demo")}
             className="px-5 py-2 rounded-[10px] bg-[#1a56e8] text-white border-none cursor-pointer text-[.9rem] font-medium transition-all hover:bg-[#0f3ab5] hover:translate-y-[-1px] hover:shadow-[0_4px_16px_rgba(26,86,232,0.35)] shadow-[0_2px_8px_rgba(26,86,232,0.25)]"
           >
