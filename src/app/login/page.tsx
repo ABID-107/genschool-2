@@ -9,7 +9,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [role, setRole] = useState<"teacher" | "student">("teacher");
+  const [role, setRole] = useState<"teacher" | "student" | "guardian">("teacher");
   const router = useRouter();
 
   const handleLogin = (e: React.FormEvent) => {
@@ -20,7 +20,10 @@ export default function LoginPage() {
     setTimeout(() => {
       localStorage.setItem("isAuthenticated", "true");
       localStorage.setItem("userRole", role);
-      if (role === "student") {
+      if (role === "guardian") {
+        localStorage.setItem("childUsername", email);
+        router.push("/guardian");
+      } else if (role === "student") {
         router.push("/student");
       } else {
         router.push("/teacher");
@@ -63,7 +66,7 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => setRole("teacher")}
-              className={`flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all ${
+              className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${
                 role === "teacher"
                   ? "bg-white text-[#1a56e8] shadow-sm border border-[#e2e8f0]"
                   : "text-[#64748b] hover:text-[#0f172a]"
@@ -74,7 +77,7 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => setRole("student")}
-              className={`flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all ${
+              className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${
                 role === "student"
                   ? "bg-white text-[#1a56e8] shadow-sm border border-[#e2e8f0]"
                   : "text-[#64748b] hover:text-[#0f172a]"
@@ -82,24 +85,35 @@ export default function LoginPage() {
             >
               Student
             </button>
+            <button
+              type="button"
+              onClick={() => setRole("guardian")}
+              className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${
+                role === "guardian"
+                  ? "bg-white text-[#1a56e8] shadow-sm border border-[#e2e8f0]"
+                  : "text-[#64748b] hover:text-[#0f172a]"
+              }`}
+            >
+              Guardian
+            </button>
           </div>
           <form className="space-y-6" onSubmit={handleLogin}>
             <div>
               <label htmlFor="email" className="block text-sm font-semibold text-[#0f172a] mb-2">
-                Email address
+                {role === "guardian" ? "Child's Username" : "Email address"}
               </label>
               <div className="relative">
-                <span className="material-symbols-outlined absolute left-3 top-3 text-[#94a3b8] text-[20px]">mail</span>
+                <span className="material-symbols-outlined absolute left-3 top-3 text-[#94a3b8] text-[20px]">{role === "guardian" ? "person" : "mail"}</span>
                 <input
                   id="email"
                   name="email"
-                  type="email"
-                  autoComplete="email"
+                  type={role === "guardian" ? "text" : "email"}
+                  autoComplete={role === "guardian" ? "username" : "email"}
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="block w-full pl-10 pr-4 py-3 rounded-xl border border-[#e2e8f0] bg-[#f8f9fc] text-[#0f172a] placeholder-[#94a3b8] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#1a56e8]/20 focus:border-[#1a56e8] transition-all sm:text-sm"
-                  placeholder={role === "teacher" ? "teacher@genschool.com" : "student@genschool.com"}
+                  placeholder={role === "guardian" ? "student_username" : role === "teacher" ? "teacher@genschool.com" : "student@genschool.com"}
                 />
               </div>
             </div>
@@ -124,7 +138,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="block w-full pl-10 pr-4 py-3 rounded-xl border border-[#e2e8f0] bg-[#f8f9fc] text-[#0f172a] placeholder-[#94a3b8] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#1a56e8]/20 focus:border-[#1a56e8] transition-all sm:text-sm"
-                  placeholder="••••••••"
+                  placeholder={role === "guardian" ? "DD-MM-YYYY" : "••••••••"}
                 />
               </div>
             </div>
