@@ -10,6 +10,115 @@ export default function TeacherDashboard() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const router = useRouter();
 
+  // New Course Form State
+  const [isLiveClass, setIsLiveClass] = useState(false);
+  const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
+  const [courseModules, setCourseModules] = useState([
+    { id: 'mod-1', title: 'Module 1: Getting Started', isExpanded: true, lessons: [{ id: 'les-1', title: 'Introduction' }] }
+  ]);
+  const [draggedLessonInfo, setDraggedLessonInfo] = useState<{moduleId: string, lessonId: string} | null>(null);
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setThumbnailPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const addModule = () => {
+    setCourseModules([...courseModules, { id: `mod-${Date.now()}`, title: `New Module`, isExpanded: true, lessons: [] }]);
+  };
+
+  const addLesson = (moduleId: string) => {
+    setCourseModules(courseModules.map(mod => 
+      mod.id === moduleId 
+        ? { ...mod, lessons: [...mod.lessons, { id: `les-${Date.now()}`, title: 'New Lesson' }], isExpanded: true }
+        : mod
+    ));
+  };
+
+  const updateModuleTitle = (moduleId: string, title: string) => {
+    setCourseModules(courseModules.map(mod => mod.id === moduleId ? { ...mod, title } : mod));
+  };
+
+  const updateLessonTitle = (moduleId: string, lessonId: string, title: string) => {
+    setCourseModules(courseModules.map(mod => 
+      mod.id === moduleId 
+        ? { ...mod, lessons: mod.lessons.map(les => les.id === lessonId ? { ...les, title } : les) }
+        : mod
+    ));
+  };
+
+  const removeModule = (moduleId: string) => {
+    setCourseModules(courseModules.filter(mod => mod.id !== moduleId));
+  };
+
+  const removeLesson = (moduleId: string, lessonId: string) => {
+    setCourseModules(courseModules.map(mod => 
+      mod.id === moduleId ? { ...mod, lessons: mod.lessons.filter(les => les.id !== lessonId) } : mod
+    ));
+  };
+
+  const toggleModuleExpansion = (moduleId: string) => {
+    setCourseModules(courseModules.map(mod => mod.id === moduleId ? { ...mod, isExpanded: !mod.isExpanded } : mod));
+  };
+
+  const handleDragStart = (e: React.DragEvent, moduleId: string, lessonId: string) => {
+    setDraggedLessonInfo({ moduleId, lessonId });
+    e.dataTransfer.effectAllowed = 'move';
+    // Small delay to prevent the dragged element from immediately snapping to the dragged image position visually
+    setTimeout(() => {
+      (e.target as HTMLElement).classList.add('opacity-50');
+    }, 0);
+  };
+
+  const handleDragEnd = (e: React.DragEvent) => {
+    setDraggedLessonInfo(null);
+    (e.target as HTMLElement).classList.remove('opacity-50');
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDrop = (e: React.DragEvent, targetModuleId: string, targetLessonId: string | null) => {
+    e.preventDefault();
+    if (!draggedLessonInfo) return;
+
+    const { moduleId: sourceModuleId, lessonId: sourceLessonId } = draggedLessonInfo;
+    
+    // Create deep copy
+    let newModules = JSON.parse(JSON.stringify(courseModules));
+    
+    // Find source
+    const sourceModuleIndex = newModules.findIndex((m: any) => m.id === sourceModuleId);
+    const sourceModule = newModules[sourceModuleIndex];
+    const lessonToMove = sourceModule.lessons.find((l: any) => l.id === sourceLessonId);
+    
+    // Remove from source
+    sourceModule.lessons = sourceModule.lessons.filter((l: any) => l.id !== sourceLessonId);
+    
+    // Find target
+    const targetModuleIndex = newModules.findIndex((m: any) => m.id === targetModuleId);
+    const targetModule = newModules[targetModuleIndex];
+    
+    if (targetLessonId) {
+      // Drop on specific lesson
+      const targetLessonIndex = targetModule.lessons.findIndex((l: any) => l.id === targetLessonId);
+      targetModule.lessons.splice(targetLessonIndex, 0, lessonToMove);
+    } else {
+      // Drop on empty module
+      targetModule.lessons.push(lessonToMove);
+    }
+    
+    setCourseModules(newModules);
+  };
+
   useEffect(() => {
     const auth = localStorage.getItem("isAuthenticated");
     if (!auth) {
@@ -150,7 +259,7 @@ export default function TeacherDashboard() {
                     <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-1 md:mb-2 font-['Bricolage_Grotesque'] tracking-tight">Welcome back, Dr. Jenkins</h1>
                     <p className="text-sm md:text-base text-slate-500">Here's what's happening with your classes today.</p>
                   </div>
-                  <button className="bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-purple-500 text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center gap-2 shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5 active:translate-y-0 w-full md:w-auto justify-center">
+                  <button onClick={() => setActiveTab('new-course')} className="bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-purple-500 text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center gap-2 shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5 active:translate-y-0 w-full md:w-auto justify-center">
                     <span className="material-symbols-outlined text-[20px]">add</span>
                     New Course
                   </button>
@@ -671,6 +780,240 @@ export default function TeacherDashboard() {
                       </div>
                       <button className="text-sm font-bold text-indigo-600 bg-indigo-50 px-4 py-2 rounded-xl hover:bg-indigo-100 hover:scale-[1.02] transition-all">Details</button>
                     </div>
+                  </div>
+                </div>
+              </section>
+            )}
+
+            {/* Tab: New Course Creation */}
+            {activeTab === 'new-course' && (
+              <section id="new-course" className="animate-in fade-in duration-500 max-w-4xl mx-auto space-y-6 pb-24">
+                <div className="flex items-center gap-4 mb-8">
+                  <button onClick={() => setActiveTab('dashboard')} className="p-2 bg-white border border-slate-200/80 hover:bg-slate-50 text-slate-600 rounded-full transition-colors shadow-sm">
+                    <span className="material-symbols-outlined">arrow_back</span>
+                  </button>
+                  <div>
+                    <h2 className="text-2xl font-bold text-slate-900 font-['Bricolage_Grotesque'] tracking-tight">Create New Course</h2>
+                    <p className="text-sm text-slate-500">Set up the foundation, curriculum, and schedule for your new course.</p>
+                  </div>
+                </div>
+
+                {/* Card 1: Basic Course Information */}
+                <div className="bg-white/80 backdrop-blur-sm p-6 md:p-8 rounded-2xl border border-slate-200/50 shadow-sm transition-shadow">
+                  <h3 className="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2 border-b border-slate-100 pb-3">
+                    <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center"><span className="material-symbols-outlined text-[18px]">info</span></div>
+                    Basic Information
+                  </h3>
+                  
+                  <div className="space-y-5">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                      <div className="col-span-1 md:col-span-2 space-y-1.5">
+                        <label className="text-sm font-bold text-slate-700 ml-1">Course Title</label>
+                        <input type="text" placeholder="e.g., Introduction to Advanced UI Design" className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3.5 outline-none bg-slate-50/50 hover:bg-white transition-colors" />
+                      </div>
+                      
+                      <div className="space-y-1.5">
+                        <label className="text-sm font-bold text-slate-700 ml-1">Subject & Category</label>
+                        <select className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3.5 outline-none bg-slate-50/50 hover:bg-white transition-colors cursor-pointer text-slate-700">
+                          <option value="">Select a category...</option>
+                          <option>Design & Art</option>
+                          <option>Computer Science</option>
+                          <option>Mathematics</option>
+                        </select>
+                      </div>
+                      
+                      <div className="space-y-1.5">
+                        <label className="text-sm font-bold text-slate-700 ml-1">Target Class / Grade</label>
+                        <select className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3.5 outline-none bg-slate-50/50 hover:bg-white transition-colors cursor-pointer text-slate-700">
+                          <option value="">Select a grade level...</option>
+                          <option>Beginner / Freshman</option>
+                          <option>Intermediate / Sophomore</option>
+                          <option>Advanced / Senior</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-sm font-bold text-slate-700 ml-1">Short Description</label>
+                      <textarea placeholder="A brief summary of the course (max 150 characters)..." maxLength={150} rows={2} className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3.5 outline-none bg-slate-50/50 hover:bg-white transition-colors resize-none"></textarea>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-sm font-bold text-slate-700 ml-1 flex justify-between">
+                        <span>Detailed Syllabus / Description</span>
+                        <span className="text-xs font-normal text-slate-400">Optional</span>
+                      </label>
+                      <textarea placeholder="Provide a comprehensive breakdown of what students will learn..." rows={4} className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3.5 outline-none bg-slate-50/50 hover:bg-white transition-colors resize-y"></textarea>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-sm font-bold text-slate-700 ml-1">Course Thumbnail</label>
+                      <div className="border-2 border-dashed border-slate-300 rounded-2xl p-6 flex flex-col items-center justify-center text-center hover:bg-indigo-50/50 hover:border-indigo-400 transition-all cursor-pointer relative overflow-hidden bg-slate-50/50">
+                        <input type="file" accept="image/*" onChange={handleImageUpload} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+                        {thumbnailPreview ? (
+                          <div className="w-full flex flex-col items-center">
+                            <img src={thumbnailPreview} alt="Thumbnail Preview" className="h-32 object-cover rounded-xl border border-slate-200 shadow-sm mb-3" />
+                            <p className="text-xs font-semibold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">Change Image</p>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="w-12 h-12 bg-white text-slate-400 shadow-sm border border-slate-100 rounded-full flex items-center justify-center mb-3">
+                              <span className="material-symbols-outlined text-2xl">image</span>
+                            </div>
+                            <p className="font-semibold text-sm text-slate-700">Click to upload or drag and drop</p>
+                            <p className="text-xs text-slate-500 mt-1">SVG, PNG, JPG or GIF (max. 5MB)</p>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Card 2: Course Structure */}
+                <div className="bg-white/80 backdrop-blur-sm p-6 md:p-8 rounded-2xl border border-slate-200/50 shadow-sm transition-shadow">
+                  <div className="flex items-center justify-between mb-6 border-b border-slate-100 pb-3">
+                    <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center"><span className="material-symbols-outlined text-[18px]">view_list</span></div>
+                      Course Structure
+                    </h3>
+                    <button onClick={addModule} className="text-sm font-bold text-indigo-600 hover:text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1">
+                      <span className="material-symbols-outlined text-[16px]">add</span> Add Module
+                    </button>
+                  </div>
+
+                  <div className="space-y-4">
+                    {courseModules.map((module, mIndex) => (
+                      <div key={module.id} className="border border-slate-200 rounded-xl bg-slate-50 overflow-hidden shadow-sm">
+                        <div className="flex items-center justify-between p-4 bg-white hover:bg-slate-50 transition-colors">
+                          <div className="flex items-center gap-3 flex-1">
+                            <button onClick={() => toggleModuleExpansion(module.id)} className="text-slate-400 hover:text-indigo-600 transition-colors p-1">
+                              <span className="material-symbols-outlined">{module.isExpanded ? 'expand_more' : 'chevron_right'}</span>
+                            </button>
+                            <input 
+                              type="text" 
+                              value={module.title}
+                              onChange={(e) => updateModuleTitle(module.id, e.target.value)}
+                              className="font-bold text-slate-800 bg-transparent border-none focus:ring-0 p-0 text-base w-full max-w-sm focus:outline-none placeholder-slate-400"
+                              placeholder="Module Title..."
+                            />
+                          </div>
+                          <button onClick={() => removeModule(module.id)} className="text-slate-300 hover:text-rose-500 transition-colors p-2 rounded-lg hover:bg-rose-50">
+                            <span className="material-symbols-outlined text-[18px]">delete</span>
+                          </button>
+                        </div>
+                        
+                        {module.isExpanded && (
+                          <div 
+                            className="p-4 pt-2 space-y-2 border-t border-slate-100 min-h-[60px]"
+                            onDragOver={handleDragOver}
+                            onDrop={(e) => handleDrop(e, module.id, null)}
+                          >
+                            {module.lessons.map((lesson, lIndex) => (
+                              <div 
+                                key={lesson.id} 
+                                draggable
+                                onDragStart={(e) => handleDragStart(e, module.id, lesson.id)}
+                                onDragEnd={handleDragEnd}
+                                onDragOver={handleDragOver}
+                                onDrop={(e) => { e.stopPropagation(); handleDrop(e, module.id, lesson.id); }}
+                                className="flex items-center gap-3 p-3 bg-white border border-slate-200 rounded-lg shadow-sm group hover:border-indigo-200 transition-all cursor-move"
+                              >
+                                <span className="material-symbols-outlined text-slate-300 cursor-grab active:cursor-grabbing">drag_indicator</span>
+                                <div className="w-6 h-6 rounded-md bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs font-bold shrink-0">{mIndex+1}.{lIndex+1}</div>
+                                <input 
+                                  type="text" 
+                                  value={lesson.title}
+                                  onChange={(e) => updateLessonTitle(module.id, lesson.id, e.target.value)}
+                                  className="flex-1 text-sm font-medium text-slate-700 bg-transparent border-none focus:ring-0 p-0 focus:outline-none placeholder-slate-400"
+                                  placeholder="Lesson Title..."
+                                />
+                                <button onClick={() => removeLesson(module.id, lesson.id)} className="text-slate-300 hover:text-rose-500 opacity-0 group-hover:opacity-100 transition-all p-1.5 rounded-md hover:bg-rose-50">
+                                  <span className="material-symbols-outlined text-[16px]">close</span>
+                                </button>
+                              </div>
+                            ))}
+                            <button onClick={() => addLesson(module.id)} className="w-full py-2.5 border-2 border-dashed border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/50 rounded-lg text-sm font-semibold text-slate-500 hover:text-indigo-600 transition-all flex items-center justify-center gap-1 mt-2">
+                              <span className="material-symbols-outlined text-[16px]">add</span> Add Lesson
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                    
+                    {courseModules.length === 0 && (
+                      <div className="text-center py-8 text-slate-500 border-2 border-dashed border-slate-200 rounded-xl bg-slate-50">
+                        <p>No modules added yet. Start by adding a module!</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Card 3: Scheduling */}
+                <div className="bg-white/80 backdrop-blur-sm p-6 md:p-8 rounded-2xl border border-slate-200/50 shadow-sm transition-shadow">
+                  <h3 className="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2 border-b border-slate-100 pb-3">
+                    <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center"><span className="material-symbols-outlined text-[18px]">calendar_month</span></div>
+                    Scheduling Options
+                  </h3>
+                  
+                  <div className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                      <div className="space-y-1.5">
+                        <label className="text-sm font-bold text-slate-700 ml-1">Start Date</label>
+                        <input type="date" className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3.5 outline-none bg-slate-50/50 hover:bg-white transition-colors text-slate-700 cursor-text" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-sm font-bold text-slate-700 ml-1">End Date <span className="text-xs font-normal text-slate-400 ml-1">(Optional)</span></label>
+                        <input type="date" className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3.5 outline-none bg-slate-50/50 hover:bg-white transition-colors text-slate-700 cursor-text" />
+                      </div>
+                    </div>
+
+                    <div className="border border-slate-200 rounded-xl p-5 bg-slate-50/50">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h4 className="font-bold text-slate-800">Live Class Schedule</h4>
+                          <p className="text-sm text-slate-500 mt-0.5">Will this course include synchronous live sessions?</p>
+                        </div>
+                        <button 
+                          onClick={() => setIsLiveClass(!isLiveClass)} 
+                          className={`relative w-12 h-6 rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${isLiveClass ? 'bg-indigo-600' : 'bg-slate-300'}`}
+                        >
+                          <span className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform duration-300 shadow-sm ${isLiveClass ? 'translate-x-6' : 'translate-x-0'}`}></span>
+                        </button>
+                      </div>
+
+                      {/* Dynamic Live Class Fields */}
+                      <div className={`grid grid-cols-1 md:grid-cols-2 gap-5 overflow-hidden transition-all duration-500 ease-in-out ${isLiveClass ? 'max-h-[500px] opacity-100 mt-5 pt-5 border-t border-slate-200' : 'max-h-0 opacity-0 mt-0 pt-0'}`}>
+                        <div className="space-y-1.5">
+                          <label className="text-sm font-bold text-slate-700 ml-1">Class Time</label>
+                          <input type="time" className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3.5 outline-none bg-white hover:bg-slate-50 transition-colors text-slate-700" />
+                        </div>
+                        <div className="space-y-1.5">
+                          <label className="text-sm font-bold text-slate-700 ml-1">Automated Reminders</label>
+                          <select className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3.5 outline-none bg-white hover:bg-slate-50 transition-colors text-slate-700">
+                            <option>1 Hour Before</option>
+                            <option>24 Hours Before</option>
+                            <option>15 Minutes Before</option>
+                            <option>No Reminders</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Sticky Action Footer */}
+                <div className="fixed bottom-0 left-0 right-0 md:left-[280px] bg-white/90 backdrop-blur-md border-t border-slate-200 shadow-[0_-4px_20px_rgba(0,0,0,0.03)] z-40 p-4 transition-all">
+                  <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-end gap-3 sm:gap-4">
+                    <button onClick={() => setActiveTab('dashboard')} className="w-full sm:w-auto px-6 py-2.5 text-slate-600 font-bold hover:bg-slate-100 rounded-xl transition-colors">
+                      Cancel
+                    </button>
+                    <button className="w-full sm:w-auto px-6 py-2.5 border-2 border-slate-200/80 text-slate-700 font-bold hover:border-slate-300 hover:bg-slate-50 rounded-xl transition-all shadow-sm">
+                      Save Draft
+                    </button>
+                    <button className="w-full sm:w-auto bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-purple-500 text-white px-8 py-2.5 rounded-xl font-bold transition-all shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2">
+                      <span className="material-symbols-outlined text-[18px]">publish</span>
+                      Publish Course
+                    </button>
                   </div>
                 </div>
               </section>
