@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -16,7 +16,288 @@ export default function TeacherDashboard() {
   const [courseModules, setCourseModules] = useState([
     { id: 'mod-1', title: 'Module 1: Getting Started', isExpanded: true, lessons: [{ id: 'les-1', title: 'Introduction' }] }
   ]);
-  const [draggedLessonInfo, setDraggedLessonInfo] = useState<{moduleId: string, lessonId: string} | null>(null);
+  const [draggedLessonInfo, setDraggedLessonInfo] = useState<{ moduleId: string, lessonId: string } | null>(null);
+
+  // Upload Lesson State
+  const [uploadLessonTitle, setUploadLessonTitle] = useState("");
+  const [uploadLessonDescription, setUploadLessonDescription] = useState("");
+  const [uploadLessonFile, setUploadLessonFile] = useState<File | null>(null);
+  const [uploadLessonThumbnail, setUploadLessonThumbnail] = useState<string | null>(null);
+  const [uploadingState, setUploadingState] = useState<'idle' | 'uploading' | 'success' | 'error'>('idle');
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadErrorMessage, setUploadErrorMessage] = useState("");
+  const [uploadedLessonsList, setUploadedLessonsList] = useState<any[]>([]);
+
+  // Course Materials State
+  const [courseMaterials, setCourseMaterials] = useState([
+    { id: 'mat-1', title: 'Syllabus_2024.pdf', description: 'Course syllabus and reading list for the semester', type: 'pdf', size: '2.4 MB', date: 'Updated 2h ago', moduleId: 'mod-1', fileUrl: 'dummy' },
+    { id: 'mat-2', title: 'Introduction_Lecture.mp4', description: 'Recording of the first introductory session', type: 'video', size: '142 MB', date: 'Updated yesterday', moduleId: 'mod-1', fileUrl: 'dummy' },
+    { id: 'mat-3', title: 'Research_Pack_Zip', description: 'Supplementary research materials and datasets', type: 'zip', size: '45 MB', date: 'Updated 3 days ago', moduleId: 'mod-1', fileUrl: 'dummy' }
+  ]);
+  const [materialSearchQuery, setMaterialSearchQuery] = useState("");
+  const [materialFilterType, setMaterialFilterType] = useState("all");
+  const [materialSortOrder, setMaterialSortOrder] = useState("latest");
+  const [materialFilterModule, setMaterialFilterModule] = useState("all");
+
+  const [previewMaterial, setPreviewMaterial] = useState<any | null>(null);
+
+  const [isUploadMaterialOpen, setIsUploadMaterialOpen] = useState(false);
+  const [uploadMatTitle, setUploadMatTitle] = useState("");
+  const [uploadMatDescription, setUploadMatDescription] = useState("");
+  const [uploadMatModule, setUploadMatModule] = useState("");
+  const [uploadMatFile, setUploadMatFile] = useState<File | null>(null);
+  const [isMatUploading, setIsMatUploading] = useState(false);
+  const [uploadMatProgress, setUploadMatProgress] = useState(0);
+  const [uploadMatSuccess, setUploadMatSuccess] = useState(false);
+  const [uploadMatError, setUploadMatError] = useState("");
+
+  const [editingMaterial, setEditingMaterial] = useState<any | null>(null);
+  const [materialToDelete, setMaterialToDelete] = useState<any | null>(null);
+
+  const [editMaterialTitle, setEditMaterialTitle] = useState("");
+  const [editMaterialDescription, setEditMaterialDescription] = useState("");
+  const [editMaterialFile, setEditMaterialFile] = useState<File | null>(null);
+  const [editMaterialThumbnail, setEditMaterialThumbnail] = useState<string | null>(null);
+  const [isSavingEdit, setIsSavingEdit] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const filteredAndSortedMaterials = useMemo(() => {
+    let result = courseMaterials;
+    if (materialSearchQuery) {
+      result = result.filter(m => m.title.toLowerCase().includes(materialSearchQuery.toLowerCase()));
+    }
+    if (materialFilterType !== "all") {
+      result = result.filter(m => m.type === materialFilterType);
+    }
+    if (materialFilterModule !== "all") {
+      result = result.filter(m => m.moduleId === materialFilterModule);
+    }
+    if (materialSortOrder === 'oldest') {
+      return [...result].reverse();
+    }
+    return result;
+  }, [courseMaterials, materialSearchQuery, materialFilterType, materialFilterModule, materialSortOrder]);
+
+  const handleEditMaterialClick = (material: any) => {
+    setEditingMaterial(material);
+    setEditMaterialTitle(material.title);
+    setEditMaterialDescription(material.description || "");
+    setEditMaterialFile(null);
+    setEditMaterialThumbnail(material.thumbnail || null);
+  };
+
+  const saveEditedMaterial = () => {
+    setIsSavingEdit(true);
+    setTimeout(() => {
+      setCourseMaterials(courseMaterials.map(m => 
+        m.id === editingMaterial.id ? { 
+          ...m, 
+          title: editMaterialTitle, 
+          description: editMaterialDescription,
+          thumbnail: editMaterialThumbnail,
+          size: editMaterialFile ? (editMaterialFile.size / (1024 * 1024)).toFixed(1) + " MB" : m.size,
+          date: 'Updated just now'
+        } : m
+      ));
+      setIsSavingEdit(false);
+      setEditingMaterial(null);
+    }, 800);
+  };
+
+  const confirmDeleteMaterial = () => {
+    setIsDeleting(true);
+    setTimeout(() => {
+      setCourseMaterials(courseMaterials.filter(m => m.id !== materialToDelete.id));
+      setIsDeleting(false);
+      setMaterialToDelete(null);
+    }, 800);
+  };
+
+  const handleEditMaterialThumbnailUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setEditMaterialThumbnail(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleMaterialFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 500 * 1024 * 1024) {
+        setUploadMatError("File exceeds 500MB limit.");
+        return;
+      }
+      setUploadMatFile(file);
+      setUploadMatError("");
+    }
+  };
+
+  const handleMaterialDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      if (file.size > 500 * 1024 * 1024) {
+        setUploadMatError("File exceeds 500MB limit.");
+        return;
+      }
+      setUploadMatFile(file);
+      setUploadMatError("");
+    }
+  };
+
+  const submitMaterialUpload = () => {
+    if (!uploadMatTitle) {
+      setUploadMatError("Material title is required.");
+      return;
+    }
+    if (!uploadMatFile) {
+      setUploadMatError("Please select a file to upload.");
+      return;
+    }
+    setUploadMatError("");
+    setIsMatUploading(true);
+    setUploadMatProgress(0);
+
+    const interval = setInterval(() => {
+      setUploadMatProgress(prev => {
+        if (prev >= 90) {
+          clearInterval(interval);
+          return 90;
+        }
+        return prev + 15;
+      });
+    }, 200);
+
+    setTimeout(() => {
+      clearInterval(interval);
+      setUploadMatProgress(100);
+      setUploadMatSuccess(true);
+      
+      const newType = uploadMatFile.type.includes('pdf') ? 'pdf' : 
+                      uploadMatFile.type.includes('video') ? 'video' : 
+                      uploadMatFile.name.endsWith('.zip') ? 'zip' : 
+                      uploadMatFile.type.includes('presentation') ? 'ppt' : 'doc';
+
+      setCourseMaterials([{
+        id: `mat-${Date.now()}`,
+        title: uploadMatTitle,
+        description: uploadMatDescription,
+        type: newType as any,
+        size: (uploadMatFile.size / (1024 * 1024)).toFixed(1) + " MB",
+        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+        moduleId: uploadMatModule || '',
+        fileUrl: 'dummy'
+      }, ...courseMaterials]);
+      
+      setTimeout(() => {
+        setIsMatUploading(false);
+        setUploadMatProgress(0);
+        setUploadMatSuccess(false);
+        setIsUploadMaterialOpen(false);
+        setUploadMatTitle("");
+        setUploadMatDescription("");
+        setUploadMatFile(null);
+        setUploadMatModule("");
+      }, 1500);
+    }, 2000);
+  };
+
+  const handleLessonFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 500 * 1024 * 1024) {
+        setUploadErrorMessage("File exceeds 500MB limit.");
+        setUploadingState("error");
+        return;
+      }
+      setUploadLessonFile(file);
+      setUploadingState("idle");
+    }
+  };
+
+  const handleLessonThumbnailUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setUploadLessonThumbnail(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleLessonDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
+  const handleLessonDropFile = (e: React.DragEvent) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      if (file.size > 500 * 1024 * 1024) {
+        setUploadErrorMessage("File exceeds 500MB limit.");
+        setUploadingState("error");
+        return;
+      }
+      setUploadLessonFile(file);
+      setUploadingState("idle");
+    }
+  };
+
+  const submitLessonUpload = () => {
+    if (!uploadLessonTitle) {
+      setUploadErrorMessage("Lesson title is required.");
+      setUploadingState("error");
+      return;
+    }
+    if (!uploadLessonFile) {
+      setUploadErrorMessage("Please upload a lesson file.");
+      setUploadingState("error");
+      return;
+    }
+
+    setUploadingState("uploading");
+    setUploadProgress(0);
+
+    const interval = setInterval(() => {
+      setUploadProgress(prev => {
+        if (prev >= 90) {
+          clearInterval(interval);
+          return 90;
+        }
+        return prev + 10;
+      });
+    }, 200);
+
+    setTimeout(() => {
+      clearInterval(interval);
+      setUploadProgress(100);
+      setUploadingState("success");
+      setUploadedLessonsList(prev => [{
+        id: `upl-${Date.now()}`,
+        title: uploadLessonTitle,
+        description: uploadLessonDescription,
+        filename: uploadLessonFile.name,
+        size: (uploadLessonFile.size / (1024 * 1024)).toFixed(1) + " MB",
+        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+        type: uploadLessonFile.type.includes('video') ? 'video' : uploadLessonFile.type.includes('pdf') ? 'pdf' : 'doc'
+      }, ...prev]);
+
+      setUploadLessonTitle("");
+      setUploadLessonDescription("");
+      setUploadLessonFile(null);
+      setUploadLessonThumbnail(null);
+
+      setTimeout(() => {
+        setUploadingState("idle");
+        setUploadProgress(0);
+      }, 3000);
+    }, 2500);
+  };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -34,8 +315,8 @@ export default function TeacherDashboard() {
   };
 
   const addLesson = (moduleId: string) => {
-    setCourseModules(courseModules.map(mod => 
-      mod.id === moduleId 
+    setCourseModules(courseModules.map(mod =>
+      mod.id === moduleId
         ? { ...mod, lessons: [...mod.lessons, { id: `les-${Date.now()}`, title: 'New Lesson' }], isExpanded: true }
         : mod
     ));
@@ -46,8 +327,8 @@ export default function TeacherDashboard() {
   };
 
   const updateLessonTitle = (moduleId: string, lessonId: string, title: string) => {
-    setCourseModules(courseModules.map(mod => 
-      mod.id === moduleId 
+    setCourseModules(courseModules.map(mod =>
+      mod.id === moduleId
         ? { ...mod, lessons: mod.lessons.map(les => les.id === lessonId ? { ...les, title } : les) }
         : mod
     ));
@@ -58,7 +339,7 @@ export default function TeacherDashboard() {
   };
 
   const removeLesson = (moduleId: string, lessonId: string) => {
-    setCourseModules(courseModules.map(mod => 
+    setCourseModules(courseModules.map(mod =>
       mod.id === moduleId ? { ...mod, lessons: mod.lessons.filter(les => les.id !== lessonId) } : mod
     ));
   };
@@ -91,22 +372,22 @@ export default function TeacherDashboard() {
     if (!draggedLessonInfo) return;
 
     const { moduleId: sourceModuleId, lessonId: sourceLessonId } = draggedLessonInfo;
-    
+
     // Create deep copy
     let newModules = JSON.parse(JSON.stringify(courseModules));
-    
+
     // Find source
     const sourceModuleIndex = newModules.findIndex((m: any) => m.id === sourceModuleId);
     const sourceModule = newModules[sourceModuleIndex];
     const lessonToMove = sourceModule.lessons.find((l: any) => l.id === sourceLessonId);
-    
+
     // Remove from source
     sourceModule.lessons = sourceModule.lessons.filter((l: any) => l.id !== sourceLessonId);
-    
+
     // Find target
     const targetModuleIndex = newModules.findIndex((m: any) => m.id === targetModuleId);
     const targetModule = newModules[targetModuleIndex];
-    
+
     if (targetLessonId) {
       // Drop on specific lesson
       const targetLessonIndex = targetModule.lessons.findIndex((l: any) => l.id === targetLessonId);
@@ -115,7 +396,7 @@ export default function TeacherDashboard() {
       // Drop on empty module
       targetModule.lessons.push(lessonToMove);
     }
-    
+
     setCourseModules(newModules);
   };
 
@@ -144,7 +425,7 @@ export default function TeacherDashboard() {
       {/* TopNavBar */}
       <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-white/80 backdrop-blur-md border-b border-slate-200/50 shadow-sm flex items-center justify-between px-4 md:px-6 w-full transition-all duration-300">
         <div className="flex items-center gap-3 md:gap-4">
-          <button 
+          <button
             className="md:hidden p-2 -ml-2 text-slate-600 hover:bg-slate-100 rounded-full transition-colors"
             onClick={() => setIsSidebarOpen(true)}
           >
@@ -172,9 +453,9 @@ export default function TeacherDashboard() {
               <p className="text-sm font-semibold text-slate-900 group-hover:text-indigo-600 transition-colors">Dr. Sarah Jenkins</p>
               <p className="text-xs text-slate-500">Senior Educator</p>
             </div>
-            <img 
-              alt="Teacher profile avatar" 
-              className="w-9 h-9 md:w-10 md:h-10 rounded-full border-2 border-white shadow-sm object-cover group-hover:border-indigo-200 transition-all" 
+            <img
+              alt="Teacher profile avatar"
+              className="w-9 h-9 md:w-10 md:h-10 rounded-full border-2 border-white shadow-sm object-cover group-hover:border-indigo-200 transition-all"
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuCW_k1UDJKVTHEb0vxQzYL6VWv9GY90kK7a7iRg-LqTHQ6_3ChbNeshcUf0XN_KFMzFLuCC27LFsWygLjphkw2pxAfmtLf0fNQ0e4h_S4tkGHHsBYlJ2OtxdMsraFPxjORddmtIH6BUJ4DM5zzewdyqkdcQOuNkOe0eTK_qDfy8B6knNUw2_z0cLmJwlBRBr3XR7Od38LUJju-YCUFxNN5HoTefz3L09BoJtFHNNeXlO4_xhM3hlJef9ALLRbqoUXw0bMp9uQAkJTs"
             />
           </div>
@@ -185,7 +466,7 @@ export default function TeacherDashboard() {
       <div className="flex flex-1 pt-16 overflow-hidden relative">
         {/* Mobile Sidebar Overlay */}
         {isSidebarOpen && (
-          <div 
+          <div
             className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-40 md:hidden transition-opacity"
             onClick={() => setIsSidebarOpen(false)}
           ></div>
@@ -198,7 +479,7 @@ export default function TeacherDashboard() {
               <h2 className="text-lg font-bold text-slate-900 font-['Bricolage_Grotesque']">Teacher Portal</h2>
               <p className="text-xs text-slate-500">Academic Management</p>
             </div>
-            <button 
+            <button
               className="md:hidden p-2 -mr-2 text-slate-400 hover:bg-slate-100 rounded-full transition-colors"
               onClick={() => setIsSidebarOpen(false)}
             >
@@ -219,8 +500,8 @@ export default function TeacherDashboard() {
                 key={tab.id}
                 onClick={() => { setActiveTab(tab.id); setIsSidebarOpen(false); }}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ease-in-out font-sans text-sm font-semibold w-full text-left relative overflow-hidden group
-                  ${activeTab === tab.id 
-                    ? 'text-indigo-700 bg-indigo-50/80 shadow-sm border border-indigo-100/50' 
+                  ${activeTab === tab.id
+                    ? 'text-indigo-700 bg-indigo-50/80 shadow-sm border border-indigo-100/50'
                     : 'text-slate-600 hover:bg-slate-50 hover:text-indigo-600 border border-transparent'
                   }`}
               >
@@ -250,7 +531,7 @@ export default function TeacherDashboard() {
         {/* Main Content Area */}
         <main className="flex-1 overflow-y-auto custom-scrollbar bg-slate-50/50 p-4 md:p-8 h-full relative">
           <div className="max-w-7xl mx-auto space-y-6 md:space-y-8 pb-12">
-            
+
             {/* Tab: Dashboard Overview */}
             {activeTab === 'dashboard' && (
               <section id="overview" className="animate-in fade-in duration-500">
@@ -293,7 +574,7 @@ export default function TeacherDashboard() {
                       <h3 className="text-2xl font-bold text-slate-900 font-['Bricolage_Grotesque']">48</h3>
                     </div>
                   </div>
-                  <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl border border-slate-200/50 shadow-sm flex items-center gap-4 hover:shadow-xl hover:shadow-rose-500/5 hover:-translate-y-1 transition-all duration-300 group">
+                  {/* <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl border border-slate-200/50 shadow-sm flex items-center gap-4 hover:shadow-xl hover:shadow-rose-500/5 hover:-translate-y-1 transition-all duration-300 group">
                     <div className="w-14 h-14 bg-gradient-to-br from-rose-50 to-rose-100/50 text-rose-600 rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
                       <span className="material-symbols-outlined text-2xl">account_balance_wallet</span>
                     </div>
@@ -301,7 +582,7 @@ export default function TeacherDashboard() {
                       <p className="text-sm text-slate-500 font-medium mb-1">Revenue</p>
                       <h3 className="text-2xl font-bold text-slate-900 font-['Bricolage_Grotesque']">$12.4k</h3>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
                 {/* Bento Grid Layout for Progress */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6 md:mt-8">
@@ -315,7 +596,7 @@ export default function TeacherDashboard() {
                     </div>
                     <div className="space-y-6">
                       <div className="flex items-center gap-4 group cursor-pointer p-2 -mx-2 rounded-xl hover:bg-slate-50 transition-colors">
-                        <img alt="Student" className="w-10 h-10 rounded-full object-cover ring-2 ring-transparent group-hover:ring-indigo-200 transition-all shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUta4-2rSjNLQv54bTrnBaHJlHYqBLCwluvy6Z-qkl2muGJjo5-X8J7rgxmlGxlOxVhHQpPOwZ8QZU53eDhssRtxqpkGoAGZNQdKd4RK9gAPh_NRBqujMIqqKc1Y27WuLkwKy5b7WAPnzbN6oSCzgea8HZtHQ43f1TdJQQF5srFfg02JXy-KqxxDFRUXNCzBBrTztv_viCaew6HWzTYxTQ5ULz3QQSWg9KChJ0rGyk2rwivadXFwW8llji83OV2jlAOjjcGAVNSmM"/>
+                        <img alt="Student" className="w-10 h-10 rounded-full object-cover ring-2 ring-transparent group-hover:ring-indigo-200 transition-all shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUta4-2rSjNLQv54bTrnBaHJlHYqBLCwluvy6Z-qkl2muGJjo5-X8J7rgxmlGxlOxVhHQpPOwZ8QZU53eDhssRtxqpkGoAGZNQdKd4RK9gAPh_NRBqujMIqqKc1Y27WuLkwKy5b7WAPnzbN6oSCzgea8HZtHQ43f1TdJQQF5srFfg02JXy-KqxxDFRUXNCzBBrTztv_viCaew6HWzTYxTQ5ULz3QQSWg9KChJ0rGyk2rwivadXFwW8llji83OV2jlAOjjcGAVNSmM" />
                         <div className="flex-1">
                           <div className="flex justify-between mb-1">
                             <span className="text-sm font-semibold text-slate-800">Jane Doe</span>
@@ -327,7 +608,7 @@ export default function TeacherDashboard() {
                         </div>
                       </div>
                       <div className="flex items-center gap-4 group cursor-pointer p-2 -mx-2 rounded-xl hover:bg-slate-50 transition-colors">
-                        <img alt="Student" className="w-10 h-10 rounded-full object-cover ring-2 ring-transparent group-hover:ring-amber-200 transition-all shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcwA27BIu8t0dk3RSo-2puJJ2zgtTzD38rprSs9BoEOsSlRSL3kGvyKO5aZZMKn1q3b9iUwYcRN-y6Bec3By2iGljlkpIu-8f8gVmN3HiiIhynJLlErYdboCAnGNydJy52ayUK2uR8lU72c2uU1dixaVqEJZ7wARZHikf0n5AKdCWdQ5tlMxdvyrFuyElNKsDUQjQp_LKmRwcsKBMRNb1lx-_7sMtkA4ErByyi_0ZW3EqSTTCzguM3Lq4PsJIA9EKFDyIkt_D8SCw"/>
+                        <img alt="Student" className="w-10 h-10 rounded-full object-cover ring-2 ring-transparent group-hover:ring-amber-200 transition-all shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcwA27BIu8t0dk3RSo-2puJJ2zgtTzD38rprSs9BoEOsSlRSL3kGvyKO5aZZMKn1q3b9iUwYcRN-y6Bec3By2iGljlkpIu-8f8gVmN3HiiIhynJLlErYdboCAnGNydJy52ayUK2uR8lU72c2uU1dixaVqEJZ7wARZHikf0n5AKdCWdQ5tlMxdvyrFuyElNKsDUQjQp_LKmRwcsKBMRNb1lx-_7sMtkA4ErByyi_0ZW3EqSTTCzguM3Lq4PsJIA9EKFDyIkt_D8SCw" />
                         <div className="flex-1">
                           <div className="flex justify-between mb-1">
                             <span className="text-sm font-semibold text-slate-800">Mark Smith</span>
@@ -339,7 +620,7 @@ export default function TeacherDashboard() {
                         </div>
                       </div>
                       <div className="flex items-center gap-4 group cursor-pointer p-2 -mx-2 rounded-xl hover:bg-slate-50 transition-colors">
-                        <img alt="Student" className="w-10 h-10 rounded-full object-cover ring-2 ring-transparent group-hover:ring-emerald-200 transition-all shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATi5GzBnVwmc4Slm91afw20KBaB2zLMAzzvXy8WzU1sLPn3nCTz8J7ZegHggrD_0Dptx82NkXGIF8Up_Q9MstUc0B778cQdkTfrKI9VzMiwitqCAgc0rKifjv5-umVm1CLutzPjaxSQyZIu9ytFJU9-XoBfAi1PanUrUrLi3bqKnkzS63sNPVsls2cu7a1qD7AeqvCGnqrTlhMMRRs4Ga7LNSy5CHinFyUUyxk7wfPLJzCuksvKAb3JFPdEZsIqqC46AeMTtCjO1Q"/>
+                        <img alt="Student" className="w-10 h-10 rounded-full object-cover ring-2 ring-transparent group-hover:ring-emerald-200 transition-all shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATi5GzBnVwmc4Slm91afw20KBaB2zLMAzzvXy8WzU1sLPn3nCTz8J7ZegHggrD_0Dptx82NkXGIF8Up_Q9MstUc0B778cQdkTfrKI9VzMiwitqCAgc0rKifjv5-umVm1CLutzPjaxSQyZIu9ytFJU9-XoBfAi1PanUrUrLi3bqKnkzS63sNPVsls2cu7a1qD7AeqvCGnqrTlhMMRRs4Ga7LNSy5CHinFyUUyxk7wfPLJzCuksvKAb3JFPdEZsIqqC46AeMTtCjO1Q" />
                         <div className="flex-1">
                           <div className="flex justify-between mb-1">
                             <span className="text-sm font-semibold text-slate-800">Alice Lin</span>
@@ -377,76 +658,569 @@ export default function TeacherDashboard() {
 
             {/* Tab: Upload Lessons */}
             {activeTab === 'lessons' && (
-              <section id="upload" className="animate-in fade-in duration-500">
-                <div className="bg-white/80 backdrop-blur-sm p-6 md:p-8 rounded-2xl border border-slate-200/50 shadow-sm max-w-4xl hover:shadow-lg transition-shadow">
-                  <h3 className="text-2xl font-bold text-slate-900 mb-6 font-['Bricolage_Grotesque'] tracking-tight">Upload Lessons</h3>
-                  <div className="border-2 border-dashed border-slate-300/80 rounded-2xl p-8 md:p-16 flex flex-col items-center justify-center text-center hover:border-indigo-500 hover:bg-indigo-50/50 transition-all duration-300 cursor-pointer group bg-slate-50/30 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-                    <div className="w-20 h-20 bg-white text-slate-400 shadow-sm border border-slate-100 rounded-2xl flex items-center justify-center mb-6 group-hover:text-indigo-600 group-hover:border-indigo-200 group-hover:bg-indigo-50/80 group-hover:scale-110 transition-all duration-300 z-10">
-                      <span className="material-symbols-outlined text-4xl">cloud_upload</span>
+              <section id="upload" className="animate-in fade-in duration-500 max-w-5xl mx-auto space-y-6">
+                <div className="bg-white/80 backdrop-blur-sm p-6 md:p-8 rounded-2xl border border-slate-200/50 shadow-sm transition-shadow">
+                  <h3 className="text-2xl font-bold text-slate-900 mb-6 font-['Bricolage_Grotesque'] tracking-tight">Upload New Lesson</h3>
+
+                  {uploadingState === 'success' && (
+                    <div className="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-3 text-emerald-700 animate-in slide-in-from-top-2">
+                      <span className="material-symbols-outlined">check_circle</span>
+                      <p className="font-semibold text-sm">Lesson uploaded successfully!</p>
                     </div>
-                    <p className="font-bold text-xl text-slate-800 z-10">Drag &amp; drop files here</p>
-                    <p className="text-slate-500 text-sm mt-2 z-10">Support for MP4, PDF, and DOCX (Max 500MB)</p>
-                    <button className="mt-8 text-indigo-600 font-bold border-2 border-indigo-600 px-8 py-2.5 rounded-xl hover:bg-indigo-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/30 active:scale-95 z-10">
-                      Browse Files
+                  )}
+
+                  {uploadingState === 'error' && (
+                    <div className="mb-6 p-4 bg-rose-50 border border-rose-200 rounded-xl flex items-center gap-3 text-rose-700 animate-in slide-in-from-top-2">
+                      <span className="material-symbols-outlined">error</span>
+                      <p className="font-semibold text-sm">{uploadErrorMessage}</p>
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div className="space-y-5">
+                      <div className="space-y-1.5">
+                        <label className="text-sm font-bold text-slate-700 ml-1">Lesson Title <span className="text-rose-500">*</span></label>
+                        <input
+                          type="text"
+                          placeholder="e.g., Introduction to CSS Grid"
+                          className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3.5 outline-none bg-slate-50/50 hover:bg-white transition-colors"
+                          value={uploadLessonTitle}
+                          onChange={(e) => setUploadLessonTitle(e.target.value)}
+                        />
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <label className="text-sm font-bold text-slate-700 ml-1">Description <span className="text-xs font-normal text-slate-400">(Optional)</span></label>
+                        <textarea
+                          placeholder="Brief description of the lesson content..."
+                          rows={4}
+                          className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3.5 outline-none bg-slate-50/50 hover:bg-white transition-colors resize-none"
+                          value={uploadLessonDescription}
+                          onChange={(e) => setUploadLessonDescription(e.target.value)}
+                        ></textarea>
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <label className="text-sm font-bold text-slate-700 ml-1">Thumbnail Image <span className="text-xs font-normal text-slate-400">(Optional)</span></label>
+                        <div className="flex items-center gap-4">
+                          {uploadLessonThumbnail ? (
+                            <div className="relative">
+                              <img src={uploadLessonThumbnail} alt="Thumbnail Preview" className="w-20 h-20 object-cover rounded-xl border border-slate-200 shadow-sm" />
+                              <button onClick={() => setUploadLessonThumbnail(null)} className="absolute -top-2 -right-2 bg-rose-100 text-rose-600 rounded-full p-1 hover:bg-rose-200 transition-colors shadow-sm">
+                                <span className="material-symbols-outlined text-[14px]">close</span>
+                              </button>
+                            </div>
+                          ) : (
+                            <div className="w-20 h-20 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center text-slate-400">
+                              <span className="material-symbols-outlined text-2xl">image</span>
+                            </div>
+                          )}
+                          <div className="flex-1">
+                            <label className="cursor-pointer bg-white border border-slate-200 text-slate-600 font-semibold px-4 py-2 rounded-lg text-sm hover:bg-slate-50 transition-colors inline-block shadow-sm">
+                              Upload Image
+                              <input type="file" accept="image/*" onChange={handleLessonThumbnailUpload} className="hidden" />
+                            </label>
+                            <p className="text-xs text-slate-500 mt-1.5">Recommended size: 1280x720px</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5 flex flex-col">
+                      <label className="text-sm font-bold text-slate-700 ml-1">Lesson File <span className="text-rose-500">*</span></label>
+                      <div
+                        className={`flex-1 border-2 border-dashed rounded-2xl p-6 flex flex-col items-center justify-center text-center transition-all duration-300 relative overflow-hidden group ${uploadLessonFile ? 'border-emerald-400 bg-emerald-50/30' : 'border-slate-300/80 hover:border-indigo-500 hover:bg-indigo-50/50 bg-slate-50/30 cursor-pointer'}`}
+                        onDragOver={handleLessonDragOver}
+                        onDrop={handleLessonDropFile}
+                      >
+                        {!uploadLessonFile && <input type="file" onChange={handleLessonFileChange} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />}
+
+                        {uploadLessonFile ? (
+                          <div className="flex flex-col items-center w-full max-w-xs z-10">
+                            <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mb-4 shadow-sm">
+                              <span className="material-symbols-outlined text-3xl">task</span>
+                            </div>
+                            <p className="font-bold text-slate-800 truncate w-full text-center">{uploadLessonFile.name}</p>
+                            <p className="text-slate-500 text-sm mt-1">{(uploadLessonFile.size / (1024 * 1024)).toFixed(2)} MB</p>
+                            <button onClick={() => setUploadLessonFile(null)} className="mt-4 text-rose-600 font-bold border border-rose-200 bg-white px-4 py-1.5 rounded-lg text-sm hover:bg-rose-50 transition-colors shadow-sm">
+                              Remove File
+                            </button>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                            <div className="w-16 h-16 bg-white text-slate-400 shadow-sm border border-slate-100 rounded-2xl flex items-center justify-center mb-4 group-hover:text-indigo-600 group-hover:border-indigo-200 group-hover:bg-indigo-50/80 group-hover:scale-110 transition-all duration-300 z-10">
+                              <span className="material-symbols-outlined text-3xl">cloud_upload</span>
+                            </div>
+                            <p className="font-bold text-lg text-slate-800 z-10">Drag &amp; drop file here</p>
+                            <p className="text-slate-500 text-sm mt-1.5 z-10">Support for MP4, PDF, and DOCX (Max 500MB)</p>
+                            <div className="mt-6 text-indigo-600 font-bold border-2 border-indigo-600 px-6 py-2 rounded-xl hover:bg-indigo-600 hover:text-white transition-all duration-300 shadow-sm z-10 pointer-events-none">
+                              Browse Files
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {uploadingState === 'uploading' && (
+                    <div className="mt-8 space-y-2">
+                      <div className="flex justify-between text-sm font-semibold text-slate-700">
+                        <span>Uploading...</span>
+                        <span className="text-indigo-600">{uploadProgress}%</span>
+                      </div>
+                      <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                        <div className="h-full bg-gradient-to-r from-indigo-400 to-indigo-600 rounded-full transition-all duration-200" style={{ width: `${uploadProgress}%` }}></div>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="mt-8 pt-6 border-t border-slate-100 flex justify-end">
+                    <button
+                      onClick={submitLessonUpload}
+                      disabled={uploadingState === 'uploading'}
+                      className={`px-8 py-3 rounded-xl font-bold flex items-center gap-2 transition-all shadow-lg ${uploadingState === 'uploading' ? 'bg-slate-300 text-slate-500 cursor-not-allowed shadow-none' : 'bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-purple-500 text-white shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5 active:translate-y-0'}`}
+                    >
+                      {uploadingState === 'uploading' ? (
+                        <>
+                          <svg className="animate-spin h-5 w-5 text-slate-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          Processing...
+                        </>
+                      ) : (
+                        <>
+                          <span className="material-symbols-outlined text-[20px]">upload</span>
+                          Upload Lesson
+                        </>
+                      )}
                     </button>
                   </div>
                 </div>
+
+                {/* Uploaded Lessons List */}
+                {uploadedLessonsList.length > 0 && (
+                  <div className="bg-white/80 backdrop-blur-sm p-6 md:p-8 rounded-2xl border border-slate-200/50 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <h3 className="text-xl font-bold text-slate-900 mb-6 font-['Bricolage_Grotesque'] tracking-tight">Recently Uploaded</h3>
+                    <div className="grid grid-cols-1 gap-4">
+                      {uploadedLessonsList.map(lesson => (
+                        <div key={lesson.id} className="flex flex-col sm:flex-row sm:items-center gap-4 p-4 border border-slate-200/60 rounded-xl hover:bg-white hover:shadow-md hover:border-indigo-100 transition-all duration-300 group">
+                          <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-all shadow-sm ${lesson.type === 'video' ? 'bg-indigo-50 text-indigo-600 group-hover:bg-indigo-100' :
+                            lesson.type === 'pdf' ? 'bg-rose-50 text-rose-600 group-hover:bg-rose-100' :
+                              'bg-blue-50 text-blue-600 group-hover:bg-blue-100'
+                            }`}>
+                            <span className="material-symbols-outlined">
+                              {lesson.type === 'video' ? 'videocam' : lesson.type === 'pdf' ? 'description' : 'article'}
+                            </span>
+                          </div>
+                          <div className="flex-1 overflow-hidden">
+                            <h4 className="text-sm font-bold text-slate-800 truncate">{lesson.title}</h4>
+                            <p className="text-xs text-slate-500 mt-0.5 truncate">{lesson.filename} • {lesson.size} • {lesson.date}</p>
+                          </div>
+                          <div className="flex gap-2 self-start sm:self-auto">
+                            <button className="px-3 py-1.5 text-xs font-bold text-slate-500 hover:text-indigo-600 bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-200 rounded-lg transition-colors">
+                              Edit
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </section>
             )}
 
             {/* Tab: Course Materials */}
             {activeTab === 'materials' && (
               <section id="materials" className="animate-in fade-in duration-500">
-                <div className="bg-white/80 backdrop-blur-sm p-6 md:p-8 rounded-2xl border border-slate-200/50 shadow-sm overflow-hidden max-w-4xl hover:shadow-lg transition-shadow">
-                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                    <h3 className="text-2xl font-bold text-slate-900 font-['Bricolage_Grotesque'] tracking-tight">Course Materials</h3>
-                    <div className="relative w-full sm:w-auto">
-                      <span className="material-symbols-outlined absolute left-3 top-2.5 text-slate-400 text-[18px]">search</span>
-                      <input className="w-full sm:w-[250px] pl-10 pr-4 py-2 bg-slate-50/50 border border-slate-200/80 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all" placeholder="Search files..." type="text"/>
+                <div className="bg-white/80 backdrop-blur-sm p-6 md:p-8 rounded-2xl border border-slate-200/50 shadow-sm overflow-hidden w-full max-w-5xl hover:shadow-lg transition-shadow relative">
+                  
+                  {/* Header and Controls */}
+                  <div className="flex flex-col gap-6 mb-8">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                      <div>
+                        <h3 className="text-2xl font-bold text-slate-900 font-['Bricolage_Grotesque'] tracking-tight">Course Materials</h3>
+                        <p className="text-sm text-slate-500 mt-1">Manage and organize your resources</p>
+                      </div>
+                      <button 
+                        onClick={() => setIsUploadMaterialOpen(!isUploadMaterialOpen)}
+                        className="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-purple-500 text-white rounded-xl font-bold shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center gap-2"
+                      >
+                        <span className="material-symbols-outlined text-[20px]">{isUploadMaterialOpen ? 'close' : 'add'}</span>
+                        {isUploadMaterialOpen ? 'Cancel Upload' : 'Upload Material'}
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-slate-50/50 p-3 rounded-xl border border-slate-100">
+                      <div className="relative w-full">
+                        <span className="material-symbols-outlined absolute left-3 top-2.5 text-slate-400 text-[18px]">search</span>
+                        <input 
+                          className="w-full pl-9 pr-4 py-2 bg-white border border-slate-200/80 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all" 
+                          placeholder="Search files..." 
+                          type="text" 
+                          value={materialSearchQuery}
+                          onChange={(e) => setMaterialSearchQuery(e.target.value)}
+                        />
+                      </div>
+                      <select 
+                        className="w-full px-3 py-2 bg-white border border-slate-200/80 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-slate-600 cursor-pointer"
+                        value={materialFilterType}
+                        onChange={(e) => setMaterialFilterType(e.target.value)}
+                      >
+                        <option value="all">All File Types</option>
+                        <option value="pdf">PDF Documents</option>
+                        <option value="video">Video Files</option>
+                        <option value="doc">Word Docs</option>
+                        <option value="ppt">Presentations</option>
+                        <option value="zip">ZIP Archives</option>
+                      </select>
+                      <select 
+                        className="w-full px-3 py-2 bg-white border border-slate-200/80 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-slate-600 cursor-pointer"
+                        value={materialFilterModule}
+                        onChange={(e) => setMaterialFilterModule(e.target.value)}
+                      >
+                        <option value="all">All Modules</option>
+                        {courseModules.map(mod => (
+                          <option key={mod.id} value={mod.id}>{mod.title}</option>
+                        ))}
+                      </select>
+                      <select 
+                        className="w-full px-3 py-2 bg-white border border-slate-200/80 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-slate-600 cursor-pointer"
+                        value={materialSortOrder}
+                        onChange={(e) => setMaterialSortOrder(e.target.value)}
+                      >
+                        <option value="latest">Latest First</option>
+                        <option value="oldest">Oldest First</option>
+                      </select>
                     </div>
                   </div>
-                  <div className="grid grid-cols-1 gap-3 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
-                    <div className="flex items-center gap-4 p-4 border border-slate-200/60 rounded-xl hover:bg-white hover:shadow-md hover:border-indigo-100 transition-all duration-300 group cursor-pointer">
-                      <div className="w-12 h-12 bg-rose-50 text-rose-600 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 group-hover:bg-rose-100 transition-all">
-                        <span className="material-symbols-outlined">description</span>
+
+                  {/* Upload Material Section */}
+                  {isUploadMaterialOpen && (
+                    <div className="mb-8 p-6 bg-slate-50 border border-indigo-100 rounded-2xl animate-in fade-in slide-in-from-top-4 duration-300">
+                      <h4 className="text-lg font-bold text-slate-900 mb-4">Upload New Material</h4>
+                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div className="lg:col-span-2 space-y-4">
+                          <div className="space-y-1.5">
+                            <label className="text-sm font-bold text-slate-700 ml-1">Title <span className="text-rose-500">*</span></label>
+                            <input 
+                              type="text" 
+                              placeholder="e.g., Week 1 Reading Materials"
+                              className="w-full border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3 outline-none bg-white transition-colors text-sm"
+                              value={uploadMatTitle}
+                              onChange={(e) => setUploadMatTitle(e.target.value)}
+                              disabled={isMatUploading}
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-sm font-bold text-slate-700 ml-1">Description</label>
+                            <textarea 
+                              placeholder="Optional description of the material..."
+                              className="w-full border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3 outline-none bg-white transition-colors resize-none text-sm"
+                              rows={2}
+                              value={uploadMatDescription}
+                              onChange={(e) => setUploadMatDescription(e.target.value)}
+                              disabled={isMatUploading}
+                            ></textarea>
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-sm font-bold text-slate-700 ml-1">Assign to Module</label>
+                            <select 
+                              className="w-full border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3 outline-none bg-white transition-colors text-sm text-slate-600 cursor-pointer"
+                              value={uploadMatModule}
+                              onChange={(e) => setUploadMatModule(e.target.value)}
+                              disabled={isMatUploading}
+                            >
+                              <option value="">No Module (Unassigned)</option>
+                              {courseModules.map(mod => (
+                                <option key={mod.id} value={mod.id}>{mod.title}</option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-1.5 flex flex-col">
+                          <label className="text-sm font-bold text-slate-700 ml-1">File <span className="text-rose-500">*</span></label>
+                          <div 
+                            className={`flex-1 border-2 border-dashed rounded-xl p-4 flex flex-col items-center justify-center text-center transition-all duration-300 relative overflow-hidden group ${uploadMatFile ? 'border-emerald-400 bg-emerald-50' : 'border-slate-300 hover:border-indigo-500 hover:bg-indigo-50/50 bg-white cursor-pointer'}`}
+                            onDragOver={(e) => e.preventDefault()}
+                            onDrop={handleMaterialDrop}
+                          >
+                            {!uploadMatFile && <input type="file" onChange={handleMaterialFileChange} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" disabled={isMatUploading} />}
+                            
+                            {uploadMatFile ? (
+                              <div className="flex flex-col items-center w-full z-10">
+                                <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center mb-3 shadow-sm">
+                                  <span className="material-symbols-outlined text-2xl">check_circle</span>
+                                </div>
+                                <p className="font-bold text-slate-800 text-sm truncate w-full px-2">{uploadMatFile.name}</p>
+                                <p className="text-slate-500 text-xs mt-0.5">{(uploadMatFile.size / (1024 * 1024)).toFixed(2)} MB</p>
+                                {!isMatUploading && (
+                                  <button onClick={() => setUploadMatFile(null)} className="mt-3 text-rose-600 font-bold border border-rose-200 bg-white px-3 py-1 rounded-lg text-xs hover:bg-rose-50 transition-colors">
+                                    Remove
+                                  </button>
+                                )}
+                              </div>
+                            ) : (
+                              <>
+                                <div className="w-12 h-12 bg-slate-50 text-slate-400 border border-slate-100 rounded-xl flex items-center justify-center mb-2 group-hover:text-indigo-600 group-hover:bg-indigo-100 group-hover:border-indigo-200 transition-all z-10">
+                                  <span className="material-symbols-outlined text-2xl">cloud_upload</span>
+                                </div>
+                                <p className="font-bold text-slate-700 text-sm z-10">Click or drag file</p>
+                                <p className="text-slate-500 text-[10px] mt-1 z-10 max-w-[120px]">PDF, DOC, PPT, MP4, ZIP up to 500MB</p>
+                              </>
+                            )}
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex-1 overflow-hidden">
-                        <p className="text-sm font-bold text-slate-800 truncate">Syllabus_2024.pdf</p>
-                        <p className="text-xs text-slate-500 mt-0.5">2.4 MB • Updated 2h ago</p>
-                      </div>
-                      <div className="flex gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
-                        <button className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"><span className="material-symbols-outlined text-xl">edit</span></button>
-                        <button className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"><span className="material-symbols-outlined text-xl">delete</span></button>
+                      
+                      {uploadMatError && (
+                        <div className="mt-4 p-3 bg-rose-50 border border-rose-200 rounded-lg flex items-center gap-2 text-rose-700 text-sm font-medium animate-in fade-in">
+                          <span className="material-symbols-outlined text-[18px]">error</span>
+                          {uploadMatError}
+                        </div>
+                      )}
+                      
+                      {isMatUploading && (
+                        <div className="mt-6 space-y-2">
+                          <div className="flex justify-between text-xs font-bold text-slate-700">
+                            <span>Uploading & Processing...</span>
+                            <span className="text-indigo-600">{uploadMatProgress}%</span>
+                          </div>
+                          <div className="h-1.5 w-full bg-slate-200 rounded-full overflow-hidden">
+                            <div className="h-full bg-indigo-500 rounded-full transition-all duration-200" style={{ width: `${uploadMatProgress}%` }}></div>
+                          </div>
+                        </div>
+                      )}
+
+                      {uploadMatSuccess && (
+                        <div className="mt-6 p-3 bg-emerald-50 border border-emerald-200 rounded-lg flex items-center gap-2 text-emerald-700 text-sm font-medium animate-in slide-in-from-bottom-2">
+                          <span className="material-symbols-outlined text-[18px]">check_circle</span>
+                          Material uploaded successfully!
+                        </div>
+                      )}
+                      
+                      <div className="mt-6 pt-4 border-t border-slate-200 flex justify-end">
+                        <button 
+                          onClick={submitMaterialUpload}
+                          disabled={isMatUploading || uploadMatSuccess}
+                          className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-lg shadow-sm disabled:opacity-50 transition-colors flex items-center gap-2"
+                        >
+                          {isMatUploading ? (
+                            <><span className="material-symbols-outlined animate-spin text-[16px]">progress_activity</span> Uploading...</>
+                          ) : (
+                            <><span className="material-symbols-outlined text-[18px]">upload</span> Upload File</>
+                          )}
+                        </button>
                       </div>
                     </div>
-                    <div className="flex items-center gap-4 p-4 border border-slate-200/60 rounded-xl hover:bg-white hover:shadow-md hover:border-indigo-100 transition-all duration-300 group cursor-pointer">
-                      <div className="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 group-hover:bg-indigo-100 transition-all">
-                        <span className="material-symbols-outlined">videocam</span>
+                  )}
+
+                  {/* Materials Grid */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar pb-4">
+                    {filteredAndSortedMaterials.map(material => {
+                      const iconMap: Record<string, string> = {
+                        pdf: 'description',
+                        video: 'videocam',
+                        zip: 'folder_zip',
+                        ppt: 'slideshow',
+                        doc: 'article',
+                        other: 'insert_drive_file'
+                      };
+                      const colorMap: Record<string, string> = {
+                        pdf: 'bg-rose-50 text-rose-600 group-hover:bg-rose-100 border-rose-100',
+                        video: 'bg-indigo-50 text-indigo-600 group-hover:bg-indigo-100 border-indigo-100',
+                        zip: 'bg-emerald-50 text-emerald-600 group-hover:bg-emerald-100 border-emerald-100',
+                        ppt: 'bg-amber-50 text-amber-600 group-hover:bg-amber-100 border-amber-100',
+                        doc: 'bg-blue-50 text-blue-600 group-hover:bg-blue-100 border-blue-100',
+                        other: 'bg-slate-50 text-slate-600 group-hover:bg-slate-100 border-slate-200'
+                      };
+                      const assignedModule = courseModules.find(m => m.id === material.moduleId);
+
+                      return (
+                        <div key={material.id} className="flex flex-col p-4 border border-slate-200/80 rounded-xl hover:bg-slate-50 hover:shadow-md hover:border-indigo-200 transition-all duration-300 group relative">
+                          <div className="flex items-start gap-4">
+                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-all border ${colorMap[material.type] || colorMap.other}`}>
+                              <span className="material-symbols-outlined">{iconMap[material.type] || iconMap.other}</span>
+                            </div>
+                            <div className="flex-1 overflow-hidden pr-2">
+                              <h4 className="text-sm font-bold text-slate-800 truncate" title={material.title}>{material.title}</h4>
+                              <p className="text-xs text-slate-500 mt-1 line-clamp-2 min-h-[2rem]">{material.description || "No description provided."}</p>
+                            </div>
+                            
+                            <div className="flex flex-col gap-1 sm:flex-row opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity bg-white/80 backdrop-blur-sm rounded-lg p-0.5 shadow-sm border border-slate-100">
+                              <button onClick={(e) => { e.stopPropagation(); setPreviewMaterial(material); }} className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-colors" title="Preview"><span className="material-symbols-outlined text-[18px]">visibility</span></button>
+                              <button onClick={(e) => { e.stopPropagation(); handleEditMaterialClick(material); }} className="p-1.5 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-md transition-colors" title="Edit"><span className="material-symbols-outlined text-[18px]">edit</span></button>
+                              <button onClick={(e) => { e.stopPropagation(); setMaterialToDelete(material); }} className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors" title="Delete"><span className="material-symbols-outlined text-[18px]">delete</span></button>
+                            </div>
+                          </div>
+                          <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-semibold text-slate-400">
+                            <div className="flex items-center gap-2">
+                              <span className="bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md uppercase tracking-wider">{material.type}</span>
+                              <span>{material.size}</span>
+                            </div>
+                            <div className="flex flex-col items-end">
+                              {assignedModule && <span className="text-indigo-500 truncate max-w-[120px]" title={assignedModule.title}>{assignedModule.title}</span>}
+                              <span>{material.date}</span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                    
+                    {filteredAndSortedMaterials.length === 0 && (
+                      <div className="md:col-span-2 text-center py-12 px-4 border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
+                        <div className="w-16 h-16 bg-white border border-slate-100 shadow-sm text-slate-300 rounded-full flex items-center justify-center mx-auto mb-4">
+                          <span className="material-symbols-outlined text-3xl">search_off</span>
+                        </div>
+                        <h4 className="text-lg font-bold text-slate-700 mb-1">No materials found</h4>
+                        <p className="text-sm text-slate-500">Try adjusting your search or filters, or upload a new material.</p>
+                        <button onClick={() => setIsUploadMaterialOpen(true)} className="mt-4 text-indigo-600 font-bold text-sm hover:underline">Upload Material</button>
                       </div>
-                      <div className="flex-1 overflow-hidden">
-                        <p className="text-sm font-bold text-slate-800 truncate">Introduction_Lecture.mp4</p>
-                        <p className="text-xs text-slate-500 mt-0.5">142 MB • Updated yesterday</p>
-                      </div>
-                      <div className="flex gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
-                        <button className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"><span className="material-symbols-outlined text-xl">edit</span></button>
-                        <button className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"><span className="material-symbols-outlined text-xl">delete</span></button>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4 p-4 border border-slate-200/60 rounded-xl hover:bg-white hover:shadow-md hover:border-indigo-100 transition-all duration-300 group cursor-pointer">
-                      <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 group-hover:bg-emerald-100 transition-all">
-                        <span className="material-symbols-outlined">folder</span>
-                      </div>
-                      <div className="flex-1 overflow-hidden">
-                        <p className="text-sm font-bold text-slate-800 truncate">Research_Pack_Zip</p>
-                        <p className="text-xs text-slate-500 mt-0.5">45 MB • Updated 3 days ago</p>
-                      </div>
-                      <div className="flex gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
-                        <button className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"><span className="material-symbols-outlined text-xl">edit</span></button>
-                        <button className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"><span className="material-symbols-outlined text-xl">delete</span></button>
-                      </div>
-                    </div>
+                    )}
                   </div>
+
+                  {/* Edit Modal */}
+                  {editingMaterial && (
+                    <div className="fixed inset-0 z-[60] flex items-center justify-center px-4">
+                      <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" onClick={() => !isSavingEdit && setEditingMaterial(null)}></div>
+                      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden relative z-10 animate-in fade-in zoom-in-95 duration-200">
+                        <div className="p-6 border-b border-slate-100 flex items-center justify-between">
+                          <h3 className="text-xl font-bold text-slate-900 font-['Bricolage_Grotesque']">Edit Material</h3>
+                          <button onClick={() => !isSavingEdit && setEditingMaterial(null)} className="text-slate-400 hover:text-slate-600 hover:bg-slate-100 p-2 rounded-full transition-colors disabled:opacity-50" disabled={isSavingEdit}>
+                            <span className="material-symbols-outlined text-[20px]">close</span>
+                          </button>
+                        </div>
+                        <div className="p-6 space-y-5">
+                          <div className="space-y-1.5">
+                            <label className="text-sm font-bold text-slate-700 ml-1">Title</label>
+                            <input 
+                              type="text" 
+                              className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3 outline-none bg-slate-50/50 hover:bg-white transition-colors text-sm"
+                              value={editMaterialTitle}
+                              onChange={(e) => setEditMaterialTitle(e.target.value)}
+                              disabled={isSavingEdit}
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-sm font-bold text-slate-700 ml-1">Description <span className="text-xs font-normal text-slate-400">(Optional)</span></label>
+                            <textarea 
+                              className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3 outline-none bg-slate-50/50 hover:bg-white transition-colors resize-none text-sm"
+                              rows={3}
+                              value={editMaterialDescription}
+                              onChange={(e) => setEditMaterialDescription(e.target.value)}
+                              disabled={isSavingEdit}
+                            ></textarea>
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-1.5">
+                              <label className="text-sm font-bold text-slate-700 ml-1">Update File</label>
+                              <label className={`block border border-slate-200 border-dashed rounded-xl p-4 text-center cursor-pointer hover:bg-indigo-50 hover:border-indigo-300 transition-colors ${isSavingEdit ? 'opacity-50 pointer-events-none' : ''}`}>
+                                <span className="material-symbols-outlined text-slate-400 mb-1">upload_file</span>
+                                <p className="text-xs font-bold text-indigo-600">Choose file</p>
+                                <p className="text-[10px] text-slate-500 mt-1 truncate">{editMaterialFile ? editMaterialFile.name : 'No file chosen'}</p>
+                                <input type="file" className="hidden" onChange={(e) => setEditMaterialFile(e.target.files?.[0] || null)} disabled={isSavingEdit} />
+                              </label>
+                            </div>
+                            <div className="space-y-1.5">
+                              <label className="text-sm font-bold text-slate-700 ml-1">Thumbnail Image</label>
+                              <div className="flex flex-col gap-2">
+                                {editMaterialThumbnail ? (
+                                  <div className="relative h-16 w-full rounded-xl overflow-hidden border border-slate-200">
+                                    <img src={editMaterialThumbnail} alt="Thumbnail" className="w-full h-full object-cover" />
+                                    <button onClick={() => setEditMaterialThumbnail(null)} className="absolute top-1 right-1 bg-black/50 text-white rounded-full p-0.5 hover:bg-black/70 transition-colors" disabled={isSavingEdit}>
+                                      <span className="material-symbols-outlined text-[14px]">close</span>
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <label className={`block border border-slate-200 border-dashed rounded-xl p-4 text-center cursor-pointer hover:bg-indigo-50 hover:border-indigo-300 transition-colors ${isSavingEdit ? 'opacity-50 pointer-events-none' : ''}`}>
+                                    <span className="material-symbols-outlined text-slate-400 mb-1">image</span>
+                                    <p className="text-xs font-bold text-indigo-600">Upload image</p>
+                                    <input type="file" accept="image/*" className="hidden" onChange={handleEditMaterialThumbnailUpload} disabled={isSavingEdit} />
+                                  </label>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="p-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-3">
+                          <button onClick={() => setEditingMaterial(null)} className="px-5 py-2.5 text-sm font-bold text-slate-600 hover:bg-slate-200 bg-slate-100 rounded-xl transition-colors disabled:opacity-50" disabled={isSavingEdit}>Cancel</button>
+                          <button onClick={saveEditedMaterial} disabled={isSavingEdit || !editMaterialTitle} className="px-6 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition-colors shadow-md shadow-indigo-500/20 disabled:opacity-50 disabled:shadow-none flex items-center gap-2">
+                            {isSavingEdit ? (
+                              <><span className="material-symbols-outlined animate-spin text-[16px]">progress_activity</span> Saving...</>
+                            ) : "Save Changes"}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Delete Confirmation Modal */}
+                  {materialToDelete && (
+                    <div className="fixed inset-0 z-[60] flex items-center justify-center px-4">
+                      <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" onClick={() => !isDeleting && setMaterialToDelete(null)}></div>
+                      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden relative z-10 animate-in fade-in zoom-in-95 duration-200 p-6 text-center">
+                        <div className="w-16 h-16 bg-rose-50 text-rose-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                          <span className="material-symbols-outlined text-3xl">warning</span>
+                        </div>
+                        <h3 className="text-xl font-bold text-slate-900 mb-2">Delete Material?</h3>
+                        <p className="text-sm text-slate-500 mb-6">Are you sure you want to delete "<span className="font-semibold text-slate-700">{materialToDelete.title}</span>"? This action cannot be undone.</p>
+                        <div className="flex gap-3 w-full">
+                          <button onClick={() => setMaterialToDelete(null)} className="flex-1 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-100 bg-slate-50 border border-slate-200 rounded-xl transition-colors disabled:opacity-50" disabled={isDeleting}>Cancel</button>
+                          <button onClick={confirmDeleteMaterial} disabled={isDeleting} className="flex-1 py-2.5 text-sm font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl transition-colors shadow-md shadow-rose-500/20 disabled:opacity-50 flex items-center justify-center gap-2">
+                            {isDeleting ? (
+                              <><span className="material-symbols-outlined animate-spin text-[16px]">progress_activity</span> Deleting...</>
+                            ) : "Delete"}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Preview Modal */}
+                  {previewMaterial && (
+                    <div className="fixed inset-0 z-[70] flex items-center justify-center px-4">
+                      <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm transition-opacity" onClick={() => setPreviewMaterial(null)}></div>
+                      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden relative z-10 animate-in zoom-in-95 duration-200">
+                        <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center">
+                              <span className="material-symbols-outlined">
+                                {previewMaterial.type === 'video' ? 'videocam' : previewMaterial.type === 'pdf' ? 'description' : 'insert_drive_file'}
+                              </span>
+                            </div>
+                            <div>
+                              <h3 className="text-lg font-bold text-slate-900 line-clamp-1">{previewMaterial.title}</h3>
+                              <p className="text-xs text-slate-500">{previewMaterial.size} • {previewMaterial.type.toUpperCase()}</p>
+                            </div>
+                          </div>
+                          <button onClick={() => setPreviewMaterial(null)} className="text-slate-400 hover:text-rose-600 hover:bg-rose-50 p-2 rounded-full transition-colors">
+                            <span className="material-symbols-outlined text-[24px]">close</span>
+                          </button>
+                        </div>
+                        <div className="flex-1 overflow-hidden bg-slate-100 relative min-h-[400px] flex items-center justify-center p-6">
+                          {previewMaterial.type === 'video' ? (
+                            <div className="w-full max-w-2xl bg-black rounded-xl aspect-video flex items-center justify-center shadow-lg border border-slate-800">
+                              <span className="material-symbols-outlined text-white text-6xl opacity-50">play_circle</span>
+                            </div>
+                          ) : previewMaterial.type === 'pdf' ? (
+                            <div className="w-full max-w-2xl h-full bg-white rounded-xl shadow-lg border border-slate-200 flex flex-col items-center justify-center">
+                              <span className="material-symbols-outlined text-rose-300 text-6xl mb-4">picture_as_pdf</span>
+                              <p className="text-slate-500 font-medium">PDF Preview (Mock)</p>
+                            </div>
+                          ) : (
+                            <div className="text-center">
+                              <span className="material-symbols-outlined text-slate-300 text-6xl mb-4">inventory_2</span>
+                              <h4 className="text-lg font-bold text-slate-700 mb-2">No preview available</h4>
+                              <p className="text-sm text-slate-500">This file type cannot be previewed in the browser.</p>
+                              <button className="mt-6 px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-bold shadow-sm transition-colors">Download File</button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </section>
             )}
@@ -502,12 +1276,12 @@ export default function TeacherDashboard() {
                     <div className="p-4 border-b border-slate-200/60 bg-white/50 backdrop-blur-md">
                       <div className="relative">
                         <span className="material-symbols-outlined absolute left-3 top-2.5 text-slate-400 text-[18px]">search</span>
-                        <input className="w-full pl-10 pr-4 py-2 border border-slate-200/80 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none bg-white/80 transition-all" placeholder="Search students..." type="text"/>
+                        <input className="w-full pl-10 pr-4 py-2 border border-slate-200/80 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none bg-white/80 transition-all" placeholder="Search students..." type="text" />
                       </div>
                     </div>
                     <div className="flex-1 overflow-y-auto custom-scrollbar">
                       <div className="p-4 flex items-center gap-3 bg-indigo-50/80 border-r-4 border-indigo-500 cursor-pointer hover:bg-indigo-50 transition-colors">
-                        <img alt="Alice" className="w-10 h-10 rounded-full object-cover shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5YtzuGGhQtoMSYb1z4CZnqzzcbjq48xkrOrRAS800ySrm9ocI5a1BzLYwxIk0eZnIcgUfFelkA_eQMCMIc7W08pM-TNUrEQ6mXISeFxVR6YfFBWO1eJoxwM9CgWegDXdxbPoVGlQZxdbmq74kNvWgTuV2Ms4t1n07gHVb4LG_ao3lxXxeamT2cw4fEHaXZ-GRkv6nwiprw6xMch0nuLsJBE30XbcNwDgFCq9ntroDL6ffKWyYToxeDEiPLoO48Pjk38Y0tPqGFSk"/>
+                        <img alt="Alice" className="w-10 h-10 rounded-full object-cover shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5YtzuGGhQtoMSYb1z4CZnqzzcbjq48xkrOrRAS800ySrm9ocI5a1BzLYwxIk0eZnIcgUfFelkA_eQMCMIc7W08pM-TNUrEQ6mXISeFxVR6YfFBWO1eJoxwM9CgWegDXdxbPoVGlQZxdbmq74kNvWgTuV2Ms4t1n07gHVb4LG_ao3lxXxeamT2cw4fEHaXZ-GRkv6nwiprw6xMch0nuLsJBE30XbcNwDgFCq9ntroDL6ffKWyYToxeDEiPLoO48Pjk38Y0tPqGFSk" />
                         <div className="flex-1 overflow-hidden">
                           <div className="flex justify-between items-start mb-0.5">
                             <h4 className="text-sm font-bold text-slate-900 truncate">Alice Lin</h4>
@@ -517,7 +1291,7 @@ export default function TeacherDashboard() {
                         </div>
                       </div>
                       <div className="p-4 flex items-center gap-3 hover:bg-white cursor-pointer transition-colors border-b border-slate-100">
-                        <img alt="John" className="w-10 h-10 rounded-full object-cover shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAy8gYSxsWIXMDJgBjagtAXPCLznBLwOX3tX91ZKO1QApfFfzvMpXemInFjapK_SL975FXP5atiFYnV9MrfDspQpMEP3S0p8hsB_v3RUiQBcWjIWJR1Q1FvCajAygB3f3k1g870DiNbZW8WXYOnx8Uvlf2Q8Nvwye97E9lHwRnwGMBZ-RmRfKbclN-RyH1HupK7BprpxsdP6g9Z3ITKw4EIF_HRwaojxOktYUbH0FcuJKyQ_M0kZUEhKC0hNYdgn1zpIDF6koegTO8"/>
+                        <img alt="John" className="w-10 h-10 rounded-full object-cover shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAy8gYSxsWIXMDJgBjagtAXPCLznBLwOX3tX91ZKO1QApfFfzvMpXemInFjapK_SL975FXP5atiFYnV9MrfDspQpMEP3S0p8hsB_v3RUiQBcWjIWJR1Q1FvCajAygB3f3k1g870DiNbZW8WXYOnx8Uvlf2Q8Nvwye97E9lHwRnwGMBZ-RmRfKbclN-RyH1HupK7BprpxsdP6g9Z3ITKw4EIF_HRwaojxOktYUbH0FcuJKyQ_M0kZUEhKC0hNYdgn1zpIDF6koegTO8" />
                         <div className="flex-1 overflow-hidden">
                           <div className="flex justify-between items-start mb-0.5">
                             <h4 className="text-sm font-bold text-slate-700 truncate">John Davis</h4>
@@ -534,7 +1308,7 @@ export default function TeacherDashboard() {
                     <div className="px-4 md:px-6 py-4 border-b border-slate-200/60 flex items-center justify-between shadow-sm z-10 bg-white/80 backdrop-blur-md">
                       <div className="flex items-center gap-3">
                         <div className="relative">
-                          <img alt="Alice" className="w-10 h-10 rounded-full object-cover shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCk7Wsjskynl2H5KXiECGBzgWR0Hvt0bSNn7-cg5jZS-lQ0Er7esj0N3SyiGOTxgCx92nEYZv8IT8Fj86UZ6VPrEcvcABG8HENglXyWqnEclvYp_Xh_Z449VX2aygqq4jg1mO-nYvCx3fl2-xuEX_1JAW6HfWjBPpVELirlTSEq-2bX4ICAQnHQVf67hRONetlckhbPzDpoKM9kULnCc--Ahe9IW68YL8tqaVrfFRULnVFCWgiiK-3c025F8JbTI1JU39_WgzQUA_M"/>
+                          <img alt="Alice" className="w-10 h-10 rounded-full object-cover shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCk7Wsjskynl2H5KXiECGBzgWR0Hvt0bSNn7-cg5jZS-lQ0Er7esj0N3SyiGOTxgCx92nEYZv8IT8Fj86UZ6VPrEcvcABG8HENglXyWqnEclvYp_Xh_Z449VX2aygqq4jg1mO-nYvCx3fl2-xuEX_1JAW6HfWjBPpVELirlTSEq-2bX4ICAQnHQVf67hRONetlckhbPzDpoKM9kULnCc--Ahe9IW68YL8tqaVrfFRULnVFCWgiiK-3c025F8JbTI1JU39_WgzQUA_M" />
                           <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full"></span>
                         </div>
                         <div>
@@ -565,7 +1339,7 @@ export default function TeacherDashboard() {
                     <div className="p-4 bg-white/80 backdrop-blur-md border-t border-slate-200/60 z-10">
                       <div className="flex items-center gap-2 md:gap-3 bg-white border border-slate-200 rounded-full px-2 py-1.5 md:px-4 md:py-2 focus-within:border-indigo-400 focus-within:ring-2 focus-within:ring-indigo-400/20 transition-all shadow-sm">
                         <button className="p-2 text-slate-400 hover:text-indigo-600 transition-colors rounded-full hover:bg-indigo-50"><span className="material-symbols-outlined">attach_file</span></button>
-                        <input className="flex-1 bg-transparent border-none outline-none focus:ring-0 text-[.95rem] py-1" placeholder="Type a message..." type="text"/>
+                        <input className="flex-1 bg-transparent border-none outline-none focus:ring-0 text-[.95rem] py-1" placeholder="Type a message..." type="text" />
                         <button className="w-10 h-10 rounded-full bg-gradient-to-r from-indigo-600 to-indigo-500 text-white flex items-center justify-center hover:shadow-lg hover:shadow-indigo-500/30 transition-all active:scale-95 flex-shrink-0"><span className="material-symbols-outlined text-[18px] ml-1">send</span></button>
                       </div>
                     </div>
@@ -601,7 +1375,7 @@ export default function TeacherDashboard() {
                         <tr className="hover:bg-slate-50/80 transition-colors group">
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
-                              <img alt="Alice" className="w-9 h-9 rounded-full object-cover ring-2 ring-white shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9mHyOpfSCUbiESMFCtXc425X4i_scXPSJ355x5z2tvsXovxMF4YcauUy9SPqHOhBZMVzunimUCkt808Po8jmGgPhKLI3ls39stBnquuE7NPpSItbEWhSqFuJAAxCG9oF-xwoZkfS2oFGkVIV8TmanlvL8KvUUwo0BpAgW0X4NWCCS713yUgurEW0qIjQC-02tAu1H0LyB8iDQvisNYRjeyXlJ51_cVO2s5hmGwHDSGbtJQbc5tr_ZEkYSeaPhw3KbygvS3VNKB1U"/>
+                              <img alt="Alice" className="w-9 h-9 rounded-full object-cover ring-2 ring-white shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9mHyOpfSCUbiESMFCtXc425X4i_scXPSJ355x5z2tvsXovxMF4YcauUy9SPqHOhBZMVzunimUCkt808Po8jmGgPhKLI3ls39stBnquuE7NPpSItbEWhSqFuJAAxCG9oF-xwoZkfS2oFGkVIV8TmanlvL8KvUUwo0BpAgW0X4NWCCS713yUgurEW0qIjQC-02tAu1H0LyB8iDQvisNYRjeyXlJ51_cVO2s5hmGwHDSGbtJQbc5tr_ZEkYSeaPhw3KbygvS3VNKB1U" />
                               <span className="text-sm font-bold text-slate-800">Alice Lin</span>
                             </div>
                           </td>
@@ -618,7 +1392,7 @@ export default function TeacherDashboard() {
                         <tr className="hover:bg-slate-50/80 transition-colors group">
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
-                              <img alt="John" className="w-9 h-9 rounded-full object-cover ring-2 ring-white shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmPoMtVfIX5bjeysfE5jkYUNIIW75DMIK5Iomw2TOqwAKMsjNMVnAoL9HrEjPvWSvgxLmnZsBUQFm9FYfe6MpexIcSgwv9Ny1D46trNo71N_fRZP1cDVK1iFoeCvkL9JfKTtQd2yalMe_jLtSELGcfH6YD2ElEhlWh-U8zK1hnzpV0HeRKHTQ-PcVKiidLKbQCjNKVfylWp69brSrGaEmo20TuUuZvb7rS4jpaO5_N1kJbbe8PLg5dgbY9ZlzKN9wuR9zHn_gayFc"/>
+                              <img alt="John" className="w-9 h-9 rounded-full object-cover ring-2 ring-white shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmPoMtVfIX5bjeysfE5jkYUNIIW75DMIK5Iomw2TOqwAKMsjNMVnAoL9HrEjPvWSvgxLmnZsBUQFm9FYfe6MpexIcSgwv9Ny1D46trNo71N_fRZP1cDVK1iFoeCvkL9JfKTtQd2yalMe_jLtSELGcfH6YD2ElEhlWh-U8zK1hnzpV0HeRKHTQ-PcVKiidLKbQCjNKVfylWp69brSrGaEmo20TuUuZvb7rS4jpaO5_N1kJbbe8PLg5dgbY9ZlzKN9wuR9zHn_gayFc" />
                               <span className="text-sm font-bold text-slate-800">John Davis</span>
                             </div>
                           </td>
@@ -635,7 +1409,7 @@ export default function TeacherDashboard() {
                         <tr className="hover:bg-slate-50/80 transition-colors group">
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
-                              <img alt="Mark" className="w-9 h-9 rounded-full object-cover ring-2 ring-white shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDcgi-CLEqUU8zIHTUR56qJbJoiJAZY8qrON2bZktQHFCl-IFRykhaMeyKz7MGz8KOeHAFu3ItwGrVG1FbSovsUICpIhke9K8wrwXQneuNanWHIqWGJYtZKqXQPAH2xHIHupzl4oSi7hgzB7CeE0jM21JjNubI6Ldp2-DEErJHEFf5ByfmLIsMtkuqMAWyhwHYq4XThBV7i-doIZmIJWfH31bbwDkDTxUduW5mB-u4O1x10rpZ7fkV0f-oz3uiZNCoVQ92ia2HCHI"/>
+                              <img alt="Mark" className="w-9 h-9 rounded-full object-cover ring-2 ring-white shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDcgi-CLEqUU8zIHTUR56qJbJoiJAZY8qrON2bZktQHFCl-IFRykhaMeyKz7MGz8KOeHAFu3ItwGrVG1FbSovsUICpIhke9K8wrwXQneuNanWHIqWGJYtZKqXQPAH2xHIHupzl4oSi7hgzB7CeE0jM21JjNubI6Ldp2-DEErJHEFf5ByfmLIsMtkuqMAWyhwHYq4XThBV7i-doIZmIJWfH31bbwDkDTxUduW5mB-u4O1x10rpZ7fkV0f-oz3uiZNCoVQ92ia2HCHI" />
                               <span className="text-sm font-bold text-slate-800">Mark Smith</span>
                             </div>
                           </td>
@@ -664,7 +1438,7 @@ export default function TeacherDashboard() {
                   {/* Performance Card 1 */}
                   <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl border border-slate-200/50 shadow-sm hover:shadow-xl hover:shadow-indigo-500/10 hover:-translate-y-1 transition-all duration-300 group">
                     <div className="flex items-center gap-4 mb-6">
-                      <img alt="Student" className="w-14 h-14 rounded-full object-cover ring-4 ring-indigo-50 shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRoIrPJRN_BrWX01RR8f0AidZH8aBVFIbIfr9_PGC963olWCk0-KoGdC5jetNAN_dbBUWheyA615feqT02UyK-L-rw8bO9gZfTpU0ToSOaOrT1dS8JifmmzWea4HtSIv5kFsc8AWakRrSeKz2fbD2Fu0w6sgKIWs8HBux0lwkHMh6EsVTI0oY2gM4w7cCd0tBeKJ4WJYHOmuSW6To4zEaPvDSnyMFIO6VUhTyq2hI8LUKT6-Az2vrawQOh6dlvzGA8nn_0XH1SQ-c"/>
+                      <img alt="Student" className="w-14 h-14 rounded-full object-cover ring-4 ring-indigo-50 shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRoIrPJRN_BrWX01RR8f0AidZH8aBVFIbIfr9_PGC963olWCk0-KoGdC5jetNAN_dbBUWheyA615feqT02UyK-L-rw8bO9gZfTpU0ToSOaOrT1dS8JifmmzWea4HtSIv5kFsc8AWakRrSeKz2fbD2Fu0w6sgKIWs8HBux0lwkHMh6EsVTI0oY2gM4w7cCd0tBeKJ4WJYHOmuSW6To4zEaPvDSnyMFIO6VUhTyq2hI8LUKT6-Az2vrawQOh6dlvzGA8nn_0XH1SQ-c" />
                       <div>
                         <h4 className="font-bold text-lg text-slate-900">Alice Lin</h4>
                         <p className="text-sm font-medium text-slate-500">Advanced UI Design</p>
@@ -704,7 +1478,7 @@ export default function TeacherDashboard() {
                   {/* Performance Card 2 */}
                   <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl border border-slate-200/50 shadow-sm hover:shadow-xl hover:shadow-indigo-500/10 hover:-translate-y-1 transition-all duration-300 group">
                     <div className="flex items-center gap-4 mb-6">
-                      <img alt="Student" className="w-14 h-14 rounded-full object-cover ring-4 ring-indigo-50 shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAFTxG276x_Z4LVfft4tt1hBs7bup9oQmpfVV2XgMnl7dXKG5teUkOp1eTTIC_FRxEWUBOI21u5Yxlvz83VaDGyuSn0bGIRJMdLZ-bo8366x0UwzF0yk6HOePwihU1EVgPocRR-a5N2F9D4lL6l6cjQwbpy5-S_4GTtRraaG6nSDEfqOf6PkoSxZWZg3RqkaVbETOuludXT4IVGx2tTVVF-ZIvLAFeJCXvCj5fWKFU-iFJ1tXaJBrP_v99VUrEHsbl4LGLpMFvmVo"/>
+                      <img alt="Student" className="w-14 h-14 rounded-full object-cover ring-4 ring-indigo-50 shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAFTxG276x_Z4LVfft4tt1hBs7bup9oQmpfVV2XgMnl7dXKG5teUkOp1eTTIC_FRxEWUBOI21u5Yxlvz83VaDGyuSn0bGIRJMdLZ-bo8366x0UwzF0yk6HOePwihU1EVgPocRR-a5N2F9D4lL6l6cjQwbpy5-S_4GTtRraaG6nSDEfqOf6PkoSxZWZg3RqkaVbETOuludXT4IVGx2tTVVF-ZIvLAFeJCXvCj5fWKFU-iFJ1tXaJBrP_v99VUrEHsbl4LGLpMFvmVo" />
                       <div>
                         <h4 className="font-bold text-lg text-slate-900">John Davis</h4>
                         <p className="text-sm font-medium text-slate-500">History of Arts</p>
@@ -744,7 +1518,7 @@ export default function TeacherDashboard() {
                   {/* Performance Card 3 */}
                   <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl border border-slate-200/50 shadow-sm hover:shadow-xl hover:shadow-indigo-500/10 hover:-translate-y-1 transition-all duration-300 group">
                     <div className="flex items-center gap-4 mb-6">
-                      <img alt="Student" className="w-14 h-14 rounded-full object-cover ring-4 ring-indigo-50 shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAa0y1_Zx64Vgpu1sMu9xw0D21fYr7vU5hcCkBQXpcHFLdtifXectSd8jDSEChWVsLzVjG_BVJREON9Ixmx_k58jWMqote5seR0GvxoGM3QEHEQ8PdjfWle-sdVCsbIsLCcZ-aFATKOjBdSlBYPNf9n8u2RbYQBk4WOSMlUf-PbMDt-QHfh9XN9ZF0mrE2QbOjXGg6bcIzn72uabgWpnVmv9L29dAqXlx5iYvad-RX_EfICXDPRssCHxZKUwoOU_YAT_a-2R0hFUe0"/>
+                      <img alt="Student" className="w-14 h-14 rounded-full object-cover ring-4 ring-indigo-50 shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAa0y1_Zx64Vgpu1sMu9xw0D21fYr7vU5hcCkBQXpcHFLdtifXectSd8jDSEChWVsLzVjG_BVJREON9Ixmx_k58jWMqote5seR0GvxoGM3QEHEQ8PdjfWle-sdVCsbIsLCcZ-aFATKOjBdSlBYPNf9n8u2RbYQBk4WOSMlUf-PbMDt-QHfh9XN9ZF0mrE2QbOjXGg6bcIzn72uabgWpnVmv9L29dAqXlx5iYvad-RX_EfICXDPRssCHxZKUwoOU_YAT_a-2R0hFUe0" />
                       <div>
                         <h4 className="font-bold text-lg text-slate-900">Mark Smith</h4>
                         <p className="text-sm font-medium text-slate-500">UX Research Pro</p>
@@ -804,14 +1578,14 @@ export default function TeacherDashboard() {
                     <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center"><span className="material-symbols-outlined text-[18px]">info</span></div>
                     Basic Information
                   </h3>
-                  
+
                   <div className="space-y-5">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                       <div className="col-span-1 md:col-span-2 space-y-1.5">
                         <label className="text-sm font-bold text-slate-700 ml-1">Course Title</label>
                         <input type="text" placeholder="e.g., Introduction to Advanced UI Design" className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3.5 outline-none bg-slate-50/50 hover:bg-white transition-colors" />
                       </div>
-                      
+
                       <div className="space-y-1.5">
                         <label className="text-sm font-bold text-slate-700 ml-1">Subject & Category</label>
                         <select className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3.5 outline-none bg-slate-50/50 hover:bg-white transition-colors cursor-pointer text-slate-700">
@@ -821,7 +1595,7 @@ export default function TeacherDashboard() {
                           <option>Mathematics</option>
                         </select>
                       </div>
-                      
+
                       <div className="space-y-1.5">
                         <label className="text-sm font-bold text-slate-700 ml-1">Target Class / Grade</label>
                         <select className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3.5 outline-none bg-slate-50/50 hover:bg-white transition-colors cursor-pointer text-slate-700">
@@ -889,8 +1663,8 @@ export default function TeacherDashboard() {
                             <button onClick={() => toggleModuleExpansion(module.id)} className="text-slate-400 hover:text-indigo-600 transition-colors p-1">
                               <span className="material-symbols-outlined">{module.isExpanded ? 'expand_more' : 'chevron_right'}</span>
                             </button>
-                            <input 
-                              type="text" 
+                            <input
+                              type="text"
                               value={module.title}
                               onChange={(e) => updateModuleTitle(module.id, e.target.value)}
                               className="font-bold text-slate-800 bg-transparent border-none focus:ring-0 p-0 text-base w-full max-w-sm focus:outline-none placeholder-slate-400"
@@ -901,16 +1675,16 @@ export default function TeacherDashboard() {
                             <span className="material-symbols-outlined text-[18px]">delete</span>
                           </button>
                         </div>
-                        
+
                         {module.isExpanded && (
-                          <div 
+                          <div
                             className="p-4 pt-2 space-y-2 border-t border-slate-100 min-h-[60px]"
                             onDragOver={handleDragOver}
                             onDrop={(e) => handleDrop(e, module.id, null)}
                           >
                             {module.lessons.map((lesson, lIndex) => (
-                              <div 
-                                key={lesson.id} 
+                              <div
+                                key={lesson.id}
                                 draggable
                                 onDragStart={(e) => handleDragStart(e, module.id, lesson.id)}
                                 onDragEnd={handleDragEnd}
@@ -919,9 +1693,9 @@ export default function TeacherDashboard() {
                                 className="flex items-center gap-3 p-3 bg-white border border-slate-200 rounded-lg shadow-sm group hover:border-indigo-200 transition-all cursor-move"
                               >
                                 <span className="material-symbols-outlined text-slate-300 cursor-grab active:cursor-grabbing">drag_indicator</span>
-                                <div className="w-6 h-6 rounded-md bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs font-bold shrink-0">{mIndex+1}.{lIndex+1}</div>
-                                <input 
-                                  type="text" 
+                                <div className="w-6 h-6 rounded-md bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs font-bold shrink-0">{mIndex + 1}.{lIndex + 1}</div>
+                                <input
+                                  type="text"
                                   value={lesson.title}
                                   onChange={(e) => updateLessonTitle(module.id, lesson.id, e.target.value)}
                                   className="flex-1 text-sm font-medium text-slate-700 bg-transparent border-none focus:ring-0 p-0 focus:outline-none placeholder-slate-400"
@@ -939,7 +1713,7 @@ export default function TeacherDashboard() {
                         )}
                       </div>
                     ))}
-                    
+
                     {courseModules.length === 0 && (
                       <div className="text-center py-8 text-slate-500 border-2 border-dashed border-slate-200 rounded-xl bg-slate-50">
                         <p>No modules added yet. Start by adding a module!</p>
@@ -954,7 +1728,7 @@ export default function TeacherDashboard() {
                     <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center"><span className="material-symbols-outlined text-[18px]">calendar_month</span></div>
                     Scheduling Options
                   </h3>
-                  
+
                   <div className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                       <div className="space-y-1.5">
@@ -973,8 +1747,8 @@ export default function TeacherDashboard() {
                           <h4 className="font-bold text-slate-800">Live Class Schedule</h4>
                           <p className="text-sm text-slate-500 mt-0.5">Will this course include synchronous live sessions?</p>
                         </div>
-                        <button 
-                          onClick={() => setIsLiveClass(!isLiveClass)} 
+                        <button
+                          onClick={() => setIsLiveClass(!isLiveClass)}
                           className={`relative w-12 h-6 rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${isLiveClass ? 'bg-indigo-600' : 'bg-slate-300'}`}
                         >
                           <span className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform duration-300 shadow-sm ${isLiveClass ? 'translate-x-6' : 'translate-x-0'}`}></span>
