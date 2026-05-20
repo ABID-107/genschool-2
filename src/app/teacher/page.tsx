@@ -1,14 +1,52 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Suspense, useState, useEffect, useMemo } from "react";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { TeacherTopNav } from "@/components/teacher/TeacherTopNav";
+import { TeacherSidebar } from "@/components/teacher/TeacherSidebar";
+import { LessonUpload } from "@/components/teacher/LessonUpload";
+import { Attendance } from "@/components/teacher/Attendance";
+import { Assignments } from "@/components/teacher/Assignments";
+import { DashboardOverview } from "@/components/teacher/dashboard/DashboardOverview";
+import { storage } from "@/lib/store";
+import { Assignment, Submission, CalendarEvent } from "@/lib/types";
+import Calendar from "@/components/Calendar";
 
 export default function TeacherDashboard() {
-  const [activeTab, setActiveTab] = useState("dashboard");
+  return (
+    <Suspense fallback={
+      <div className="h-screen w-full flex items-center justify-center bg-[#f8f9fc]">
+        <div className="animate-spin h-8 w-8 text-[#1a56e8] border-4 border-current border-t-transparent rounded-full"></div>
+      </div>
+    }>
+      <TeacherDashboardContent />
+    </Suspense>
+  );
+}
+
+function TeacherDashboardContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  const [activeTab, setActiveTab] = useState(searchParams.get("tab") || "dashboard");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const router = useRouter();
+
+  // Sync activeTab with URL
+  useEffect(() => {
+    const tab = searchParams.get("tab");
+    if (tab && tab !== activeTab) {
+      setActiveTab(tab);
+    }
+  }, [searchParams]);
+
+  const handleTabChange = (tabId: string) => {
+    setActiveTab(tabId);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("tab", tabId);
+    router.push(`${pathname}?${params.toString()}`);
+  };
 
   // New Course Form State
   const [isLiveClass, setIsLiveClass] = useState(false);
@@ -18,14 +56,6 @@ export default function TeacherDashboard() {
   ]);
   const [draggedLessonInfo, setDraggedLessonInfo] = useState<{ moduleId: string, lessonId: string } | null>(null);
 
-  // Upload Lesson State
-  const [uploadLessonTitle, setUploadLessonTitle] = useState("");
-  const [uploadLessonDescription, setUploadLessonDescription] = useState("");
-  const [uploadLessonFile, setUploadLessonFile] = useState<File | null>(null);
-  const [uploadLessonThumbnail, setUploadLessonThumbnail] = useState<string | null>(null);
-  const [uploadingState, setUploadingState] = useState<'idle' | 'uploading' | 'success' | 'error'>('idle');
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [uploadErrorMessage, setUploadErrorMessage] = useState("");
   const [uploadedLessonsList, setUploadedLessonsList] = useState<any[]>([]);
 
   // Course Materials State
@@ -61,6 +91,187 @@ export default function TeacherDashboard() {
   const [isSavingEdit, setIsSavingEdit] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  // ── Assignment System State ──────────────────────────────────────
+  const [assignments, setAssignments] = useState<Assignment[]>([]);
+  const [submissions, setSubmissions] = useState<Submission[]>([]);
+  const [events, setEvents] = useState<CalendarEvent[]>([]);
+
+  // Load data from storage on mount
+  useEffect(() => {
+    setAssignments(storage.getAssignments());
+    setEvents(storage.getEvents());
+    // In a real app, submissions would be fetched per assignment
+    // For this mock, we'll initialize some if they don't exist
+    const savedAssignments = storage.getAssignments();
+    if (savedAssignments.length > 0) {
+      setAssignments(savedAssignments);
+    }
+  }, []);
+
+  // Assignment UI state
+  const [assignmentView, setAssignmentView] = useState<'list' | 'create' | 'edit' | 'submissions'>('list');
+  const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null);
+  const [gradingSubmission, setGradingSubmission] = useState<Submission | null>(null);
+
+  // Create/Edit form state
+  const [aFormTitle, setAFormTitle] = useState('');
+  const [aFormSubject, setAFormSubject] = useState('Visual Communication');
+  const [aFormClass, setAFormClass] = useState('Sophomore (A)');
+  const [aFormType, setAFormType] = useState('Project Submission');
+  const [aFormInstructions, setAFormInstructions] = useState('');
+  const [aFormDueDate, setAFormDueDate] = useState('');
+  const [aFormDueTime, setAFormDueTime] = useState('23:59');
+  const [aFormMarks, setAFormMarks] = useState(100);
+  const [aFormError, setAFormError] = useState('');
+  const [aFormSaving, setAFormSaving] = useState(false);
+
+  // Grading state
+  const [gradeMarks, setGradeMarks] = useState('');
+  const [gradeFeedback, setGradeFeedback] = useState('');
+  const [gradeSaving, setGradeSaving] = useState(false);
+
+  // Delete assignment confirmation
+  const [assignmentToDelete, setAssignmentToDelete] = useState<Assignment | null>(null);
+  const [isDeletingAssignment, setIsDeletingAssignment] = useState(false);
+
+  // Toast state
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+
+  const showToast = (message: string, type: 'success' | 'error' = 'success') => {
+    setToast({ message, type });
+    setTimeout(() => setToast(null), 3500);
+  };
+
+  const openCreateAssignment = () => {
+    setAFormTitle(''); setAFormSubject('Visual Communication'); setAFormClass('Sophomore (A)');
+    setAFormType('Project Submission'); setAFormInstructions(''); setAFormDueDate('');
+    setAFormDueTime('23:59'); setAFormMarks(100); setAFormError('');
+    setAssignmentView('create');
+  };
+
+  const openEditAssignment = (asgn: Assignment) => {
+    setAFormTitle(asgn.title); setAFormSubject(asgn.subject); setAFormClass(asgn.classGroup || 'Sophomore (A)');
+    setAFormType(asgn.type); setAFormInstructions(asgn.instructions); setAFormDueDate(asgn.dueDate);
+    setAFormDueTime(asgn.dueTime); setAFormMarks(asgn.totalMarks); setAFormError('');
+    setSelectedAssignment(asgn); setAssignmentView('edit');
+  };
+
+  const saveAssignment = (publish: boolean) => {
+    if (!aFormTitle.trim()) { setAFormError('Assignment title is required.'); return; }
+    if (!aFormDueDate) { setAFormError('Due date is required.'); return; }
+    if (!aFormInstructions.trim()) { setAFormError('Instructions are required.'); return; }
+    setAFormSaving(true); setAFormError('');
+    setTimeout(() => {
+      let updatedAssignments: Assignment[];
+      if (assignmentView === 'edit' && selectedAssignment) {
+        updatedAssignments = assignments.map(a => a.id === selectedAssignment.id
+          ? { ...a, title: aFormTitle, subject: aFormSubject, classGroup: aFormClass, type: aFormType, instructions: aFormInstructions, dueDate: aFormDueDate, dueTime: aFormDueTime, totalMarks: aFormMarks, status: publish ? 'published' : 'draft' }
+          : a);
+        showToast('Assignment updated successfully!');
+      } else {
+        const newAsgn: Assignment = { 
+          id: `asgn-${Date.now()}`, 
+          title: aFormTitle, 
+          subject: aFormSubject, 
+          teacher: 'Dr. Sarah Jenkins', 
+          classGroup: aFormClass,
+          type: aFormType, 
+          instructions: aFormInstructions, 
+          dueDate: aFormDueDate, 
+          dueTime: aFormDueTime, 
+          totalMarks: aFormMarks, 
+          status: publish ? 'published' : 'draft' 
+        };
+        updatedAssignments = [newAsgn, ...assignments];
+        
+        // Also add to calendar if published
+        if (publish) {
+          const newEvent: CalendarEvent = {
+            id: `evt-asgn-${Date.now()}`,
+            title: `Deadline: ${aFormTitle}`,
+            type: 'homework',
+            start: `${aFormDueDate}T${aFormDueTime}`,
+            end: `${aFormDueDate}T${aFormDueTime}`,
+            subject: aFormSubject,
+            description: `Submission deadline for ${aFormTitle}`
+          };
+          const updatedEvents = [newEvent, ...events];
+          setEvents(updatedEvents);
+          storage.saveEvents(updatedEvents);
+        }
+        
+        showToast(publish ? 'Assignment published successfully!' : 'Assignment saved as draft!');
+      }
+      setAssignments(updatedAssignments);
+      storage.saveAssignments(updatedAssignments);
+      setAFormSaving(false); setAssignmentView('list'); setSelectedAssignment(null);
+    }, 900);
+  };
+
+  const deleteAssignment = () => {
+    if (!assignmentToDelete) return;
+    setIsDeletingAssignment(true);
+    setTimeout(() => {
+      const updatedAssignments = assignments.filter(a => a.id !== assignmentToDelete.id);
+      setAssignments(updatedAssignments);
+      storage.saveAssignments(updatedAssignments);
+      
+      setSubmissions(prev => prev.filter(s => s.assignmentId !== assignmentToDelete.id));
+      setIsDeletingAssignment(false); setAssignmentToDelete(null);
+      showToast('Assignment deleted.');
+    }, 700);
+  };
+
+  const openSubmissionsView = (asgn: Assignment) => {
+    setSelectedAssignment(asgn); setGradingSubmission(null);
+    setGradeMarks(''); setGradeFeedback('');
+    setAssignmentView('submissions');
+  };
+
+  const openGrading = (sub: Submission) => {
+    setGradingSubmission(sub);
+    setGradeMarks(sub.marks?.toString() ?? '');
+    setGradeFeedback(sub.feedback ?? '');
+  };
+
+  const saveGrade = () => {
+    if (!gradingSubmission || !selectedAssignment) return;
+    const marksNum = parseInt(gradeMarks);
+    if (isNaN(marksNum) || marksNum < 0 || marksNum > selectedAssignment.totalMarks) {
+      showToast(`Marks must be between 0 and ${selectedAssignment.totalMarks}.`, 'error'); return;
+    }
+    setGradeSaving(true);
+    setTimeout(() => {
+      const updatedSubmissions = submissions.map(s => s.id === gradingSubmission.id
+        ? { ...s, marks: marksNum, feedback: gradeFeedback, status: 'graded' as const } : s);
+      setSubmissions(updatedSubmissions);
+      
+      // Update assignments list to reflect graded status if applicable
+      const updatedAssignments = assignments.map(a => a.id === selectedAssignment.id ? {
+        ...a, marks: marksNum, feedback: gradeFeedback, status: 'graded' as const
+      } : a);
+      setAssignments(updatedAssignments);
+      storage.saveAssignments(updatedAssignments);
+      
+      setGradeSaving(false); setGradingSubmission(null);
+      showToast('Grade saved successfully!');
+    }, 700);
+  };
+
+  const getAssignmentSubmissions = (asgnId: string) => submissions.filter(s => s.assignmentId === asgnId);
+  const getSubmissionCounts = (asgnId: string) => {
+    const subs = getAssignmentSubmissions(asgnId);
+    return { total: subs.length, submitted: subs.filter(s => s.status !== 'not_submitted').length, graded: subs.filter(s => s.status === 'graded').length };
+  };
+  const isOverdue = (dueDate: string, dueTime: string) => new Date(`${dueDate}T${dueTime}`) < new Date();
+
+  const statusConfig: Record<Submission['status'], { label: string; color: string; icon: string }> = {
+    not_submitted: { label: 'Not Submitted', color: 'bg-slate-100 text-slate-600 border-slate-200', icon: 'schedule' },
+    submitted: { label: 'Submitted', color: 'bg-blue-50 text-blue-700 border-blue-200', icon: 'task_alt' },
+    late: { label: 'Late', color: 'bg-amber-50 text-amber-700 border-amber-200', icon: 'warning' },
+    graded: { label: 'Graded', color: 'bg-emerald-50 text-emerald-700 border-emerald-200', icon: 'military_tech' },
+  };
+
   const filteredAndSortedMaterials = useMemo(() => {
     let result = courseMaterials;
     if (materialSearchQuery) {
@@ -89,10 +300,10 @@ export default function TeacherDashboard() {
   const saveEditedMaterial = () => {
     setIsSavingEdit(true);
     setTimeout(() => {
-      setCourseMaterials(courseMaterials.map(m => 
-        m.id === editingMaterial.id ? { 
-          ...m, 
-          title: editMaterialTitle, 
+      setCourseMaterials(courseMaterials.map(m =>
+        m.id === editingMaterial.id ? {
+          ...m,
+          title: editMaterialTitle,
           description: editMaterialDescription,
           thumbnail: editMaterialThumbnail,
           size: editMaterialFile ? (editMaterialFile.size / (1024 * 1024)).toFixed(1) + " MB" : m.size,
@@ -176,11 +387,11 @@ export default function TeacherDashboard() {
       clearInterval(interval);
       setUploadMatProgress(100);
       setUploadMatSuccess(true);
-      
-      const newType = uploadMatFile.type.includes('pdf') ? 'pdf' : 
-                      uploadMatFile.type.includes('video') ? 'video' : 
-                      uploadMatFile.name.endsWith('.zip') ? 'zip' : 
-                      uploadMatFile.type.includes('presentation') ? 'ppt' : 'doc';
+
+      const newType = uploadMatFile.type.includes('pdf') ? 'pdf' :
+        uploadMatFile.type.includes('video') ? 'video' :
+          uploadMatFile.name.endsWith('.zip') ? 'zip' :
+            uploadMatFile.type.includes('presentation') ? 'ppt' : 'doc';
 
       setCourseMaterials([{
         id: `mat-${Date.now()}`,
@@ -192,7 +403,7 @@ export default function TeacherDashboard() {
         moduleId: uploadMatModule || '',
         fileUrl: 'dummy'
       }, ...courseMaterials]);
-      
+
       setTimeout(() => {
         setIsMatUploading(false);
         setUploadMatProgress(0);
@@ -204,99 +415,6 @@ export default function TeacherDashboard() {
         setUploadMatModule("");
       }, 1500);
     }, 2000);
-  };
-
-  const handleLessonFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (file.size > 500 * 1024 * 1024) {
-        setUploadErrorMessage("File exceeds 500MB limit.");
-        setUploadingState("error");
-        return;
-      }
-      setUploadLessonFile(file);
-      setUploadingState("idle");
-    }
-  };
-
-  const handleLessonThumbnailUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setUploadLessonThumbnail(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleLessonDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-  };
-
-  const handleLessonDropFile = (e: React.DragEvent) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files?.[0];
-    if (file) {
-      if (file.size > 500 * 1024 * 1024) {
-        setUploadErrorMessage("File exceeds 500MB limit.");
-        setUploadingState("error");
-        return;
-      }
-      setUploadLessonFile(file);
-      setUploadingState("idle");
-    }
-  };
-
-  const submitLessonUpload = () => {
-    if (!uploadLessonTitle) {
-      setUploadErrorMessage("Lesson title is required.");
-      setUploadingState("error");
-      return;
-    }
-    if (!uploadLessonFile) {
-      setUploadErrorMessage("Please upload a lesson file.");
-      setUploadingState("error");
-      return;
-    }
-
-    setUploadingState("uploading");
-    setUploadProgress(0);
-
-    const interval = setInterval(() => {
-      setUploadProgress(prev => {
-        if (prev >= 90) {
-          clearInterval(interval);
-          return 90;
-        }
-        return prev + 10;
-      });
-    }, 200);
-
-    setTimeout(() => {
-      clearInterval(interval);
-      setUploadProgress(100);
-      setUploadingState("success");
-      setUploadedLessonsList(prev => [{
-        id: `upl-${Date.now()}`,
-        title: uploadLessonTitle,
-        description: uploadLessonDescription,
-        filename: uploadLessonFile.name,
-        size: (uploadLessonFile.size / (1024 * 1024)).toFixed(1) + " MB",
-        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-        type: uploadLessonFile.type.includes('video') ? 'video' : uploadLessonFile.type.includes('pdf') ? 'pdf' : 'doc'
-      }, ...prev]);
-
-      setUploadLessonTitle("");
-      setUploadLessonDescription("");
-      setUploadLessonFile(null);
-      setUploadLessonThumbnail(null);
-
-      setTimeout(() => {
-        setUploadingState("idle");
-        setUploadProgress(0);
-      }, 3000);
-    }, 2500);
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -423,44 +541,17 @@ export default function TeacherDashboard() {
   return (
     <div className="bg-teacher-background text-teacher-on-surface font-sans h-screen overflow-hidden flex flex-col">
       {/* TopNavBar */}
-      <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-white/80 backdrop-blur-md border-b border-slate-200/50 shadow-sm flex items-center justify-between px-4 md:px-6 w-full transition-all duration-300">
-        <div className="flex items-center gap-3 md:gap-4">
-          <button
-            className="md:hidden p-2 -ml-2 text-slate-600 hover:bg-slate-100 rounded-full transition-colors"
-            onClick={() => setIsSidebarOpen(true)}
-          >
-            <span className="material-symbols-outlined">menu</span>
-          </button>
-          <Link href="/demo" className="text-xl font-bold tracking-tight text-indigo-600 no-underline hover:text-indigo-700 transition-colors flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20 group-hover:scale-105 transition-transform">
-              <span className="material-symbols-outlined text-[18px]">school</span>
-            </div>
-            <span className="hidden sm:block">EduPlatform</span>
-          </Link>
-        </div>
-        <div className="flex items-center gap-2 md:gap-6">
-          <div className="flex items-center gap-1 md:gap-2">
-            <button className="text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 transition-colors p-2 rounded-full cursor-pointer active:scale-95">
-              <span className="material-symbols-outlined">notifications</span>
-            </button>
-            <button className="hidden sm:flex text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 transition-colors p-2 rounded-full cursor-pointer active:scale-95">
-              <span className="material-symbols-outlined">settings</span>
-            </button>
-          </div>
-          <div className="h-8 w-px bg-slate-200 hidden sm:block"></div>
-          <div className="flex items-center gap-3 cursor-pointer group">
-            <div className="text-right hidden md:block">
-              <p className="text-sm font-semibold text-slate-900 group-hover:text-indigo-600 transition-colors">Dr. Sarah Jenkins</p>
-              <p className="text-xs text-slate-500">Senior Educator</p>
-            </div>
-            <img
-              alt="Teacher profile avatar"
-              className="w-9 h-9 md:w-10 md:h-10 rounded-full border-2 border-white shadow-sm object-cover group-hover:border-indigo-200 transition-all"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCW_k1UDJKVTHEb0vxQzYL6VWv9GY90kK7a7iRg-LqTHQ6_3ChbNeshcUf0XN_KFMzFLuCC27LFsWygLjphkw2pxAfmtLf0fNQ0e4h_S4tkGHHsBYlJ2OtxdMsraFPxjORddmtIH6BUJ4DM5zzewdyqkdcQOuNkOe0eTK_qDfy8B6knNUw2_z0cLmJwlBRBr3XR7Od38LUJju-YCUFxNN5HoTefz3L09BoJtFHNNeXlO4_xhM3hlJef9ALLRbqoUXw0bMp9uQAkJTs"
-            />
-          </div>
-        </div>
-      </header>
+      <TeacherTopNav
+        onToggleSidebar={() => setIsSidebarOpen(true)}
+        teacherName="Dr. Sarah Jenkins"
+        teacherRole="Senior Educator"
+        avatarUrl="https://lh3.googleusercontent.com/aida-public/AB6AXuCW_k1UDJKVTHEb0vxQzYL6VWv9GY90kK7a7iRg-LqTHQ6_3ChbNeshcUf0XN_KFMzFLuCC27LFsWygLjphkw2pxAfmtLf0fNQ0e4h_S4tkGHHsBYlJ2OtxdMsraFPxjORddmtIH6BUJ4DM5zzewdyqkdcQOuNkOe0eTK_qDfy8B6knNUw2_z0cLmJwlBRBr3XR7Od38LUJju-YCUFxNN5HoTefz3L09BoJtFHNNeXlO4_xhM3hlJef9ALLRbqoUXw0bMp9uQAkJTs"
+        onSignOut={() => {
+          localStorage.removeItem("isAuthenticated");
+          localStorage.removeItem("userRole");
+          router.push("/login");
+        }}
+      />
 
       {/* SideNavBar & Main Content Wrapper */}
       <div className="flex flex-1 pt-16 overflow-hidden relative">
@@ -473,60 +564,17 @@ export default function TeacherDashboard() {
         )}
 
         {/* SideNavBar */}
-        <aside className={`fixed md:static inset-y-0 left-0 z-50 w-[280px] bg-white/95 backdrop-blur-xl md:bg-white border-r border-slate-200/50 flex flex-col gap-1 p-4 flex-shrink-0 h-[calc(100vh-64px)] overflow-y-auto custom-scrollbar transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
-          <div className="flex items-center justify-between px-3 py-4 mb-2 md:mb-4">
-            <div>
-              <h2 className="text-lg font-bold text-slate-900 font-['Bricolage_Grotesque']">Teacher Portal</h2>
-              <p className="text-xs text-slate-500">Academic Management</p>
-            </div>
-            <button
-              className="md:hidden p-2 -mr-2 text-slate-400 hover:bg-slate-100 rounded-full transition-colors"
-              onClick={() => setIsSidebarOpen(false)}
-            >
-              <span className="material-symbols-outlined">close</span>
-            </button>
-          </div>
-          <nav className="flex flex-col gap-1.5">
-            {[
-              { id: 'dashboard', icon: 'dashboard', label: 'Dashboard' },
-              { id: 'lessons', icon: 'auto_stories', label: 'Lessons' },
-              { id: 'materials', icon: 'folder_open', label: 'Materials' },
-              { id: 'assignments', icon: 'assignment', label: 'Assignments' },
-              { id: 'chat', icon: 'chat', label: 'Chat' },
-              { id: 'payments', icon: 'payments', label: 'Payments' },
-              { id: 'performance', icon: 'trending_up', label: 'Performance' },
-            ].map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => { setActiveTab(tab.id); setIsSidebarOpen(false); }}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ease-in-out font-sans text-sm font-semibold w-full text-left relative overflow-hidden group
-                  ${activeTab === tab.id
-                    ? 'text-indigo-700 bg-indigo-50/80 shadow-sm border border-indigo-100/50'
-                    : 'text-slate-600 hover:bg-slate-50 hover:text-indigo-600 border border-transparent'
-                  }`}
-              >
-                {activeTab === tab.id && (
-                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-indigo-500 to-purple-500 rounded-r-full"></div>
-                )}
-                <span className={`material-symbols-outlined transition-transform duration-300 ${activeTab === tab.id ? 'scale-110' : 'group-hover:scale-110'}`}>{tab.icon}</span>
-                <span>{tab.label}</span>
-              </button>
-            ))}
-          </nav>
-          <div className="mt-auto pt-4 relative group">
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl opacity-50 group-hover:opacity-100 transition-opacity"></div>
-            <div className="relative p-5 border border-indigo-100/50 rounded-2xl backdrop-blur-sm bg-white/50">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="material-symbols-outlined text-indigo-500 text-[18px]">cloud</span>
-                <p className="text-xs font-bold text-slate-700 uppercase tracking-wider">Storage</p>
-              </div>
-              <div className="h-2 w-full bg-indigo-100/50 rounded-full overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 w-3/4 rounded-full"></div>
-              </div>
-              <p className="text-xs text-slate-600 font-medium mt-3">7.5 GB <span className="text-slate-400 font-normal">/ 10 GB used</span></p>
-            </div>
-          </div>
-        </aside>
+        <TeacherSidebar
+          isOpen={isSidebarOpen}
+          activeTab={activeTab}
+          onTabChange={handleTabChange}
+          onCloseSidebar={() => setIsSidebarOpen(false)}
+          onSignOut={() => {
+            localStorage.removeItem("isAuthenticated");
+            localStorage.removeItem("userRole");
+            router.push("/login");
+          }}
+        />
 
         {/* Main Content Area */}
         <main className="flex-1 overflow-y-auto custom-scrollbar bg-slate-50/50 p-4 md:p-8 h-full relative">
@@ -534,295 +582,37 @@ export default function TeacherDashboard() {
 
             {/* Tab: Dashboard Overview */}
             {activeTab === 'dashboard' && (
-              <section id="overview" className="animate-in fade-in duration-500">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-6 md:mb-8">
-                  <div>
-                    <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-1 md:mb-2 font-['Bricolage_Grotesque'] tracking-tight">Welcome back, Dr. Jenkins</h1>
-                    <p className="text-sm md:text-base text-slate-500">Here's what's happening with your classes today.</p>
-                  </div>
-                  <button onClick={() => setActiveTab('new-course')} className="bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-purple-500 text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center gap-2 shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5 active:translate-y-0 w-full md:w-auto justify-center">
-                    <span className="material-symbols-outlined text-[20px]">add</span>
-                    New Course
-                  </button>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                  {/* Stats Cards */}
-                  <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl border border-slate-200/50 shadow-sm flex items-center gap-4 hover:shadow-xl hover:shadow-indigo-500/5 hover:-translate-y-1 transition-all duration-300 group">
-                    <div className="w-14 h-14 bg-gradient-to-br from-indigo-50 to-indigo-100/50 text-indigo-600 rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
-                      <span className="material-symbols-outlined text-2xl">group</span>
-                    </div>
-                    <div>
-                      <p className="text-sm text-slate-500 font-medium mb-1">Total Students</p>
-                      <h3 className="text-2xl font-bold text-slate-900 font-['Bricolage_Grotesque']">1,284</h3>
-                    </div>
-                  </div>
-                  <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl border border-slate-200/50 shadow-sm flex items-center gap-4 hover:shadow-xl hover:shadow-emerald-500/5 hover:-translate-y-1 transition-all duration-300 group">
-                    <div className="w-14 h-14 bg-gradient-to-br from-emerald-50 to-emerald-100/50 text-emerald-600 rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
-                      <span className="material-symbols-outlined text-2xl">school</span>
-                    </div>
-                    <div>
-                      <p className="text-sm text-slate-500 font-medium mb-1">Active Courses</p>
-                      <h3 className="text-2xl font-bold text-slate-900 font-['Bricolage_Grotesque']">12</h3>
-                    </div>
-                  </div>
-                  <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl border border-slate-200/50 shadow-sm flex items-center gap-4 hover:shadow-xl hover:shadow-amber-500/5 hover:-translate-y-1 transition-all duration-300 group">
-                    <div className="w-14 h-14 bg-gradient-to-br from-amber-50 to-amber-100/50 text-amber-600 rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-300">
-                      <span className="material-symbols-outlined text-2xl">assignment_turned_in</span>
-                    </div>
-                    <div>
-                      <p className="text-sm text-slate-500 font-medium mb-1">Assignments</p>
-                      <h3 className="text-2xl font-bold text-slate-900 font-['Bricolage_Grotesque']">48</h3>
-                    </div>
-                  </div>
-                  {/* <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl border border-slate-200/50 shadow-sm flex items-center gap-4 hover:shadow-xl hover:shadow-rose-500/5 hover:-translate-y-1 transition-all duration-300 group">
-                    <div className="w-14 h-14 bg-gradient-to-br from-rose-50 to-rose-100/50 text-rose-600 rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
-                      <span className="material-symbols-outlined text-2xl">account_balance_wallet</span>
-                    </div>
-                    <div>
-                      <p className="text-sm text-slate-500 font-medium mb-1">Revenue</p>
-                      <h3 className="text-2xl font-bold text-slate-900 font-['Bricolage_Grotesque']">$12.4k</h3>
-                    </div>
-                  </div> */}
-                </div>
-                {/* Bento Grid Layout for Progress */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6 md:mt-8">
-                  <div className="lg:col-span-2 bg-white/80 backdrop-blur-sm p-6 md:p-8 rounded-2xl border border-slate-200/50 shadow-sm">
-                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                      <h3 className="text-xl font-bold text-slate-900 font-['Bricolage_Grotesque']">Student Progress</h3>
-                      <select className="w-full sm:w-auto border border-slate-200/80 rounded-xl text-sm px-4 py-2.5 text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none bg-slate-50/50 cursor-pointer hover:bg-slate-100 transition-colors">
-                        <option>Last 7 Days</option>
-                        <option>Last 30 Days</option>
-                      </select>
-                    </div>
-                    <div className="space-y-6">
-                      <div className="flex items-center gap-4 group cursor-pointer p-2 -mx-2 rounded-xl hover:bg-slate-50 transition-colors">
-                        <img alt="Student" className="w-10 h-10 rounded-full object-cover ring-2 ring-transparent group-hover:ring-indigo-200 transition-all shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUta4-2rSjNLQv54bTrnBaHJlHYqBLCwluvy6Z-qkl2muGJjo5-X8J7rgxmlGxlOxVhHQpPOwZ8QZU53eDhssRtxqpkGoAGZNQdKd4RK9gAPh_NRBqujMIqqKc1Y27WuLkwKy5b7WAPnzbN6oSCzgea8HZtHQ43f1TdJQQF5srFfg02JXy-KqxxDFRUXNCzBBrTztv_viCaew6HWzTYxTQ5ULz3QQSWg9KChJ0rGyk2rwivadXFwW8llji83OV2jlAOjjcGAVNSmM" />
-                        <div className="flex-1">
-                          <div className="flex justify-between mb-1">
-                            <span className="text-sm font-semibold text-slate-800">Jane Doe</span>
-                            <span className="text-sm font-bold text-indigo-600">88%</span>
-                          </div>
-                          <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
-                            <div className="h-full bg-gradient-to-r from-indigo-400 to-indigo-600 w-[88%] rounded-full group-hover:shadow-[0_0_10px_rgba(79,70,229,0.4)] transition-shadow"></div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-4 group cursor-pointer p-2 -mx-2 rounded-xl hover:bg-slate-50 transition-colors">
-                        <img alt="Student" className="w-10 h-10 rounded-full object-cover ring-2 ring-transparent group-hover:ring-amber-200 transition-all shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcwA27BIu8t0dk3RSo-2puJJ2zgtTzD38rprSs9BoEOsSlRSL3kGvyKO5aZZMKn1q3b9iUwYcRN-y6Bec3By2iGljlkpIu-8f8gVmN3HiiIhynJLlErYdboCAnGNydJy52ayUK2uR8lU72c2uU1dixaVqEJZ7wARZHikf0n5AKdCWdQ5tlMxdvyrFuyElNKsDUQjQp_LKmRwcsKBMRNb1lx-_7sMtkA4ErByyi_0ZW3EqSTTCzguM3Lq4PsJIA9EKFDyIkt_D8SCw" />
-                        <div className="flex-1">
-                          <div className="flex justify-between mb-1">
-                            <span className="text-sm font-semibold text-slate-800">Mark Smith</span>
-                            <span className="text-sm font-bold text-amber-500">72%</span>
-                          </div>
-                          <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
-                            <div className="h-full bg-gradient-to-r from-amber-400 to-amber-500 w-[72%] rounded-full group-hover:shadow-[0_0_10px_rgba(245,158,11,0.4)] transition-shadow"></div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-4 group cursor-pointer p-2 -mx-2 rounded-xl hover:bg-slate-50 transition-colors">
-                        <img alt="Student" className="w-10 h-10 rounded-full object-cover ring-2 ring-transparent group-hover:ring-emerald-200 transition-all shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATi5GzBnVwmc4Slm91afw20KBaB2zLMAzzvXy8WzU1sLPn3nCTz8J7ZegHggrD_0Dptx82NkXGIF8Up_Q9MstUc0B778cQdkTfrKI9VzMiwitqCAgc0rKifjv5-umVm1CLutzPjaxSQyZIu9ytFJU9-XoBfAi1PanUrUrLi3bqKnkzS63sNPVsls2cu7a1qD7AeqvCGnqrTlhMMRRs4Ga7LNSy5CHinFyUUyxk7wfPLJzCuksvKAb3JFPdEZsIqqC46AeMTtCjO1Q" />
-                        <div className="flex-1">
-                          <div className="flex justify-between mb-1">
-                            <span className="text-sm font-semibold text-slate-800">Alice Lin</span>
-                            <span className="text-sm font-bold text-emerald-500">95%</span>
-                          </div>
-                          <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
-                            <div className="h-full bg-gradient-to-r from-emerald-400 to-emerald-500 w-[95%] rounded-full group-hover:shadow-[0_0_10px_rgba(16,185,129,0.4)] transition-shadow"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 p-8 rounded-2xl text-white flex flex-col justify-between relative overflow-hidden shadow-xl shadow-indigo-900/20 group hover:shadow-indigo-900/40 transition-shadow">
-                    <div className="relative z-10">
-                      <div className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center mb-6 border border-white/20">
-                        <span className="material-symbols-outlined text-white">event</span>
-                      </div>
-                      <h3 className="text-2xl font-bold mb-2 font-['Bricolage_Grotesque'] tracking-tight">Upcoming Session</h3>
-                      <p className="text-indigo-100 text-sm opacity-90 leading-relaxed">Advanced UI Design Principles</p>
-                      <div className="mt-6 flex items-center gap-2 bg-black/20 w-fit px-4 py-2 rounded-xl backdrop-blur-md border border-white/10">
-                        <span className="material-symbols-outlined text-[18px] text-indigo-200">schedule</span>
-                        <span className="text-sm font-semibold tracking-wide">14:00 - 15:30</span>
-                      </div>
-                    </div>
-                    <button className="bg-white text-indigo-700 w-full py-3.5 rounded-xl font-bold text-sm relative z-10 hover:bg-indigo-50 transition-colors shadow-lg shadow-black/10 active:scale-[0.98] mt-8 group-hover:-translate-y-1">
-                      Join Meeting
-                    </button>
-                    {/* Abstract decoration */}
-                    <div className="absolute -right-12 -top-12 w-40 h-40 bg-purple-500/30 rounded-full blur-3xl group-hover:bg-purple-400/40 transition-colors"></div>
-                    <div className="absolute -left-8 -bottom-8 w-32 h-32 bg-indigo-400/30 rounded-full blur-2xl group-hover:bg-indigo-400/40 transition-colors"></div>
-                  </div>
-                </div>
-              </section>
+              <DashboardOverview
+                assignments={assignments}
+                events={events}
+                onTabChange={handleTabChange}
+                teacherName="Dr. Sarah Jenkins"
+              />
+            )}
+
+            {/* Tab: Attendance */}
+            {activeTab === 'attendance' && (
+              <Attendance />
             )}
 
             {/* Tab: Upload Lessons */}
             {activeTab === 'lessons' && (
               <section id="upload" className="animate-in fade-in duration-500 max-w-5xl mx-auto space-y-6">
-                <div className="bg-white/80 backdrop-blur-sm p-6 md:p-8 rounded-2xl border border-slate-200/50 shadow-sm transition-shadow">
-                  <h3 className="text-2xl font-bold text-slate-900 mb-6 font-['Bricolage_Grotesque'] tracking-tight">Upload New Lesson</h3>
-
-                  {uploadingState === 'success' && (
-                    <div className="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-3 text-emerald-700 animate-in slide-in-from-top-2">
-                      <span className="material-symbols-outlined">check_circle</span>
-                      <p className="font-semibold text-sm">Lesson uploaded successfully!</p>
-                    </div>
-                  )}
-
-                  {uploadingState === 'error' && (
-                    <div className="mb-6 p-4 bg-rose-50 border border-rose-200 rounded-xl flex items-center gap-3 text-rose-700 animate-in slide-in-from-top-2">
-                      <span className="material-symbols-outlined">error</span>
-                      <p className="font-semibold text-sm">{uploadErrorMessage}</p>
-                    </div>
-                  )}
-
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div className="space-y-5">
-                      <div className="space-y-1.5">
-                        <label className="text-sm font-bold text-slate-700 ml-1">Lesson Title <span className="text-rose-500">*</span></label>
-                        <input
-                          type="text"
-                          placeholder="e.g., Introduction to CSS Grid"
-                          className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3.5 outline-none bg-slate-50/50 hover:bg-white transition-colors"
-                          value={uploadLessonTitle}
-                          onChange={(e) => setUploadLessonTitle(e.target.value)}
-                        />
-                      </div>
-
-                      <div className="space-y-1.5">
-                        <label className="text-sm font-bold text-slate-700 ml-1">Description <span className="text-xs font-normal text-slate-400">(Optional)</span></label>
-                        <textarea
-                          placeholder="Brief description of the lesson content..."
-                          rows={4}
-                          className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3.5 outline-none bg-slate-50/50 hover:bg-white transition-colors resize-none"
-                          value={uploadLessonDescription}
-                          onChange={(e) => setUploadLessonDescription(e.target.value)}
-                        ></textarea>
-                      </div>
-
-                      <div className="space-y-1.5">
-                        <label className="text-sm font-bold text-slate-700 ml-1">Thumbnail Image <span className="text-xs font-normal text-slate-400">(Optional)</span></label>
-                        <div className="flex items-center gap-4">
-                          {uploadLessonThumbnail ? (
-                            <div className="relative">
-                              <img src={uploadLessonThumbnail} alt="Thumbnail Preview" className="w-20 h-20 object-cover rounded-xl border border-slate-200 shadow-sm" />
-                              <button onClick={() => setUploadLessonThumbnail(null)} className="absolute -top-2 -right-2 bg-rose-100 text-rose-600 rounded-full p-1 hover:bg-rose-200 transition-colors shadow-sm">
-                                <span className="material-symbols-outlined text-[14px]">close</span>
-                              </button>
-                            </div>
-                          ) : (
-                            <div className="w-20 h-20 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center text-slate-400">
-                              <span className="material-symbols-outlined text-2xl">image</span>
-                            </div>
-                          )}
-                          <div className="flex-1">
-                            <label className="cursor-pointer bg-white border border-slate-200 text-slate-600 font-semibold px-4 py-2 rounded-lg text-sm hover:bg-slate-50 transition-colors inline-block shadow-sm">
-                              Upload Image
-                              <input type="file" accept="image/*" onChange={handleLessonThumbnailUpload} className="hidden" />
-                            </label>
-                            <p className="text-xs text-slate-500 mt-1.5">Recommended size: 1280x720px</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-1.5 flex flex-col">
-                      <label className="text-sm font-bold text-slate-700 ml-1">Lesson File <span className="text-rose-500">*</span></label>
-                      <div
-                        className={`flex-1 border-2 border-dashed rounded-2xl p-6 flex flex-col items-center justify-center text-center transition-all duration-300 relative overflow-hidden group ${uploadLessonFile ? 'border-emerald-400 bg-emerald-50/30' : 'border-slate-300/80 hover:border-indigo-500 hover:bg-indigo-50/50 bg-slate-50/30 cursor-pointer'}`}
-                        onDragOver={handleLessonDragOver}
-                        onDrop={handleLessonDropFile}
-                      >
-                        {!uploadLessonFile && <input type="file" onChange={handleLessonFileChange} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />}
-
-                        {uploadLessonFile ? (
-                          <div className="flex flex-col items-center w-full max-w-xs z-10">
-                            <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mb-4 shadow-sm">
-                              <span className="material-symbols-outlined text-3xl">task</span>
-                            </div>
-                            <p className="font-bold text-slate-800 truncate w-full text-center">{uploadLessonFile.name}</p>
-                            <p className="text-slate-500 text-sm mt-1">{(uploadLessonFile.size / (1024 * 1024)).toFixed(2)} MB</p>
-                            <button onClick={() => setUploadLessonFile(null)} className="mt-4 text-rose-600 font-bold border border-rose-200 bg-white px-4 py-1.5 rounded-lg text-sm hover:bg-rose-50 transition-colors shadow-sm">
-                              Remove File
-                            </button>
-                          </div>
-                        ) : (
-                          <>
-                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-                            <div className="w-16 h-16 bg-white text-slate-400 shadow-sm border border-slate-100 rounded-2xl flex items-center justify-center mb-4 group-hover:text-indigo-600 group-hover:border-indigo-200 group-hover:bg-indigo-50/80 group-hover:scale-110 transition-all duration-300 z-10">
-                              <span className="material-symbols-outlined text-3xl">cloud_upload</span>
-                            </div>
-                            <p className="font-bold text-lg text-slate-800 z-10">Drag &amp; drop file here</p>
-                            <p className="text-slate-500 text-sm mt-1.5 z-10">Support for MP4, PDF, and DOCX (Max 500MB)</p>
-                            <div className="mt-6 text-indigo-600 font-bold border-2 border-indigo-600 px-6 py-2 rounded-xl hover:bg-indigo-600 hover:text-white transition-all duration-300 shadow-sm z-10 pointer-events-none">
-                              Browse Files
-                            </div>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {uploadingState === 'uploading' && (
-                    <div className="mt-8 space-y-2">
-                      <div className="flex justify-between text-sm font-semibold text-slate-700">
-                        <span>Uploading...</span>
-                        <span className="text-indigo-600">{uploadProgress}%</span>
-                      </div>
-                      <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
-                        <div className="h-full bg-gradient-to-r from-indigo-400 to-indigo-600 rounded-full transition-all duration-200" style={{ width: `${uploadProgress}%` }}></div>
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="mt-8 pt-6 border-t border-slate-100 flex justify-end">
-                    <button
-                      onClick={submitLessonUpload}
-                      disabled={uploadingState === 'uploading'}
-                      className={`px-8 py-3 rounded-xl font-bold flex items-center gap-2 transition-all shadow-lg ${uploadingState === 'uploading' ? 'bg-slate-300 text-slate-500 cursor-not-allowed shadow-none' : 'bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-purple-500 text-white shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5 active:translate-y-0'}`}
-                    >
-                      {uploadingState === 'uploading' ? (
-                        <>
-                          <svg className="animate-spin h-5 w-5 text-slate-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                          </svg>
-                          Processing...
-                        </>
-                      ) : (
-                        <>
-                          <span className="material-symbols-outlined text-[20px]">upload</span>
-                          Upload Lesson
-                        </>
-                      )}
-                    </button>
-                  </div>
-                </div>
-
-                {/* Uploaded Lessons List */}
+                <LessonUpload onUploadSuccess={(lesson) => setUploadedLessonsList(prev => [lesson, ...prev])} />
+                
+                {/* Display uploaded lessons list */}
                 {uploadedLessonsList.length > 0 && (
-                  <div className="bg-white/80 backdrop-blur-sm p-6 md:p-8 rounded-2xl border border-slate-200/50 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    <h3 className="text-xl font-bold text-slate-900 mb-6 font-['Bricolage_Grotesque'] tracking-tight">Recently Uploaded</h3>
-                    <div className="grid grid-cols-1 gap-4">
+                  <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                    <h4 className="font-bold text-lg mb-4">Recent Uploads</h4>
+                    <div className="space-y-3">
                       {uploadedLessonsList.map(lesson => (
-                        <div key={lesson.id} className="flex flex-col sm:flex-row sm:items-center gap-4 p-4 border border-slate-200/60 rounded-xl hover:bg-white hover:shadow-md hover:border-indigo-100 transition-all duration-300 group">
-                          <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-all shadow-sm ${lesson.type === 'video' ? 'bg-indigo-50 text-indigo-600 group-hover:bg-indigo-100' :
-                            lesson.type === 'pdf' ? 'bg-rose-50 text-rose-600 group-hover:bg-rose-100' :
-                              'bg-blue-50 text-blue-600 group-hover:bg-blue-100'
-                            }`}>
-                            <span className="material-symbols-outlined">
-                              {lesson.type === 'video' ? 'videocam' : lesson.type === 'pdf' ? 'description' : 'article'}
-                            </span>
+                        <div key={lesson.id} className="flex items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-100">
+                          <span className="material-symbols-outlined text-indigo-500">article</span>
+                          <div className="flex-1">
+                            <p className="font-semibold text-sm">{lesson.title}</p>
+                            <p className="text-xs text-slate-500">{lesson.filename} • {lesson.size}</p>
                           </div>
-                          <div className="flex-1 overflow-hidden">
-                            <h4 className="text-sm font-bold text-slate-800 truncate">{lesson.title}</h4>
-                            <p className="text-xs text-slate-500 mt-0.5 truncate">{lesson.filename} • {lesson.size} • {lesson.date}</p>
-                          </div>
-                          <div className="flex gap-2 self-start sm:self-auto">
-                            <button className="px-3 py-1.5 text-xs font-bold text-slate-500 hover:text-indigo-600 bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-200 rounded-lg transition-colors">
-                              Edit
-                            </button>
-                          </div>
+                          <span className="text-xs text-slate-400">{lesson.date}</span>
                         </div>
                       ))}
                     </div>
@@ -835,15 +625,15 @@ export default function TeacherDashboard() {
             {activeTab === 'materials' && (
               <section id="materials" className="animate-in fade-in duration-500">
                 <div className="bg-white/80 backdrop-blur-sm p-6 md:p-8 rounded-2xl border border-slate-200/50 shadow-sm overflow-hidden w-full max-w-5xl hover:shadow-lg transition-shadow relative">
-                  
+
                   {/* Header and Controls */}
                   <div className="flex flex-col gap-6 mb-8">
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                       <div>
-                        <h3 className="text-2xl font-bold text-slate-900 font-['Bricolage_Grotesque'] tracking-tight">Course Materials</h3>
+                        <h3 className="text-2xl font-bold text-slate-900 font-bricolage tracking-tight">Course Materials</h3>
                         <p className="text-sm text-slate-500 mt-1">Manage and organize your resources</p>
                       </div>
-                      <button 
+                      <button
                         onClick={() => setIsUploadMaterialOpen(!isUploadMaterialOpen)}
                         className="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-purple-500 text-white rounded-xl font-bold shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center gap-2"
                       >
@@ -855,15 +645,15 @@ export default function TeacherDashboard() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-slate-50/50 p-3 rounded-xl border border-slate-100">
                       <div className="relative w-full">
                         <span className="material-symbols-outlined absolute left-3 top-2.5 text-slate-400 text-[18px]">search</span>
-                        <input 
-                          className="w-full pl-9 pr-4 py-2 bg-white border border-slate-200/80 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all" 
-                          placeholder="Search files..." 
-                          type="text" 
+                        <input
+                          className="w-full pl-9 pr-4 py-2 bg-white border border-slate-200/80 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
+                          placeholder="Search files..."
+                          type="text"
                           value={materialSearchQuery}
                           onChange={(e) => setMaterialSearchQuery(e.target.value)}
                         />
                       </div>
-                      <select 
+                      <select
                         className="w-full px-3 py-2 bg-white border border-slate-200/80 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-slate-600 cursor-pointer"
                         value={materialFilterType}
                         onChange={(e) => setMaterialFilterType(e.target.value)}
@@ -875,7 +665,7 @@ export default function TeacherDashboard() {
                         <option value="ppt">Presentations</option>
                         <option value="zip">ZIP Archives</option>
                       </select>
-                      <select 
+                      <select
                         className="w-full px-3 py-2 bg-white border border-slate-200/80 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-slate-600 cursor-pointer"
                         value={materialFilterModule}
                         onChange={(e) => setMaterialFilterModule(e.target.value)}
@@ -885,7 +675,7 @@ export default function TeacherDashboard() {
                           <option key={mod.id} value={mod.id}>{mod.title}</option>
                         ))}
                       </select>
-                      <select 
+                      <select
                         className="w-full px-3 py-2 bg-white border border-slate-200/80 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-slate-600 cursor-pointer"
                         value={materialSortOrder}
                         onChange={(e) => setMaterialSortOrder(e.target.value)}
@@ -904,8 +694,8 @@ export default function TeacherDashboard() {
                         <div className="lg:col-span-2 space-y-4">
                           <div className="space-y-1.5">
                             <label className="text-sm font-bold text-slate-700 ml-1">Title <span className="text-rose-500">*</span></label>
-                            <input 
-                              type="text" 
+                            <input
+                              type="text"
                               placeholder="e.g., Week 1 Reading Materials"
                               className="w-full border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3 outline-none bg-white transition-colors text-sm"
                               value={uploadMatTitle}
@@ -915,7 +705,7 @@ export default function TeacherDashboard() {
                           </div>
                           <div className="space-y-1.5">
                             <label className="text-sm font-bold text-slate-700 ml-1">Description</label>
-                            <textarea 
+                            <textarea
                               placeholder="Optional description of the material..."
                               className="w-full border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3 outline-none bg-white transition-colors resize-none text-sm"
                               rows={2}
@@ -926,7 +716,7 @@ export default function TeacherDashboard() {
                           </div>
                           <div className="space-y-1.5">
                             <label className="text-sm font-bold text-slate-700 ml-1">Assign to Module</label>
-                            <select 
+                            <select
                               className="w-full border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3 outline-none bg-white transition-colors text-sm text-slate-600 cursor-pointer"
                               value={uploadMatModule}
                               onChange={(e) => setUploadMatModule(e.target.value)}
@@ -939,16 +729,16 @@ export default function TeacherDashboard() {
                             </select>
                           </div>
                         </div>
-                        
+
                         <div className="space-y-1.5 flex flex-col">
                           <label className="text-sm font-bold text-slate-700 ml-1">File <span className="text-rose-500">*</span></label>
-                          <div 
+                          <div
                             className={`flex-1 border-2 border-dashed rounded-xl p-4 flex flex-col items-center justify-center text-center transition-all duration-300 relative overflow-hidden group ${uploadMatFile ? 'border-emerald-400 bg-emerald-50' : 'border-slate-300 hover:border-indigo-500 hover:bg-indigo-50/50 bg-white cursor-pointer'}`}
                             onDragOver={(e) => e.preventDefault()}
                             onDrop={handleMaterialDrop}
                           >
                             {!uploadMatFile && <input type="file" onChange={handleMaterialFileChange} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" disabled={isMatUploading} />}
-                            
+
                             {uploadMatFile ? (
                               <div className="flex flex-col items-center w-full z-10">
                                 <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center mb-3 shadow-sm">
@@ -974,14 +764,14 @@ export default function TeacherDashboard() {
                           </div>
                         </div>
                       </div>
-                      
+
                       {uploadMatError && (
                         <div className="mt-4 p-3 bg-rose-50 border border-rose-200 rounded-lg flex items-center gap-2 text-rose-700 text-sm font-medium animate-in fade-in">
                           <span className="material-symbols-outlined text-[18px]">error</span>
                           {uploadMatError}
                         </div>
                       )}
-                      
+
                       {isMatUploading && (
                         <div className="mt-6 space-y-2">
                           <div className="flex justify-between text-xs font-bold text-slate-700">
@@ -1000,9 +790,9 @@ export default function TeacherDashboard() {
                           Material uploaded successfully!
                         </div>
                       )}
-                      
+
                       <div className="mt-6 pt-4 border-t border-slate-200 flex justify-end">
-                        <button 
+                        <button
                           onClick={submitMaterialUpload}
                           disabled={isMatUploading || uploadMatSuccess}
                           className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-lg shadow-sm disabled:opacity-50 transition-colors flex items-center gap-2"
@@ -1048,7 +838,7 @@ export default function TeacherDashboard() {
                               <h4 className="text-sm font-bold text-slate-800 truncate" title={material.title}>{material.title}</h4>
                               <p className="text-xs text-slate-500 mt-1 line-clamp-2 min-h-[2rem]">{material.description || "No description provided."}</p>
                             </div>
-                            
+
                             <div className="flex flex-col gap-1 sm:flex-row opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity bg-white/80 backdrop-blur-sm rounded-lg p-0.5 shadow-sm border border-slate-100">
                               <button onClick={(e) => { e.stopPropagation(); setPreviewMaterial(material); }} className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-colors" title="Preview"><span className="material-symbols-outlined text-[18px]">visibility</span></button>
                               <button onClick={(e) => { e.stopPropagation(); handleEditMaterialClick(material); }} className="p-1.5 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-md transition-colors" title="Edit"><span className="material-symbols-outlined text-[18px]">edit</span></button>
@@ -1068,7 +858,7 @@ export default function TeacherDashboard() {
                         </div>
                       );
                     })}
-                    
+
                     {filteredAndSortedMaterials.length === 0 && (
                       <div className="md:col-span-2 text-center py-12 px-4 border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
                         <div className="w-16 h-16 bg-white border border-slate-100 shadow-sm text-slate-300 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -1087,7 +877,7 @@ export default function TeacherDashboard() {
                       <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" onClick={() => !isSavingEdit && setEditingMaterial(null)}></div>
                       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden relative z-10 animate-in fade-in zoom-in-95 duration-200">
                         <div className="p-6 border-b border-slate-100 flex items-center justify-between">
-                          <h3 className="text-xl font-bold text-slate-900 font-['Bricolage_Grotesque']">Edit Material</h3>
+                          <h3 className="text-xl font-bold text-slate-900 font-bricolage">Edit Material</h3>
                           <button onClick={() => !isSavingEdit && setEditingMaterial(null)} className="text-slate-400 hover:text-slate-600 hover:bg-slate-100 p-2 rounded-full transition-colors disabled:opacity-50" disabled={isSavingEdit}>
                             <span className="material-symbols-outlined text-[20px]">close</span>
                           </button>
@@ -1095,8 +885,8 @@ export default function TeacherDashboard() {
                         <div className="p-6 space-y-5">
                           <div className="space-y-1.5">
                             <label className="text-sm font-bold text-slate-700 ml-1">Title</label>
-                            <input 
-                              type="text" 
+                            <input
+                              type="text"
                               className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3 outline-none bg-slate-50/50 hover:bg-white transition-colors text-sm"
                               value={editMaterialTitle}
                               onChange={(e) => setEditMaterialTitle(e.target.value)}
@@ -1105,7 +895,7 @@ export default function TeacherDashboard() {
                           </div>
                           <div className="space-y-1.5">
                             <label className="text-sm font-bold text-slate-700 ml-1">Description <span className="text-xs font-normal text-slate-400">(Optional)</span></label>
-                            <textarea 
+                            <textarea
                               className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3 outline-none bg-slate-50/50 hover:bg-white transition-colors resize-none text-sm"
                               rows={3}
                               value={editMaterialDescription}
@@ -1225,46 +1015,463 @@ export default function TeacherDashboard() {
               </section>
             )}
 
-            {/* Tab: Create Assignment */}
-            {activeTab === 'assignments' && (
-              <section id="assignments" className="animate-in fade-in duration-500">
-                <div className="bg-white/80 backdrop-blur-sm p-6 md:p-8 rounded-2xl border border-slate-200/50 shadow-sm max-w-5xl hover:shadow-lg transition-shadow">
-                  <h3 className="text-2xl font-bold text-slate-900 mb-6 md:mb-8 font-['Bricolage_Grotesque'] tracking-tight">Create New Assignment</h3>
-                  <form className="grid grid-cols-1 md:grid-cols-3 gap-6" onSubmit={e => e.preventDefault()}>
-                    <div className="space-y-2">
-                      <label className="text-sm font-bold text-slate-700 ml-1">Subject</label>
-                      <select className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3.5 outline-none bg-slate-50/50 hover:bg-slate-100 transition-colors cursor-pointer">
-                        <option>Visual Communication</option>
-                        <option>History of Art</option>
-                        <option>Color Theory</option>
-                      </select>
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-bold text-slate-700 ml-1">Class / Grade</label>
-                      <select className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3.5 outline-none bg-slate-50/50 hover:bg-slate-100 transition-colors cursor-pointer">
-                        <option>Sophomore (A)</option>
-                        <option>Sophomore (B)</option>
-                        <option>Senior Advanced</option>
-                      </select>
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-bold text-slate-700 ml-1">Assignment Type</label>
-                      <select className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3.5 outline-none bg-slate-50/50 hover:bg-slate-100 transition-colors cursor-pointer">
-                        <option>Project Submission</option>
-                        <option>Quiz / Test</option>
-                        <option>Discussion Post</option>
-                      </select>
-                    </div>
-                    <div className="md:col-span-3 space-y-2 mt-2">
-                      <label className="text-sm font-bold text-slate-700 ml-1">Instructions</label>
-                      <textarea className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-4 outline-none bg-slate-50/50 hover:bg-slate-50 transition-colors min-h-[160px] resize-y" placeholder="Detailed assignment description..."></textarea>
-                    </div>
-                    <div className="md:col-span-3 flex flex-col sm:flex-row justify-end gap-3 md:gap-4 mt-4 pt-6 border-t border-slate-100">
-                      <button className="px-6 py-2.5 border-2 border-slate-200/80 rounded-xl font-bold text-slate-600 hover:bg-slate-100 hover:border-slate-300 transition-all" type="button">Save Draft</button>
-                      <button className="px-8 py-2.5 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-purple-500 text-white rounded-xl font-bold shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5 active:translate-y-0 transition-all" type="submit">Publish Assignment</button>
-                    </div>
-                  </form>
+            {/* Tab: Schedule Management */}
+            {activeTab === 'schedule' && (
+              <section id="schedule" className="animate-in fade-in duration-500 space-y-6">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                  <div>
+                    <h3 className="text-2xl font-bold text-slate-900 font-bricolage tracking-tight">Academic Calendar</h3>
+                    <p className="text-sm text-slate-500 mt-1">Schedule classes, exams, and events for your students</p>
+                  </div>
+                  <button 
+                    onClick={() => {
+                      const title = prompt('Event Title:');
+                      const type = prompt('Type (class, exam, event, homework):') as any;
+                      const date = prompt('Date (YYYY-MM-DD):');
+                      const time = prompt('Time (HH:mm):');
+                      if (title && date && time) {
+                        const newEvent: CalendarEvent = {
+                          id: `evt-${Date.now()}`,
+                          title,
+                          type: type || 'event',
+                          start: `${date}T${time}:00`,
+                          end: `${date}T${time}:00`,
+                          teacher: 'Dr. Sarah Jenkins'
+                        };
+                        const updatedEvents = [newEvent, ...events];
+                        setEvents(updatedEvents);
+                        storage.saveEvents(updatedEvents);
+                        showToast('Event scheduled successfully!');
+                      }
+                    }}
+                    className="px-6 py-2.5 bg-indigo-600 text-white rounded-xl font-bold shadow-md hover:bg-indigo-700 transition-all flex items-center gap-2"
+                  >
+                    <span className="material-symbols-outlined text-[20px]">add</span>
+                    Schedule Event
+                  </button>
                 </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  <div className="lg:col-span-2 bg-white rounded-3xl border border-slate-200/50 p-6 shadow-sm">
+                    <Calendar events={events} />
+                  </div>
+                  <div className="space-y-4">
+                    <h4 className="font-bold text-slate-900 px-2">Upcoming Schedule</h4>
+                    <div className="space-y-3">
+                      {events.sort((a,b) => new Date(a.start).getTime() - new Date(b.start).getTime()).map(evt => (
+                        <div key={evt.id} className="p-4 bg-white border border-slate-100 rounded-2xl hover:shadow-md transition-all group">
+                          <div className="flex justify-between items-start mb-2">
+                            <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border uppercase tracking-wider ${
+                              evt.type === 'class' ? 'bg-indigo-50 text-indigo-600 border-indigo-100' :
+                              evt.type === 'exam' ? 'bg-rose-50 text-rose-600 border-rose-100' :
+                              'bg-slate-50 text-slate-600 border-slate-100'
+                            }`}>
+                              {evt.type}
+                            </span>
+                            <button 
+                              onClick={() => {
+                                const updated = events.filter(e => e.id !== evt.id);
+                                setEvents(updated);
+                                storage.saveEvents(updated);
+                                showToast('Event removed.');
+                              }}
+                              className="text-slate-300 hover:text-rose-500 transition-colors"
+                            >
+                              <span className="material-symbols-outlined text-[18px]">delete</span>
+                            </button>
+                          </div>
+                          <h5 className="font-bold text-slate-800 text-sm">{evt.title}</h5>
+                          <div className="flex items-center gap-3 mt-2 text-[11px] font-semibold text-slate-400">
+                            <div className="flex items-center gap-1">
+                              <span className="material-symbols-outlined text-[14px]">calendar_today</span>
+                              {new Date(evt.start).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <span className="material-symbols-outlined text-[14px]">schedule</span>
+                              {new Date(evt.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </section>
+            )}
+            {activeTab === 'assignments' && (
+              <section id="assignments" className="animate-in fade-in duration-500 space-y-6">
+                
+                {/* 1. Assignments List View */}
+                {assignmentView === 'list' && (
+                  <div className="space-y-6">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                      <div>
+                        <h3 className="text-2xl font-bold text-slate-900 font-bricolage tracking-tight">Manage Assignments</h3>
+                        <p className="text-sm text-slate-500 mt-1">Track student progress and grade submissions</p>
+                      </div>
+                      <button 
+                        onClick={openCreateAssignment}
+                        className="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-purple-500 text-white rounded-xl font-bold shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center gap-2"
+                      >
+                        <span className="material-symbols-outlined text-[20px]">add</span>
+                        Create Assignment
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {assignments.map(asgn => {
+                        const counts = getSubmissionCounts(asgn.id);
+                        const progress = (counts.submitted / (counts.total || 1)) * 100;
+                        const overdue = isOverdue(asgn.dueDate, asgn.dueTime) && counts.submitted < counts.total;
+
+                        return (
+                          <div key={asgn.id} className="bg-white/80 backdrop-blur-sm rounded-2xl border border-slate-200/50 p-6 hover:shadow-xl hover:shadow-indigo-500/5 transition-all group relative overflow-hidden">
+                            {asgn.status === 'draft' && (
+                              <div className="absolute top-0 right-0 px-3 py-1 bg-slate-100 text-slate-500 text-[10px] font-bold uppercase rounded-bl-xl border-b border-l border-slate-200/50">Draft</div>
+                            )}
+                            
+                            <div className="flex justify-between items-start mb-4">
+                              <div className="p-2.5 bg-indigo-50 text-indigo-600 rounded-xl">
+                                <span className="material-symbols-outlined text-[20px]">
+                                  {asgn.type === 'Quiz / Test' ? 'quiz' : asgn.type === 'Discussion Post' ? 'forum' : 'assignment'}
+                                </span>
+                              </div>
+                              <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button onClick={() => openEditAssignment(asgn)} className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"><span className="material-symbols-outlined text-[18px]">edit</span></button>
+                                <button onClick={() => setAssignmentToDelete(asgn)} className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"><span className="material-symbols-outlined text-[18px]">delete</span></button>
+                              </div>
+                            </div>
+
+                            <h4 className="font-bold text-slate-900 mb-1 line-clamp-1">{asgn.title}</h4>
+                            <p className="text-xs text-slate-500 font-medium mb-4">{asgn.subject} • {asgn.classGroup}</p>
+
+                            <div className="space-y-4">
+                              <div>
+                                <div className="flex justify-between text-[11px] font-bold mb-1.5 text-slate-700 uppercase tracking-wider">
+                                  <span>Submissions</span>
+                                  <span className="text-indigo-600">{counts.submitted}/{counts.total || 0}</span>
+                                </div>
+                                <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                                  <div 
+                                    className={`h-full rounded-full transition-all duration-500 ${overdue ? 'bg-rose-500' : 'bg-gradient-to-r from-indigo-400 to-indigo-600'}`}
+                                    style={{ width: `${progress}%` }}
+                                  ></div>
+                                </div>
+                              </div>
+
+                              <div className="flex items-center justify-between pt-2">
+                                <div className="flex items-center gap-1.5 text-slate-500">
+                                  <span className={`material-symbols-outlined text-[16px] ${overdue ? 'text-rose-500 animate-pulse' : ''}`}>event</span>
+                                  <span className={`text-[11px] font-bold ${overdue ? 'text-rose-500' : ''}`}>
+                                    Due {new Date(asgn.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                                  </span>
+                                </div>
+                                <button 
+                                  onClick={() => openSubmissionsView(asgn)}
+                                  className="text-[11px] font-bold text-indigo-600 hover:text-indigo-700 uppercase tracking-widest flex items-center gap-1 group/btn"
+                                >
+                                  Review
+                                  <span className="material-symbols-outlined text-[14px] group-hover/btn:translate-x-0.5 transition-transform">arrow_forward</span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+
+                      {assignments.length === 0 && (
+                        <div className="col-span-full py-16 flex flex-col items-center justify-center text-center bg-white/50 rounded-3xl border-2 border-dashed border-slate-200">
+                          <div className="w-20 h-20 bg-white shadow-sm border border-slate-100 rounded-2xl flex items-center justify-center mb-4 text-slate-300">
+                            <span className="material-symbols-outlined text-4xl">assignment_add</span>
+                          </div>
+                          <h4 className="text-xl font-bold text-slate-900 mb-2 font-bricolage">No assignments yet</h4>
+                          <p className="text-slate-500 max-w-xs mb-8">Create your first assignment to start tracking student progress and grading work.</p>
+                          <button onClick={openCreateAssignment} className="px-8 py-3 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-500/20">Create New Assignment</button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* 2. Create/Edit Assignment View */}
+                {(assignmentView === 'create' || assignmentView === 'edit') && (
+                  <div className="max-w-4xl mx-auto space-y-6">
+                    <div className="flex items-center gap-4 mb-2">
+                      <button onClick={() => setAssignmentView('list')} className="p-2 bg-white border border-slate-200/80 hover:bg-slate-50 text-slate-600 rounded-full transition-colors shadow-sm">
+                        <span className="material-symbols-outlined">arrow_back</span>
+                      </button>
+                      <div>
+                        <h3 className="text-2xl font-bold text-slate-900 font-bricolage tracking-tight">
+                          {assignmentView === 'create' ? 'Create New Assignment' : 'Edit Assignment'}
+                        </h3>
+                        <p className="text-sm text-slate-500 mt-0.5">Fill in the details to set up the learning task</p>
+                      </div>
+                    </div>
+
+                    <div className="bg-white/80 backdrop-blur-sm p-6 md:p-8 rounded-3xl border border-slate-200/50 shadow-sm space-y-8">
+                      {aFormError && (
+                        <div className="p-4 bg-rose-50 border border-rose-200 rounded-2xl flex items-center gap-3 text-rose-700 animate-in slide-in-from-top-2">
+                          <span className="material-symbols-outlined">error</span>
+                          <p className="font-bold text-sm">{aFormError}</p>
+                        </div>
+                      )}
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="md:col-span-2 space-y-1.5">
+                          <label className="text-sm font-bold text-slate-700 ml-1">Assignment Title <span className="text-rose-500">*</span></label>
+                          <input 
+                            type="text" 
+                            placeholder="e.g., Final Year Thesis Proposal"
+                            className="w-full border border-slate-200/80 rounded-2xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-4 outline-none bg-slate-50/50 hover:bg-white transition-colors font-medium shadow-sm"
+                            value={aFormTitle}
+                            onChange={e => setAFormTitle(e.target.value)}
+                          />
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="text-sm font-bold text-slate-700 ml-1">Subject</label>
+                          <select 
+                            className="w-full border border-slate-200/80 rounded-2xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-4 outline-none bg-slate-50/50 hover:bg-white transition-colors cursor-pointer text-slate-700 shadow-sm"
+                            value={aFormSubject}
+                            onChange={e => setAFormSubject(e.target.value)}
+                          >
+                            <option>Visual Communication</option>
+                            <option>History of Art</option>
+                            <option>Color Theory</option>
+                          </select>
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="text-sm font-bold text-slate-700 ml-1">Class / Grade</label>
+                          <select 
+                            className="w-full border border-slate-200/80 rounded-2xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-4 outline-none bg-slate-50/50 hover:bg-white transition-colors cursor-pointer text-slate-700 shadow-sm"
+                            value={aFormClass}
+                            onChange={e => setAFormClass(e.target.value)}
+                          >
+                            <option>Sophomore (A)</option>
+                            <option>Sophomore (B)</option>
+                            <option>Senior Advanced</option>
+                          </select>
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="text-sm font-bold text-slate-700 ml-1">Assignment Type</label>
+                          <select 
+                            className="w-full border border-slate-200/80 rounded-2xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-4 outline-none bg-slate-50/50 hover:bg-white transition-colors cursor-pointer text-slate-700 shadow-sm"
+                            value={aFormType}
+                            onChange={e => setAFormType(e.target.value)}
+                          >
+                            <option>Project Submission</option>
+                            <option>Quiz / Test</option>
+                            <option>Discussion Post</option>
+                          </select>
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="text-sm font-bold text-slate-700 ml-1">Total Marks</label>
+                          <input 
+                            type="number" 
+                            className="w-full border border-slate-200/80 rounded-2xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-4 outline-none bg-slate-50/50 hover:bg-white transition-colors shadow-sm"
+                            value={aFormMarks}
+                            onChange={e => setAFormMarks(parseInt(e.target.value) || 0)}
+                          />
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="text-sm font-bold text-slate-700 ml-1">Due Date <span className="text-rose-500">*</span></label>
+                          <input 
+                            type="date" 
+                            className="w-full border border-slate-200/80 rounded-2xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-4 outline-none bg-slate-50/50 hover:bg-white transition-colors shadow-sm"
+                            value={aFormDueDate}
+                            onChange={e => setAFormDueDate(e.target.value)}
+                          />
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="text-sm font-bold text-slate-700 ml-1">Due Time</label>
+                          <input 
+                            type="time" 
+                            className="w-full border border-slate-200/80 rounded-2xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-4 outline-none bg-slate-50/50 hover:bg-white transition-colors shadow-sm"
+                            value={aFormDueTime}
+                            onChange={e => setAFormDueTime(e.target.value)}
+                          />
+                        </div>
+
+                        <div className="md:col-span-2 space-y-1.5 pt-2">
+                          <label className="text-sm font-bold text-slate-700 ml-1">Detailed Instructions <span className="text-rose-500">*</span></label>
+                          <textarea 
+                            rows={6}
+                            placeholder="Provide clear steps and requirements for students..."
+                            className="w-full border border-slate-200/80 rounded-2xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-5 outline-none bg-slate-50/50 hover:bg-white transition-colors shadow-sm resize-none"
+                            value={aFormInstructions}
+                            onChange={e => setAFormInstructions(e.target.value)}
+                          ></textarea>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col sm:flex-row justify-end gap-3 pt-8 border-t border-slate-100">
+                        <button 
+                          onClick={() => saveAssignment(false)}
+                          disabled={aFormSaving}
+                          className="px-8 py-3.5 border-2 border-slate-200 rounded-2xl font-bold text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-all disabled:opacity-50"
+                        >
+                          Save as Draft
+                        </button>
+                        <button 
+                          onClick={() => saveAssignment(true)}
+                          disabled={aFormSaving}
+                          className="px-10 py-3.5 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-purple-500 text-white rounded-2xl font-bold shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5 active:translate-y-0 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                        >
+                          {aFormSaving ? (
+                            <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                          ) : (
+                            <>
+                              <span className="material-symbols-outlined text-[20px]">send</span>
+                              Publish Assignment
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* 3. Submissions Table View */}
+                {assignmentView === 'submissions' && selectedAssignment && (
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-4 mb-2">
+                      <button onClick={() => setAssignmentView('list')} className="p-2 bg-white border border-slate-200/80 hover:bg-slate-50 text-slate-600 rounded-full transition-colors shadow-sm">
+                        <span className="material-symbols-outlined">arrow_back</span>
+                      </button>
+                      <div>
+                        <h3 className="text-2xl font-bold text-slate-900 font-bricolage tracking-tight">Review Submissions</h3>
+                        <p className="text-sm text-slate-500 mt-0.5">{selectedAssignment.title}</p>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                      <div className="lg:col-span-1 space-y-6">
+                        <div className="bg-white/80 backdrop-blur-sm p-6 rounded-3xl border border-slate-200/50 shadow-sm">
+                          <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-4">Assignment Info</h4>
+                          <div className="space-y-4">
+                            <div>
+                              <p className="text-[10px] font-bold text-slate-400 uppercase">Class</p>
+                              <p className="text-sm font-bold text-slate-800">{selectedAssignment.classGroup}</p>
+                            </div>
+                            <div>
+                              <p className="text-[10px] font-bold text-slate-400 uppercase">Due Date</p>
+                              <p className="text-sm font-bold text-slate-800">{new Date(selectedAssignment.dueDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                            </div>
+                            <div>
+                              <p className="text-[10px] font-bold text-slate-400 uppercase">Total Marks</p>
+                              <p className="text-sm font-bold text-indigo-600 font-bricolage text-lg">{selectedAssignment.totalMarks}</p>
+                            </div>
+                          </div>
+                          <div className="mt-6 pt-6 border-t border-slate-100 flex flex-col gap-2">
+                            <button onClick={() => openEditAssignment(selectedAssignment)} className="w-full py-2.5 bg-slate-50 text-slate-700 font-bold text-xs rounded-xl hover:bg-indigo-50 hover:text-indigo-600 transition-colors flex items-center justify-center gap-2">
+                              <span className="material-symbols-outlined text-[16px]">edit</span> Edit Details
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="bg-gradient-to-br from-indigo-600 to-purple-700 p-6 rounded-3xl text-white shadow-xl shadow-indigo-500/20">
+                          <div className="flex justify-between items-start mb-6">
+                            <h4 className="font-bold">Grading Status</h4>
+                            <span className="material-symbols-outlined text-indigo-200">analytics</span>
+                          </div>
+                          {(() => {
+                            const counts = getSubmissionCounts(selectedAssignment.id);
+                            return (
+                              <div className="space-y-4">
+                                <div className="flex justify-between items-center bg-white/10 p-3 rounded-2xl border border-white/10">
+                                  <span className="text-xs font-semibold opacity-80">Submitted</span>
+                                  <span className="font-bold">{counts.submitted}/{counts.total}</span>
+                                </div>
+                                <div className="flex justify-between items-center bg-white/10 p-3 rounded-2xl border border-white/10">
+                                  <span className="text-xs font-semibold opacity-80">Graded</span>
+                                  <span className="font-bold">{counts.graded}/{counts.submitted}</span>
+                                </div>
+                                <div className="h-2 w-full bg-white/10 rounded-full mt-4">
+                                  <div className="h-full bg-white rounded-full transition-all duration-1000" style={{ width: `${(counts.graded / (counts.submitted || 1)) * 100}%` }}></div>
+                                </div>
+                              </div>
+                            );
+                          })()}
+                        </div>
+                      </div>
+
+                      <div className="lg:col-span-3">
+                        <div className="bg-white/80 backdrop-blur-sm rounded-3xl border border-slate-200/50 shadow-sm overflow-hidden">
+                          <div className="overflow-x-auto custom-scrollbar">
+                            <table className="w-full text-left">
+                              <thead className="bg-slate-50/50 text-slate-500 text-[10px] uppercase font-bold tracking-widest border-b border-slate-100">
+                                <tr>
+                                  <th className="px-6 py-5">Student</th>
+                                  <th className="px-6 py-5">Status</th>
+                                  <th className="px-6 py-5">Submission Date</th>
+                                  <th className="px-6 py-5">Grade</th>
+                                  <th className="px-6 py-5 text-right">Action</th>
+                                </tr>
+                              </thead>
+                              <tbody className="divide-y divide-slate-50">
+                                {getAssignmentSubmissions(selectedAssignment.id).map(sub => {
+                                  const config = statusConfig[sub.status];
+                                  return (
+                                    <tr key={sub.id} className="hover:bg-slate-50/30 transition-colors group">
+                                      <td className="px-6 py-4">
+                                        <div className="flex items-center gap-3">
+                                          <img alt={sub.studentName} className="w-9 h-9 rounded-full object-cover ring-2 ring-white shadow-sm" src={sub.studentAvatar} />
+                                          <span className="text-sm font-bold text-slate-800">{sub.studentName}</span>
+                                        </div>
+                                      </td>
+                                      <td className="px-6 py-4">
+                                        <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-bold border ${config.color}`}>
+                                          <span className="material-symbols-outlined text-[14px]">{config.icon}</span>
+                                          {config.label}
+                                        </span>
+                                      </td>
+                                      <td className="px-6 py-4">
+                                        <p className="text-xs font-medium text-slate-500">
+                                          {sub.submittedAt ? new Date(sub.submittedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—'}
+                                        </p>
+                                      </td>
+                                      <td className="px-6 py-4">
+                                        {sub.status === 'graded' ? (
+                                          <span className="text-sm font-bold text-indigo-600 font-bricolage bg-indigo-50 px-3 py-1 rounded-lg border border-indigo-100">
+                                            {sub.marks}/{selectedAssignment.totalMarks}
+                                          </span>
+                                        ) : (
+                                          <span className="text-[10px] font-bold text-slate-300 uppercase tracking-tighter">Not Graded</span>
+                                        )}
+                                      </td>
+                                      <td className="px-6 py-4 text-right">
+                                        {sub.status !== 'not_submitted' ? (
+                                          <button 
+                                            onClick={() => openGrading(sub)}
+                                            className="px-4 py-2 bg-white border border-slate-200 text-slate-700 text-[11px] font-bold rounded-xl hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all shadow-sm active:scale-95"
+                                          >
+                                            {sub.status === 'graded' ? 'Update Grade' : 'Grade Now'}
+                                          </button>
+                                        ) : (
+                                          <button className="px-4 py-2 bg-slate-50 text-slate-300 text-[11px] font-bold rounded-xl cursor-not-allowed border border-slate-100">
+                                            No Submission
+                                          </button>
+                                        )}
+                                      </td>
+                                    </tr>
+                                  );
+                                })}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </section>
             )}
 
@@ -1353,7 +1560,7 @@ export default function TeacherDashboard() {
               <section id="payments" className="animate-in fade-in duration-500">
                 <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-slate-200/50 shadow-sm overflow-hidden max-w-6xl mx-auto hover:shadow-lg transition-shadow">
                   <div className="p-6 border-b border-slate-200/60 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white/50 backdrop-blur-md">
-                    <h3 className="text-2xl font-bold text-slate-900 font-['Bricolage_Grotesque'] tracking-tight">Student Payments</h3>
+                    <h3 className="text-2xl font-bold text-slate-900 font-bricolage tracking-tight">Student Payments</h3>
                     <button className="flex items-center gap-2 text-sm font-bold text-slate-700 border-2 border-slate-200/80 px-5 py-2.5 rounded-xl hover:bg-white hover:border-slate-300 hover:shadow-sm transition-all w-full sm:w-auto justify-center">
                       <span className="material-symbols-outlined text-[18px]">download</span>
                       Export Report
@@ -1433,7 +1640,7 @@ export default function TeacherDashboard() {
             {/* Tab: Student Performance */}
             {activeTab === 'performance' && (
               <section id="performance" className="animate-in fade-in duration-500">
-                <h3 className="text-2xl font-bold text-slate-900 mb-6 md:mb-8 font-['Bricolage_Grotesque'] tracking-tight">Student Performance</h3>
+                <h3 className="text-2xl font-bold text-slate-900 mb-6 md:mb-8 font-bricolage tracking-tight">Student Performance</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                   {/* Performance Card 1 */}
                   <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl border border-slate-200/50 shadow-sm hover:shadow-xl hover:shadow-indigo-500/10 hover:-translate-y-1 transition-all duration-300 group">
@@ -1567,7 +1774,7 @@ export default function TeacherDashboard() {
                     <span className="material-symbols-outlined">arrow_back</span>
                   </button>
                   <div>
-                    <h2 className="text-2xl font-bold text-slate-900 font-['Bricolage_Grotesque'] tracking-tight">Create New Course</h2>
+                    <h2 className="text-2xl font-bold text-slate-900 font-bricolage tracking-tight">Create New Course</h2>
                     <p className="text-sm text-slate-500">Set up the foundation, curriculum, and schedule for your new course.</p>
                   </div>
                 </div>
@@ -1796,6 +2003,129 @@ export default function TeacherDashboard() {
           </div>
         </main>
       </div>
+
+      {/* ── Assignment Overlays ────────────────────────────────────── */}
+
+      {/* 1. Grading Sidebar */}
+      {gradingSubmission && selectedAssignment && (
+        <div className="fixed inset-0 z-[60] flex justify-end">
+          <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-300" onClick={() => setGradingSubmission(null)}></div>
+          <div className="relative w-full max-w-md bg-white h-full shadow-2xl animate-in slide-in-from-right duration-300 flex flex-col">
+            <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+              <div>
+                <h4 className="font-bold text-slate-900">Grade Submission</h4>
+                <p className="text-xs text-slate-500 font-medium">{gradingSubmission.studentName}</p>
+              </div>
+              <button onClick={() => setGradingSubmission(null)} className="p-2 hover:bg-white rounded-full text-slate-400 transition-colors shadow-sm border border-transparent hover:border-slate-100">
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">
+              <div className="space-y-4">
+                <h5 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Submitted File</h5>
+                <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 flex items-center gap-4 group cursor-pointer hover:bg-white hover:border-indigo-200 transition-all">
+                  <div className="w-12 h-12 bg-rose-100 text-rose-600 rounded-xl flex items-center justify-center shadow-sm">
+                    <span className="material-symbols-outlined text-[28px]">description</span>
+                  </div>
+                  <div className="flex-1 overflow-hidden">
+                    <p className="text-sm font-bold text-slate-800 truncate">{gradingSubmission.fileName || 'submission.pdf'}</p>
+                    <p className="text-[10px] font-medium text-slate-500 uppercase">2.4 MB • PDF Document</p>
+                  </div>
+                  <span className="material-symbols-outlined text-slate-300 group-hover:text-indigo-600 transition-colors">download</span>
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-slate-700 flex justify-between">
+                    Marks Obtained
+                    <span className="text-indigo-600 font-bricolage font-normal">out of {selectedAssignment.totalMarks}</span>
+                  </label>
+                  <div className="relative">
+                    <input 
+                      type="number" 
+                      className="w-full border border-slate-200 rounded-2xl p-4 pr-16 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-slate-50/30 font-bold text-lg text-slate-800"
+                      placeholder="0"
+                      value={gradeMarks}
+                      onChange={e => setGradeMarks(e.target.value)}
+                    />
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">/ {selectedAssignment.totalMarks}</div>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-slate-700">Teacher Feedback</label>
+                  <textarea 
+                    rows={8}
+                    className="w-full border border-slate-200 rounded-2xl p-4 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-slate-50/30 text-sm resize-none"
+                    placeholder="Provide constructive feedback for the student..."
+                    value={gradeFeedback}
+                    onChange={e => setGradeFeedback(e.target.value)}
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-6 border-t border-slate-100 bg-slate-50/50">
+              <button 
+                onClick={saveGrade}
+                disabled={gradeSaving}
+                className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold shadow-lg shadow-indigo-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+              >
+                {gradeSaving ? (
+                  <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                ) : (
+                  <>
+                    <span className="material-symbols-outlined text-[20px]">check_circle</span>
+                    Submit Grade & Feedback
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 2. Delete Assignment Confirmation */}
+      {assignmentToDelete && (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-300" onClick={() => setAssignmentToDelete(null)}></div>
+          <div className="relative bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl animate-in zoom-in-95 duration-300 text-center">
+            <div className="w-16 h-16 bg-rose-50 text-rose-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <span className="material-symbols-outlined text-3xl">delete_forever</span>
+            </div>
+            <h4 className="text-xl font-bold text-slate-900 mb-2 font-bricolage">Delete Assignment?</h4>
+            <p className="text-sm text-slate-500 mb-8 px-4">This action cannot be undone. All student submissions and grades for <span className="font-bold text-slate-700">"{assignmentToDelete.title}"</span> will be permanently deleted.</p>
+            <div className="flex gap-3">
+              <button onClick={() => setAssignmentToDelete(null)} className="flex-1 py-3 px-4 border border-slate-200 text-slate-600 font-bold text-sm rounded-xl hover:bg-slate-50 transition-colors">Cancel</button>
+              <button 
+                onClick={deleteAssignment}
+                disabled={isDeletingAssignment}
+                className="flex-1 py-3 px-4 bg-rose-500 hover:bg-rose-600 text-white font-bold text-sm rounded-xl transition-all shadow-lg shadow-rose-500/20 disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {isDeletingAssignment ? 'Deleting...' : 'Delete Now'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 3. Global Toast Notifications */}
+      {toast && (
+        <div className={`fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] animate-in slide-in-from-bottom-10 fade-in duration-500`}>
+          <div className={`px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 backdrop-blur-md border ${toast.type === 'success' ? 'bg-emerald-600/90 text-white border-emerald-400/20' : 'bg-rose-600/90 text-white border-rose-400/20'}`}>
+            <span className="material-symbols-outlined text-[20px]">
+              {toast.type === 'success' ? 'check_circle' : 'error'}
+            </span>
+            <p className="text-sm font-bold tracking-tight">{toast.message}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+

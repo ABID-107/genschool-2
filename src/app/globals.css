@@ -1,151 +1,247 @@
+@import url('https://banglawebfonts.pages.dev/css/ekush.css');
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Ekush';
+  src: url('https://banglawebfonts.pages.dev/fonts/ekush/ekush-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0980-09FF, U+200C, U+200D, U+25CC;
+}
+
 :root {
-  --blue: #1a56e8;
-  --blue-light: #e8f0ff;
-  --blue-mid: #3b72f0;
-  --blue-dark: #0f3ab5;
-  --indigo: #4f46e5;
-  --surface: #f8f9fc;
-  --surface2: #eef1f8;
-  --white: #ffffff;
-  --text: #0f172a;
-  --text-sub: #475569;
-  --text-muted: #94a3b8;
-  --border: #e2e8f0;
-  --radius: 14px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
-  --shadow-sm: 0 1px 3px rgba(15,23,42,0.06), 0 1px 2px rgba(15,23,42,0.04);
-  --shadow: 0 4px 16px rgba(15,23,42,0.08), 0 1px 4px rgba(15,23,42,0.04);
-  --shadow-lg: 0 12px 40px rgba(15,23,42,0.12), 0 4px 12px rgba(15,23,42,0.06);
+  /* Brand Palette Light Mode (Warm Earth) */
+  --brand-navy-deep: #2A0800; /* Main Dark */
+  --brand-navy: #775144; /* Secondary Dark */
+  --brand-blue: #C09891; /* Accent */
+  --brand-blue-light: #BEA8A7; /* Surface */
+  --brand-ice: #F4D8D8; /* Global Canvas */
+
+  /* Global Backgrounds */
+  --bg-primary: #F4D8D8;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #BEA8A7;
+  
+  /* Text */
+  --text-primary: #2A0800;
+  --text-secondary: #775144;
+  --text-muted: #775144;
+  
+  /* Borders */
+  --border-color: rgba(190, 168, 167, 0.4);
+  --border-strong: rgba(190, 168, 167, 0.7);
+
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.65);
+  --glass-bg-hover: rgba(255, 255, 255, 0.85);
+  --glass-shadow: 0 4px 24px -4px rgba(42, 8, 0, 0.05);
+  --glass-shadow-hover: 0 8px 32px -4px rgba(119, 81, 68, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.7);
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(42, 8, 0, 0.06), 0 1px 2px rgba(42, 8, 0, 0.04);
+  --shadow: 0 4px 16px rgba(42, 8, 0, 0.08), 0 1px 4px rgba(42, 8, 0, 0.04);
+  --shadow-lg: 0 12px 40px rgba(119, 81, 68, 0.12), 0 4px 12px rgba(119, 81, 68, 0.06);
+
+  /* Shared Radii */
+  --radius: 12px;
+  --radius-lg: 14px;
+  --radius-xl: 16px;
+}
+
+.dark {
+  /* Brand Palette Dark Mode (Adjusted for contrast) */
+  --brand-navy-deep: #010812;
+  --brand-navy: #021024;
+  --brand-blue: #5483B3;
+  --brand-blue-light: #7DA0CA;
+  --brand-ice: #052659; /* Use dark navy instead of ice for dark mode bg blocks */
+
+  /* Global Backgrounds */
+  --bg-primary: #021024;
+  --bg-secondary: #052659;
+  --bg-tertiary: #021024;
+  
+  /* Text */
+  --text-primary: #f0f6fc;
+  --text-secondary: #C1E8FF;
+  --text-muted: #7DA0CA;
+  
+  /* Borders */
+  --border-color: rgba(125, 160, 202, 0.15);
+  --border-strong: rgba(125, 160, 202, 0.3);
+
+  /* Glassmorphism */
+  --glass-bg: rgba(5, 38, 89, 0.45);
+  --glass-bg-hover: rgba(5, 38, 89, 0.65);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  --glass-shadow-hover: 0 12px 48px 0 rgba(0, 0, 0, 0.6);
+  --glass-border: rgba(125, 160, 202, 0.1);
 }
 
 @theme inline {
-  --color-blue: var(--blue);
-  --color-blue-light: var(--blue-light);
-  --color-indigo: var(--indigo);
-  --color-surface: var(--surface);
-  --color-surface2: var(--surface2);
-  --color-text: var(--text);
-  --color-text-sub: var(--text-sub);
-  --color-text-muted: var(--text-muted);
-  --color-border: var(--border);
-  --font-bricolage: 'Bricolage Grotesque', sans-serif;
-  --font-dm: 'DM Sans', sans-serif;
+  /* Override Tailwind Core Colors to force brand consistency across existing utility classes */
   
-  /* Demo Page Theme Variables */
-  --color-demo-outline: #737872;
-  --color-demo-on-secondary-fixed: #261900;
-  --color-demo-tertiary-fixed-dim: #c9c6c0;
-  --color-demo-secondary-fixed-dim: #e9c176;
-  --color-demo-on-error-container: #93000a;
-  --color-demo-surface-tint: #506354;
-  --color-demo-primary-fixed-dim: #b7ccb9;
-  --color-demo-secondary-fixed: #ffdea5;
-  --color-demo-background: #faf9f6;
-  --color-demo-secondary-container: #fed488;
-  --color-demo-on-error: #ffffff;
-  --color-demo-surface-container-lowest: #ffffff;
-  --color-demo-on-primary: #ffffff;
-  --color-demo-surface-container-low: #f4f3f1;
-  --color-demo-secondary: #775a19;
-  --color-demo-on-tertiary-fixed-variant: #474742;
-  --color-demo-on-secondary-fixed-variant: #5d4201;
-  --color-demo-on-primary-fixed-variant: #394b3d;
-  --color-demo-surface-container: #efeeeb;
-  --color-demo-inverse-on-surface: #f2f1ee;
-  --color-demo-on-background: #1a1c1a;
-  --color-demo-error-container: #ffdad6;
-  --color-demo-on-tertiary: #ffffff;
-  --color-demo-surface-container-high: #e9e8e5;
-  --color-demo-tertiary: #42413d;
-  --color-demo-surface: #faf9f6;
-  --color-demo-surface-bright: #faf9f6;
-  --color-demo-primary: #334537;
-  --color-demo-primary-fixed: #d3e8d5;
-  --color-demo-error: #ba1a1a;
-  --color-demo-tertiary-fixed: #e5e2db;
-  --color-demo-on-surface: #1a1c1a;
-  --color-demo-outline-variant: #c3c8c1;
-  --color-demo-on-tertiary-fixed: #1c1c18;
-  --color-demo-surface-dim: #dbdad7;
-  --color-demo-tertiary-container: #5a5954;
-  --color-demo-on-tertiary-container: #d2cfc9;
-  --color-demo-on-primary-container: #c0d5c2;
-  --color-demo-on-secondary: #ffffff;
-  --color-demo-on-primary-fixed: #0e1f13;
-  --color-demo-primary-container: #4a5d4e;
-  --color-demo-inverse-surface: #2f312f;
-  --color-demo-on-secondary-container: #785a1a;
-  --color-demo-surface-variant: #e3e2e0;
-  --color-demo-surface-container-highest: #e3e2e0;
-  --color-demo-on-surface-variant: #434843;
-  --color-demo-inverse-primary: #b7ccb9;
+  /* Map slate to our brand scale */
+  --color-slate-50: var(--bg-tertiary);
+  --color-slate-100: var(--bg-secondary);
+  --color-slate-200: var(--border-color);
+  --color-slate-300: var(--border-strong);
+  --color-slate-400: var(--text-muted);
+  --color-slate-500: var(--text-muted);
+  --color-slate-600: var(--text-secondary);
+  --color-slate-700: var(--text-secondary);
+  --color-slate-800: var(--text-primary);
+  --color-slate-900: var(--text-primary);
 
-  /* Teacher Dashboard Theme Variables */
-  --color-teacher-background: #f8f9fa;
-  --color-teacher-on-background: #191c1d;
-  --color-teacher-surface: #f8f9fa;
-  --color-teacher-on-surface: #191c1d;
-  --color-teacher-primary: #3525cd;
-  --color-teacher-on-primary: #ffffff;
-  --color-teacher-primary-container: #4f46e5;
-  --color-teacher-on-primary-container: #dad7ff;
-  --color-teacher-secondary: #565e74;
-  --color-teacher-on-secondary: #ffffff;
-  --color-teacher-secondary-container: #dae2fd;
-  --color-teacher-on-secondary-container: #5c647a;
-  --color-teacher-error: #ba1a1a;
-  --color-teacher-on-error: #ffffff;
-  --color-teacher-error-container: #ffdad6;
-  --color-teacher-on-error-container: #93000a;
-  --color-teacher-outline: #777587;
-  --color-teacher-outline-variant: #c7c4d8;
+  /* Map indigo/blue to brand accents */
+  --color-indigo-50: var(--brand-ice);
+  --color-indigo-100: var(--brand-blue-light);
+  --color-indigo-500: var(--brand-blue);
+  --color-indigo-600: var(--brand-navy);
+  --color-indigo-700: var(--brand-navy-deep);
+  --color-indigo-900: var(--brand-navy-deep);
+  
+  --color-blue-50: var(--brand-ice);
+  --color-blue-500: var(--brand-blue);
+  --color-blue-600: var(--brand-navy);
+  --color-blue-900: var(--brand-navy-deep);
 
-  --font-h1: var(--font-noto-serif);
-  --font-h2: var(--font-noto-serif);
-  --font-h3: var(--font-noto-serif);
-  --font-caption: var(--font-manrope);
-  --font-body-lg: var(--font-manrope);
-  --font-body-md: var(--font-manrope);
-  --font-label-md: var(--font-manrope);
+  /* Custom generic variables */
+  --color-brand-deep: var(--brand-navy-deep);
+  --color-brand-navy: var(--brand-navy);
+  --color-brand-blue: var(--brand-blue);
+  --color-brand-light: var(--brand-blue-light);
+  --color-brand-ice: var(--brand-ice);
 
-  /* Guardian Dashboard Theme Variables */
-  --color-background: #f8f9fa;
-  --color-on-background: #191c1d;
-  --color-surface: #f8f9fa;
-  --color-on-surface: #191c1d;
-  --color-on-surface-variant: #464555;
-  --color-primary: #3525cd;
-  --color-primary-container: #4f46e5;
-  --color-on-primary-container: #dad7ff;
-  --color-secondary: #565e74;
-  --color-on-secondary: #ffffff;
-  --color-error: #ba1a1a;
-  --color-on-error: #ffffff;
-  --color-tertiary: #005338;
-  --color-tertiary-fixed: #6ffbbe;
-  --color-tertiary-container: #006e4b;
-  --color-on-tertiary-container: #67f4b7;
-  --color-surface-container-highest: #e1e3e4;
-  --color-surface-container-high: #e7e8e9;
-  --color-outline-variant: #c7c4d8;
-
-  --spacing-gutter: 24px;
-  --spacing-container-max: 1120px;
-  --spacing-unit: 8px;
-  --spacing-stack-sm: 16px;
-  --spacing-stack-md: 32px;
-  --spacing-stack-lg: 64px;
-  --spacing-margin-desktop: 48px;
-  --spacing-margin-mobile: 16px;
+  /* Fonts */
+  --font-bricolage: 'Ekush', sans-serif;
+  --font-dm: 'Ekush', sans-serif;
+  --font-manrope: 'Ekush', sans-serif;
+  --font-noto-serif: 'Ekush', serif;
+  --font-hind: 'Ekush', sans-serif;
+  --font-noto-bengali: 'Ekush', sans-serif;
+  --font-sans: 'Ekush', sans-serif;
+  --font-serif: 'Ekush', serif;
 }
 
 body {
-  font-family: var(--font-dm);
-  background: var(--white);
-  color: var(--text);
+  font-family: 'Ekush', var(--font-dm);
+  font-weight: 400;
+  font-style: normal;
+  background: var(--bg-primary);
+  color: var(--text-primary);
   line-height: 1.6;
   overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+/* Glassmorphism Utilities */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: var(--radius-xl);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  background: var(--glass-bg-hover);
+  box-shadow: var(--glass-shadow-hover);
+  transform: translateY(-2px);
+}
+
+.glass-nav {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--glass-shadow);
+  transition: all 0.3s ease;
+}
+
+.glass-sidebar {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-right: 1px solid var(--border-color);
+  box-shadow: var(--glass-shadow);
+  transition: all 0.3s ease;
+}
+
+.glass-button {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.glass-button:hover {
+  border-color: var(--brand-blue);
+  box-shadow: 0 0 12px rgba(84, 131, 179, 0.3);
+  transform: translateY(-1px);
+}
+
+.glass-button-primary {
+  background: var(--brand-navy);
+  color: var(--bg-secondary);
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 4px 12px var(--border-strong);
+  transition: all 0.2s ease;
+}
+
+.glass-button-primary:hover {
+  background: var(--brand-blue);
+  box-shadow: 0 6px 16px var(--border-strong), 0 0 15px var(--border-color);
+  transform: translateY(-2px);
+}
+
+.glass-panel {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Skeleton Loading Styles */
+.skeleton {
+  background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--border-color) 50%, var(--bg-secondary) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 4px;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Custom Scrollbar for better SaaS feel */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Bangla Typography Utilities */
+.font-bangla {
+  font-family: var(--font-hind);
+}
+
+.font-noto {
+  font-family: var(--font-noto-bengali);
+}
+

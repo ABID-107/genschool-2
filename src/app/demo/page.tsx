@@ -5,7 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import translationsData from '../../data/translations.json';
-
+import ThemeToggle from "@/components/ThemeToggle";
+import { useLanguage } from "@/lib/i18n";
 const translations: Record<string, any> = translationsData;
 
 const demoCards = [
@@ -54,7 +55,7 @@ const demoCards = [
 export default function DemoPage() {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [isDesktop, setIsDesktop] = useState(true);
-  const [lang, setLang] = useState<"en" | "bn">("en");
+  const { lang, toggleLang } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
   const [selectedCard, setSelectedCard] = useState<string | null>(null);
   const router = useRouter();
@@ -69,10 +70,6 @@ export default function DemoPage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const toggleLang = () => {
-    setLang((prev) => (prev === "en" ? "bn" : "en"));
-  };
-
   useEffect(() => {
     const handleResize = () => {
       setIsDesktop(window.innerWidth > 1024);
@@ -83,21 +80,22 @@ export default function DemoPage() {
   }, []);
 
   return (
-    <div className="bg-[#f8f9fc] text-[#0f172a] min-h-screen flex flex-col antialiased selection:bg-[#1a56e8]/20 selection:text-[#1a56e8]">
+    <div className="min-h-screen flex flex-col antialiased selection:bg-indigo-500/20 selection:text-indigo-600">
       {/* Navbar */}
       <motion.nav
         initial={{ y: -68 }}
         animate={{ y: 0 }}
-        className={`fixed top-0 left-0 right-0 z-50 h-[68px] flex items-center justify-between px-[5%] border-b transition-shadow duration-300 ${isScrolled ? "bg-white/88 backdrop-blur-xl shadow-[0_4px_16px_rgba(15,23,42,0.08)]" : "bg-white/88 backdrop-blur-xl border-[#e2e8f0]"
+        className={`fixed top-0 left-0 right-0 z-50 h-[68px] flex items-center justify-between px-[5%] transition-shadow duration-300 ${isScrolled ? "glass-nav" : "bg-transparent"
           }`}
       >
-        <Link href="/" className="flex items-center gap-[10px] text-[1.5rem] font-bold text-[#0f172a] no-underline font-['Bricolage_Grotesque']">
+        <Link href="/" className="flex items-center gap-[10px] text-[1.5rem] font-bold text-[#0f172a] no-underline font-bricolage">
           <div className="w-9 h-9 rounded-[10px] bg-gradient-to-br from-[#1a56e8] to-[#4f46e5] flex items-center justify-center text-white font-extrabold">
             G
           </div>
           <span>GenSchool</span>
         </Link>
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           <button
             onClick={toggleLang}
             className="px-4 py-[7px] rounded-lg border border-[#e2e8f0] bg-transparent cursor-pointer text-[.85rem] font-medium text-[#475569] transition-all hover:border-[#1a56e8] hover:text-[#1a56e8] hover:bg-[#e8f0ff]"
@@ -112,7 +110,7 @@ export default function DemoPage() {
           </button>
           <button
             onClick={() => router.push("/demo")}
-            className="px-5 py-2 rounded-[10px] bg-[#1a56e8] text-white border-none cursor-pointer text-[.9rem] font-medium transition-all hover:bg-[#0f3ab5] hover:translate-y-[-1px] hover:shadow-[0_4px_16px_rgba(26,86,232,0.35)] shadow-[0_2px_8px_rgba(26,86,232,0.25)]"
+            className="px-5 py-2 rounded-[10px] glass-button-primary flex items-center gap-2 text-[.9rem] font-medium"
           >
             {t.demoBtn}
           </button>
@@ -146,7 +144,7 @@ export default function DemoPage() {
           className="text-center mb-10 lg:mb-14 max-w-2xl"
         >
           <div className="text-[.78rem] font-semibold tracking-[.1em] uppercase text-[#1a56e8] mb-3">Interactive Demo</div>
-          <h1 className="font-['Bricolage_Grotesque'] text-[clamp(2rem,4vw,3.2rem)] font-bold leading-[1.1] tracking-[-0.03em] text-[#0f172a] mb-4">
+          <h1 className="font-bricolage text-[clamp(2rem,4vw,3.2rem)] font-bold leading-[1.1] tracking-[-0.03em] text-[#0f172a] mb-4">
             Select Your <span className="bg-gradient-to-r from-[#1a56e8] to-[#4f46e5] bg-clip-text text-transparent">Experience</span>
           </h1>
           <p className="text-[1.05rem] lg:text-[1.1rem] text-[#475569] leading-[1.7]">
@@ -180,7 +178,7 @@ export default function DemoPage() {
                   layout: { duration: 0.5, ease: [0.4, 0, 0.2, 1] },
                   width: { duration: 0.6, ease: [0.4, 0, 0.2, 1] }
                 }}
-                className={`group bg-white rounded-[24px] shadow-[0_4px_16px_rgba(15,23,42,0.06)] hover:shadow-[0_12px_40px_rgba(15,23,42,0.12)] border border-[#e2e8f0] relative overflow-hidden flex flex-col lg:flex-row ${card.align === 'left' ? 'lg:flex-row-reverse' : ''} transition-shadow duration-500 h-[140px] lg:h-full cursor-pointer lg:cursor-default`}
+                className={`group glass-card relative overflow-hidden flex flex-col lg:flex-row ${card.align === 'left' ? 'lg:flex-row-reverse' : ''} transition-shadow duration-500 h-[140px] lg:h-full cursor-pointer lg:cursor-default`}
                 style={{
                   flexShrink: 0,
                 }}
@@ -201,7 +199,7 @@ export default function DemoPage() {
                   <div className="absolute bottom-5 left-6 flex items-center gap-2 text-white">
                     <span className="material-symbols-outlined text-[28px]">{card.icon}</span>
                     <motion.span 
-                      className="text-[.85rem] font-semibold tracking-wider font-['Bricolage_Grotesque']"
+                      className="text-[.85rem] font-semibold tracking-wider font-bricolage"
                       animate={{ opacity: (isHovered && isDesktop) ? 0 : 1 }}
                       transition={{ duration: 0.3 }}
                     >
@@ -224,7 +222,7 @@ export default function DemoPage() {
                   animate={{ opacity: isDesktop ? (isHovered ? 1 : 0) : 0 }}
                   transition={{ duration: 0.4, ease: "easeInOut" }}
                 >
-                  <h3 className="font-['Bricolage_Grotesque'] text-[1.5rem] font-bold text-[#0f172a] mb-4 border-b border-[#e2e8f0] pb-4">{card.title}</h3>
+                  <h3 className="font-bricolage text-[1.5rem] font-bold text-[#0f172a] mb-4 border-b border-[#e2e8f0] pb-4">{card.title}</h3>
                   <p className="text-[.95rem] text-[#475569] mb-4 leading-[1.6]">{card.desc1}</p>
                   <p className="text-[.95rem] text-[#475569] leading-[1.6]">{card.desc2}</p>
                   
@@ -239,7 +237,7 @@ export default function DemoPage() {
                         alert('This demo is not yet available.');
                       }
                     }}
-                    className="mt-8 self-start bg-[#1a56e8] text-white px-6 py-[10px] rounded-xl text-[.9rem] font-medium transition-all hover:bg-[#0f3ab5] shadow-[0_4px_16px_rgba(26,86,232,0.3)] hover:shadow-[0_8px_24px_rgba(26,86,232,0.4)] flex items-center gap-2 group/btn"
+                    className="mt-8 self-start glass-button-primary px-6 py-[10px] rounded-xl text-[.9rem] font-medium flex items-center gap-2 group/btn"
                   >
                     Launch Demo
                     <span className="material-symbols-outlined text-[18px] transform group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
@@ -285,7 +283,7 @@ export default function DemoPage() {
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/40 to-transparent flex items-end p-6">
-                  <h3 className="font-['Bricolage_Grotesque'] text-[1.8rem] font-bold text-white">
+                  <h3 className="font-bricolage text-[1.8rem] font-bold text-white">
                     {demoCards.find(c => c.id === selectedCard)?.title}
                   </h3>
                 </div>
@@ -313,7 +311,7 @@ export default function DemoPage() {
                       alert('This demo is not yet available.');
                     }
                   }}
-                  className="w-full bg-[#1a56e8] text-white py-[14px] rounded-xl text-[1rem] font-medium transition-all hover:bg-[#0f3ab5] shadow-[0_4px_16px_rgba(26,86,232,0.3)] flex items-center justify-center gap-2 active:scale-95"
+                  className="w-full glass-button-primary py-[14px] rounded-xl text-[1rem] font-medium flex items-center justify-center gap-2 active:scale-95"
                 >
                   Launch Demo
                   <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
@@ -327,7 +325,7 @@ export default function DemoPage() {
       {/* Footer */}
       <footer className="bg-[#0f172a] text-white/70 py-12 px-[5%] mt-auto z-10">
         <div className="max-w-[1100px] mx-auto flex items-center justify-between flex-wrap gap-5">
-          <div className="font-['Bricolage_Grotesque'] text-[1.2rem] font-bold text-white">GenSchool</div>
+          <div className="font-bricolage text-[1.2rem] font-bold text-white">GenSchool</div>
           <div className="flex gap-6">
             <a href="#" className="text-white/60 text-[.85rem] no-underline transition-colors hover:text-white">{t.fp1}</a>
             <a href="#" className="text-white/60 text-[.85rem] no-underline transition-colors hover:text-white">{t.fp2}</a>
@@ -340,3 +338,4 @@ export default function DemoPage() {
     </div>
   );
 }
+

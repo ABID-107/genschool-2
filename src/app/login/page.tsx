@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -11,6 +11,7 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [role, setRole] = useState<"teacher" | "student" | "guardian">("teacher");
   const router = useRouter();
+
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,7 +33,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8f9fc] flex flex-col justify-center py-12 sm:px-6 lg:px-8 selection:bg-[#1a56e8]/20 selection:text-[#1a56e8]">
+    <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 selection:bg-indigo-500/20 selection:text-indigo-600">
       
       {/* Background Orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
@@ -41,13 +42,13 @@ export default function LoginPage() {
       </div>
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md z-10">
-        <Link href="/" className="flex items-center justify-center gap-[10px] text-[1.8rem] font-bold text-[#0f172a] no-underline font-['Bricolage_Grotesque'] hover:opacity-80 transition-opacity">
+        <Link href="/" className="flex items-center justify-center gap-[10px] text-[1.8rem] font-bold text-[#0f172a] no-underline font-bricolage hover:opacity-80 transition-opacity">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#1a56e8] to-[#4f46e5] flex items-center justify-center text-white font-extrabold text-xl">
             G
           </div>
           <span>GenSchool</span>
         </Link>
-        <h2 className="mt-8 text-center text-[1.8rem] font-bold tracking-tight text-[#0f172a] font-['Bricolage_Grotesque']">
+        <h2 className="mt-8 text-center text-[1.8rem] font-bold tracking-tight text-[#0f172a] font-bricolage">
           Welcome back
         </h2>
         <p className="mt-2 text-center text-sm text-[#475569]">
@@ -61,8 +62,8 @@ export default function LoginPage() {
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="mt-8 sm:mx-auto sm:w-full sm:max-w-[420px] z-10"
       >
-        <div className="bg-white py-10 px-6 sm:px-12 shadow-[0_12px_40px_rgba(15,23,42,0.08)] rounded-[24px] border border-[#e2e8f0]">
-          <div className="flex bg-[#f8f9fc] p-1 rounded-xl mb-8">
+        <div className="glass-card py-10 px-6 sm:px-12">
+          <div className="flex bg-slate-50 border border-slate-200 p-1 rounded-xl mb-8">
             <button
               type="button"
               onClick={() => setRole("teacher")}
@@ -158,8 +159,7 @@ export default function LoginPage() {
             <div>
               <button
                 type="submit"
-                disabled={isLoading}
-                className="flex w-full justify-center items-center py-3.5 px-4 rounded-xl text-sm font-bold text-white bg-[#1a56e8] hover:bg-[#0f3ab5] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1a56e8] transition-all shadow-[0_4px_16px_rgba(26,86,232,0.3)] hover:shadow-[0_8px_24px_rgba(26,86,232,0.4)] disabled:opacity-70 disabled:cursor-not-allowed"
+                className="flex w-full justify-center items-center py-3.5 px-4 rounded-xl text-sm font-bold glass-button-primary disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {isLoading ? (
                   <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -189,3 +189,4 @@ export default function LoginPage() {
     </div>
   );
 }
+
