@@ -2,10 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-<<<<<<< HEAD
 import Image from "next/image";
-=======
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import translationsData from '../../data/translations.json';
@@ -192,7 +189,6 @@ export default function DemoPage() {
                   layout
                   className="relative overflow-hidden flex-shrink-0 w-full lg:w-[160px] h-full z-10 bg-[#f8f9fc]"
                 >
-<<<<<<< HEAD
                   <motion.div
                     className="relative w-full h-full"
                     animate={{ scale: isHovered ? 1.05 : 1 }}
@@ -206,15 +202,6 @@ export default function DemoPage() {
                       className="object-cover opacity-90 group-hover:opacity-100 transition-opacity"
                     />
                   </motion.div>
-=======
-                  <motion.img
-                    src={card.image}
-                    alt={card.title}
-                    className="object-cover w-full h-full opacity-90 group-hover:opacity-100 transition-opacity"
-                    animate={{ scale: isHovered ? 1.05 : 1 }}
-                    transition={{ duration: 0.7, ease: "easeOut" }}
-                  />
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a]/90 via-[#0f172a]/20 to-transparent"></div>
                   <div className="absolute bottom-5 left-6 flex items-center gap-2 text-white">
                     <span className="material-symbols-outlined text-[28px]">{card.icon}</span>
@@ -297,18 +284,11 @@ export default function DemoPage() {
               
               {/* Image Header */}
               <div className="w-full h-[220px] relative flex-shrink-0">
-<<<<<<< HEAD
                 <Image 
                   src={demoCards.find(c => c.id === selectedCard)?.image || ''} 
                   alt="topic"
                   fill
                   className="object-cover"
-=======
-                <img 
-                  src={demoCards.find(c => c.id === selectedCard)?.image} 
-                  alt="topic"
-                  className="w-full h-full object-cover"
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/40 to-transparent flex items-end p-6">
                   <h3 className="font-bricolage text-[1.8rem] font-bold text-white">

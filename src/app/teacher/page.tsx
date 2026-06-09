@@ -1,10 +1,7 @@
 "use client";
 
 import { Suspense, useState, useEffect, useMemo } from "react";
-<<<<<<< HEAD
 import Image from "next/image";
-=======
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { TeacherTopNav } from "@/components/teacher/TeacherTopNav";
 import { TeacherSidebar } from "@/components/teacher/TeacherSidebar";
@@ -495,12 +492,7 @@ function TeacherDashboardContent() {
 
     const { moduleId: sourceModuleId, lessonId: sourceLessonId } = draggedLessonInfo;
 
-    // Create deep copy
-<<<<<<< HEAD
     const newModules = JSON.parse(JSON.stringify(courseModules));
-=======
-    let newModules = JSON.parse(JSON.stringify(courseModules));
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
 
     // Find source
     const sourceModuleIndex = newModules.findIndex((m: any) => m.id === sourceModuleId);
@@ -557,11 +549,7 @@ function TeacherDashboardContent() {
         onSignOut={() => {
           localStorage.removeItem("isAuthenticated");
           localStorage.removeItem("userRole");
-<<<<<<< HEAD
           router.replace("/login");
-=======
-          router.push("/login");
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
         }}
       />
 
@@ -584,11 +572,7 @@ function TeacherDashboardContent() {
           onSignOut={() => {
             localStorage.removeItem("isAuthenticated");
             localStorage.removeItem("userRole");
-<<<<<<< HEAD
             router.replace("/login");
-=======
-            router.push("/login");
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
           }}
         />
 
@@ -932,13 +916,9 @@ function TeacherDashboardContent() {
                             <div className="space-y-1.5">
                               <label className="text-sm font-bold text-slate-700 ml-1">Thumbnail Image</label>
                               <div className="flex flex-col gap-2">
-                                {editMaterialThumbnail ? (
+                                                                  {editMaterialThumbnail ? (
                                   <div className="relative h-16 w-full rounded-xl overflow-hidden border border-slate-200">
-<<<<<<< HEAD
                                     <Image src={editMaterialThumbnail} alt="Thumbnail" fill className="object-cover" unoptimized />
-=======
-                                    <img src={editMaterialThumbnail} alt="Thumbnail" className="w-full h-full object-cover" />
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
                                     <button onClick={() => setEditMaterialThumbnail(null)} className="absolute top-1 right-1 bg-black/50 text-white rounded-full p-0.5 hover:bg-black/70 transition-colors" disabled={isSavingEdit}>
                                       <span className="material-symbols-outlined text-[14px]">close</span>
                                     </button>
@@ -1443,11 +1423,7 @@ function TeacherDashboardContent() {
                                     <tr key={sub.id} className="hover:bg-slate-50/30 transition-colors group">
                                       <td className="px-6 py-4">
                                         <div className="flex items-center gap-3">
-<<<<<<< HEAD
                                           <Image alt={sub.studentName} className="w-9 h-9 rounded-full object-cover ring-2 ring-white shadow-sm" src={sub.studentAvatar} width={36} height={36} />
-=======
-                                          <img alt={sub.studentName} className="w-9 h-9 rounded-full object-cover ring-2 ring-white shadow-sm" src={sub.studentAvatar} />
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
                                           <span className="text-sm font-bold text-slate-800">{sub.studentName}</span>
                                         </div>
                                       </td>
@@ -1512,11 +1488,7 @@ function TeacherDashboardContent() {
                     </div>
                     <div className="flex-1 overflow-y-auto custom-scrollbar">
                       <div className="p-4 flex items-center gap-3 bg-indigo-50/80 border-r-4 border-indigo-500 cursor-pointer hover:bg-indigo-50 transition-colors">
-<<<<<<< HEAD
                         <Image alt="Alice" className="w-10 h-10 rounded-full object-cover shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5YtzuGGhQtoMSYb1z4CZnqzzcbjq48xkrOrRAS800ySrm9ocI5a1BzLYwxIk0eZnIcgUfFelkA_eQMCMIc7W08pM-TNUrEQ6mXISeFxVR6YfFBWO1eJoxwM9CgWegDXdxbPoVGlQZxdbmq74kNvWgTuV2Ms4t1n07gHVb4LG_ao3lxXxeamT2cw4fEHaXZ-GRkv6nwiprw6xMch0nuLsJBE30XbcNwDgFCq9ntroDL6ffKWyYToxeDEiPLoO48Pjk38Y0tPqGFSk" width={40} height={40} />
-=======
-                        <img alt="Alice" className="w-10 h-10 rounded-full object-cover shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5YtzuGGhQtoMSYb1z4CZnqzzcbjq48xkrOrRAS800ySrm9ocI5a1BzLYwxIk0eZnIcgUfFelkA_eQMCMIc7W08pM-TNUrEQ6mXISeFxVR6YfFBWO1eJoxwM9CgWegDXdxbPoVGlQZxdbmq74kNvWgTuV2Ms4t1n07gHVb4LG_ao3lxXxeamT2cw4fEHaXZ-GRkv6nwiprw6xMch0nuLsJBE30XbcNwDgFCq9ntroDL6ffKWyYToxeDEiPLoO48Pjk38Y0tPqGFSk" />
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
                         <div className="flex-1 overflow-hidden">
                           <div className="flex justify-between items-start mb-0.5">
                             <h4 className="text-sm font-bold text-slate-900 truncate">Alice Lin</h4>
@@ -1526,11 +1498,7 @@ function TeacherDashboardContent() {
                         </div>
                       </div>
                       <div className="p-4 flex items-center gap-3 hover:bg-white cursor-pointer transition-colors border-b border-slate-100">
-<<<<<<< HEAD
                         <Image alt="John" className="w-10 h-10 rounded-full object-cover shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAy8gYSxsWIXMDJgBjagtAXPCLznBLwOX3tX91ZKO1QApfFfzvMpXemInFjapK_SL975FXP5atiFYnV9MrfDspQpMEP3S0p8hsB_v3RUiQBcWjIWJR1Q1FvCajAygB3f3k1g870DiNbZW8WXYOnx8Uvlf2Q8Nvwye97E9lHwRnwGMBZ-RmRfKbclN-RyH1HupK7BprpxsdP6g9Z3ITKw4EIF_HRwaojxOktYUbH0FcuJKyQ_M0kZUEhKC0hNYdgn1zpIDF6koegTO8" width={40} height={40} />
-=======
-                        <img alt="John" className="w-10 h-10 rounded-full object-cover shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAy8gYSxsWIXMDJgBjagtAXPCLznBLwOX3tX91ZKO1QApfFfzvMpXemInFjapK_SL975FXP5atiFYnV9MrfDspQpMEP3S0p8hsB_v3RUiQBcWjIWJR1Q1FvCajAygB3f3k1g870DiNbZW8WXYOnx8Uvlf2Q8Nvwye97E9lHwRnwGMBZ-RmRfKbclN-RyH1HupK7BprpxsdP6g9Z3ITKw4EIF_HRwaojxOktYUbH0FcuJKyQ_M0kZUEhKC0hNYdgn1zpIDF6koegTO8" />
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
                         <div className="flex-1 overflow-hidden">
                           <div className="flex justify-between items-start mb-0.5">
                             <h4 className="text-sm font-bold text-slate-700 truncate">John Davis</h4>
@@ -1547,11 +1515,7 @@ function TeacherDashboardContent() {
                     <div className="px-4 md:px-6 py-4 border-b border-slate-200/60 flex items-center justify-between shadow-sm z-10 bg-white/80 backdrop-blur-md">
                       <div className="flex items-center gap-3">
                         <div className="relative">
-<<<<<<< HEAD
                           <Image alt="Alice" className="w-10 h-10 rounded-full object-cover shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCk7Wsjskynl2H5KXiECGBzgWR0Hvt0bSNn7-cg5jZS-lQ0Er7esj0N3SyiGOTxgCx92nEYZv8IT8Fj86UZ6VPrEcvcABG8HENglXyWqnEclvYp_Xh_Z449VX2aygqq4jg1mO-nYvCx3fl2-xuEX_1JAW6HfWjBPpVELirlTSEq-2bX4ICAQnHQVf67hRONetlckhbPzDpoKM9kULnCc--Ahe9IW68YL8tqaVrfFRULnVFCWgiiK-3c025F8JbTI1JU39_WgzQUA_M" width={40} height={40} />
-=======
-                          <img alt="Alice" className="w-10 h-10 rounded-full object-cover shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCk7Wsjskynl2H5KXiECGBzgWR0Hvt0bSNn7-cg5jZS-lQ0Er7esj0N3SyiGOTxgCx92nEYZv8IT8Fj86UZ6VPrEcvcABG8HENglXyWqnEclvYp_Xh_Z449VX2aygqq4jg1mO-nYvCx3fl2-xuEX_1JAW6HfWjBPpVELirlTSEq-2bX4ICAQnHQVf67hRONetlckhbPzDpoKM9kULnCc--Ahe9IW68YL8tqaVrfFRULnVFCWgiiK-3c025F8JbTI1JU39_WgzQUA_M" />
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
                           <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full"></span>
                         </div>
                         <div>
@@ -1618,11 +1582,7 @@ function TeacherDashboardContent() {
                         <tr className="hover:bg-slate-50/80 transition-colors group">
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
-<<<<<<< HEAD
                               <Image alt="Alice" className="w-9 h-9 rounded-full object-cover ring-2 ring-white shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9mHyOpfSCUbiESMFCtXc425X4i_scXPSJ355x5z2tvsXovxMF4YcauUy9SPqHOhBZMVzunimUCkt808Po8jmGgPhKLI3ls39stBnquuE7NPpSItbEWhSqFuJAAxCG9oF-xwoZkfS2oFGkVIV8TmanlvL8KvUUwo0BpAgW0X4NWCCS713yUgurEW0qIjQC-02tAu1H0LyB8iDQvisNYRjeyXlJ51_cVO2s5hmGwHDSGbtJQbc5tr_ZEkYSeaPhw3KbygvS3VNKB1U" width={36} height={36} />
-=======
-                              <img alt="Alice" className="w-9 h-9 rounded-full object-cover ring-2 ring-white shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9mHyOpfSCUbiESMFCtXc425X4i_scXPSJ355x5z2tvsXovxMF4YcauUy9SPqHOhBZMVzunimUCkt808Po8jmGgPhKLI3ls39stBnquuE7NPpSItbEWhSqFuJAAxCG9oF-xwoZkfS2oFGkVIV8TmanlvL8KvUUwo0BpAgW0X4NWCCS713yUgurEW0qIjQC-02tAu1H0LyB8iDQvisNYRjeyXlJ51_cVO2s5hmGwHDSGbtJQbc5tr_ZEkYSeaPhw3KbygvS3VNKB1U" />
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
                               <span className="text-sm font-bold text-slate-800">Alice Lin</span>
                             </div>
                           </td>
@@ -1639,11 +1599,7 @@ function TeacherDashboardContent() {
                         <tr className="hover:bg-slate-50/80 transition-colors group">
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
-<<<<<<< HEAD
                               <Image alt="John" className="w-9 h-9 rounded-full object-cover ring-2 ring-white shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmPoMtVfIX5bjeysfE5jkYUNIIW75DMIK5Iomw2TOqwAKMsjNMVnAoL9HrEjPvWSvgxLmnZsBUQFm9FYfe6MpexIcSgwv9Ny1D46trNo71N_fRZP1cDVK1iFoeCvkL9JfKTtQd2yalMe_jLtSELGcfH6YD2ElEhlWh-U8zK1hnzpV0HeRKHTQ-PcVKiidLKbQCjNKVfylWp69brSrGaEmo20TuUuZvb7rS4jpaO5_N1kJbbe8PLg5dgbY9ZlzKN9wuR9zHn_gayFc" width={36} height={36} />
-=======
-                              <img alt="John" className="w-9 h-9 rounded-full object-cover ring-2 ring-white shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmPoMtVfIX5bjeysfE5jkYUNIIW75DMIK5Iomw2TOqwAKMsjNMVnAoL9HrEjPvWSvgxLmnZsBUQFm9FYfe6MpexIcSgwv9Ny1D46trNo71N_fRZP1cDVK1iFoeCvkL9JfKTtQd2yalMe_jLtSELGcfH6YD2ElEhlWh-U8zK1hnzpV0HeRKHTQ-PcVKiidLKbQCjNKVfylWp69brSrGaEmo20TuUuZvb7rS4jpaO5_N1kJbbe8PLg5dgbY9ZlzKN9wuR9zHn_gayFc" />
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
                               <span className="text-sm font-bold text-slate-800">John Davis</span>
                             </div>
                           </td>
@@ -1660,11 +1616,7 @@ function TeacherDashboardContent() {
                         <tr className="hover:bg-slate-50/80 transition-colors group">
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
-<<<<<<< HEAD
                               <Image alt="Mark" className="w-9 h-9 rounded-full object-cover ring-2 ring-white shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDcgi-CLEqUU8zIHTUR56qJbJoiJAZY8qrON2bZktQHFCl-IFRykhaMeyKz7MGz8KOeHAFu3ItwGrVG1FbSovsUICpIhke9K8wrwXQneuNanWHIqWGJYtZKqXQPAH2xHIHupzl4oSi7hgzB7CeE0jM21JjNubI6Ldp2-DEErJHEFf5ByfmLIsMtkuqMAWyhwHYq4XThBV7i-doIZmIJWfH31bbwDkDTxUduW5mB-u4O1x10rpZ7fkV0f-oz3uiZNCoVQ92ia2HCHI" width={36} height={36} />
-=======
-                              <img alt="Mark" className="w-9 h-9 rounded-full object-cover ring-2 ring-white shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDcgi-CLEqUU8zIHTUR56qJbJoiJAZY8qrON2bZktQHFCl-IFRykhaMeyKz7MGz8KOeHAFu3ItwGrVG1FbSovsUICpIhke9K8wrwXQneuNanWHIqWGJYtZKqXQPAH2xHIHupzl4oSi7hgzB7CeE0jM21JjNubI6Ldp2-DEErJHEFf5ByfmLIsMtkuqMAWyhwHYq4XThBV7i-doIZmIJWfH31bbwDkDTxUduW5mB-u4O1x10rpZ7fkV0f-oz3uiZNCoVQ92ia2HCHI" />
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
                               <span className="text-sm font-bold text-slate-800">Mark Smith</span>
                             </div>
                           </td>
@@ -1693,11 +1645,7 @@ function TeacherDashboardContent() {
                   {/* Performance Card 1 */}
                   <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl border border-slate-200/50 shadow-sm hover:shadow-xl hover:shadow-indigo-500/10 hover:-translate-y-1 transition-all duration-300 group">
                     <div className="flex items-center gap-4 mb-6">
-<<<<<<< HEAD
                       <Image alt="Student" className="w-14 h-14 rounded-full object-cover ring-4 ring-indigo-50 shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRoIrPJRN_BrWX01RR8f0AidZH8aBVFIbIfr9_PGC963olWCk0-KoGdC5jetNAN_dbBUWheyA615feqT02UyK-L-rw8bO9gZfTpU0ToSOaOrT1dS8JifmmzWea4HtSIv5kFsc8AWakRrSeKz2fbD2Fu0w6sgKIWs8HBux0lwkHMh6EsVTI0oY2gM4w7cCd0tBeKJ4WJYHOmuSW6To4zEaPvDSnyMFIO6VUhTyq2hI8LUKT6-Az2vrawQOh6dlvzGA8nn_0XH1SQ-c" width={56} height={56} />
-=======
-                      <img alt="Student" className="w-14 h-14 rounded-full object-cover ring-4 ring-indigo-50 shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRoIrPJRN_BrWX01RR8f0AidZH8aBVFIbIfr9_PGC963olWCk0-KoGdC5jetNAN_dbBUWheyA615feqT02UyK-L-rw8bO9gZfTpU0ToSOaOrT1dS8JifmmzWea4HtSIv5kFsc8AWakRrSeKz2fbD2Fu0w6sgKIWs8HBux0lwkHMh6EsVTI0oY2gM4w7cCd0tBeKJ4WJYHOmuSW6To4zEaPvDSnyMFIO6VUhTyq2hI8LUKT6-Az2vrawQOh6dlvzGA8nn_0XH1SQ-c" />
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
                       <div>
                         <h4 className="font-bold text-lg text-slate-900">Alice Lin</h4>
                         <p className="text-sm font-medium text-slate-500">Advanced UI Design</p>
@@ -1737,11 +1685,7 @@ function TeacherDashboardContent() {
                   {/* Performance Card 2 */}
                   <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl border border-slate-200/50 shadow-sm hover:shadow-xl hover:shadow-indigo-500/10 hover:-translate-y-1 transition-all duration-300 group">
                     <div className="flex items-center gap-4 mb-6">
-<<<<<<< HEAD
                       <Image alt="Student" className="w-14 h-14 rounded-full object-cover ring-4 ring-indigo-50 shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAFTxG276x_Z4LVfft4tt1hBs7bup9oQmpfVV2XgMnl7dXKG5teUkOp1eTTIC_FRxEWUBOI21u5Yxlvz83VaDGyuSn0bGIRJMdLZ-bo8366x0UwzF0yk6HOePwihU1EVgPocRR-a5N2F9D4lL6l6cjQwbpy5-S_4GTtRraaG6nSDEfqOf6PkoSxZWZg3RqkaVbETOuludXT4IVGx2tTVVF-ZIvLAFeJCXvCj5fWKFU-iFJ1tXaJBrP_v99VUrEHsbl4LGLpMFvmVo" width={56} height={56} />
-=======
-                      <img alt="Student" className="w-14 h-14 rounded-full object-cover ring-4 ring-indigo-50 shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAFTxG276x_Z4LVfft4tt1hBs7bup9oQmpfVV2XgMnl7dXKG5teUkOp1eTTIC_FRxEWUBOI21u5Yxlvz83VaDGyuSn0bGIRJMdLZ-bo8366x0UwzF0yk6HOePwihU1EVgPocRR-a5N2F9D4lL6l6cjQwbpy5-S_4GTtRraaG6nSDEfqOf6PkoSxZWZg3RqkaVbETOuludXT4IVGx2tTVVF-ZIvLAFeJCXvCj5fWKFU-iFJ1tXaJBrP_v99VUrEHsbl4LGLpMFvmVo" />
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
                       <div>
                         <h4 className="font-bold text-lg text-slate-900">John Davis</h4>
                         <p className="text-sm font-medium text-slate-500">History of Arts</p>
@@ -1781,11 +1725,7 @@ function TeacherDashboardContent() {
                   {/* Performance Card 3 */}
                   <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl border border-slate-200/50 shadow-sm hover:shadow-xl hover:shadow-indigo-500/10 hover:-translate-y-1 transition-all duration-300 group">
                     <div className="flex items-center gap-4 mb-6">
-<<<<<<< HEAD
                       <Image alt="Student" className="w-14 h-14 rounded-full object-cover ring-4 ring-indigo-50 shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAa0y1_Zx64Vgpu1sMu9xw0D21fYr7vU5hcCkBQXpcHFLdtifXectSd8jDSEChWVsLzVjG_BVJREON9Ixmx_k58jWMqote5seR0GvxoGM3QEHEQ8PdjfWle-sdVCsbIsLCcZ-aFATKOjBdSlBYPNf9n8u2RbYQBk4WOSMlUf-PbMDt-QHfh9XN9ZF0mrE2QbOjXGg6bcIzn72uabgWpnVmv9L29dAqXlx5iYvad-RX_EfICXDPRssCHxZKUwoOU_YAT_a-2R0hFUe0" width={56} height={56} />
-=======
-                      <img alt="Student" className="w-14 h-14 rounded-full object-cover ring-4 ring-indigo-50 shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAa0y1_Zx64Vgpu1sMu9xw0D21fYr7vU5hcCkBQXpcHFLdtifXectSd8jDSEChWVsLzVjG_BVJREON9Ixmx_k58jWMqote5seR0GvxoGM3QEHEQ8PdjfWle-sdVCsbIsLCcZ-aFATKOjBdSlBYPNf9n8u2RbYQBk4WOSMlUf-PbMDt-QHfh9XN9ZF0mrE2QbOjXGg6bcIzn72uabgWpnVmv9L29dAqXlx5iYvad-RX_EfICXDPRssCHxZKUwoOU_YAT_a-2R0hFUe0" />
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
                       <div>
                         <h4 className="font-bold text-lg text-slate-900">Mark Smith</h4>
                         <p className="text-sm font-medium text-slate-500">UX Research Pro</p>
@@ -1893,11 +1833,7 @@ function TeacherDashboardContent() {
                         <input type="file" accept="image/*" onChange={handleImageUpload} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
                         {thumbnailPreview ? (
                           <div className="w-full flex flex-col items-center">
-<<<<<<< HEAD
                             <Image src={thumbnailPreview} alt="Thumbnail Preview" width={200} height={128} className="h-32 object-cover rounded-xl border border-slate-200 shadow-sm mb-3" unoptimized />
-=======
-                            <img src={thumbnailPreview} alt="Thumbnail Preview" className="h-32 object-cover rounded-xl border border-slate-200 shadow-sm mb-3" />
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
                             <p className="text-xs font-semibold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">Change Image</p>
                           </div>
                         ) : (

@@ -1,9 +1,7 @@
+import Image from "next/image";
 import { useLanguage } from "@/lib/i18n";
 import { useState } from "react";
-<<<<<<< HEAD
-import Image from "next/image";
-=======
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
+
 
 export function GuardianMessagesView() {
   const { lang, t } = useLanguage();
@@ -60,11 +58,7 @@ export function GuardianMessagesView() {
                 className={`w-full p-4 flex items-center gap-3 transition-colors border-b border-slate-50 text-left ${activeChat === teacher.id ? 'bg-indigo-50 border-l-4 border-l-indigo-600' : 'hover:bg-slate-50 border-l-4 border-l-transparent'}`}
               >
                 <div className="relative">
-<<<<<<< HEAD
                   <Image src={teacher.avatar} alt={teacher.name} className="w-12 h-12 rounded-full object-cover border border-slate-200" width={48} height={48} />
-=======
-                  <img src={teacher.avatar} alt={teacher.name} className="w-12 h-12 rounded-full object-cover border border-slate-200" />
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
                   {teacher.online && (
                     <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
                   )}
@@ -100,11 +94,7 @@ export function GuardianMessagesView() {
                   >
                     <span className="material-symbols-outlined">arrow_back</span>
                   </button>
-<<<<<<< HEAD
                   <Image src={activeTeacher.avatar} alt={activeTeacher.name} className="w-10 h-10 rounded-full object-cover" width={40} height={40} />
-=======
-                  <img src={activeTeacher.avatar} alt={activeTeacher.name} className="w-10 h-10 rounded-full object-cover" />
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
                   <div>
                     <h4 className="font-bold text-slate-900">{activeTeacher.name}</h4>
                     <p className={`text-xs font-semibold ${activeTeacher.online ? 'text-green-600' : 'text-slate-500'}`}>

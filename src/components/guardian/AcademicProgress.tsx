@@ -1,8 +1,6 @@
-import { useLanguage } from "@/lib/i18n";
-<<<<<<< HEAD
 import Image from "next/image";
-=======
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
+import { useLanguage } from "@/lib/i18n";
+
 
 interface ExamResult {
   term: string;
@@ -159,11 +157,7 @@ export function GuardianAcademicProgressView() {
             <div key={feedback.id} className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition-shadow">
               <div className="flex justify-between items-start mb-4">
                 <div className="flex gap-3">
-<<<<<<< HEAD
                   <Image src={feedback.avatar} alt={feedback.teacher} className="w-10 h-10 rounded-full border border-slate-100 object-cover" width={40} height={40} />
-=======
-                  <img src={feedback.avatar} alt={feedback.teacher} className="w-10 h-10 rounded-full border border-slate-100 object-cover" />
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
                   <div>
                     <h4 className="font-bold text-slate-900 text-sm">{feedback.teacher}</h4>
                     <p className="text-xs font-semibold text-indigo-600">{lang === 'bn' ? feedback.subjectBn : feedback.subject}</p>

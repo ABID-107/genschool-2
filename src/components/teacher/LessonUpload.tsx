@@ -1,9 +1,7 @@
 import { useState, ChangeEvent, DragEvent } from "react";
-import { motion } from "framer-motion";
-<<<<<<< HEAD
 import Image from "next/image";
-=======
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
+import { motion } from "framer-motion";
+
 
 interface LessonUploadProps {
   onUploadSuccess: (lesson: any) => void;
@@ -143,11 +141,7 @@ export function LessonUpload({ onUploadSuccess }: LessonUploadProps) {
                 <div className="flex items-center gap-4">
                     {thumbnail ? (
                         <div className="relative">
-<<<<<<< HEAD
                             <Image src={thumbnail} alt="Thumbnail Preview" width={80} height={80} className="w-20 h-20 object-cover rounded-xl border border-slate-200 shadow-sm" unoptimized />
-=======
-                            <img src={thumbnail} alt="Thumbnail Preview" className="w-20 h-20 object-cover rounded-xl border border-slate-200 shadow-sm" />
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
                             <button onClick={() => setThumbnail(null)} className="absolute -top-2 -right-2 bg-rose-100 text-rose-600 rounded-full p-1 hover:bg-rose-200 transition-colors shadow-sm">
                                 <span className="material-symbols-outlined text-[14px]">close</span>
                             </button>

@@ -1,9 +1,5 @@
 import type { Metadata } from "next";
-<<<<<<< HEAD
 import { Bricolage_Grotesque, DM_Sans, Manrope, Noto_Serif, Tiro_Bangla, Fjalla_One } from "next/font/google";
-=======
-import { Bricolage_Grotesque, DM_Sans, Manrope, Noto_Serif, Hind_Siliguri, Noto_Sans_Bengali } from "next/font/google";
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
 import "./globals.css";
 import GlobalLanguageToggle from "@/components/GlobalLanguageToggle";
 
@@ -32,7 +28,6 @@ const notoSerif = Noto_Serif({
   weight: ["400", "700"],
 });
 
-<<<<<<< HEAD
 const tiroBangla = Tiro_Bangla({
   variable: "--font-tiro-bangla-next",
   subsets: ["bengali", "latin"],
@@ -43,18 +38,6 @@ const fjallaOne = Fjalla_One({
   variable: "--font-fjalla-next",
   subsets: ["latin"],
   weight: "400",
-=======
-const hindSiliguri = Hind_Siliguri({
-  variable: "--font-hind-next",
-  subsets: ["bengali", "latin"],
-  weight: ["300", "400", "500", "600", "700"],
-});
-
-const notoBengali = Noto_Sans_Bengali({
-  variable: "--font-noto-bengali-next",
-  subsets: ["bengali", "latin"],
-  weight: ["400", "700"],
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
 });
 
 export const metadata: Metadata = {
@@ -68,14 +51,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-<<<<<<< HEAD
     <html lang="en" className={`${bricolage.variable} ${dmSans.variable} ${manrope.variable} ${notoSerif.variable} ${tiroBangla.variable} ${fjallaOne.variable} h-full antialiased scroll-smooth`} suppressHydrationWarning>
       <head>
-=======
-    <html lang="en" className={`${bricolage.variable} ${dmSans.variable} ${manrope.variable} ${notoSerif.variable} ${hindSiliguri.variable} ${notoBengali.variable} h-full antialiased scroll-smooth`} suppressHydrationWarning>
-      <head>
-        <link rel="preload" as="font" type="font/woff2" href="https://banglawebfonts.pages.dev/fonts/ekush/ekush-regular.woff2" crossOrigin="anonymous" />
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
         <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
         <script
           dangerouslySetInnerHTML={{
@@ -91,11 +68,7 @@ export default function RootLayout({
           }}
         />
       </head>
-<<<<<<< HEAD
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
-=======
-      <body className="min-h-full flex flex-col">
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
         {children}
         <GlobalLanguageToggle />
       </body>

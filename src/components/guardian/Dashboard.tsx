@@ -1,9 +1,7 @@
+import Image from "next/image";
 import { useLanguage } from "@/lib/i18n";
 import { useState } from "react";
-<<<<<<< HEAD
-import Image from "next/image";
-=======
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
+
 
 interface Child {
   id: string;
@@ -55,11 +53,7 @@ export function GuardianDashboardView({
                 : 'bg-white text-slate-700 border-slate-200 hover:border-indigo-300'
             }`}
           >
-<<<<<<< HEAD
             <Image src={child.avatar} alt={child.nameEn} className={`w-12 h-12 rounded-full object-cover border-2 ${activeChildId === child.id ? 'border-indigo-300' : 'border-slate-100'}`} width={48} height={48} />
-=======
-            <img src={child.avatar} alt={child.nameEn} className={`w-12 h-12 rounded-full object-cover border-2 ${activeChildId === child.id ? 'border-indigo-300' : 'border-slate-100'}`} />
->>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
             <div className="text-left">
               <p className="font-bold text-sm leading-tight">{lang === 'bn' ? child.nameBn : child.nameEn}</p>
               <p className={`text-xs ${activeChildId === child.id ? 'text-indigo-100' : 'text-slate-500'}`}>Class {child.class} • Sec {child.section}</p>
