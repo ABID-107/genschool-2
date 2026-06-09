@@ -59,10 +59,10 @@ export default function AdminSidebar() {
       initial={{ width: 280 }}
       animate={{ width: isCollapsed ? 80 : 280 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
-      className="relative h-screen bg-slate-900 text-white border-r border-slate-800 flex flex-col z-20"
+      className="relative h-screen glass-sidebar text-white flex flex-col z-20"
     >
       {/* Logo Area */}
-      <div className="h-16 flex items-center justify-between px-4 border-b border-slate-800">
+      <div className="h-16 flex items-center justify-between px-4 border-b border-[var(--border-color)]">
         <AnimatePresence mode="wait">
           {!isCollapsed && (
             <motion.div
@@ -71,17 +71,17 @@ export default function AdminSidebar() {
               exit={{ opacity: 0, x: -20 }}
               className="flex items-center gap-3 font-bold text-xl tracking-tight text-white"
             >
-              <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white">
+              <div className="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center text-white">
                 <GraduationCap size={20} />
               </div>
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-400">GenSchool</span>
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-brand-accent to-brand-light">GenSchool</span>
             </motion.div>
           )}
         </AnimatePresence>
         
         {isCollapsed && (
           <div className="w-full flex justify-center">
-            <div className="w-10 h-10 bg-blue-500/20 text-blue-400 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-brand-primary/20 text-brand-accent rounded-xl flex items-center justify-center">
               <GraduationCap size={24} />
             </div>
           </div>
@@ -91,7 +91,7 @@ export default function AdminSidebar() {
       {/* Toggle Button */}
       <button
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className="absolute -right-3 top-20 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white shadow-lg hover:bg-blue-600 transition-colors z-30"
+        className="absolute -right-3 top-20 w-6 h-6 bg-brand-primary rounded-full flex items-center justify-center text-white shadow-lg hover:bg-brand-mid transition-colors z-30"
       >
         {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
       </button>
@@ -104,13 +104,13 @@ export default function AdminSidebar() {
             return (
               <Link key={item.name} href={item.path}>
                 <div
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group relative ${
+                  className={`nav-item ${
                     isActive 
-                      ? 'bg-blue-500/15 text-blue-400' 
-                      : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+                      ? 'active' 
+                      : ''
                   }`}
                 >
-                  <item.icon size={20} className={isActive ? 'text-blue-400' : 'text-slate-400 group-hover:text-white'} />
+                  <item.icon size={20} />
                   
                   <AnimatePresence>
                     {!isCollapsed && (
@@ -125,9 +125,8 @@ export default function AdminSidebar() {
                     )}
                   </AnimatePresence>
 
-                  {/* Tooltip for collapsed state */}
                   {isCollapsed && (
-                    <div className="absolute left-full ml-4 px-2 py-1 bg-slate-800 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50">
+                    <div className="absolute left-full ml-4 px-2 py-1 bg-brand-dark text-white text-xs rounded-md opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50">
                       {item.name}
                     </div>
                   )}
@@ -138,11 +137,10 @@ export default function AdminSidebar() {
         </div>
       </div>
 
-      {/* Footer / Settings */}
-      <div className="p-4 border-t border-slate-800">
+      <div className="p-4 border-t border-[var(--border-color)]">
         <div className="space-y-1">
           <Link href="/admin/settings">
-            <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors group">
+            <div className="nav-item">
               <Settings size={20} />
               {!isCollapsed && <span className="font-medium text-sm">Settings</span>}
             </div>
@@ -153,7 +151,7 @@ export default function AdminSidebar() {
               localStorage.removeItem("userRole");
               router.replace("/login");
             }}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-red-400 hover:text-red-300 hover:bg-red-950/30 transition-colors group"
+            className="w-full nav-item text-rose-500 hover:text-rose-400"
           >
             <LogOut size={20} />
             {!isCollapsed && <span className="font-medium text-sm">Log Out</span>}

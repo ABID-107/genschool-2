@@ -282,7 +282,7 @@ export default function FinanceManagementPage() {
       unpaid: { bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-200', icon: Clock },
       partial: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', icon: Clock },
       overpaid: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200', icon: TrendingUp },
-      refunded: { bg: 'bg-slate-100', text: 'text-slate-600', border: 'border-slate-200', icon: Undo2 },
+      refunded: { bg: 'bg-[var(--bg-tertiary)]', text: 'text-[var(--text-secondary)]', border: 'border-[var(--border-light)]', icon: Undo2 },
       completed: { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', icon: CheckCircle2 },
       pending: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', icon: Clock },
       cancelled: { bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-200', icon: Ban },
@@ -318,32 +318,32 @@ export default function FinanceManagementPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Finance & Fee Management</h1>
-          <p className="text-sm text-slate-500 mt-1">Manage fee structures, invoices, payments, expenses, and financial reports.</p>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)] tracking-tight">Finance & Fee Management</h1>
+          <p className="text-sm text-[var(--text-muted)] mt-1">Manage fee structures, invoices, payments, expenses, and financial reports.</p>
         </div>
         <div className="flex items-center gap-3">
           {activeTab === 'invoices' && (
             <>
-              <button onClick={() => handleExport('invoices')} className="bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 px-4 py-2 rounded-xl text-sm font-medium transition-colors shadow-sm flex items-center gap-2">
+              <button onClick={() => handleExport('invoices')} className="bg-[var(--bg-secondary)] border border-[var(--border-light)] text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] px-4 py-2 rounded-xl text-sm font-medium transition-colors shadow-sm flex items-center gap-2">
                 <Download size={16} /> Export
               </button>
-              <button onClick={openCreateInvoice} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-medium shadow-md transition-all flex items-center gap-2">
+              <button onClick={openCreateInvoice} className="bg-brand-primary hover:bg-brand-mid text-white px-4 py-2 rounded-xl text-sm font-medium shadow-md transition-all flex items-center gap-2">
                 <Plus size={16} /> Create Invoice
               </button>
             </>
           )}
           {activeTab === 'payments' && (
-            <button onClick={() => handleExport('payments')} className="bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 px-4 py-2 rounded-xl text-sm font-medium transition-colors shadow-sm flex items-center gap-2">
+            <button onClick={() => handleExport('payments')} className="bg-[var(--bg-secondary)] border border-[var(--border-light)] text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] px-4 py-2 rounded-xl text-sm font-medium transition-colors shadow-sm flex items-center gap-2">
               <Download size={16} /> Export
             </button>
           )}
           {activeTab === 'structures' && (
-            <button onClick={() => openFSModal('create')} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-medium shadow-md transition-all flex items-center gap-2">
+            <button onClick={() => openFSModal('create')} className="bg-brand-primary hover:bg-brand-mid text-white px-4 py-2 rounded-xl text-sm font-medium shadow-md transition-all flex items-center gap-2">
               <Plus size={16} /> Add Structure
             </button>
           )}
           {activeTab === 'expenses' && (
-            <button onClick={() => openExpModal('add')} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-medium shadow-md transition-all flex items-center gap-2">
+            <button onClick={() => openExpModal('add')} className="bg-brand-primary hover:bg-brand-mid text-white px-4 py-2 rounded-xl text-sm font-medium shadow-md transition-all flex items-center gap-2">
               <Plus size={16} /> Add Expense
             </button>
           )}
@@ -352,38 +352,38 @@ export default function FinanceManagementPage() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden group">
-          <div className="absolute top-0 right-0 p-4 opacity-10 text-blue-500 transform group-hover:scale-110 transition-transform"><Wallet size={48} /></div>
-          <p className="text-sm font-medium text-slate-500 relative z-10">Total Revenue (MTD)</p>
-          <p className="text-2xl font-bold text-slate-800 mt-1 relative z-10">৳ {kpiData.totalRevenue.toLocaleString()}</p>
+        <div className="bg-[var(--bg-secondary)] p-5 rounded-2xl border border-[var(--border-light)] shadow-sm relative overflow-hidden group">
+          <div className="absolute top-0 right-0 p-4 opacity-10 text-brand-primary transform group-hover:scale-110 transition-transform"><Wallet size={48} /></div>
+          <p className="text-sm font-medium text-[var(--text-muted)] relative z-10">Total Revenue (MTD)</p>
+          <p className="text-2xl font-bold text-[var(--text-primary)] mt-1 relative z-10">৳ {kpiData.totalRevenue.toLocaleString()}</p>
         </div>
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden group">
+        <div className="bg-[var(--bg-secondary)] p-5 rounded-2xl border border-[var(--border-light)] shadow-sm relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-4 opacity-10 text-rose-500 transform group-hover:scale-110 transition-transform"><TrendingDown size={48} /></div>
-          <p className="text-sm font-medium text-slate-500 relative z-10">Pending Dues</p>
-          <p className="text-2xl font-bold text-slate-800 mt-1 relative z-10">৳ {kpiData.totalDues.toLocaleString()}</p>
+          <p className="text-sm font-medium text-[var(--text-muted)] relative z-10">Pending Dues</p>
+          <p className="text-2xl font-bold text-[var(--text-primary)] mt-1 relative z-10">৳ {kpiData.totalDues.toLocaleString()}</p>
         </div>
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden group">
+        <div className="bg-[var(--bg-secondary)] p-5 rounded-2xl border border-[var(--border-light)] shadow-sm relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-4 opacity-10 text-amber-500 transform group-hover:scale-110 transition-transform"><TrendingDown size={48} /></div>
-          <p className="text-sm font-medium text-slate-500 relative z-10">Total Expenses (MTD)</p>
-          <p className="text-2xl font-bold text-slate-800 mt-1 relative z-10">৳ {kpiData.monthlyExpenses.toLocaleString()}</p>
+          <p className="text-sm font-medium text-[var(--text-muted)] relative z-10">Total Expenses (MTD)</p>
+          <p className="text-2xl font-bold text-[var(--text-primary)] mt-1 relative z-10">৳ {kpiData.monthlyExpenses.toLocaleString()}</p>
         </div>
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden group">
+        <div className="bg-[var(--bg-secondary)] p-5 rounded-2xl border border-[var(--border-light)] shadow-sm relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-4 opacity-10 text-emerald-500 transform group-hover:scale-110 transition-transform"><PiggyBank size={48} /></div>
-          <p className="text-sm font-medium text-slate-500 relative z-10">Net Balance</p>
-          <p className={`text-2xl font-bold mt-1 relative z-10 ${kpiData.netBalance >= 0 ? 'text-slate-800' : 'text-rose-600'}`}>৳ {kpiData.netBalance.toLocaleString()}</p>
+          <p className="text-sm font-medium text-[var(--text-muted)] relative z-10">Net Balance</p>
+          <p className={`text-2xl font-bold mt-1 relative z-10 ${kpiData.netBalance >= 0 ? 'text-[var(--text-primary)]' : 'text-rose-600'}`}>৳ {kpiData.netBalance.toLocaleString()}</p>
         </div>
       </div>
 
       {/* Main Card */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-light)] shadow-sm overflow-hidden glass-panel">
         {/* Tabs */}
-        <div className="flex border-b border-slate-200 bg-slate-50/50 overflow-x-auto custom-scrollbar">
+        <div className="flex border-b border-[var(--border-light)] bg-[var(--bg-tertiary)]/50 overflow-x-auto custom-scrollbar">
           {TABS.map(tab => (
             <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-6 py-4 text-sm font-medium transition-colors relative whitespace-nowrap ${activeTab === tab.id ? 'text-blue-600' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'}`}>
-              <tab.icon size={18} className={activeTab === tab.id ? 'text-blue-600' : 'text-slate-400'} />
+              className={`flex items-center gap-2 px-6 py-4 text-sm font-medium transition-colors relative whitespace-nowrap ${activeTab === tab.id ? 'text-brand-primary' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'}`}>
+              <tab.icon size={18} className={activeTab === tab.id ? 'text-brand-primary' : 'text-[var(--text-muted)]'} />
               {tab.label}
-              {activeTab === tab.id && <motion.div layoutId="financeTabIndicator" className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600" />}
+              {activeTab === tab.id && <motion.div layoutId="financeTabIndicator" className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-primary" />}
             </button>
           ))}
         </div>
@@ -395,12 +395,12 @@ export default function FinanceManagementPage() {
               <motion.div key="invoices" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
                 <div className="flex flex-col md:flex-row gap-4 mb-4">
                   <div className="relative flex-1 max-w-md">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400"><Search size={18} /></div>
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[var(--text-muted)]"><Search size={18} /></div>
                     <input type="text" placeholder="Search by invoice ID or student..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)}
-                      className="block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-xl leading-5 bg-slate-50 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 sm:text-sm transition-all" />
+                      className="block w-full pl-10 pr-3 py-2 border border-[var(--border-light)] rounded-xl leading-5 bg-[var(--bg-tertiary)] placeholder-[var(--text-muted)] focus:outline-none focus:bg-[var(--bg-secondary)] focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary sm:text-sm transition-all" />
                   </div>
                   <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}
-                    className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500/20 w-full sm:w-40">
+                    className="px-4 py-2 bg-[var(--bg-tertiary)] border border-[var(--border-light)] rounded-xl text-sm text-[var(--text-secondary)] focus:outline-none focus:ring-2 focus:ring-brand-primary/20 w-full sm:w-40">
                     <option value="">All Statuses</option>
                     <option value="paid">Paid</option>
                     <option value="unpaid">Unpaid</option>
@@ -410,8 +410,8 @@ export default function FinanceManagementPage() {
                   </select>
                 </div>
                 <div className="overflow-x-auto">
-                  <table className="w-full text-sm text-left">
-                    <thead className="text-xs text-slate-500 uppercase bg-slate-50 rounded-xl">
+                  <table className="w-full text-sm text-left data-table">
+                    <thead className="text-xs text-[var(--text-muted)] uppercase bg-[var(--bg-tertiary)] rounded-xl">
                       <tr>
                         <th className="px-6 py-4 font-semibold rounded-tl-xl">Invoice</th>
                         <th className="px-6 py-4 font-semibold">Student</th>
@@ -424,31 +424,31 @@ export default function FinanceManagementPage() {
                     </thead>
                     <tbody className="divide-y divide-slate-100">
                       {filteredInvoices.map(inv => (
-                        <tr key={inv.id} className="hover:bg-slate-50/50 transition-colors">
-                          <td className="px-6 py-4 font-medium text-slate-600">{inv.id}</td>
+                        <tr key={inv.id} className="hover:bg-[var(--bg-tertiary)]/50 transition-colors">
+                          <td className="px-6 py-4 font-medium text-[var(--text-secondary)]">{inv.id}</td>
                           <td className="px-6 py-4">
-                            <div className="font-semibold text-slate-800">{inv.studentName}</div>
-                            <div className="text-xs text-slate-500 mt-0.5">{inv.className}</div>
+                            <div className="font-semibold text-[var(--text-primary)]">{inv.studentName}</div>
+                            <div className="text-xs text-[var(--text-muted)] mt-0.5">{inv.className}</div>
                           </td>
-                          <td className="px-6 py-4 font-bold text-slate-800">৳ {inv.totalAmount.toLocaleString()}</td>
+                          <td className="px-6 py-4 font-bold text-[var(--text-primary)]">৳ {inv.totalAmount.toLocaleString()}</td>
                           <td className="px-6 py-4 text-emerald-600 font-medium">৳ {inv.paidAmount.toLocaleString()}</td>
                           <td className="px-6 py-4">
-                            <span className={inv.dueAmount > 0 ? 'text-rose-600 font-medium' : 'text-slate-400'}>{inv.dueAmount > 0 ? `৳ ${inv.dueAmount.toLocaleString()}` : '—'}</span>
+                            <span className={inv.dueAmount > 0 ? 'text-rose-600 font-medium' : 'text-[var(--text-muted)]'}>{inv.dueAmount > 0 ? `৳ ${inv.dueAmount.toLocaleString()}` : '—'}</span>
                           </td>
                           <td className="px-6 py-4">{statusBadge(inv.status)}</td>
                           <td className="px-6 py-4">
                             <div className="flex items-center justify-end gap-1">
                               {inv.status !== 'refunded' && (
-                                <button onClick={() => openReceivePayment(inv)} className="p-2 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Receive Payment"><CreditCard size={16} /></button>
+                                <button onClick={() => openReceivePayment(inv)} className="p-2 text-[var(--text-muted)] hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Receive Payment"><CreditCard size={16} /></button>
                               )}
-                              <button onClick={() => handleRefundInvoice(inv.id)} className="p-2 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors" title="Refund"><Undo2 size={16} /></button>
-                              <button onClick={() => { if (confirm(`Delete invoice ${inv.id}?`)) handleDeleteInvoice(inv.id); }} className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Delete"><Trash2 size={16} /></button>
+                              <button onClick={() => handleRefundInvoice(inv.id)} className="p-2 text-[var(--text-muted)] hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors" title="Refund"><Undo2 size={16} /></button>
+                              <button onClick={() => { if (confirm(`Delete invoice ${inv.id}?`)) handleDeleteInvoice(inv.id); }} className="p-2 text-[var(--text-muted)] hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Delete"><Trash2 size={16} /></button>
                             </div>
                           </td>
                         </tr>
                       ))}
                       {filteredInvoices.length === 0 && (
-                        <tr><td colSpan={7} className="px-6 py-12 text-center text-sm text-slate-400">No invoices found.</td></tr>
+                        <tr><td colSpan={7} className="px-6 py-12 text-center text-sm text-[var(--text-muted)]">No invoices found.</td></tr>
                       )}
                     </tbody>
                   </table>
@@ -460,8 +460,8 @@ export default function FinanceManagementPage() {
             {activeTab === 'payments' && (
               <motion.div key="payments" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
                 <div className="overflow-x-auto">
-                  <table className="w-full text-sm text-left">
-                    <thead className="text-xs text-slate-500 uppercase bg-slate-50 rounded-xl">
+                  <table className="w-full text-sm text-left data-table">
+                    <thead className="text-xs text-[var(--text-muted)] uppercase bg-[var(--bg-tertiary)] rounded-xl">
                       <tr>
                         <th className="px-6 py-4 font-semibold rounded-tl-xl">Payment ID</th>
                         <th className="px-6 py-4 font-semibold">Invoice</th>
@@ -474,15 +474,15 @@ export default function FinanceManagementPage() {
                     </thead>
                     <tbody className="divide-y divide-slate-100">
                       {payments.length === 0 ? (
-                        <tr><td colSpan={7} className="px-6 py-12 text-center text-sm text-slate-400">No payments recorded yet. Receive payments from the Invoices tab.</td></tr>
+                        <tr><td colSpan={7} className="px-6 py-12 text-center text-sm text-[var(--text-muted)]">No payments recorded yet. Receive payments from the Invoices tab.</td></tr>
                       ) : payments.sort((a, b) => b.paymentDate.localeCompare(a.paymentDate)).map(p => (
-                        <tr key={p.id} className="hover:bg-slate-50/50 transition-colors">
-                          <td className="px-6 py-4 font-medium text-slate-600">{p.id}</td>
-                          <td className="px-6 py-4 text-slate-600">{p.invoiceId}</td>
-                          <td className="px-6 py-4 font-medium text-slate-800">{p.studentName}</td>
-                          <td className="px-6 py-4 font-bold text-slate-800">৳ {p.amount.toLocaleString()}</td>
-                          <td className="px-6 py-4 text-slate-600 capitalize">{p.method.replace('-', ' ')}</td>
-                          <td className="px-6 py-4 text-slate-500">{new Date(p.paymentDate).toLocaleDateString()}</td>
+                        <tr key={p.id} className="hover:bg-[var(--bg-tertiary)]/50 transition-colors">
+                          <td className="px-6 py-4 font-medium text-[var(--text-secondary)]">{p.id}</td>
+                          <td className="px-6 py-4 text-[var(--text-secondary)]">{p.invoiceId}</td>
+                          <td className="px-6 py-4 font-medium text-[var(--text-primary)]">{p.studentName}</td>
+                          <td className="px-6 py-4 font-bold text-[var(--text-primary)]">৳ {p.amount.toLocaleString()}</td>
+                          <td className="px-6 py-4 text-[var(--text-secondary)] capitalize">{p.method.replace('-', ' ')}</td>
+                          <td className="px-6 py-4 text-[var(--text-muted)]">{new Date(p.paymentDate).toLocaleDateString()}</td>
                           <td className="px-6 py-4">{statusBadge(p.status)}</td>
                         </tr>
                       ))}
@@ -497,33 +497,33 @@ export default function FinanceManagementPage() {
               <motion.div key="structures" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {feeStructures.map(fs => (
-                    <div key={fs.id} className={`p-5 rounded-2xl border shadow-sm transition-all ${fs.isActive ? 'bg-white border-slate-200' : 'bg-slate-50 border-slate-200 opacity-70'}`}>
+                    <div key={fs.id} className={`p-5 rounded-2xl border shadow-sm transition-all ${fs.isActive ? 'bg-[var(--bg-secondary)] border-[var(--border-light)]' : 'bg-[var(--bg-tertiary)] border-[var(--border-light)] opacity-70'}`}>
                       <div className="flex items-start justify-between mb-3">
                         <div>
-                          <h3 className="font-semibold text-slate-800">{fs.name}</h3>
-                          <p className="text-xs text-slate-500 mt-0.5">{fs.id} &bull; {fs.frequency} &bull; {fs.classIds.length} class(es)</p>
+                          <h3 className="font-semibold text-[var(--text-primary)]">{fs.name}</h3>
+                          <p className="text-xs text-[var(--text-muted)] mt-0.5">{fs.id} &bull; {fs.frequency} &bull; {fs.classIds.length} class(es)</p>
                         </div>
                         <div className="flex gap-1">
-                          <button onClick={() => openFSModal('edit', fs)} className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"><Pencil size={15} /></button>
-                          <button onClick={() => { if (confirm(`Delete ${fs.name}?`)) { deleteFeeStructure(fs.id); setFeeStructures(prev => prev.filter(f => f.id !== fs.id)); } }} className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"><Trash2 size={15} /></button>
+                          <button onClick={() => openFSModal('edit', fs)} className="p-1.5 text-[var(--text-muted)] hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"><Pencil size={15} /></button>
+                          <button onClick={() => { if (confirm(`Delete ${fs.name}?`)) { deleteFeeStructure(fs.id); setFeeStructures(prev => prev.filter(f => f.id !== fs.id)); } }} className="p-1.5 text-[var(--text-muted)] hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"><Trash2 size={15} /></button>
                         </div>
                       </div>
                       <div className="space-y-1.5">
                         {fs.items.map((item, i) => (
                           <div key={i} className="flex items-center justify-between text-sm">
-                            <span className="text-slate-600">{item.label}</span>
-                            <span className="font-medium text-slate-800">৳ {item.amount.toLocaleString()}</span>
+                            <span className="text-[var(--text-secondary)]">{item.label}</span>
+                            <span className="font-medium text-[var(--text-primary)]">৳ {item.amount.toLocaleString()}</span>
                           </div>
                         ))}
                       </div>
-                      <div className="mt-3 pt-3 border-t border-slate-100 flex justify-between text-sm font-semibold">
-                        <span className="text-slate-700">Total</span>
-                        <span className="text-slate-800">৳ {fs.items.reduce((s, i) => s + i.amount, 0).toLocaleString()}</span>
+                      <div className="mt-3 pt-3 border-t border-[var(--border-light)] flex justify-between text-sm font-semibold">
+                        <span className="text-[var(--text-primary)]">Total</span>
+                        <span className="text-[var(--text-primary)]">৳ {fs.items.reduce((s, i) => s + i.amount, 0).toLocaleString()}</span>
                       </div>
                     </div>
                   ))}
                   {feeStructures.length === 0 && (
-                    <div className="col-span-2 text-center py-12 text-sm text-slate-400">No fee structures defined.</div>
+                    <div className="col-span-2 text-center py-12 text-sm text-[var(--text-muted)]">No fee structures defined.</div>
                   )}
                 </div>
               </motion.div>
@@ -533,8 +533,8 @@ export default function FinanceManagementPage() {
             {activeTab === 'expenses' && (
               <motion.div key="expenses" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
                 <div className="overflow-x-auto">
-                  <table className="w-full text-sm text-left">
-                    <thead className="text-xs text-slate-500 uppercase bg-slate-50 rounded-xl">
+                  <table className="w-full text-sm text-left data-table">
+                    <thead className="text-xs text-[var(--text-muted)] uppercase bg-[var(--bg-tertiary)] rounded-xl">
                       <tr>
                         <th className="px-6 py-4 font-semibold rounded-tl-xl">Date</th>
                         <th className="px-6 py-4 font-semibold">Title</th>
@@ -547,21 +547,21 @@ export default function FinanceManagementPage() {
                     </thead>
                     <tbody className="divide-y divide-slate-100">
                       {expenses.length === 0 ? (
-                        <tr><td colSpan={7} className="px-6 py-12 text-center text-sm text-slate-400">No expenses recorded.</td></tr>
+                        <tr><td colSpan={7} className="px-6 py-12 text-center text-sm text-[var(--text-muted)]">No expenses recorded.</td></tr>
                       ) : expenses.sort((a, b) => b.expenseDate.localeCompare(a.expenseDate)).map(exp => (
-                        <tr key={exp.id} className="hover:bg-slate-50/50 transition-colors">
-                          <td className="px-6 py-4 text-slate-600">{new Date(exp.expenseDate).toLocaleDateString()}</td>
-                          <td className="px-6 py-4 font-medium text-slate-800">{exp.title}</td>
+                        <tr key={exp.id} className="hover:bg-[var(--bg-tertiary)]/50 transition-colors">
+                          <td className="px-6 py-4 text-[var(--text-secondary)]">{new Date(exp.expenseDate).toLocaleDateString()}</td>
+                          <td className="px-6 py-4 font-medium text-[var(--text-primary)]">{exp.title}</td>
                           <td className="px-6 py-4">
-                            <span className="px-2 py-0.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-700">{exp.categoryName}</span>
+                            <span className="px-2 py-0.5 rounded-lg text-xs font-medium bg-[var(--bg-tertiary)] text-[var(--text-primary)]">{exp.categoryName}</span>
                           </td>
                           <td className="px-6 py-4 font-bold text-rose-600">৳ {exp.amount.toLocaleString()}</td>
-                          <td className="px-6 py-4 text-slate-600 capitalize">{exp.paymentMethod.replace('-', ' ')}</td>
-                          <td className="px-6 py-4 text-slate-600">{exp.paidTo}</td>
+                          <td className="px-6 py-4 text-[var(--text-secondary)] capitalize">{exp.paymentMethod.replace('-', ' ')}</td>
+                          <td className="px-6 py-4 text-[var(--text-secondary)]">{exp.paidTo}</td>
                           <td className="px-6 py-4 text-right">
                             <div className="flex items-center justify-end gap-1">
-                              <button onClick={() => openExpModal('edit', exp)} className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"><Pencil size={16} /></button>
-                              <button onClick={() => { if (confirm(`Delete expense "${exp.title}"?`)) { deleteExpense(exp.id); setExpenses(prev => prev.filter(e => e.id !== exp.id)); } }} className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"><Trash2 size={16} /></button>
+                              <button onClick={() => openExpModal('edit', exp)} className="p-2 text-[var(--text-muted)] hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"><Pencil size={16} /></button>
+                              <button onClick={() => { if (confirm(`Delete expense "${exp.title}"?`)) { deleteExpense(exp.id); setExpenses(prev => prev.filter(e => e.id !== exp.id)); } }} className="p-2 text-[var(--text-muted)] hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"><Trash2 size={16} /></button>
                             </div>
                           </td>
                         </tr>
@@ -577,7 +577,7 @@ export default function FinanceManagementPage() {
               <motion.div key="reports" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
                 <div className="flex flex-col md:flex-row gap-4 mb-6">
                   <select value={reportType} onChange={e => setReportType(e.target.value as any)}
-                    className="px-4 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500/20 w-full md:w-56">
+                    className="px-4 py-2.5 border border-[var(--border-light)] rounded-xl text-sm text-[var(--text-secondary)] focus:outline-none focus:ring-2 focus:ring-brand-primary/20 w-full md:w-56">
                     <option value="monthly">Monthly Summary</option>
                     <option value="profit-loss">Profit & Loss</option>
                     <option value="due">Due List</option>
@@ -585,30 +585,30 @@ export default function FinanceManagementPage() {
                   {reportType === 'profit-loss' && (
                     <div className="flex gap-3">
                       <input type="date" value={reportDateRange.start} onChange={e => setReportDateRange(p => ({ ...p, start: e.target.value }))}
-                        className="px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
+                        className="px-4 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20" />
                       <input type="date" value={reportDateRange.end} onChange={e => setReportDateRange(p => ({ ...p, end: e.target.value }))}
-                        className="px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
+                        className="px-4 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20" />
                     </div>
                   )}
                 </div>
 
                 {reportType === 'monthly' && reportData && (
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                    <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm">
-                      <p className="text-sm text-slate-500">Collections</p>
+                    <div className="p-4 bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-light)] shadow-sm">
+                      <p className="text-sm text-[var(--text-muted)]">Collections</p>
                       <p className="text-xl font-bold text-emerald-600 mt-1">৳ {(reportData as any).totalCollections?.toLocaleString() || 0}</p>
                     </div>
-                    <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm">
-                      <p className="text-sm text-slate-500">Expenses</p>
+                    <div className="p-4 bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-light)] shadow-sm">
+                      <p className="text-sm text-[var(--text-muted)]">Expenses</p>
                       <p className="text-xl font-bold text-rose-600 mt-1">৳ {(reportData as any).totalExpenses?.toLocaleString() || 0}</p>
                     </div>
-                    <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm">
-                      <p className="text-sm text-slate-500">Net Income</p>
-                      <p className={`text-xl font-bold mt-1 ${(reportData as any).netIncome >= 0 ? 'text-slate-800' : 'text-rose-600'}`}>৳ {(reportData as any).netIncome?.toLocaleString() || 0}</p>
+                    <div className="p-4 bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-light)] shadow-sm">
+                      <p className="text-sm text-[var(--text-muted)]">Net Income</p>
+                      <p className={`text-xl font-bold mt-1 ${(reportData as any).netIncome >= 0 ? 'text-[var(--text-primary)]' : 'text-rose-600'}`}>৳ {(reportData as any).netIncome?.toLocaleString() || 0}</p>
                     </div>
-                    <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm">
-                      <p className="text-sm text-slate-500">Transactions</p>
-                      <p className="text-xl font-bold text-slate-800 mt-1">{(reportData as any).collectionCount || 0}</p>
+                    <div className="p-4 bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-light)] shadow-sm">
+                      <p className="text-sm text-[var(--text-muted)]">Transactions</p>
+                      <p className="text-xl font-bold text-[var(--text-primary)] mt-1">{(reportData as any).collectionCount || 0}</p>
                     </div>
                   </div>
                 )}
@@ -616,47 +616,47 @@ export default function FinanceManagementPage() {
                 {reportType === 'profit-loss' && reportData && (
                   <div className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm">
-                        <p className="text-sm text-slate-500">Total Revenue</p>
+                      <div className="p-4 bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-light)] shadow-sm">
+                        <p className="text-sm text-[var(--text-muted)]">Total Revenue</p>
                         <p className="text-xl font-bold text-emerald-600 mt-1">৳ {(reportData as any).totalRevenue?.toLocaleString() || 0}</p>
                       </div>
-                      <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm">
-                        <p className="text-sm text-slate-500">Total Expenses</p>
+                      <div className="p-4 bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-light)] shadow-sm">
+                        <p className="text-sm text-[var(--text-muted)]">Total Expenses</p>
                         <p className="text-xl font-bold text-rose-600 mt-1">৳ {(reportData as any).totalExpenses?.toLocaleString() || 0}</p>
                       </div>
-                      <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm">
-                        <p className="text-sm text-slate-500">Net Profit/Loss</p>
+                      <div className="p-4 bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-light)] shadow-sm">
+                        <p className="text-sm text-[var(--text-muted)]">Net Profit/Loss</p>
                         <p className={`text-xl font-bold mt-1 ${(reportData as any).netProfit >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
                           ৳ {(reportData as any).netProfit?.toLocaleString() || 0}
                         </p>
                       </div>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm">
-                        <h4 className="text-sm font-semibold text-slate-700 mb-3">Revenue by Category</h4>
+                      <div className="p-5 bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-light)] shadow-sm">
+                        <h4 className="text-sm font-semibold text-[var(--text-primary)] mb-3">Revenue by Category</h4>
                         {Object.entries((reportData as any).revenueByCategory || {}).length > 0 ? (
                           <div className="space-y-2">
                             {Object.entries((reportData as any).revenueByCategory).map(([cat, amt]) => (
                               <div key={cat} className="flex justify-between text-sm">
-                                <span className="text-slate-600">{cat}</span>
+                                <span className="text-[var(--text-secondary)]">{cat}</span>
                                 <span className="font-medium text-emerald-600">৳ {(amt as number).toLocaleString()}</span>
                               </div>
                             ))}
                           </div>
-                        ) : <p className="text-sm text-slate-400">No revenue data.</p>}
+                        ) : <p className="text-sm text-[var(--text-muted)]">No revenue data.</p>}
                       </div>
-                      <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm">
-                        <h4 className="text-sm font-semibold text-slate-700 mb-3">Expense by Category</h4>
+                      <div className="p-5 bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-light)] shadow-sm">
+                        <h4 className="text-sm font-semibold text-[var(--text-primary)] mb-3">Expense by Category</h4>
                         {Object.entries((reportData as any).expenseByCategory || {}).length > 0 ? (
                           <div className="space-y-2">
                             {Object.entries((reportData as any).expenseByCategory).map(([cat, amt]) => (
                               <div key={cat} className="flex justify-between text-sm">
-                                <span className="text-slate-600">{cat}</span>
+                                <span className="text-[var(--text-secondary)]">{cat}</span>
                                 <span className="font-medium text-rose-600">৳ {(amt as number).toLocaleString()}</span>
                               </div>
                             ))}
                           </div>
-                        ) : <p className="text-sm text-slate-400">No expense data.</p>}
+                        ) : <p className="text-sm text-[var(--text-muted)]">No expense data.</p>}
                       </div>
                     </div>
                   </div>
@@ -665,7 +665,7 @@ export default function FinanceManagementPage() {
                 {reportType === 'due' && (
                   <div className="overflow-x-auto">
                     <table className="w-full text-sm text-left">
-                      <thead className="text-xs text-slate-500 uppercase bg-slate-50 rounded-xl">
+                      <thead className="text-xs text-[var(--text-muted)] uppercase bg-[var(--bg-tertiary)] rounded-xl">
                         <tr>
                           <th className="px-6 py-4 font-semibold rounded-tl-xl">Student</th>
                           <th className="px-6 py-4 font-semibold">Invoice</th>
@@ -678,15 +678,15 @@ export default function FinanceManagementPage() {
                       </thead>
                       <tbody className="divide-y divide-slate-100">
                         {(reportData as Invoice[]).length === 0 ? (
-                          <tr><td colSpan={7} className="px-6 py-12 text-center text-sm text-slate-400">No dues outstanding.</td></tr>
+                          <tr><td colSpan={7} className="px-6 py-12 text-center text-sm text-[var(--text-muted)]">No dues outstanding.</td></tr>
                         ) : (reportData as Invoice[]).map(inv => (
-                          <tr key={inv.id} className="hover:bg-slate-50/50 transition-colors">
-                            <td className="px-6 py-4 font-medium text-slate-800">{inv.studentName}</td>
-                            <td className="px-6 py-4 text-slate-600">{inv.id}</td>
+                          <tr key={inv.id} className="hover:bg-[var(--bg-tertiary)]/50 transition-colors">
+                            <td className="px-6 py-4 font-medium text-[var(--text-primary)]">{inv.studentName}</td>
+                            <td className="px-6 py-4 text-[var(--text-secondary)]">{inv.id}</td>
                             <td className="px-6 py-4 font-medium">৳ {inv.totalAmount.toLocaleString()}</td>
                             <td className="px-6 py-4 text-emerald-600">৳ {inv.paidAmount.toLocaleString()}</td>
                             <td className="px-6 py-4 font-bold text-rose-600">৳ {inv.dueAmount.toLocaleString()}</td>
-                            <td className="px-6 py-4 text-slate-500">{new Date(inv.dueDate).toLocaleDateString()}</td>
+                            <td className="px-6 py-4 text-[var(--text-muted)]">{new Date(inv.dueDate).toLocaleDateString()}</td>
                             <td className="px-6 py-4 text-right">{statusBadge(inv.status)}</td>
                           </tr>
                         ))}
@@ -704,70 +704,70 @@ export default function FinanceManagementPage() {
       <AnimatePresence>
         {invModal.open && (
           <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/30 backdrop-blur-sm" onClick={closeInvModal} />
-            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-lg z-10 max-h-[90vh] overflow-y-auto">
-              <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between sticky top-0 bg-white z-10 rounded-t-2xl">
-                <h3 className="font-bold text-slate-800 text-lg">Create Invoice</h3>
-                <button onClick={closeInvModal} className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"><X size={20} /></button>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[var(--text-primary)]/30 backdrop-blur-sm" onClick={closeInvModal} />
+            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-[var(--bg-secondary)] rounded-2xl shadow-xl border border-[var(--border-light)] w-full max-w-lg z-10 max-h-[90vh] overflow-y-auto">
+              <div className="px-6 py-4 border-b border-[var(--border-light)] flex items-center justify-between sticky top-0 bg-[var(--bg-secondary)] z-10 rounded-t-2xl">
+                <h3 className="font-bold text-[var(--text-primary)] text-lg">Create Invoice</h3>
+                <button onClick={closeInvModal} className="p-2 text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"><X size={20} /></button>
               </div>
               <div className="p-6 space-y-4">
                 <div className="space-y-1">
-                  <label className="text-sm font-medium text-slate-700">Student <span className="text-rose-500">*</span></label>
+                  <label className="text-sm font-medium text-[var(--text-primary)]">Student <span className="text-rose-500">*</span></label>
                   <select value={invModal.data.studentId || ''} onChange={e => {
                     const s = students.find(st => st.id === e.target.value);
                     setInvModal(prev => ({ ...prev, data: { ...prev.data, studentId: e.target.value, studentName: s?.name || '', className: s?.class || '', section: s?.section || '' } }));
-                  }} className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 bg-white">
+                  }} className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 bg-[var(--bg-secondary)]">
                     <option value="">— Select —</option>
                     {students.map(s => <option key={s.id} value={s.id}>{s.name} ({s.id})</option>)}
                   </select>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1"><label className="text-sm font-medium text-slate-700">Issue Date</label><input type="date" value={invModal.data.issueDate || ''} onChange={e => setInvModal(p => ({ ...p, data: { ...p.data, issueDate: e.target.value } }))} className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20" /></div>
-                  <div className="space-y-1"><label className="text-sm font-medium text-slate-700">Due Date <span className="text-rose-500">*</span></label><input type="date" value={invModal.data.dueDate || ''} onChange={e => setInvModal(p => ({ ...p, data: { ...p.data, dueDate: e.target.value } }))} className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20" /></div>
+                  <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Issue Date</label><input type="date" value={invModal.data.issueDate || ''} onChange={e => setInvModal(p => ({ ...p, data: { ...p.data, issueDate: e.target.value } }))} className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20" /></div>
+                  <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Due Date <span className="text-rose-500">*</span></label><input type="date" value={invModal.data.dueDate || ''} onChange={e => setInvModal(p => ({ ...p, data: { ...p.data, dueDate: e.target.value } }))} className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20" /></div>
                 </div>
                 {/* Fee Items */}
                 <div>
-                  <label className="text-sm font-medium text-slate-700 block mb-2">Fee Items <span className="text-rose-500">*</span></label>
+                  <label className="text-sm font-medium text-[var(--text-primary)] block mb-2">Fee Items <span className="text-rose-500">*</span></label>
                   <div className="space-y-2 max-h-48 overflow-y-auto">
                     {(invModal.data.items || []).map((item, idx) => (
-                      <div key={idx} className="flex items-center gap-2 p-2 bg-slate-50 rounded-xl">
+                      <div key={idx} className="flex items-center gap-2 p-2 bg-[var(--bg-tertiary)] rounded-xl">
                         <select value={item.category} onChange={e => {
                           const items = [...(invModal.data.items || [])];
                           const cat = FEE_CATEGORIES.find(c => c.value === e.target.value);
                           items[idx] = { ...items[idx], category: e.target.value as FeeCategory, label: cat?.label || '' };
                           setInvModal(p => ({ ...p, data: { ...p.data, items } }));
-                        }} className="flex-1 px-2 py-1 border border-slate-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/20 bg-white">
+                        }} className="flex-1 px-2 py-1 border border-[var(--border-light)] rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-brand-primary/20 bg-[var(--bg-secondary)]">
                           {FEE_CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
                         </select>
                         <input type="number" value={item.amount || ''} onChange={e => {
                           const items = [...(invModal.data.items || [])];
                           items[idx] = { ...items[idx], amount: Number(e.target.value) };
                           setInvModal(p => ({ ...p, data: { ...p.data, items, totalAmount: items.reduce((s, i) => s + i.amount, 0) } }));
-                        }} placeholder="Amount" className="w-24 px-2 py-1 border border-slate-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
+                        }} placeholder="Amount" className="w-24 px-2 py-1 border border-[var(--border-light)] rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-brand-primary/20" />
                         <button onClick={() => {
                           const items = (invModal.data.items || []).filter((_, i) => i !== idx);
                           setInvModal(p => ({ ...p, data: { ...p.data, items, totalAmount: items.reduce((s, i) => s + i.amount, 0) } }));
-                        }} className="p-1 text-slate-400 hover:text-rose-600"><X size={14} /></button>
+                        }} className="p-1 text-[var(--text-muted)] hover:text-rose-600"><X size={14} /></button>
                       </div>
                     ))}
                   </div>
                   <button onClick={() => setInvModal(p => ({ ...p, data: { ...p.data, items: [...(p.data.items || []), { category: 'custom' as FeeCategory, label: 'Custom Fee', amount: 0, isOptional: false }] } }))}
-                    className="mt-2 text-xs text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"><Plus size={12} /> Add Item</button>
+                    className="mt-2 text-xs text-brand-primary hover:text-brand-mid font-medium flex items-center gap-1"><Plus size={12} /> Add Item</button>
                 </div>
-                <div className="flex justify-between text-sm font-semibold p-3 bg-slate-50 rounded-xl">
-                  <span className="text-slate-700">Total Amount</span>
-                  <span className="text-slate-800">৳ {((invModal.data.items || []).reduce((s, i) => s + i.amount, 0)).toLocaleString()}</span>
+                <div className="flex justify-between text-sm font-semibold p-3 bg-[var(--bg-tertiary)] rounded-xl">
+                  <span className="text-[var(--text-primary)]">Total Amount</span>
+                  <span className="text-[var(--text-primary)]">৳ {((invModal.data.items || []).reduce((s, i) => s + i.amount, 0)).toLocaleString()}</span>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1"><label className="text-sm font-medium text-slate-700">Discount</label><input type="number" value={invModal.data.discount || 0} onChange={e => setInvModal(p => ({ ...p, data: { ...p.data, discount: Number(e.target.value) } }))} className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20" /></div>
-                  <div className="space-y-1"><label className="text-sm font-medium text-slate-700">Fine/Late Fee</label><input type="number" value={invModal.data.fine || 0} onChange={e => setInvModal(p => ({ ...p, data: { ...p.data, fine: Number(e.target.value) } }))} className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20" /></div>
+                  <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Discount</label><input type="number" value={invModal.data.discount || 0} onChange={e => setInvModal(p => ({ ...p, data: { ...p.data, discount: Number(e.target.value) } }))} className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20" /></div>
+                  <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Fine/Late Fee</label><input type="number" value={invModal.data.fine || 0} onChange={e => setInvModal(p => ({ ...p, data: { ...p.data, fine: Number(e.target.value) } }))} className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20" /></div>
                 </div>
-                <div className="space-y-1"><label className="text-sm font-medium text-slate-700">Notes</label><textarea value={invModal.data.notes || ''} onChange={e => setInvModal(p => ({ ...p, data: { ...p.data, notes: e.target.value } }))} className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 min-h-[60px]" /></div>
+                <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Notes</label><textarea value={invModal.data.notes || ''} onChange={e => setInvModal(p => ({ ...p, data: { ...p.data, notes: e.target.value } }))} className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 min-h-[60px]" /></div>
               </div>
-              <div className="px-6 py-4 border-t border-slate-100 flex gap-3">
-                <button onClick={closeInvModal} className="flex-1 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-medium transition-colors">Cancel</button>
+              <div className="px-6 py-4 border-t border-[var(--border-light)] flex gap-3">
+                <button onClick={closeInvModal} className="flex-1 px-4 py-2 bg-[var(--bg-tertiary)] hover:bg-[var(--bg-tertiary)]/80 text-[var(--text-primary)] rounded-xl text-sm font-medium transition-colors">Cancel</button>
                 <button onClick={handleCreateInvoice} disabled={invSaving}
-                  className={`flex-1 px-4 py-2 rounded-xl text-sm font-medium text-white transition-colors flex items-center justify-center gap-2 ${invSaving ? 'bg-blue-400 cursor-wait' : 'bg-blue-600 hover:bg-blue-700 shadow-sm'}`}>
+                  className={`flex-1 px-4 py-2 rounded-xl text-sm font-medium text-white transition-colors flex items-center justify-center gap-2 ${invSaving ? 'bg-brand-mid/60 cursor-wait' : 'bg-brand-primary hover:bg-brand-mid shadow-sm'}`}>
                   {invSaving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
                   Create Invoice
                 </button>
@@ -781,42 +781,42 @@ export default function FinanceManagementPage() {
       <AnimatePresence>
         {payModal.open && payModal.invoice && (
           <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/30 backdrop-blur-sm" onClick={closePayModal} />
-            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-md z-10">
-              <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-                <h3 className="font-bold text-slate-800 text-lg">Receive Payment</h3>
-                <button onClick={closePayModal} className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"><X size={20} /></button>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[var(--text-primary)]/30 backdrop-blur-sm" onClick={closePayModal} />
+            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-[var(--bg-secondary)] rounded-2xl shadow-xl border border-[var(--border-light)] w-full max-w-md z-10">
+              <div className="px-6 py-4 border-b border-[var(--border-light)] flex items-center justify-between">
+                <h3 className="font-bold text-[var(--text-primary)] text-lg">Receive Payment</h3>
+                <button onClick={closePayModal} className="p-2 text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"><X size={20} /></button>
               </div>
               <div className="p-6 space-y-4">
-                <div className="text-sm bg-slate-50 rounded-xl p-3 space-y-1">
-                  <div className="flex justify-between"><span className="text-slate-500">Invoice:</span><span className="font-medium text-slate-700">{payModal.invoice.id}</span></div>
-                  <div className="flex justify-between"><span className="text-slate-500">Student:</span><span className="font-medium text-slate-700">{payModal.invoice.studentName}</span></div>
-                  <div className="flex justify-between"><span className="text-slate-500">Total Due:</span><span className="font-bold text-rose-600">৳ {payModal.invoice.dueAmount.toLocaleString()}</span></div>
+                <div className="text-sm bg-[var(--bg-tertiary)] rounded-xl p-3 space-y-1">
+                  <div className="flex justify-between"><span className="text-[var(--text-muted)]">Invoice:</span><span className="font-medium text-[var(--text-primary)]">{payModal.invoice.id}</span></div>
+                  <div className="flex justify-between"><span className="text-[var(--text-muted)]">Student:</span><span className="font-medium text-[var(--text-primary)]">{payModal.invoice.studentName}</span></div>
+                  <div className="flex justify-between"><span className="text-[var(--text-muted)]">Total Due:</span><span className="font-bold text-rose-600">৳ {payModal.invoice.dueAmount.toLocaleString()}</span></div>
                 </div>
-                <div className="space-y-1"><label className="text-sm font-medium text-slate-700">Amount <span className="text-rose-500">*</span></label>
+                <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Amount <span className="text-rose-500">*</span></label>
                   <input type="number" value={payModal.data.amount || ''} onChange={e => setPayModal(p => ({ ...p, data: { ...p.data, amount: Number(e.target.value) } }))}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20" /></div>
+                    className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20" /></div>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1"><label className="text-sm font-medium text-slate-700">Method</label>
+                  <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Method</label>
                     <select value={payModal.data.method || 'cash'} onChange={e => setPayModal(p => ({ ...p, data: { ...p.data, method: e.target.value as any } }))}
-                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 bg-white">
+                      className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 bg-[var(--bg-secondary)]">
                       {PAYMENT_METHODS.map(m => <option key={m.value} value={m.value}>{m.label}</option>)}
                     </select></div>
-                  <div className="space-y-1"><label className="text-sm font-medium text-slate-700">Date</label>
+                  <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Date</label>
                     <input type="date" value={payModal.data.paymentDate || ''} onChange={e => setPayModal(p => ({ ...p, data: { ...p.data, paymentDate: e.target.value } }))}
-                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20" /></div>
+                      className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20" /></div>
                 </div>
-                <div className="space-y-1"><label className="text-sm font-medium text-slate-700">Reference (optional)</label>
+                <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Reference (optional)</label>
                   <input type="text" value={payModal.data.reference || ''} onChange={e => setPayModal(p => ({ ...p, data: { ...p.data, reference: e.target.value } }))}
-                    placeholder="Cheque no, trx ID..." className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20" /></div>
-                <div className="space-y-1"><label className="text-sm font-medium text-slate-700">Note</label>
+                    placeholder="Cheque no, trx ID..." className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20" /></div>
+                <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Note</label>
                   <textarea value={payModal.data.note || ''} onChange={e => setPayModal(p => ({ ...p, data: { ...p.data, note: e.target.value } }))}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 min-h-[60px]" /></div>
+                    className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 min-h-[60px]" /></div>
               </div>
-              <div className="px-6 py-4 border-t border-slate-100 flex gap-3">
-                <button onClick={closePayModal} className="flex-1 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-medium transition-colors">Cancel</button>
+              <div className="px-6 py-4 border-t border-[var(--border-light)] flex gap-3">
+                <button onClick={closePayModal} className="flex-1 px-4 py-2 bg-[var(--bg-tertiary)] hover:bg-[var(--bg-tertiary)]/80 text-[var(--text-primary)] rounded-xl text-sm font-medium transition-colors">Cancel</button>
                 <button onClick={handleReceivePayment} disabled={paySaving}
-                  className={`flex-1 px-4 py-2 rounded-xl text-sm font-medium text-white transition-colors flex items-center justify-center gap-2 ${paySaving ? 'bg-blue-400 cursor-wait' : 'bg-emerald-600 hover:bg-emerald-700 shadow-sm'}`}>
+                  className={`flex-1 px-4 py-2 rounded-xl text-sm font-medium text-white transition-colors flex items-center justify-center gap-2 ${paySaving ? 'bg-brand-mid/60 cursor-wait' : 'bg-emerald-600 hover:bg-emerald-700 shadow-sm'}`}>
                   {paySaving ? <Loader2 size={16} className="animate-spin" /> : <CheckCircle2 size={16} />}
                   Receive Payment
                 </button>
@@ -830,20 +830,20 @@ export default function FinanceManagementPage() {
       <AnimatePresence>
         {fsModal.open && (
           <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/30 backdrop-blur-sm" onClick={closeFSModal} />
-            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-lg z-10 max-h-[90vh] overflow-y-auto">
-              <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between sticky top-0 bg-white z-10 rounded-t-2xl">
-                <h3 className="font-bold text-slate-800 text-lg">{fsModal.mode === 'create' ? 'Create' : 'Edit'} Fee Structure</h3>
-                <button onClick={closeFSModal} className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"><X size={20} /></button>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[var(--text-primary)]/30 backdrop-blur-sm" onClick={closeFSModal} />
+            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-[var(--bg-secondary)] rounded-2xl shadow-xl border border-[var(--border-light)] w-full max-w-lg z-10 max-h-[90vh] overflow-y-auto">
+              <div className="px-6 py-4 border-b border-[var(--border-light)] flex items-center justify-between sticky top-0 bg-[var(--bg-secondary)] z-10 rounded-t-2xl">
+                <h3 className="font-bold text-[var(--text-primary)] text-lg">{fsModal.mode === 'create' ? 'Create' : 'Edit'} Fee Structure</h3>
+                <button onClick={closeFSModal} className="p-2 text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"><X size={20} /></button>
               </div>
               <div className="p-6 space-y-4">
-                <div className="space-y-1"><label className="text-sm font-medium text-slate-700">Structure Name <span className="text-rose-500">*</span></label>
+                <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Structure Name <span className="text-rose-500">*</span></label>
                   <input type="text" value={fsModal.data.name || ''} onChange={e => setFsModal(p => ({ ...p, data: { ...p.data, name: e.target.value } }))}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20" /></div>
+                    className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20" /></div>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1"><label className="text-sm font-medium text-slate-700">Frequency</label>
+                  <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Frequency</label>
                     <select value={fsModal.data.frequency || 'monthly'} onChange={e => setFsModal(p => ({ ...p, data: { ...p.data, frequency: e.target.value as any } }))}
-                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 bg-white">
+                      className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 bg-[var(--bg-secondary)]">
                       <option value="monthly">Monthly</option>
                       <option value="yearly">Yearly</option>
                       <option value="one-time">One Time</option>
@@ -851,16 +851,16 @@ export default function FinanceManagementPage() {
                 </div>
                 {/* Applicable Classes */}
                 <div>
-                  <label className="text-sm font-medium text-slate-700 block mb-2">Applicable Classes <span className="text-rose-500">*</span></label>
-                  <div className="max-h-32 overflow-y-auto border border-slate-200 rounded-xl p-2 space-y-0.5">
+                  <label className="text-sm font-medium text-[var(--text-primary)] block mb-2">Applicable Classes <span className="text-rose-500">*</span></label>
+                  <div className="max-h-32 overflow-y-auto border border-[var(--border-light)] rounded-xl p-2 space-y-0.5">
                     {classes.map(c => {
                       const checked = (fsModal.data.classIds || []).includes(c.id);
                       return (
-                        <label key={c.id} className={`flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-sm cursor-pointer transition-colors ${checked ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-50'}`}>
+                        <label key={c.id} className={`flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-sm cursor-pointer transition-colors ${checked ? 'bg-[var(--bg-tertiary)] text-brand-primary' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)]'}`}>
                           <input type="checkbox" checked={checked} onChange={() => {
                             const ids: number[] = fsModal.data.classIds || [];
                             setFsModal(p => ({ ...p, data: { ...p.data, classIds: checked ? ids.filter(id => id !== c.id) : [...ids, c.id] } }));
-                          }} className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500" />
+                          }} className="w-4 h-4 rounded border-[var(--border-light)] text-brand-primary focus:ring-brand-primary" />
                           {c.name}
                         </label>
                       );
@@ -869,27 +869,27 @@ export default function FinanceManagementPage() {
                 </div>
                 {/* Fee Items */}
                 <div>
-                  <label className="text-sm font-medium text-slate-700 block mb-2">Fee Items</label>
+                  <label className="text-sm font-medium text-[var(--text-primary)] block mb-2">Fee Items</label>
                   <div className="space-y-2">
                     {(fsModal.data.items || []).map((item, idx) => (
-                      <div key={idx} className="flex items-center gap-2 p-2 bg-slate-50 rounded-xl">
+                      <div key={idx} className="flex items-center gap-2 p-2 bg-[var(--bg-tertiary)] rounded-xl">
                         <select value={item.category} onChange={e => handleFSItemChange(idx, 'category', e.target.value)}
-                          className="flex-1 px-2 py-1 border border-slate-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/20 bg-white">
+                          className="flex-1 px-2 py-1 border border-[var(--border-light)] rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-brand-primary/20 bg-[var(--bg-secondary)]">
                           {FEE_CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
                         </select>
                         <input type="number" value={item.amount || ''} onChange={e => handleFSItemChange(idx, 'amount', Number(e.target.value))}
-                          placeholder="Amount" className="w-20 px-2 py-1 border border-slate-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
-                        <button onClick={() => removeFSItem(idx)} className="p-1 text-slate-400 hover:text-rose-600"><X size={14} /></button>
+                          placeholder="Amount" className="w-20 px-2 py-1 border border-[var(--border-light)] rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-brand-primary/20" />
+                        <button onClick={() => removeFSItem(idx)} className="p-1 text-[var(--text-muted)] hover:text-rose-600"><X size={14} /></button>
                       </div>
                     ))}
                   </div>
-                  <button onClick={addFSItem} className="mt-2 text-xs text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"><Plus size={12} /> Add Item</button>
+                  <button onClick={addFSItem} className="mt-2 text-xs text-brand-primary hover:text-brand-mid font-medium flex items-center gap-1"><Plus size={12} /> Add Item</button>
                 </div>
               </div>
-              <div className="px-6 py-4 border-t border-slate-100 flex gap-3">
-                <button onClick={closeFSModal} className="flex-1 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-medium transition-colors">Cancel</button>
+              <div className="px-6 py-4 border-t border-[var(--border-light)] flex gap-3">
+                <button onClick={closeFSModal} className="flex-1 px-4 py-2 bg-[var(--bg-tertiary)] hover:bg-[var(--bg-tertiary)]/80 text-[var(--text-primary)] rounded-xl text-sm font-medium transition-colors">Cancel</button>
                 <button onClick={handleSaveFS} disabled={fsSaving}
-                  className={`flex-1 px-4 py-2 rounded-xl text-sm font-medium text-white transition-colors flex items-center justify-center gap-2 ${fsSaving ? 'bg-blue-400 cursor-wait' : 'bg-blue-600 hover:bg-blue-700 shadow-sm'}`}>
+                  className={`flex-1 px-4 py-2 rounded-xl text-sm font-medium text-white transition-colors flex items-center justify-center gap-2 ${fsSaving ? 'bg-brand-mid/60 cursor-wait' : 'bg-brand-primary hover:bg-brand-mid shadow-sm'}`}>
                   {fsSaving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
                   {fsModal.mode === 'create' ? 'Create' : 'Save Changes'}
                 </button>
@@ -903,51 +903,51 @@ export default function FinanceManagementPage() {
       <AnimatePresence>
         {expModal.open && (
           <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/30 backdrop-blur-sm" onClick={closeExpModal} />
-            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-lg z-10">
-              <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-                <h3 className="font-bold text-slate-800 text-lg">{expModal.mode === 'add' ? 'Add' : 'Edit'} Expense</h3>
-                <button onClick={closeExpModal} className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"><X size={20} /></button>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[var(--text-primary)]/30 backdrop-blur-sm" onClick={closeExpModal} />
+            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-[var(--bg-secondary)] rounded-2xl shadow-xl border border-[var(--border-light)] w-full max-w-lg z-10">
+              <div className="px-6 py-4 border-b border-[var(--border-light)] flex items-center justify-between">
+                <h3 className="font-bold text-[var(--text-primary)] text-lg">{expModal.mode === 'add' ? 'Add' : 'Edit'} Expense</h3>
+                <button onClick={closeExpModal} className="p-2 text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"><X size={20} /></button>
               </div>
               <div className="p-6 space-y-4">
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1"><label className="text-sm font-medium text-slate-700">Title <span className="text-rose-500">*</span></label>
+                  <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Title <span className="text-rose-500">*</span></label>
                     <input type="text" value={expModal.data.title || ''} onChange={e => setExpModal(p => ({ ...p, data: { ...p.data, title: e.target.value } }))}
-                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20" /></div>
-                  <div className="space-y-1"><label className="text-sm font-medium text-slate-700">Category <span className="text-rose-500">*</span></label>
+                      className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20" /></div>
+                  <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Category <span className="text-rose-500">*</span></label>
                     <select value={expModal.data.categoryId || ''} onChange={e => setExpModal(p => ({ ...p, data: { ...p.data, categoryId: e.target.value } }))}
-                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 bg-white">
+                      className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 bg-[var(--bg-secondary)]">
                       {expCategories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                     </select></div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1"><label className="text-sm font-medium text-slate-700">Amount <span className="text-rose-500">*</span></label>
+                  <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Amount <span className="text-rose-500">*</span></label>
                     <input type="number" value={expModal.data.amount || ''} onChange={e => setExpModal(p => ({ ...p, data: { ...p.data, amount: Number(e.target.value) } }))}
-                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20" /></div>
-                  <div className="space-y-1"><label className="text-sm font-medium text-slate-700">Payment Method</label>
+                      className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20" /></div>
+                  <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Payment Method</label>
                     <select value={expModal.data.paymentMethod || 'cash'} onChange={e => setExpModal(p => ({ ...p, data: { ...p.data, paymentMethod: e.target.value as any } }))}
-                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 bg-white">
+                      className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 bg-[var(--bg-secondary)]">
                       <option value="cash">Cash</option>
                       <option value="bank">Bank</option>
                       <option value="mobile-banking">Mobile Banking</option>
                     </select></div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1"><label className="text-sm font-medium text-slate-700">Paid To <span className="text-rose-500">*</span></label>
+                  <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Paid To <span className="text-rose-500">*</span></label>
                     <input type="text" value={expModal.data.paidTo || ''} onChange={e => setExpModal(p => ({ ...p, data: { ...p.data, paidTo: e.target.value } }))}
-                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20" /></div>
-                  <div className="space-y-1"><label className="text-sm font-medium text-slate-700">Date <span className="text-rose-500">*</span></label>
+                      className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20" /></div>
+                  <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Date <span className="text-rose-500">*</span></label>
                     <input type="date" value={expModal.data.expenseDate || ''} onChange={e => setExpModal(p => ({ ...p, data: { ...p.data, expenseDate: e.target.value } }))}
-                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20" /></div>
+                      className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20" /></div>
                 </div>
-                <div className="space-y-1"><label className="text-sm font-medium text-slate-700">Description</label>
+                <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Description</label>
                   <textarea value={expModal.data.description || ''} onChange={e => setExpModal(p => ({ ...p, data: { ...p.data, description: e.target.value } }))}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 min-h-[60px]" /></div>
+                    className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 min-h-[60px]" /></div>
               </div>
-              <div className="px-6 py-4 border-t border-slate-100 flex gap-3">
-                <button onClick={closeExpModal} className="flex-1 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-medium transition-colors">Cancel</button>
+              <div className="px-6 py-4 border-t border-[var(--border-light)] flex gap-3">
+                <button onClick={closeExpModal} className="flex-1 px-4 py-2 bg-[var(--bg-tertiary)] hover:bg-[var(--bg-tertiary)]/80 text-[var(--text-primary)] rounded-xl text-sm font-medium transition-colors">Cancel</button>
                 <button onClick={handleSaveExpense} disabled={expSaving}
-                  className={`flex-1 px-4 py-2 rounded-xl text-sm font-medium text-white transition-colors flex items-center justify-center gap-2 ${expSaving ? 'bg-blue-400 cursor-wait' : 'bg-blue-600 hover:bg-blue-700 shadow-sm'}`}>
+                  className={`flex-1 px-4 py-2 rounded-xl text-sm font-medium text-white transition-colors flex items-center justify-center gap-2 ${expSaving ? 'bg-brand-mid/60 cursor-wait' : 'bg-brand-primary hover:bg-brand-mid shadow-sm'}`}>
                   {expSaving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
                   {expModal.mode === 'add' ? 'Add Expense' : 'Save Changes'}
                 </button>

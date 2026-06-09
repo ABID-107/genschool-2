@@ -189,8 +189,8 @@ export default function AcademicStructurePage() {
     switch (activeTab) {
       case 'class':
         return (
-          <table className="w-full text-sm text-left">
-            <thead className="text-xs text-slate-500 uppercase bg-slate-50 rounded-xl">
+          <table className="w-full text-sm text-left data-table">
+            <thead className="text-xs text-[var(--text-muted)] uppercase bg-[var(--bg-tertiary)] rounded-xl">
               <tr>
                 <th className="px-6 py-4 font-semibold rounded-tl-xl">Class Name</th>
                 <th className="px-6 py-4 font-semibold">Total Sections</th>
@@ -199,33 +199,33 @@ export default function AcademicStructurePage() {
                 <th className="px-6 py-4 font-semibold text-right rounded-tr-xl">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-[var(--border-light)]">
               {filteredClasses.map(cls => (
-                <tr key={cls.id} className="hover:bg-slate-50/50 transition-colors">
-                  <td className="px-6 py-4 font-semibold text-slate-800">{cls.name}</td>
-                  <td className="px-6 py-4 text-slate-600">{sectionCountByClass[cls.id] || 0}</td>
-                  <td className="px-6 py-4 text-slate-600">{cls.students}{cls.capacity > 0 ? ` / ${cls.capacity}` : ''}</td>
+                <tr key={cls.id} className="hover:bg-[var(--bg-tertiary)]/50 transition-colors">
+                  <td className="px-6 py-4 font-semibold text-[var(--text-primary)]">{cls.name}</td>
+                  <td className="px-6 py-4 text-[var(--text-secondary)]">{sectionCountByClass[cls.id] || 0}</td>
+                  <td className="px-6 py-4 text-[var(--text-secondary)]">{cls.students}{cls.capacity > 0 ? ` / ${cls.capacity}` : ''}</td>
                   <td className="px-6 py-4">
-                    <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">{cls.status}</span>
+                    <span className="badge badge-green">{cls.status}</span>
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center justify-end gap-2">
-                      <button onClick={() => openEdit('class', cls)} className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"><Pencil size={16} /></button>
-                      <button onClick={() => handleDelete('class', cls.id, cls.name)} className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"><Trash2 size={16} /></button>
+                      <button onClick={() => openEdit('class', cls)} className="p-2 text-[var(--text-muted)] hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"><Pencil size={16} /></button>
+                      <button onClick={() => handleDelete('class', cls.id, cls.name)} className="p-2 text-[var(--text-muted)] hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"><Trash2 size={16} /></button>
                     </div>
                   </td>
                 </tr>
               ))}
               {filteredClasses.length === 0 && (
-                <tr><td colSpan={5} className="px-6 py-12 text-center text-sm text-slate-400">No classes found.</td></tr>
+                <tr><td colSpan={5} className="px-6 py-12 text-center text-sm text-[var(--text-muted)]">No classes found.</td></tr>
               )}
             </tbody>
           </table>
         );
       case 'section':
         return (
-          <table className="w-full text-sm text-left">
-            <thead className="text-xs text-slate-500 uppercase bg-slate-50 rounded-xl">
+          <table className="w-full text-sm text-left data-table">
+            <thead className="text-xs text-[var(--text-muted)] uppercase bg-[var(--bg-tertiary)] rounded-xl">
               <tr>
                 <th className="px-6 py-4 font-semibold rounded-tl-xl">Section Name</th>
                 <th className="px-6 py-4 font-semibold">Class</th>
@@ -235,13 +235,13 @@ export default function AcademicStructurePage() {
                 <th className="px-6 py-4 font-semibold text-right rounded-tr-xl">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-[var(--border-light)]">
               {filteredSections.map(s => (
-                <tr key={s.id} className="hover:bg-slate-50/50 transition-colors">
-                  <td className="px-6 py-4 font-semibold text-slate-800">{s.name}</td>
-                  <td className="px-6 py-4 text-slate-600">{classMap[s.classId] || `Class ${s.classId}`}</td>
-                  <td className="px-6 py-4 text-slate-600">{s.capacity}</td>
-                  <td className="px-6 py-4 text-slate-600">{s.students}</td>
+                <tr key={s.id} className="hover:bg-[var(--bg-tertiary)]/50 transition-colors">
+                  <td className="px-6 py-4 font-semibold text-[var(--text-primary)]">{s.name}</td>
+                  <td className="px-6 py-4 text-[var(--text-secondary)]">{classMap[s.classId] || `Class ${s.classId}`}</td>
+                  <td className="px-6 py-4 text-[var(--text-secondary)]">{s.capacity}</td>
+                  <td className="px-6 py-4 text-[var(--text-secondary)]">{s.students}</td>
                   <td className="px-6 py-4">
                     <span className={`text-xs font-medium ${s.capacity - s.students > 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
                       {s.capacity - s.students}
@@ -249,22 +249,22 @@ export default function AcademicStructurePage() {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center justify-end gap-2">
-                      <button onClick={() => openEdit('section', s)} className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"><Pencil size={16} /></button>
-                      <button onClick={() => handleDelete('section', s.id, s.name)} className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"><Trash2 size={16} /></button>
+                      <button onClick={() => openEdit('section', s)} className="p-2 text-[var(--text-muted)] hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"><Pencil size={16} /></button>
+                      <button onClick={() => handleDelete('section', s.id, s.name)} className="p-2 text-[var(--text-muted)] hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"><Trash2 size={16} /></button>
                     </div>
                   </td>
                 </tr>
               ))}
               {filteredSections.length === 0 && (
-                <tr><td colSpan={6} className="px-6 py-12 text-center text-sm text-slate-400">No sections found.</td></tr>
+                <tr><td colSpan={6} className="px-6 py-12 text-center text-sm text-[var(--text-muted)]">No sections found.</td></tr>
               )}
             </tbody>
           </table>
         );
       case 'subject':
         return (
-          <table className="w-full text-sm text-left">
-            <thead className="text-xs text-slate-500 uppercase bg-slate-50 rounded-xl">
+          <table className="w-full text-sm text-left data-table">
+            <thead className="text-xs text-[var(--text-muted)] uppercase bg-[var(--bg-tertiary)] rounded-xl">
               <tr>
                 <th className="px-6 py-4 font-semibold rounded-tl-xl">Subject Code</th>
                 <th className="px-6 py-4 font-semibold">Subject Name</th>
@@ -273,33 +273,33 @@ export default function AcademicStructurePage() {
                 <th className="px-6 py-4 font-semibold text-right rounded-tr-xl">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-[var(--border-light)]">
               {filteredSubjects.map(subject => (
-                <tr key={subject.id} className="hover:bg-slate-50/50 transition-colors">
-                  <td className="px-6 py-4 font-medium text-slate-600">{subject.code}</td>
-                  <td className="px-6 py-4 font-semibold text-slate-800">{subject.name}</td>
+                <tr key={subject.id} className="hover:bg-[var(--bg-tertiary)]/50 transition-colors">
+                  <td className="px-6 py-4 font-medium text-[var(--text-secondary)]">{subject.code}</td>
+                  <td className="px-6 py-4 font-semibold text-[var(--text-primary)]">{subject.name}</td>
                   <td className="px-6 py-4">
                     <span className={`px-2.5 py-1 rounded-full text-xs font-medium border ${
-                      subject.type === 'Core' ? 'bg-indigo-50 text-indigo-700 border-indigo-200'
+                      subject.type === 'Core' ? 'badge bg-[var(--bg-tertiary)] text-brand-primary border-[var(--border-light)]'
                       : subject.type === 'Elective' ? 'bg-violet-50 text-violet-700 border-violet-200'
-                      : subject.type === 'Practical' ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                      : subject.type === 'Lab' ? 'bg-amber-50 text-amber-700 border-amber-200'
-                      : 'bg-slate-50 text-slate-700 border-slate-200'
+                      : subject.type === 'Practical' ? 'badge-green'
+                      : subject.type === 'Lab' ? 'badge-amber'
+                      : 'bg-[var(--bg-tertiary)] text-[var(--text-primary)] border-[var(--border-light)]'
                     }`}>{subject.type}</span>
                   </td>
-                  <td className="px-6 py-4 text-slate-600">
+                  <td className="px-6 py-4 text-[var(--text-secondary)]">
                     {subject.classIds.map(id => classMap[id]).filter(Boolean).join(', ') || '—'}
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center justify-end gap-2">
-                      <button onClick={() => openEdit('subject', subject)} className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"><Pencil size={16} /></button>
-                      <button onClick={() => handleDelete('subject', subject.id, subject.name)} className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"><Trash2 size={16} /></button>
+                      <button onClick={() => openEdit('subject', subject)} className="p-2 text-[var(--text-muted)] hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"><Pencil size={16} /></button>
+                      <button onClick={() => handleDelete('subject', subject.id, subject.name)} className="p-2 text-[var(--text-muted)] hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"><Trash2 size={16} /></button>
                     </div>
                   </td>
                 </tr>
               ))}
               {filteredSubjects.length === 0 && (
-                <tr><td colSpan={5} className="px-6 py-12 text-center text-sm text-slate-400">No subjects found.</td></tr>
+                <tr><td colSpan={5} className="px-6 py-12 text-center text-sm text-[var(--text-muted)]">No subjects found.</td></tr>
               )}
             </tbody>
           </table>
@@ -312,45 +312,45 @@ export default function AcademicStructurePage() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Academic Structure</h1>
-          <p className="text-sm text-slate-500 mt-1">Manage classes, sections, and subjects.</p>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)] tracking-tight">Academic Structure</h1>
+          <p className="text-sm text-[var(--text-muted)] mt-1">Manage classes, sections, and subjects.</p>
         </div>
-        <button onClick={() => openAdd(activeTab as any)} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-medium shadow-md shadow-blue-500/20 transition-all flex items-center gap-2">
+        <button onClick={() => openAdd(activeTab as any)} className="bg-brand-primary hover:bg-brand-mid text-white px-4 py-2 rounded-xl text-sm font-medium shadow-md shadow-brand-primary/20 transition-all flex items-center gap-2">
           <Plus size={16} />
           Add New {activeTab === 'class' ? 'Class' : activeTab === 'section' ? 'Section' : 'Subject'}
         </button>
       </div>
 
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-[var(--bg-secondary)] rounded-2xl border-[var(--border-light)] shadow-sm overflow-hidden book-page">
         {/* Tabs */}
-        <div className="flex border-b border-slate-200 bg-slate-50/50 overflow-x-auto custom-scrollbar">
+        <div className="flex border-b border-[var(--border-light)] bg-[var(--bg-tertiary)]/50 overflow-x-auto custom-scrollbar">
           {TABS.map(tab => (
             <button
               key={tab.id}
               onClick={() => { setActiveTab(tab.id); setSearch(''); }}
               className={`flex items-center gap-2 px-6 py-4 text-sm font-medium transition-colors relative whitespace-nowrap ${
-                activeTab === tab.id ? 'text-blue-600' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
+                activeTab === tab.id ? 'text-brand-primary' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'
               }`}
             >
-              <tab.icon size={18} className={activeTab === tab.id ? 'text-blue-600' : 'text-slate-400'} />
+              <tab.icon size={18} className={activeTab === tab.id ? 'text-brand-primary' : 'text-[var(--text-muted)]'} />
               {tab.label}
               {activeTab === tab.id && (
-                <motion.div layoutId="academicTabIndicator" className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600" />
+                <motion.div layoutId="academicTabIndicator" className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-primary" />
               )}
             </button>
           ))}
         </div>
 
         {/* Search */}
-        <div className="px-6 py-3 border-b border-slate-100">
+        <div className="px-6 py-3 border-b border-[var(--border-light)]">
           <div className="relative max-w-xs">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400"><Search size={16} /></div>
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[var(--text-muted)]"><Search size={16} /></div>
             <input
               type="text"
               placeholder={`Search ${activeTab}...`}
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="block w-full pl-9 pr-3 py-2 border border-slate-200 rounded-xl text-sm bg-slate-50 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+              className="block w-full pl-9 pr-3 py-2 border-[var(--border-light)] rounded-xl text-sm bg-[var(--bg-tertiary)] placeholder-[var(--text-muted)] focus:outline-none focus:bg-[var(--bg-secondary)] focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary"
             />
           </div>
         </div>
@@ -374,13 +374,13 @@ export default function AcademicStructurePage() {
       <AnimatePresence>
         {modal.open && (
           <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/30 backdrop-blur-sm" onClick={closeModal} />
-            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-md z-10">
-              <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-                <h3 className="font-bold text-slate-800 text-lg">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[var(--text-primary)]/20 backdrop-blur-sm" onClick={closeModal} />
+            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-[var(--bg-secondary)] rounded-2xl shadow-xl border-[var(--border-light)] w-full max-w-md z-10">
+              <div className="px-6 py-4 border-b border-[var(--border-light)] flex items-center justify-between">
+                <h3 className="font-bold text-[var(--text-primary)] text-lg">
                   {modal.mode === 'add' ? 'Add' : 'Edit'} {modal.entity === 'class' ? 'Class' : modal.entity === 'section' ? 'Section' : 'Subject'}
                 </h3>
-                <button onClick={closeModal} className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"><X size={20} /></button>
+                <button onClick={closeModal} className="p-2 text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"><X size={20} /></button>
               </div>
               <div className="p-6 space-y-4">
                 {modal.entity === 'class' && (
@@ -408,16 +408,16 @@ export default function AcademicStructurePage() {
                     <Field label="Subject Code (optional)" value={modal.data.code} onChange={v => setModal(m => ({ ...m, data: { ...m.data, code: v } }))} />
                     <Select label="Subject Type" value={modal.data.type} onChange={v => setModal(m => ({ ...m, data: { ...m.data, type: v } }))} options={['Core', 'Elective', 'Optional', 'Practical', 'Lab']} />
                     <div className="space-y-1">
-                      <label className="text-sm font-medium text-slate-700">Applicable Classes <span className="text-rose-500">*</span></label>
-                      <div className="max-h-44 overflow-y-auto border border-slate-200 rounded-xl p-2 space-y-0.5">
+                      <label className="text-sm font-medium text-[var(--text-primary)]">Applicable Classes <span className="text-rose-500">*</span></label>
+                      <div className="max-h-44 overflow-y-auto border-[var(--border-light)] rounded-xl p-2 space-y-0.5">
                         {classes.map(c => {
                           const checked = (modal.data.classIds || []).includes(c.id);
                           return (
-                            <label key={c.id} className={`flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-sm cursor-pointer transition-colors ${checked ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-50'}`}>
+                            <label key={c.id} className={`flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-sm cursor-pointer transition-colors ${checked ? 'bg-[var(--bg-tertiary)] text-brand-primary' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)]'}`}>
                               <input type="checkbox" checked={checked} onChange={() => {
                                 const ids: number[] = modal.data.classIds || [];
                                 setModal(m => ({ ...m, data: { ...m.data, classIds: checked ? ids.filter(id => id !== c.id) : [...ids, c.id] } }));
-                              }} className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500" />
+                              }} className="w-4 h-4 rounded border-slate-300 text-brand-primary focus:ring-brand-primary" />
                               {c.name}
                             </label>
                           );
@@ -427,9 +427,9 @@ export default function AcademicStructurePage() {
                     <Field label="Description (optional)" value={modal.data.description} onChange={v => setModal(m => ({ ...m, data: { ...m.data, description: v } }))} />
                   </>
                 )}
-                <div className="flex gap-3 pt-4 border-t border-slate-100 mt-6">
-                  <button onClick={closeModal} className="flex-1 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-medium transition-colors">Cancel</button>
-                  <button onClick={handleSave} disabled={saving} className={`flex-1 px-4 py-2 rounded-xl text-sm font-medium text-white transition-colors flex items-center justify-center gap-2 ${saving ? 'bg-blue-400 cursor-wait' : 'bg-blue-600 hover:bg-blue-700 shadow-sm shadow-blue-500/20'}`}>
+                <div className="flex gap-3 pt-4 border-t border-[var(--border-light)] mt-6">
+                  <button onClick={closeModal} className="flex-1 px-4 py-2 bg-[var(--bg-tertiary)] hover:bg-[var(--bg-tertiary)] text-[var(--text-primary)] rounded-xl text-sm font-medium transition-colors">Cancel</button>
+                  <button onClick={handleSave} disabled={saving} className={`flex-1 px-4 py-2 rounded-xl text-sm font-medium text-white transition-colors flex items-center justify-center gap-2 ${saving ? 'bg-brand-mid cursor-wait' : 'bg-brand-primary hover:bg-brand-mid shadow-sm shadow-brand-primary/20'}`}>
                     {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
                     {saving ? 'Saving...' : modal.mode === 'add' ? 'Add' : 'Save Changes'}
                   </button>
@@ -444,15 +444,15 @@ export default function AcademicStructurePage() {
       <AnimatePresence>
         {confirmDelete && (
           <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/30 backdrop-blur-sm" onClick={() => setConfirmDelete(null)} />
-            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="relative bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-sm z-10 p-6 text-center">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[var(--text-primary)]/20 backdrop-blur-sm" onClick={() => setConfirmDelete(null)} />
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="relative bg-[var(--bg-secondary)] rounded-2xl shadow-xl border-[var(--border-light)] w-full max-w-sm z-10 p-6 text-center">
               <div className="w-12 h-12 rounded-full bg-rose-100 flex items-center justify-center mx-auto mb-4"><Trash2 size={24} className="text-rose-600" /></div>
-              <h3 className="text-lg font-bold text-slate-800 mb-2">Delete {confirmDelete.entity}?</h3>
-              <p className="text-sm text-slate-500 mb-6">
-                Are you sure you want to delete <span className="font-semibold text-slate-700">{confirmDelete.label}</span>? This action cannot be undone.
+              <h3 className="text-lg font-bold text-[var(--text-primary)] mb-2">Delete {confirmDelete.entity}?</h3>
+              <p className="text-sm text-[var(--text-muted)] mb-6">
+                Are you sure you want to delete <span className="font-semibold text-[var(--text-primary)]">{confirmDelete.label}</span>? This action cannot be undone.
               </p>
               <div className="flex gap-3">
-                <button onClick={() => setConfirmDelete(null)} className="flex-1 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-medium transition-colors">Cancel</button>
+                <button onClick={() => setConfirmDelete(null)} className="flex-1 px-4 py-2 bg-[var(--bg-tertiary)] hover:bg-[var(--bg-tertiary)] text-[var(--text-primary)] rounded-xl text-sm font-medium transition-colors">Cancel</button>
                 <button onClick={confirmDeleteAction} className="flex-1 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-sm font-medium transition-colors shadow-sm">Delete</button>
               </div>
             </motion.div>
@@ -466,8 +466,8 @@ export default function AcademicStructurePage() {
 function Field({ label, value, onChange, type = 'text' }: { label: string; value: string; onChange: (v: string) => void; type?: string }) {
   return (
     <div className="space-y-1">
-      <label className="text-sm font-medium text-slate-700">{label}</label>
-      <input type={type} value={value} onChange={e => onChange(e.target.value)} className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+      <label className="text-sm font-medium text-[var(--text-primary)]">{label}</label>
+      <input type={type} value={value} onChange={e => onChange(e.target.value)} className="w-full px-3 py-2 border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary" />
     </div>
   );
 }
@@ -476,8 +476,8 @@ function Select({ label, value, onChange, options }: { label: string; value: str
   const opts = Array.isArray(options) ? (typeof options[0] === 'string' ? (options as string[]).map(o => ({ value: o, label: o })) : options as { value: string; label: string }[]) : [];
   return (
     <div className="space-y-1">
-      <label className="text-sm font-medium text-slate-700">{label}</label>
-      <select value={value} onChange={e => onChange(e.target.value)} className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white">{opts.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}</select>
+      <label className="text-sm font-medium text-[var(--text-primary)]">{label}</label>
+      <select value={value} onChange={e => onChange(e.target.value)} className="w-full px-3 py-2 border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary bg-[var(--bg-secondary)]">{opts.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}</select>
     </div>
   );
 }

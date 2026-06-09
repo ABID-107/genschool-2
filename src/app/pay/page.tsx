@@ -32,11 +32,11 @@ export default function PublicPaymentPortal() {
       <header className="glass-nav py-6 px-4 mb-8">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-xl">G</div>
-            <h1 className="text-xl font-bold text-slate-900">আদর্শ উচ্চ বিদ্যালয়</h1>
+            <div className="w-10 h-10 bg-brand-primary rounded-xl flex items-center justify-center text-white font-bold text-xl">G</div>
+            <h1 className="text-xl font-bold text-[var(--text-primary)]">আদর্শ উচ্চ বিদ্যালয়</h1>
           </Link>
           <div className="text-right">
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Fee Portal</p>
+            <p className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest">Fee Portal</p>
             <p className="text-sm font-bold text-rose-600">অনলাইন পেমেন্ট</p>
           </div>
         </div>
@@ -45,17 +45,17 @@ export default function PublicPaymentPortal() {
       <main className="max-w-xl mx-auto px-4">
         {step === 'search' && (
           <div className="glass-card p-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <h2 className="text-2xl font-bold text-slate-900 mb-2 text-center">ফি পরিশোধ করুন</h2>
-            <p className="text-slate-500 text-center text-sm mb-8">স্টুডেন্ট আইডি দিয়ে বকেয়া ফি চেক করুন</p>
+            <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-2 text-center">ফি পরিশোধ করুন</h2>
+            <p className="text-[var(--text-muted)] text-center text-sm mb-8">স্টুডেন্ট আইডি দিয়ে বকেয়া ফি চেক করুন</p>
             
             <form onSubmit={handleSearch} className="space-y-6">
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2 ml-1">স্টুডেন্ট আইডি (Student ID)</label>
+                <label className="block text-sm font-bold text-[var(--text-primary)] mb-2 ml-1">স্টুডেন্ট আইডি (Student ID)</label>
                 <input 
                   type="text" 
                   required
                   placeholder="e.g. SMS-2025-0982"
-                  className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 px-5 outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all font-sans font-bold"
+                  className="glass-input w-full bg-[var(--bg-tertiary)] border border-[var(--border-light)] rounded-2xl py-4 px-5 outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all font-sans font-bold"
                   value={studentId}
                   onChange={e => setStudentId(e.target.value)}
                 />
@@ -64,7 +64,7 @@ export default function PublicPaymentPortal() {
               <button 
                 type="submit" 
                 disabled={isLoading}
-                className="w-full py-4 bg-rose-600 hover:bg-rose-700 text-white rounded-2xl font-bold text-lg shadow-lg shadow-rose-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-70 active:scale-95"
+                className="glass-button-primary w-full py-4 bg-brand-primary hover:bg-brand-mid text-white rounded-2xl font-bold text-lg shadow-lg shadow-brand-primary/20 transition-all flex items-center justify-center gap-2 disabled:opacity-70 active:scale-95"
               >
                 {isLoading ? (
                   <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -79,8 +79,8 @@ export default function PublicPaymentPortal() {
 
         {step === 'verify' && (
           <div className="glass-card p-8 animate-in zoom-in-95 duration-500">
-            <h2 className="text-2xl font-bold text-slate-900 mb-2 text-center">ভেরিফিকেশন</h2>
-            <p className="text-slate-500 text-center text-sm mb-8 font-bangla">আপনার নিবন্ধিত মোবাইল নাম্বারে একটি ৪-সংখ্যার ওটিপি (OTP) পাঠানো হয়েছে</p>
+            <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-2 text-center">ভেরিফিকেশন</h2>
+            <p className="text-[var(--text-muted)] text-center text-sm mb-8 font-bangla">আপনার নিবন্ধিত মোবাইল নাম্বারে একটি ৪-সংখ্যার ওটিপি (OTP) পাঠানো হয়েছে</p>
             
             <form onSubmit={handleVerify} className="space-y-6">
               <div>
@@ -89,7 +89,7 @@ export default function PublicPaymentPortal() {
                   required
                   maxLength={4}
                   placeholder="OTP"
-                  className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-5 px-5 outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all font-sans font-bold text-center text-2xl tracking-[1em]"
+                  className="glass-input w-full bg-[var(--bg-tertiary)] border border-[var(--border-light)] rounded-2xl py-5 px-5 outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all font-sans font-bold text-center text-2xl tracking-[1em]"
                   value={otp}
                   onChange={e => setOtp(e.target.value)}
                 />
@@ -97,7 +97,7 @@ export default function PublicPaymentPortal() {
 
               <button 
                 type="submit" 
-                className="w-full py-4 bg-rose-600 text-white rounded-2xl font-bold text-lg shadow-lg active:scale-95 transition-all"
+                className="glass-button-primary w-full py-4 bg-brand-primary text-white rounded-2xl font-bold text-lg shadow-lg active:scale-95 transition-all"
               >
                 ভেরিফাই করুন
               </button>
@@ -108,8 +108,8 @@ export default function PublicPaymentPortal() {
         {step === 'payment' && (
           <div className="glass-card p-8 animate-in fade-in duration-500">
             <div className="text-center mb-8">
-              <p className="text-sm font-bold text-slate-400 uppercase">Alex Johnson • SMS-2025-0982</p>
-              <h2 className="text-4xl font-bold text-slate-900 mt-2 font-bricolage">৳২,৪৫০.০০</h2>
+              <p className="text-sm font-bold text-[var(--text-muted)] uppercase">Alex Johnson • SMS-2025-0982</p>
+              <h2 className="text-4xl font-bold text-[var(--text-primary)] mt-2 font-bricolage">৳২,৪৫০.০০</h2>
               <p className="text-xs font-bold text-rose-500 mt-1">মোট বকেয়া ফি</p>
             </div>
 
@@ -122,11 +122,10 @@ export default function PublicPaymentPortal() {
               </button>
             </div>
 
-            <button onClick={() => setStep('search')} className="w-full py-2 text-slate-400 font-bold text-sm mt-8">ক্যান্সেল করুন</button>
+            <button onClick={() => setStep('search')} className="w-full py-2 text-[var(--text-muted)] font-bold text-sm mt-8">ক্যান্সেল করুন</button>
           </div>
         )}
       </main>
     </div>
   );
 }
-

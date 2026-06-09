@@ -1,7 +1,3 @@
-"use client";
-
-import { useState, useEffect } from "react";
-
 export type Language = "bn" | "en";
 
 export const translations = {
@@ -59,57 +55,11 @@ export const translations = {
   }
 };
 
-let globalLang: Language = "bn";
-const listeners = new Set<(lang: Language) => void>();
-
 export function useLanguage() {
-  // Always start with the static default to match Server-Side Rendering (preventing hydration mismatch)
-  const [lang, setLang] = useState<Language>(globalLang);
-
-  useEffect(() => {
-    // Only access localStorage on the client after hydration is complete
-    const saved = localStorage.getItem("preferredLanguage") as Language;
-    if (saved && saved !== globalLang) {
-      globalLang = saved;
-      listeners.forEach((listener) => listener(saved));
-    } else {
-      // Otherwise ensure local state matches the active global language
-      setLang(globalLang);
-    }
-
-    const handleChange = (newLang: Language) => {
-      setLang(newLang);
-    };
-
-    listeners.add(handleChange);
-
-    // Synchronize cross-tab preferredLanguage updates
-    const handleStorage = (e: StorageEvent) => {
-      if (e.key === "preferredLanguage" && e.newValue) {
-        const newLang = e.newValue as Language;
-        globalLang = newLang;
-        listeners.forEach((listener) => listener(newLang));
-      }
-    };
-    window.addEventListener("storage", handleStorage);
-
-    return () => {
-      listeners.delete(handleChange);
-      window.removeEventListener("storage", handleStorage);
-    };
-  }, []);
-
-  const toggleLang = () => {
-    const newLang = lang === "bn" ? "en" : "bn";
-    globalLang = newLang;
-    localStorage.setItem("preferredLanguage", newLang);
-    listeners.forEach((listener) => listener(newLang));
-  };
-
   const t = (key: keyof typeof translations["en"]) => {
-    return translations[lang][key] || key;
+    return translations["en"][key] || key;
   };
 
-  return { lang, toggleLang, t };
+  return { lang: "en" as Language, t };
 }
 

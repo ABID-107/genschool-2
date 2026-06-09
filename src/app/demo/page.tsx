@@ -56,7 +56,7 @@ const demoCards = [
 export default function DemoPage() {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [isDesktop, setIsDesktop] = useState(true);
-  const { lang, toggleLang } = useLanguage();
+  const { lang } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
   const [selectedCard, setSelectedCard] = useState<string | null>(null);
   const router = useRouter();
@@ -81,7 +81,7 @@ export default function DemoPage() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col antialiased selection:bg-indigo-500/20 selection:text-indigo-600">
+    <div className="min-h-screen flex flex-col antialiased selection:bg-brand-primary/20 selection:text-brand-primary">
       {/* Navbar */}
       <motion.nav
         initial={{ y: -68 }}
@@ -89,8 +89,8 @@ export default function DemoPage() {
         className={`fixed top-0 left-0 right-0 z-50 h-[68px] flex items-center justify-between px-[5%] transition-shadow duration-300 ${isScrolled ? "glass-nav" : "bg-transparent"
           }`}
       >
-        <Link href="/" className="flex items-center gap-[10px] text-[1.5rem] font-bold text-[#0f172a] no-underline font-bricolage">
-          <div className="w-9 h-9 rounded-[10px] bg-gradient-to-br from-[#1a56e8] to-[#4f46e5] flex items-center justify-center text-white font-extrabold">
+        <Link href="/" className="flex items-center gap-[10px] text-[1.5rem] font-bold text-[var(--text-primary)] no-underline font-bricolage">
+          <div className="w-9 h-9 rounded-[10px] bg-gradient-to-br from-brand-primary to-brand-mid flex items-center justify-center text-white font-extrabold">
             G
           </div>
           <span>GenSchool</span>
@@ -98,14 +98,8 @@ export default function DemoPage() {
         <div className="flex items-center gap-2">
           <ThemeToggle />
           <button
-            onClick={toggleLang}
-            className="px-4 py-[7px] rounded-lg border border-[#e2e8f0] bg-transparent cursor-pointer text-[.85rem] font-medium text-[#475569] transition-all hover:border-[#1a56e8] hover:text-[#1a56e8] hover:bg-[#e8f0ff]"
-          >
-            {lang === "en" ? "বাং" : "EN"}
-          </button>
-          <button
             onClick={() => router.push("/login")}
-            className="px-5 py-2 rounded-[10px] border border-[#1a56e8] text-[#1a56e8] cursor-pointer text-[.9rem] font-medium transition-all hover:bg-[#1a56e8] hover:text-white"
+            className="px-5 py-2 rounded-[10px] border border-brand-primary text-brand-primary cursor-pointer text-[.9rem] font-medium transition-all hover:bg-brand-primary hover:text-white"
           >
             Login
           </button>
@@ -127,13 +121,13 @@ export default function DemoPage() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.5, ease: "easeOut" }}
-            className="absolute top-[10%] left-[5%] w-[400px] h-[400px] bg-[#1a56e8]/5 rounded-full blur-[100px]" 
+            className="absolute top-[10%] left-[5%] w-[400px] h-[400px] bg-brand-primary/5 rounded-full blur-[100px]" 
           />
           <motion.div 
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.5, delay: 0.2, ease: "easeOut" }}
-            className="absolute bottom-[10%] right-[5%] w-[500px] h-[500px] bg-[#4f46e5]/5 rounded-full blur-[120px]" 
+            className="absolute bottom-[10%] right-[5%] w-[500px] h-[500px] bg-brand-mid/5 rounded-full blur-[120px]" 
           />
         </div>
 
@@ -142,13 +136,13 @@ export default function DemoPage() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="text-center mb-10 lg:mb-14 max-w-2xl"
+          className="glass-panel p-8 rounded-2xl text-center mb-10 lg:mb-14 max-w-2xl animate-in"
         >
-          <div className="text-[.78rem] font-semibold tracking-[.1em] uppercase text-[#1a56e8] mb-3">Interactive Demo</div>
-          <h1 className="font-bricolage text-[clamp(2rem,4vw,3.2rem)] font-bold leading-[1.1] tracking-[-0.03em] text-[#0f172a] mb-4">
-            Select Your <span className="bg-gradient-to-r from-[#1a56e8] to-[#4f46e5] bg-clip-text text-transparent">Experience</span>
+          <div className="text-[.78rem] font-semibold tracking-[.1em] uppercase text-brand-primary mb-3">Interactive Demo</div>
+          <h1 className="font-bricolage text-[clamp(2rem,4vw,3.2rem)] font-bold leading-[1.1] tracking-[-0.03em] text-[var(--text-primary)] mb-4">
+            Select Your <span className="bg-gradient-to-r from-brand-primary to-brand-mid bg-clip-text text-transparent">Experience</span>
           </h1>
-          <p className="text-[1.05rem] lg:text-[1.1rem] text-[#475569] leading-[1.7]">
+          <p className="text-[1.05rem] lg:text-[1.1rem] text-[var(--text-muted)] leading-[1.7]">
             Explore GenSchool tailored to your role. Choose a path below to see how our platform facilitates a focused and collaborative educational journey.
           </p>
         </motion.div>
@@ -179,7 +173,7 @@ export default function DemoPage() {
                   layout: { duration: 0.5, ease: [0.4, 0, 0.2, 1] },
                   width: { duration: 0.6, ease: [0.4, 0, 0.2, 1] }
                 }}
-                className={`group glass-card relative overflow-hidden flex flex-col lg:flex-row ${card.align === 'left' ? 'lg:flex-row-reverse' : ''} transition-shadow duration-500 h-[140px] lg:h-full cursor-pointer lg:cursor-default`}
+                className={`group glass-card glow-on-hover relative overflow-hidden flex flex-col lg:flex-row ${card.align === 'left' ? 'lg:flex-row-reverse' : ''} transition-shadow duration-500 h-[140px] lg:h-full cursor-pointer lg:cursor-default`}
                 style={{
                   flexShrink: 0,
                 }}
@@ -187,7 +181,7 @@ export default function DemoPage() {
                 {/* Image Container */}
                 <motion.div 
                   layout
-                  className="relative overflow-hidden flex-shrink-0 w-full lg:w-[160px] h-full z-10 bg-[#f8f9fc]"
+                  className="relative overflow-hidden flex-shrink-0 w-full lg:w-[160px] h-full z-10 bg-[var(--bg-tertiary)]"
                 >
                   <motion.div
                     className="relative w-full h-full"
@@ -216,7 +210,7 @@ export default function DemoPage() {
                   
                   {/* Tap indication for mobile */}
                   {!isDesktop && (
-                    <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white">
+                    <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[var(--bg-secondary)]/20 backdrop-blur-sm flex items-center justify-center text-white">
                       <span className="material-symbols-outlined text-[18px]">open_in_full</span>
                     </div>
                   )}
@@ -224,14 +218,14 @@ export default function DemoPage() {
 
                 {/* Description Content */}
                 <motion.div 
-                  className={`p-8 flex-col justify-center w-full lg:w-[290px] flex-shrink-0 bg-white z-0 hidden lg:flex`}
+                  className={`book-page p-8 flex-col justify-center w-full lg:w-[290px] flex-shrink-0 bg-[var(--bg-secondary)] z-0 hidden lg:flex`}
                   initial={{ opacity: 1 }}
                   animate={{ opacity: isDesktop ? (isHovered ? 1 : 0) : 0 }}
                   transition={{ duration: 0.4, ease: "easeInOut" }}
                 >
-                  <h3 className="font-bricolage text-[1.5rem] font-bold text-[#0f172a] mb-4 border-b border-[#e2e8f0] pb-4">{card.title}</h3>
-                  <p className="text-[.95rem] text-[#475569] mb-4 leading-[1.6]">{card.desc1}</p>
-                  <p className="text-[.95rem] text-[#475569] leading-[1.6]">{card.desc2}</p>
+                  <h3 className="font-bricolage text-[1.5rem] font-bold text-[var(--text-primary)] mb-4 border-b border-[var(--border-light)] pb-4">{card.title}</h3>
+                  <p className="text-[.95rem] text-[var(--text-muted)] mb-4 leading-[1.6]">{card.desc1}</p>
+                  <p className="text-[.95rem] text-[var(--text-muted)] leading-[1.6]">{card.desc2}</p>
                   
                   <motion.button 
                     whileHover={{ scale: 1.02, y: -2 }}
@@ -272,7 +266,7 @@ export default function DemoPage() {
               exit={{ opacity: 0, y: 20, scale: 0.95 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-white rounded-[24px] w-full max-w-md overflow-hidden shadow-2xl relative flex flex-col max-h-[85vh]"
+              className="glass-panel bg-[var(--bg-secondary)] rounded-[24px] w-full max-w-md overflow-hidden shadow-2xl relative flex flex-col max-h-[85vh]"
             >
               {/* Close Button */}
               <button 
@@ -299,14 +293,14 @@ export default function DemoPage() {
 
               {/* Scrollable Content */}
               <div className="p-6 overflow-y-auto">
-                <p className="text-[#475569] text-[.95rem] leading-[1.65] mb-4 font-medium">
+                <p className="text-[var(--text-muted)] text-[.95rem] leading-[1.65] mb-4 font-medium">
                   {demoCards.find(c => c.id === selectedCard)?.desc1}
                 </p>
-                <div className="h-[1px] w-full bg-[#e2e8f0] mb-4"></div>
-                <p className="text-[#475569] text-[.95rem] leading-[1.65] mb-4">
+                <div className="h-[1px] w-full bg-[var(--border-light)] mb-4"></div>
+                <p className="text-[var(--text-muted)] text-[.95rem] leading-[1.65] mb-4">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                 </p>
-                <p className="text-[#475569] text-[.95rem] leading-[1.65] mb-6">
+                <p className="text-[var(--text-muted)] text-[.95rem] leading-[1.65] mb-6">
                   Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem.
                 </p>
                 

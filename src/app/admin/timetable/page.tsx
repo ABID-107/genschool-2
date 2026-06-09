@@ -368,16 +368,16 @@ export default function TimetableManagerPage() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Timetable Manager</h1>
-          <p className="text-sm text-slate-500 mt-1">
+          <h1 className="text-2xl font-bold text-[var(--text-primary)] tracking-tight">Timetable Manager</h1>
+          <p className="text-sm text-[var(--text-muted)] mt-1">
             {periods.length} periods &bull; {workingDays.length} academic days &bull; Friday holiday
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <button onClick={handlePrint} className="bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 px-4 py-2 rounded-xl text-sm font-medium transition-colors shadow-sm flex items-center gap-2">
+          <button onClick={handlePrint} className="bg-[var(--bg-secondary)] border border-[var(--border-light)] text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] px-4 py-2 rounded-xl text-sm font-medium transition-colors shadow-sm flex items-center gap-2">
             <Printer size={16} /> Print
           </button>
-          <button onClick={handlePublish} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-medium shadow-md shadow-blue-500/20 transition-all flex items-center gap-2">
+          <button onClick={handlePublish} className="bg-brand-primary hover:bg-brand-mid text-white px-4 py-2 rounded-xl text-sm font-medium shadow-md shadow-brand-primary/20 transition-all flex items-center gap-2">
             <Share2 size={16} />
             {published ? 'Published!' : 'Publish Timetable'}
           </button>
@@ -385,7 +385,7 @@ export default function TimetableManagerPage() {
       </div>
 
       {/* Controls */}
-      <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row gap-4 items-center justify-between">
+      <div className="bg-[var(--bg-secondary)] p-4 rounded-2xl border border-[var(--border-light)] shadow-sm flex flex-col sm:flex-row gap-4 items-center justify-between">
         <div className="flex items-center gap-3 w-full sm:w-auto">
           <select
             value={selectedClass}
@@ -395,14 +395,14 @@ export default function TimetableManagerPage() {
                 setSelectedSection(sectionOptions[0] || 'Section A');
               }
             }}
-            className="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 w-full sm:w-auto"
+            className="px-4 py-2.5 bg-[var(--bg-tertiary)] border border-[var(--border-light)] rounded-xl text-sm font-medium text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-brand-primary/20 w-full sm:w-auto"
           >
             {classOptions.map(c => <option key={c}>{c}</option>)}
           </select>
           <select
             value={selectedSection}
             onChange={e => setSelectedSection(e.target.value)}
-            className="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 w-full sm:w-auto"
+            className="px-4 py-2.5 bg-[var(--bg-tertiary)] border border-[var(--border-light)] rounded-xl text-sm font-medium text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-brand-primary/20 w-full sm:w-auto"
           >
             {sectionOptions.map(s => <option key={s}>{s}</option>)}
           </select>
@@ -411,29 +411,29 @@ export default function TimetableManagerPage() {
         <div className="flex items-center gap-4 text-sm">
           <button
             onClick={openAddPeriod}
-            className="px-3 py-2 bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 rounded-xl text-sm font-medium transition-colors flex items-center gap-2"
+            className="px-3 py-2 bg-[var(--bg-secondary)] border border-[var(--border-light)] text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] rounded-xl text-sm font-medium transition-colors flex items-center gap-2"
           >
             <Clock size={16} /> Periods
           </button>
-          <div className="flex items-center gap-1.5 text-slate-500">
+          <div className="flex items-center gap-1.5 text-[var(--text-muted)]">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Valid
           </div>
-          <div className={`flex items-center gap-1.5 ${conflicts.size > 0 ? 'text-rose-500' : 'text-slate-500'}`}>
-            <span className={`w-2.5 h-2.5 rounded-full ${conflicts.size > 0 ? 'bg-rose-500' : 'bg-slate-300'}`}></span>
+          <div className={`flex items-center gap-1.5 ${conflicts.size > 0 ? 'text-rose-500' : 'text-[var(--text-muted)]'}`}>
+            <span className={`w-2.5 h-2.5 rounded-full ${conflicts.size > 0 ? 'bg-rose-500' : 'bg-[var(--border-light)]'}`}></span>
             {conflicts.size > 0 ? `${conflicts.size} Conflict${conflicts.size > 1 ? 's' : ''} Detected` : 'No Conflicts'}
           </div>
           <div className="relative">
-            <button onClick={() => setSettingsOpen(!settingsOpen)} className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors">
+            <button onClick={() => setSettingsOpen(!settingsOpen)} className="p-2 text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors">
               <Settings size={18} />
             </button>
             {settingsOpen && (
               <>
                 <div className="fixed inset-0 z-10" onClick={() => setSettingsOpen(false)} />
-                <div className="absolute right-0 top-full mt-1 z-20 bg-white rounded-xl border border-slate-200 shadow-lg p-2 min-w-[180px]">
-                  <button onClick={() => { setClassSectionModal(true); setSettingsOpen(false); }} className="w-full text-left px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg transition-colors flex items-center gap-2">
+                <div className="absolute right-0 top-full mt-1 z-20 bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-light)] shadow-lg p-2 min-w-[180px]">
+                  <button onClick={() => { setClassSectionModal(true); setSettingsOpen(false); }} className="w-full text-left px-3 py-2 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors flex items-center gap-2">
                     <List size={15} /> Manage Classes & Sections
                   </button>
-                  <button onClick={() => { setSettingsOpen(false); }} className="w-full text-left px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
+                  <button onClick={() => { setSettingsOpen(false); }} className="w-full text-left px-3 py-2 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors">
                     Export as CSV
                   </button>
                 </div>
@@ -444,16 +444,16 @@ export default function TimetableManagerPage() {
       </div>
 
       {/* Timetable Grid */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden overflow-x-auto">
-        <table className="w-full text-sm text-left border-collapse min-w-[900px]">
+      <div className="bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-light)] shadow-sm overflow-hidden overflow-x-auto glass-panel animate-in">
+        <table className="w-full text-sm text-left border-collapse min-w-[900px] data-table">
           <thead>
             <tr>
-              <th className="px-4 py-4 font-semibold text-slate-500 bg-slate-50 border-b border-r border-slate-200 w-24 text-center">
+              <th className="px-4 py-4 font-semibold text-[var(--text-muted)] bg-[var(--bg-tertiary)] border-b border-r border-[var(--border-light)] w-24 text-center">
                 <Clock size={16} className="mx-auto mb-1 opacity-50" />
                 Period
               </th>
               {allDays.map(day => (
-                <th key={day} className={`px-4 py-4 font-semibold border-b border-r border-slate-200 last:border-r-0 text-center ${day === 'Friday' ? 'bg-amber-50 text-amber-600' : 'bg-slate-50 text-slate-700'}`}>
+                <th key={day} className={`px-4 py-4 font-semibold border-b border-r border-[var(--border-light)] last:border-r-0 text-center ${day === 'Friday' ? 'bg-[var(--bg-tertiary)] text-amber-600' : 'bg-[var(--bg-tertiary)] text-[var(--text-primary)]'}`}>
                   {day}
                   {day === 'Friday' && <div className="text-[10px] font-normal mt-0.5">Holiday</div>}
                 </th>
@@ -465,22 +465,22 @@ export default function TimetableManagerPage() {
               const isBreak = period.isBreak;
               return (
                 <tr key={period.id}>
-                  <td className="px-4 py-4 font-medium text-slate-500 bg-slate-50 border-b border-r border-slate-200 text-center text-xs">
+                  <td className="px-4 py-4 font-medium text-[var(--text-muted)] bg-[var(--bg-tertiary)] border-b border-r border-[var(--border-light)] text-center text-xs">
                     <div>{period.label}</div>
                     {!isBreak && period.start && (
-                      <div className="text-[10px] text-slate-400 mt-0.5">{period.start} - {period.end}</div>
+                      <div className="text-[10px] text-[var(--text-muted)] mt-0.5">{period.start} - {period.end}</div>
                     )}
-                    {isBreak && <div className="text-[10px] text-slate-400 mt-0.5">Break</div>}
+                    {isBreak && <div className="text-[10px] text-[var(--text-muted)] mt-0.5">Break</div>}
                   </td>
                   {isBreak ? (
-                    <td colSpan={allDays.length} className="px-4 py-3 font-semibold text-slate-400 bg-slate-100 border-b border-slate-200 text-center tracking-widest uppercase">
+                    <td colSpan={allDays.length} className="px-4 py-3 font-semibold text-[var(--text-muted)] bg-[var(--bg-tertiary)] border-b border-[var(--border-light)] text-center tracking-widest uppercase">
                       {period.label} &mdash; BREAK
                     </td>
                   ) : (
                     allDays.map(day => {
                       if (day === 'Friday') {
                         return (
-                          <td key={`${day}-${period.id}`} className="p-2 border-b border-r border-slate-200 bg-amber-50/30 text-center align-middle">
+                          <td key={`${day}-${period.id}`} className="p-2 border-b border-r border-[var(--border-light)] bg-amber-50/30 text-center align-middle">
                             <span className="text-xs font-medium text-amber-500">HOLIDAY</span>
                           </td>
                         );
@@ -491,7 +491,7 @@ export default function TimetableManagerPage() {
                         <td
                           key={`${day}-${period.id}`}
                           onClick={() => slotData ? openEdit(day, period.id) : openAdd(day, period.id)}
-                          className="p-2 border-b border-r border-slate-200 last:border-r-0 bg-white group hover:bg-slate-50 transition-colors align-top cursor-pointer"
+                          className="p-2 border-b border-r border-[var(--border-light)] last:border-r-0 bg-[var(--bg-secondary)] group hover:bg-[var(--bg-tertiary)]/50 transition-colors align-top cursor-pointer"
                         >
                           {slotData ? (
                             <motion.div
@@ -500,8 +500,8 @@ export default function TimetableManagerPage() {
                             >
                               <div className={`absolute top-0 left-0 w-1 h-full ${colorStyles[slotData.color].bar}`} />
                               <div className={`font-bold ${colorStyles[slotData.color].text} text-sm mb-1`}>{slotData.subject}</div>
-                              <div className="text-xs font-medium text-slate-600">{slotData.teacher}</div>
-                              <div className="text-xs text-slate-500 mt-1 flex items-center justify-between">
+                              <div className="text-xs font-medium text-[var(--text-secondary)]">{slotData.teacher}</div>
+                              <div className="text-xs text-[var(--text-muted)] mt-1 flex items-center justify-between">
                                 <span>{slotData.room}</span>
                                 {hasConflict && (
                                   <div className="w-5 h-5 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center" title="Teacher double booked">
@@ -511,8 +511,8 @@ export default function TimetableManagerPage() {
                               </div>
                             </motion.div>
                           ) : (
-                            <div className="h-full w-full min-h-[80px] rounded-xl border-2 border-dashed border-slate-200 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                              <span className="text-xs font-medium text-slate-400">Click to add</span>
+                            <div className="h-full w-full min-h-[80px] rounded-xl border-2 border-dashed border-[var(--border-light)] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                              <span className="text-xs font-medium text-[var(--text-muted)]">Click to add</span>
                             </div>
                           )}
                         </td>
@@ -530,42 +530,42 @@ export default function TimetableManagerPage() {
       <AnimatePresence>
         {modal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/30 backdrop-blur-sm" onClick={closeModal} />
-            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-md z-10">
-              <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-                <h3 className="font-bold text-slate-800 text-lg">{modal.mode === 'add' ? 'Add' : 'Edit'} Timetable Entry</h3>
-                <button onClick={closeModal} className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"><X size={20} /></button>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[var(--text-primary)]/20 backdrop-blur-sm" onClick={closeModal} />
+            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-[var(--bg-secondary)] rounded-2xl shadow-xl border border-[var(--border-light)] w-full max-w-md z-10">
+              <div className="px-6 py-4 border-b border-[var(--border-light)] flex items-center justify-between">
+                <h3 className="font-bold text-[var(--text-primary)] text-lg">{modal.mode === 'add' ? 'Add' : 'Edit'} Timetable Entry</h3>
+                <button onClick={closeModal} className="p-2 text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"><X size={20} /></button>
               </div>
               <div className="p-6 space-y-4">
-                <div className="flex gap-2 text-sm text-slate-500 mb-2">
-                  <span className="px-2.5 py-1 rounded-lg bg-slate-100 font-medium">{modal.day}</span>
-                  <span className="px-2.5 py-1 rounded-lg bg-slate-100 font-medium">{periods.find(p => p.id === modal.periodId)?.label || modal.periodId}</span>
+                <div className="flex gap-2 text-sm text-[var(--text-muted)] mb-2">
+                  <span className="px-2.5 py-1 rounded-lg bg-[var(--bg-tertiary)] font-medium">{modal.day}</span>
+                  <span className="px-2.5 py-1 rounded-lg bg-[var(--bg-tertiary)] font-medium">{periods.find(p => p.id === modal.periodId)?.label || modal.periodId}</span>
                 </div>
                 <Field label="Subject Name" value={modal.data.subject} onChange={v => setModal(m => m ? { ...m, data: { ...m.data, subject: v } } : null)} />
                 <Field label="Teacher" value={modal.data.teacher} onChange={v => setModal(m => m ? { ...m, data: { ...m.data, teacher: v } } : null)} />
                 <Field label="Room" value={modal.data.room} onChange={v => setModal(m => m ? { ...m, data: { ...m.data, room: v } } : null)} />
                 <div className="space-y-1">
-                  <label className="text-sm font-medium text-slate-700">Color</label>
+                  <label className="text-sm font-medium text-[var(--text-primary)]">Color</label>
                   <div className="flex flex-wrap gap-2">
                     {colors.map(color => (
                       <button key={color} type="button" onClick={() => setModal(m => m ? { ...m, data: { ...m.data, color } } : null)}
-                        className={`w-7 h-7 rounded-full border-2 transition-all ${colorStyles[color].bg} ${colorStyles[color].border} ${modal.data.color === color ? 'ring-2 ring-offset-2 ring-blue-500 scale-110' : ''}`}
+                        className={`w-7 h-7 rounded-full border-2 transition-all ${colorStyles[color].bg} ${colorStyles[color].border} ${modal.data.color === color ? 'ring-2 ring-offset-2 ring-brand-primary scale-110' : ''}`}
                         title={color}
                       />
                     ))}
                   </div>
                 </div>
-                <div className="flex gap-3 pt-4 border-t border-slate-100 mt-6">
+                <div className="flex gap-3 pt-4 border-t border-[var(--border-light)] mt-6">
                   {modal.mode === 'edit' && (
                     <button onClick={handleDelete} className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-sm font-medium transition-colors shadow-sm flex items-center gap-2">
                       <Trash2 size={16} /> Delete
                     </button>
                   )}
-                  <button onClick={closeModal} className={`${modal.mode === 'edit' ? 'flex-1' : 'flex-1'} px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-medium transition-colors`}>
+                  <button onClick={closeModal} className={`${modal.mode === 'edit' ? 'flex-1' : 'flex-1'} px-4 py-2 bg-[var(--bg-tertiary)] hover:bg-[var(--bg-tertiary)]/80 text-[var(--text-primary)] rounded-xl text-sm font-medium transition-colors`}>
                     Cancel
                   </button>
                   <button onClick={handleSave} disabled={saving}
-                    className={`flex-1 px-4 py-2 rounded-xl text-sm font-medium text-white transition-colors flex items-center justify-center gap-2 ${saving ? 'bg-blue-400 cursor-wait' : 'bg-blue-600 hover:bg-blue-700 shadow-sm shadow-blue-500/20'}`}
+                    className={`flex-1 px-4 py-2 rounded-xl text-sm font-medium text-white transition-colors flex items-center justify-center gap-2 ${saving ? 'bg-brand-mid/60 cursor-wait' : 'bg-brand-primary hover:bg-brand-mid shadow-sm shadow-brand-primary/20'}`}
                   >
                     {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
                     {saving ? 'Saving...' : 'Save'}
@@ -581,31 +581,31 @@ export default function TimetableManagerPage() {
       <AnimatePresence>
         {periodModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/30 backdrop-blur-sm" onClick={() => setPeriodModal(null)} />
-            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-2xl z-10">
-              <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-                <h3 className="font-bold text-slate-800 text-lg">Manage Periods</h3>
-                <button onClick={() => setPeriodModal(null)} className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"><X size={20} /></button>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[var(--text-primary)]/20 backdrop-blur-sm" onClick={() => setPeriodModal(null)} />
+            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-[var(--bg-secondary)] rounded-2xl shadow-xl border border-[var(--border-light)] w-full max-w-2xl z-10">
+              <div className="px-6 py-4 border-b border-[var(--border-light)] flex items-center justify-between">
+                <h3 className="font-bold text-[var(--text-primary)] text-lg">Manage Periods</h3>
+                <button onClick={() => setPeriodModal(null)} className="p-2 text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"><X size={20} /></button>
               </div>
               <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
                 {/* Current period list */}
                 <div className="space-y-2">
                   {periods.map((p, i) => (
-                    <div key={p.id} className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200">
-                      <span className="text-xs font-medium text-slate-400 w-6">{i + 1}.</span>
+                    <div key={p.id} className="flex items-center gap-3 p-3 bg-[var(--bg-tertiary)] rounded-xl border border-[var(--border-light)]">
+                      <span className="text-xs font-medium text-[var(--text-muted)] w-6">{i + 1}.</span>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          <span className="font-medium text-slate-800">{p.label}</span>
+                          <span className="font-medium text-[var(--text-primary)]">{p.label}</span>
                           {p.isBreak && <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-700 font-medium">Break</span>}
                         </div>
                         {!p.isBreak && (
-                          <div className="text-xs text-slate-500 mt-0.5">{p.start} - {p.end}</div>
+                          <div className="text-xs text-[var(--text-muted)] mt-0.5">{p.start} - {p.end}</div>
                         )}
                       </div>
-                      <button onClick={() => openEditPeriod(p)} className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                      <button onClick={() => openEditPeriod(p)} className="p-2 text-[var(--text-muted)] hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors">
                         <Pencil size={15} />
                       </button>
-                      <button onClick={() => handleDeletePeriod(p.id)} className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors">
+                      <button onClick={() => handleDeletePeriod(p.id)} className="p-2 text-[var(--text-muted)] hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors">
                         <Trash2 size={15} />
                       </button>
                     </div>
@@ -613,34 +613,34 @@ export default function TimetableManagerPage() {
                 </div>
 
                 {/* Add new period form */}
-                <div className="border-t border-slate-200 pt-4">
-                  <h4 className="text-sm font-semibold text-slate-700 mb-3">Add New Period</h4>
+                <div className="border-t border-[var(--border-light)] pt-4">
+                  <h4 className="text-sm font-semibold text-[var(--text-primary)] mb-3">Add New Period</h4>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                     <div className="space-y-1">
-                      <label className="text-xs font-medium text-slate-500">Label</label>
+                      <label className="text-xs font-medium text-[var(--text-muted)]">Label</label>
                       <input type="text" value={periodModal.data.label} onChange={e => setPeriodModal(pm => pm ? { ...pm, data: { ...pm.data, label: e.target.value } } : null)}
-                        placeholder="e.g., 08:00 AM" className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
+                        placeholder="e.g., 08:00 AM" className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20" />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-xs font-medium text-slate-500">Start</label>
+                      <label className="text-xs font-medium text-[var(--text-muted)]">Start</label>
                       <input type="time" value={periodModal.data.start} onChange={e => setPeriodModal(pm => pm ? { ...pm, data: { ...pm.data, start: e.target.value } } : null)}
-                        className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
+                        className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20" />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-xs font-medium text-slate-500">End</label>
+                      <label className="text-xs font-medium text-[var(--text-muted)]">End</label>
                       <input type="time" value={periodModal.data.end} onChange={e => setPeriodModal(pm => pm ? { ...pm, data: { ...pm.data, end: e.target.value } } : null)}
-                        className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
+                        className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20" />
                     </div>
                     <div className="space-y-1 flex flex-col justify-end">
                       <label className="flex items-center gap-2 cursor-pointer">
                         <input type="checkbox" checked={periodModal.data.isBreak} onChange={e => setPeriodModal(pm => pm ? { ...pm, data: { ...pm.data, isBreak: e.target.checked } } : null)}
-                          className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500" />
-                        <span className="text-sm text-slate-600">Break period</span>
+                          className="w-4 h-4 rounded border-[var(--border-light)] text-brand-primary focus:ring-brand-primary" />
+                        <span className="text-sm text-[var(--text-secondary)]">Break period</span>
                       </label>
                     </div>
                   </div>
                   <div className="flex gap-3 mt-4">
-                    <button onClick={handleSavePeriod} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-medium shadow-sm transition-colors flex items-center gap-2">
+                    <button onClick={handleSavePeriod} className="px-4 py-2 bg-brand-primary hover:bg-brand-mid text-white rounded-xl text-sm font-medium shadow-sm transition-colors flex items-center gap-2">
                       <Plus size={16} /> {periodModal.mode === 'add' ? 'Add Period' : 'Update Period'}
                     </button>
                     {periodModal.mode === 'edit' && (
@@ -660,47 +660,47 @@ export default function TimetableManagerPage() {
       <AnimatePresence>
         {classSectionModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/30 backdrop-blur-sm" onClick={() => setClassSectionModal(false)} />
-            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-lg z-10">
-              <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-                <h3 className="font-bold text-slate-800 text-lg">Classes & Sections</h3>
-                <button onClick={() => setClassSectionModal(false)} className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"><X size={20} /></button>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[var(--text-primary)]/20 backdrop-blur-sm" onClick={() => setClassSectionModal(false)} />
+            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-[var(--bg-secondary)] rounded-2xl shadow-xl border border-[var(--border-light)] w-full max-w-lg z-10">
+              <div className="px-6 py-4 border-b border-[var(--border-light)] flex items-center justify-between">
+                <h3 className="font-bold text-[var(--text-primary)] text-lg">Classes & Sections</h3>
+                <button onClick={() => setClassSectionModal(false)} className="p-2 text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"><X size={20} /></button>
               </div>
               <div className="p-6 space-y-6 max-h-[70vh] overflow-y-auto">
                 {/* Classes */}
                 <div>
-                  <h4 className="text-sm font-semibold text-slate-700 mb-2">Classes ({classOptions.length})</h4>
+                  <h4 className="text-sm font-semibold text-[var(--text-primary)] mb-2">Classes ({classOptions.length})</h4>
                   <div className="flex flex-wrap gap-2 mb-3">
                     {classOptions.map(c => (
-                      <span key={c} className="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-sm font-medium border border-blue-200">{c}</span>
+                      <span key={c} className="px-3 py-1.5 bg-[var(--bg-tertiary)] text-brand-primary rounded-lg text-sm font-medium border border-brand-primary/30">{c}</span>
                     ))}
                   </div>
                   <div className="flex gap-2">
                     <input
                       type="text" value={newClassName} onChange={e => setNewClassName(e.target.value)}
-                      placeholder="New class name..." className="flex-1 px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                      placeholder="New class name..." className="flex-1 px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20"
                       onKeyDown={e => e.key === 'Enter' && handleAddClass()}
                     />
-                    <button onClick={handleAddClass} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-medium transition-colors flex items-center gap-2">
+                    <button onClick={handleAddClass} className="px-4 py-2 bg-brand-primary hover:bg-brand-mid text-white rounded-xl text-sm font-medium transition-colors flex items-center gap-2">
                       <Plus size={16} /> Add
                     </button>
                   </div>
                 </div>
                 {/* Sections */}
-                <div className="border-t border-slate-200 pt-4">
-                  <h4 className="text-sm font-semibold text-slate-700 mb-2">Sections ({sectionOptions.length})</h4>
+                <div className="border-t border-[var(--border-light)] pt-4">
+                  <h4 className="text-sm font-semibold text-[var(--text-primary)] mb-2">Sections ({sectionOptions.length})</h4>
                   <div className="flex flex-wrap gap-2 mb-3">
                     {sectionOptions.map(s => (
-                      <span key={s} className="px-3 py-1.5 bg-violet-50 text-violet-700 rounded-lg text-sm font-medium border border-violet-200">{s}</span>
+                      <span key={s} className="px-3 py-1.5 bg-[var(--bg-tertiary)] text-brand-primary rounded-lg text-sm font-medium border border-brand-primary/30">{s}</span>
                     ))}
                   </div>
                   <div className="flex gap-2">
                     <input
                       type="text" value={newSectionName} onChange={e => setNewSectionName(e.target.value)}
-                      placeholder="New section name..." className="flex-1 px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                      placeholder="New section name..." className="flex-1 px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20"
                       onKeyDown={e => e.key === 'Enter' && handleAddSection()}
                     />
-                    <button onClick={handleAddSection} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-medium transition-colors flex items-center gap-2">
+                    <button onClick={handleAddSection} className="px-4 py-2 bg-brand-primary hover:bg-brand-mid text-white rounded-xl text-sm font-medium transition-colors flex items-center gap-2">
                       <Plus size={16} /> Add
                     </button>
                   </div>
@@ -728,8 +728,8 @@ export default function TimetableManagerPage() {
 function Field({ label, value, onChange, type = 'text' }: { label: string; value: string; onChange: (v: string) => void; type?: string }) {
   return (
     <div className="space-y-1">
-      <label className="text-sm font-medium text-slate-700">{label}</label>
-      <input type={type} value={value} onChange={e => onChange(e.target.value)} className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+      <label className="text-sm font-medium text-[var(--text-primary)]">{label}</label>
+      <input type={type} value={value} onChange={e => onChange(e.target.value)} className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary" />
     </div>
   );
 }

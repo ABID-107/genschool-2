@@ -162,12 +162,12 @@ export default function NewStudentPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Enroll New Student</h1>
-          <p className="text-sm text-slate-500 mt-1">Fill in the details to register a new student.</p>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)] tracking-tight">Enroll New Student</h1>
+          <p className="text-sm text-[var(--text-muted)] mt-1">Fill in the details to register a new student.</p>
         </div>
         <div className="flex items-center gap-3">
           <Link href="/admin/students">
-            <button className="px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors shadow-sm">
+            <button className="px-4 py-2 text-sm font-medium text-[var(--text-secondary)] bg-[var(--bg-secondary)] border-[var(--border-light)] rounded-xl hover:bg-[var(--bg-tertiary)] transition-colors shadow-sm">
               Cancel
             </button>
           </Link>
@@ -178,8 +178,8 @@ export default function NewStudentPage() {
               saved
                 ? 'bg-emerald-500 cursor-default'
                 : saving
-                  ? 'bg-blue-400 cursor-wait'
-                  : 'bg-blue-600 hover:bg-blue-700 shadow-blue-500/20'
+                  ? 'bg-brand-mid cursor-wait'
+                  : 'bg-brand-primary hover:bg-brand-mid shadow-brand-primary/20'
             }`}
           >
             {saved ? (
@@ -194,21 +194,21 @@ export default function NewStudentPage() {
       </div>
 
       <form onSubmit={handleSubmit}>
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="bg-[var(--bg-secondary)] rounded-2xl border-[var(--border-light)] shadow-sm overflow-hidden book-page">
           {/* Tabs */}
-          <div className="flex border-b border-slate-200 bg-slate-50/50">
+          <div className="flex border-b border-[var(--border-light)] bg-[var(--bg-tertiary)]/50">
             {TABS.map((tab, index) => (
               <button
                 type="button"
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex-1 flex items-center justify-center gap-2 py-4 text-sm font-medium transition-colors relative ${
-                  activeTab === tab.id ? 'text-blue-600' : 'text-slate-500 hover:text-slate-700'
+                  activeTab === tab.id ? 'text-brand-primary' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                 }`}
               >
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
-                  activeTab === tab.id ? 'bg-blue-100 text-blue-600' : 
-                  index < currentIndex ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-200 text-slate-500'
+                  activeTab === tab.id ? 'bg-[var(--bg-tertiary)] text-brand-primary' : 
+                  index < currentIndex ? 'bg-emerald-100 text-emerald-600' : 'bg-[var(--bg-tertiary)] text-[var(--text-muted)]'
                 }`}>
                   {index < currentIndex ? '✓' : index + 1}
                 </div>
@@ -216,7 +216,7 @@ export default function NewStudentPage() {
                 {activeTab === tab.id && (
                   <motion.div 
                     layoutId="activeTabIndicator"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600" 
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-primary" 
                   />
                 )}
               </button>
@@ -234,21 +234,21 @@ export default function NewStudentPage() {
                   exit={{ opacity: 0, x: -20 }}
                   className="space-y-6"
                 >
-                  <div className="flex items-center gap-6 pb-6 border-b border-slate-100">
+                  <div className="flex items-center gap-6 pb-6 border-b border-[var(--border-light)]">
                     <div
                       onClick={() => fileInputRef.current?.click()}
                       className={`w-24 h-24 rounded-full border-2 border-dashed flex flex-col items-center justify-center transition-colors cursor-pointer group overflow-hidden ${
                         photoPreview
-                          ? 'border-blue-400'
-                          : 'border-slate-300 bg-slate-100 hover:border-blue-400 hover:bg-slate-50 hover:text-blue-500'
+                          ? 'border-brand-primary'
+                          : 'border-[var(--border-light)] bg-[var(--bg-tertiary)] hover:border-brand-primary hover:bg-[var(--bg-tertiary)] hover:text-brand-primary'
                       }`}
                     >
                       {photoPreview ? (
                         <Image src={photoPreview} alt="Preview" width={96} height={96} className="w-full h-full object-cover" unoptimized />
                       ) : (
                         <>
-                          <Upload size={24} className="mb-1 text-slate-400 group-hover:-translate-y-1 transition-transform" />
-                          <span className="text-xs font-medium text-slate-400">Upload Photo</span>
+                          <Upload size={24} className="mb-1 text-[var(--text-muted)] group-hover:-translate-y-1 transition-transform" />
+                          <span className="text-xs font-medium text-[var(--text-muted)]">Upload Photo</span>
                         </>
                       )}
                     </div>
@@ -260,57 +260,57 @@ export default function NewStudentPage() {
                       onChange={handlePhotoUpload}
                     />
                     <div>
-                      <h3 className="font-semibold text-slate-800">Student Photo</h3>
-                      <p className="text-sm text-slate-500">Allowed formats: JPG, PNG. Max size: 2MB.</p>
+                      <h3 className="font-semibold text-[var(--text-primary)]">Student Photo</h3>
+                      <p className="text-sm text-[var(--text-muted)]">Allowed formats: JPG, PNG. Max size: 2MB.</p>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-slate-700">First Name <span className="text-rose-500">*</span></label>
+                      <label className="text-sm font-medium text-[var(--text-primary)]">First Name <span className="text-rose-500">*</span></label>
                       <input
                         type="text"
                         value={formData.firstName}
                         onChange={e => updateField('firstName', e.target.value)}
-                        className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors ${
-                          errors.firstName ? 'border-rose-300 bg-rose-50/30' : 'border-slate-200'
+                        className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors ${
+                          errors.firstName ? 'border-rose-300 bg-rose-50/30' : 'border-[var(--border-light)]'
                         }`}
                         placeholder="e.g. Aarav"
                       />
                       {errors.firstName && <p className="text-xs text-rose-500 mt-0.5">{errors.firstName}</p>}
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-slate-700">Last Name <span className="text-rose-500">*</span></label>
+                      <label className="text-sm font-medium text-[var(--text-primary)]">Last Name <span className="text-rose-500">*</span></label>
                       <input
                         type="text"
                         value={formData.lastName}
                         onChange={e => updateField('lastName', e.target.value)}
-                        className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors ${
-                          errors.lastName ? 'border-rose-300 bg-rose-50/30' : 'border-slate-200'
+                        className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors ${
+                          errors.lastName ? 'border-rose-300 bg-rose-50/30' : 'border-[var(--border-light)]'
                         }`}
                         placeholder="e.g. Rahman"
                       />
                       {errors.lastName && <p className="text-xs text-rose-500 mt-0.5">{errors.lastName}</p>}
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-slate-700">Date of Birth <span className="text-rose-500">*</span></label>
+                      <label className="text-sm font-medium text-[var(--text-primary)]">Date of Birth <span className="text-rose-500">*</span></label>
                       <input
                         type="date"
                         value={formData.dateOfBirth}
                         onChange={e => updateField('dateOfBirth', e.target.value)}
-                        className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors text-slate-600 ${
-                          errors.dateOfBirth ? 'border-rose-300 bg-rose-50/30' : 'border-slate-200'
+                        className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors text-[var(--text-secondary)] ${
+                          errors.dateOfBirth ? 'border-rose-300 bg-rose-50/30' : 'border-[var(--border-light)]'
                         }`}
                       />
                       {errors.dateOfBirth && <p className="text-xs text-rose-500 mt-0.5">{errors.dateOfBirth}</p>}
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-slate-700">Gender <span className="text-rose-500">*</span></label>
+                      <label className="text-sm font-medium text-[var(--text-primary)]">Gender <span className="text-rose-500">*</span></label>
                       <select
                         value={formData.gender}
                         onChange={e => updateField('gender', e.target.value)}
-                        className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors text-slate-600 bg-white ${
-                          errors.gender ? 'border-rose-300 bg-rose-50/30' : 'border-slate-200'
+                        className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors text-[var(--text-secondary)] bg-[var(--bg-secondary)] ${
+                          errors.gender ? 'border-rose-300 bg-rose-50/30' : 'border-[var(--border-light)]'
                         }`}
                       >
                         <option value="">Select Gender</option>
@@ -321,11 +321,11 @@ export default function NewStudentPage() {
                       {errors.gender && <p className="text-xs text-rose-500 mt-0.5">{errors.gender}</p>}
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-slate-700">Blood Group</label>
+                      <label className="text-sm font-medium text-[var(--text-primary)]">Blood Group</label>
                       <select
                         value={formData.bloodGroup}
                         onChange={e => updateField('bloodGroup', e.target.value)}
-                        className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors text-slate-600 bg-white"
+                        className="w-full px-4 py-2 border-[var(--border-light)] rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors text-[var(--text-secondary)] bg-[var(--bg-secondary)]"
                       >
                         <option value="">Select Blood Group</option>
                         <option value="A+">A+</option><option value="A-">A-</option>
@@ -335,11 +335,11 @@ export default function NewStudentPage() {
                       </select>
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-slate-700">Religion</label>
+                      <label className="text-sm font-medium text-[var(--text-primary)]">Religion</label>
                       <select
                         value={formData.religion}
                         onChange={e => updateField('religion', e.target.value)}
-                        className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors text-slate-600 bg-white"
+                        className="w-full px-4 py-2 border-[var(--border-light)] rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors text-[var(--text-secondary)] bg-[var(--bg-secondary)]"
                       >
                         <option value="">Select Religion</option>
                         <option value="Islam">Islam</option>
@@ -363,44 +363,44 @@ export default function NewStudentPage() {
                 >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-1.5 md:col-span-2">
-                      <label className="text-sm font-medium text-slate-700">Admission Number (Auto-generated)</label>
+                      <label className="text-sm font-medium text-[var(--text-primary)]">Admission Number (Auto-generated)</label>
                       <input
                         type="text"
                         disabled
-                        className="w-full px-4 py-2 border border-slate-200 rounded-xl bg-slate-50 text-slate-500"
+                        className="w-full px-4 py-2 border-[var(--border-light)] rounded-xl bg-[var(--bg-tertiary)] text-[var(--text-muted)]"
                         value={admissionNumber}
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-slate-700">Admission Date <span className="text-rose-500">*</span></label>
+                      <label className="text-sm font-medium text-[var(--text-primary)]">Admission Date <span className="text-rose-500">*</span></label>
                       <input
                         type="date"
                         value={formData.admissionDate}
                         onChange={e => updateField('admissionDate', e.target.value)}
-                        className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors text-slate-600 ${
-                          errors.admissionDate ? 'border-rose-300 bg-rose-50/30' : 'border-slate-200'
+                        className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors text-[var(--text-secondary)] ${
+                          errors.admissionDate ? 'border-rose-300 bg-rose-50/30' : 'border-[var(--border-light)]'
                         }`}
                       />
                       {errors.admissionDate && <p className="text-xs text-rose-500 mt-0.5">{errors.admissionDate}</p>}
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-slate-700">Academic Year <span className="text-rose-500">*</span></label>
+                      <label className="text-sm font-medium text-[var(--text-primary)]">Academic Year <span className="text-rose-500">*</span></label>
                       <select
                         value={formData.academicYear}
                         onChange={e => updateField('academicYear', e.target.value)}
-                        className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors text-slate-600 bg-white"
+                        className="w-full px-4 py-2 border-[var(--border-light)] rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors text-[var(--text-secondary)] bg-[var(--bg-secondary)]"
                       >
                         <option value="2026-2027">2026-2027</option>
                         <option value="2025-2026">2025-2026</option>
                       </select>
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-slate-700">Class <span className="text-rose-500">*</span></label>
+                      <label className="text-sm font-medium text-[var(--text-primary)]">Class <span className="text-rose-500">*</span></label>
                       <select
                         value={formData.className}
                         onChange={e => updateField('className', e.target.value)}
-                        className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors text-slate-600 bg-white ${
-                          errors.className ? 'border-rose-300 bg-rose-50/30' : 'border-slate-200'
+                        className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors text-[var(--text-secondary)] bg-[var(--bg-secondary)] ${
+                          errors.className ? 'border-rose-300 bg-rose-50/30' : 'border-[var(--border-light)]'
                         }`}
                       >
                         <option value="">Select Class</option>
@@ -411,12 +411,12 @@ export default function NewStudentPage() {
                       {errors.className && <p className="text-xs text-rose-500 mt-0.5">{errors.className}</p>}
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-slate-700">Section <span className="text-rose-500">*</span></label>
+                      <label className="text-sm font-medium text-[var(--text-primary)]">Section <span className="text-rose-500">*</span></label>
                       <select
                         value={formData.section}
                         onChange={e => updateField('section', e.target.value)}
-                        className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors text-slate-600 bg-white ${
-                          errors.section ? 'border-rose-300 bg-rose-50/30' : 'border-slate-200'
+                        className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors text-[var(--text-secondary)] bg-[var(--bg-secondary)] ${
+                          errors.section ? 'border-rose-300 bg-rose-50/30' : 'border-[var(--border-light)]'
                         }`}
                       >
                         <option value="">Select Section</option>
@@ -440,24 +440,24 @@ export default function NewStudentPage() {
                 >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-slate-700">Guardian Name <span className="text-rose-500">*</span></label>
+                      <label className="text-sm font-medium text-[var(--text-primary)]">Guardian Name <span className="text-rose-500">*</span></label>
                       <input
                         type="text"
                         value={formData.guardianName}
                         onChange={e => updateField('guardianName', e.target.value)}
-                        className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors ${
-                          errors.guardianName ? 'border-rose-300 bg-rose-50/30' : 'border-slate-200'
+                        className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors ${
+                          errors.guardianName ? 'border-rose-300 bg-rose-50/30' : 'border-[var(--border-light)]'
                         }`}
                         placeholder="Full Name"
                       />
                       {errors.guardianName && <p className="text-xs text-rose-500 mt-0.5">{errors.guardianName}</p>}
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-slate-700">Relationship <span className="text-rose-500">*</span></label>
+                      <label className="text-sm font-medium text-[var(--text-primary)]">Relationship <span className="text-rose-500">*</span></label>
                       <select
                         value={formData.relationship}
                         onChange={e => updateField('relationship', e.target.value)}
-                        className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors text-slate-600 bg-white"
+                        className="w-full px-4 py-2 border-[var(--border-light)] rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors text-[var(--text-secondary)] bg-[var(--bg-secondary)]"
                       >
                         <option value="Father">Father</option>
                         <option value="Mother">Mother</option>
@@ -466,35 +466,35 @@ export default function NewStudentPage() {
                       </select>
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-slate-700">Mobile Number (For SMS) <span className="text-rose-500">*</span></label>
+                      <label className="text-sm font-medium text-[var(--text-primary)]">Mobile Number (For SMS) <span className="text-rose-500">*</span></label>
                       <input
                         type="tel"
                         value={formData.mobile}
                         onChange={e => updateField('mobile', e.target.value)}
-                        className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors ${
-                          errors.mobile ? 'border-rose-300 bg-rose-50/30' : 'border-slate-200'
+                        className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors ${
+                          errors.mobile ? 'border-rose-300 bg-rose-50/30' : 'border-[var(--border-light)]'
                         }`}
                         placeholder="+880 1XXX-XXXXXX"
                       />
                       {errors.mobile && <p className="text-xs text-rose-500 mt-0.5">{errors.mobile}</p>}
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-slate-700">Email Address</label>
+                      <label className="text-sm font-medium text-[var(--text-primary)]">Email Address</label>
                       <input
                         type="email"
                         value={formData.email}
                         onChange={e => updateField('email', e.target.value)}
-                        className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors"
+                        className="w-full px-4 py-2 border-[var(--border-light)] rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors"
                         placeholder="email@example.com"
                       />
                     </div>
                     <div className="space-y-1.5 md:col-span-2">
-                      <label className="text-sm font-medium text-slate-700">Present Address <span className="text-rose-500">*</span></label>
+                      <label className="text-sm font-medium text-[var(--text-primary)]">Present Address <span className="text-rose-500">*</span></label>
                       <textarea
                         value={formData.address}
                         onChange={e => updateField('address', e.target.value)}
-                        className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors min-h-[100px] ${
-                          errors.address ? 'border-rose-300 bg-rose-50/30' : 'border-slate-200'
+                        className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors min-h-[100px] ${
+                          errors.address ? 'border-rose-300 bg-rose-50/30' : 'border-[var(--border-light)]'
                         }`}
                         placeholder="Full present address..."
                       />
@@ -506,13 +506,13 @@ export default function NewStudentPage() {
             </AnimatePresence>
 
             {/* Navigation Buttons */}
-            <div className="flex items-center justify-between mt-8 pt-6 border-t border-slate-100">
+            <div className="flex items-center justify-between mt-8 pt-6 border-t border-[var(--border-light)]">
               <button
                 type="button"
                 onClick={handlePrev}
                 disabled={currentIndex === 0}
                 className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
-                  currentIndex === 0 ? 'text-slate-300 cursor-not-allowed' : 'text-slate-600 hover:bg-slate-50 border border-slate-200'
+                  currentIndex === 0 ? 'text-[var(--border-light)] cursor-not-allowed' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] border-[var(--border-light)]'
                 }`}
               >
                 <ArrowLeft size={16} />
@@ -523,7 +523,7 @@ export default function NewStudentPage() {
                 onClick={handleNext}
                 disabled={currentIndex === TABS.length - 1}
                 className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
-                  currentIndex === TABS.length - 1 ? 'opacity-0 pointer-events-none' : 'text-white bg-slate-800 hover:bg-slate-900 shadow-md'
+                  currentIndex === TABS.length - 1 ? 'opacity-0 pointer-events-none' : 'text-white bg-[var(--text-primary)] hover:bg-[var(--text-primary)] shadow-md'
                 }`}
               >
                 Next Step

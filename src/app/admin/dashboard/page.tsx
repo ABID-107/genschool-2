@@ -140,14 +140,14 @@ export default function AdminDashboard() {
 
   // Resolved color classes (Tailwind JIT needs complete class names)
   const iconColorMap: Record<string, string> = {
-    blue: 'bg-blue-50 text-blue-500',
-    indigo: 'bg-indigo-50 text-indigo-500',
+    blue: 'bg-[var(--bg-tertiary)] text-brand-primary',
+    indigo: 'bg-[var(--bg-tertiary)] text-brand-primary',
     emerald: 'bg-emerald-50 text-emerald-500',
     rose: 'bg-rose-50 text-rose-500',
   };
   const decoColorMap: Record<string, string> = {
-    blue: 'bg-blue-50',
-    indigo: 'bg-indigo-50',
+    blue: 'bg-brand-primary/5',
+    indigo: 'bg-brand-primary/5',
     emerald: 'bg-emerald-50',
     rose: 'bg-rose-50',
   };
@@ -199,12 +199,12 @@ export default function AdminDashboard() {
     <div className="space-y-6 pb-12">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Overview</h1>
-          <p className="text-sm text-slate-500 mt-1">Welcome back, here is what is happening today.</p>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)] tracking-tight">Overview</h1>
+          <p className="text-sm text-[var(--text-muted)] mt-1">Welcome back, here is what is happening today.</p>
         </div>
         <div className="flex items-center gap-3">
-          <div className="hidden sm:flex bg-white border border-slate-200 rounded-lg px-4 py-2 text-sm font-medium text-slate-600 items-center gap-2 shadow-sm">
-            <CalendarIcon size={16} className="text-slate-400" />
+          <div className="hidden sm:flex bg-[var(--bg-secondary)] border border-[var(--border-light)] rounded-lg px-4 py-2 text-sm font-medium text-[var(--text-secondary)] items-center gap-2 shadow-sm">
+            <CalendarIcon size={16} className="text-[var(--text-muted)]" />
             {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
           </div>
           
@@ -215,7 +215,7 @@ export default function AdminDashboard() {
                 <motion.button 
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="bg-emerald-50 text-emerald-600 border border-emerald-200 px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-emerald-100 transition-colors cursor-pointer"
+                  className="badge-green px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 cursor-pointer"
                 >
                   <CheckCircle2 size={16} />
                   View Report
@@ -227,8 +227,8 @@ export default function AdminDashboard() {
                 disabled={isGenerating}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition-all ${
                   isGenerating 
-                    ? 'bg-blue-50 text-blue-600 border border-blue-200 cursor-wait'
-                    : 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-500/20'
+                    ? 'bg-[var(--bg-tertiary)] text-brand-primary border border-brand-primary/30 cursor-wait'
+                    : 'bg-brand-primary hover:bg-brand-mid text-white shadow-brand-primary/20'
                 }`}
               >
                 {isGenerating ? (
@@ -253,19 +253,19 @@ export default function AdminDashboard() {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 8, scale: 0.95 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden z-50"
+                  className="absolute right-0 mt-2 w-56 bg-[var(--bg-secondary)] rounded-xl shadow-lg border border-[var(--border-light)] overflow-hidden z-50"
                 >
-                  <div className="p-2 border-b border-slate-100">
-                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider px-2">Select Report</p>
+                  <div className="p-2 border-b border-[var(--border-light)]">
+                    <p className="text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider px-2">Select Report</p>
                   </div>
                   <div className="p-1">
                     {reportTypes.map((report) => (
                       <button
                         key={report.id}
                         onClick={() => handleGenerateReport(report.id)}
-                        className="w-full text-left px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 rounded-lg flex items-center gap-3 transition-colors group"
+                        className="w-full text-left px-3 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] rounded-lg flex items-center gap-3 transition-colors group"
                       >
-                        <div className="p-1.5 rounded-md bg-slate-100 text-slate-500 group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
+                        <div className="p-1.5 rounded-md bg-[var(--bg-tertiary)] text-[var(--text-muted)] group-hover:bg-[var(--bg-tertiary)] group-hover:text-brand-primary transition-colors">
                           <report.icon size={14} />
                         </div>
                         {report.name}
@@ -295,7 +295,7 @@ export default function AdminDashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 }}
-            className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group"
+            className="stat-card bg-[var(--bg-secondary)] rounded-2xl p-6 border border-[var(--border-light)] shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group glass-card"
           >
             <div className="flex justify-between items-start mb-4">
               <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${iconColorMap[stat.color]} group-hover:scale-110 transition-transform duration-300`}>
@@ -307,8 +307,8 @@ export default function AdminDashboard() {
               </div>
             </div>
             <div>
-              <h3 className="text-slate-500 text-sm font-medium">{stat.name}</h3>
-              <p className="text-3xl font-bold text-slate-800 mt-1 tracking-tight">{stat.value}</p>
+              <h3 className="text-[var(--text-muted)] text-sm font-medium">{stat.name}</h3>
+              <p className="text-3xl font-bold text-[var(--text-primary)] mt-1 tracking-tight">{stat.value}</p>
             </div>
             {/* Background decoration */}
             <div className={`absolute -right-6 -bottom-6 w-24 h-24 ${decoColorMap[stat.color]} rounded-full opacity-0 group-hover:opacity-50 transition-opacity duration-300 blur-2xl`} />
@@ -322,14 +322,14 @@ export default function AdminDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm lg:col-span-2"
+          className="bg-[var(--bg-secondary)] rounded-2xl p-6 border border-[var(--border-light)] shadow-sm lg:col-span-2 glass-panel"
         >
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h3 className="text-lg font-bold text-slate-800 tracking-tight">Revenue Analytics</h3>
-              <p className="text-sm text-slate-500">Fee collection trends over the last 6 months</p>
+              <h3 className="text-lg font-bold text-[var(--text-primary)] tracking-tight">Revenue Analytics</h3>
+              <p className="text-sm text-[var(--text-muted)]">Fee collection trends over the last 6 months</p>
             </div>
-            <button className="text-slate-400 hover:text-slate-600 p-2 rounded-lg hover:bg-slate-50 transition-colors">
+            <button className="text-[var(--text-muted)] hover:text-[var(--text-secondary)] p-2 rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors">
               <MoreVertical size={20} />
             </button>
           </div>
@@ -338,29 +338,29 @@ export default function AdminDashboard() {
               <AreaChart data={revenueData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="var(--brand-primary)" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="var(--brand-primary)" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border-light)" />
                 <XAxis 
                   dataKey="name" 
                   axisLine={false} 
                   tickLine={false} 
-                  tick={{ fill: '#64748b', fontSize: 12 }}
+                  tick={{ fill: 'var(--text-muted)', fontSize: 12 }}
                   dy={10}
                 />
                 <YAxis 
                   axisLine={false} 
                   tickLine={false} 
-                  tick={{ fill: '#64748b', fontSize: 12 }}
+                  tick={{ fill: 'var(--text-muted)', fontSize: 12 }}
                   tickFormatter={(value) => `৳${(value / 1000000).toFixed(1)}M`}
                 />
                 <Tooltip 
                   contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)' }}
                   formatter={(value) => [typeof value === 'number' ? `৳${value.toLocaleString()}` : String(value), 'Revenue']}
                 />
-                <Area type="monotone" dataKey="total" stroke="#3b82f6" strokeWidth={3} fillOpacity={1} fill="url(#colorRevenue)" />
+                <Area type="monotone" dataKey="total" stroke="var(--brand-primary)" strokeWidth={3} fillOpacity={1} fill="url(#colorRevenue)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -371,36 +371,36 @@ export default function AdminDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm"
+          className="bg-[var(--bg-secondary)] rounded-2xl p-6 border border-[var(--border-light)] shadow-sm glass-panel"
         >
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h3 className="text-lg font-bold text-slate-800 tracking-tight">Student Attendance</h3>
-              <p className="text-sm text-slate-500">Weekly average</p>
+              <h3 className="text-lg font-bold text-[var(--text-primary)] tracking-tight">Student Attendance</h3>
+              <p className="text-sm text-[var(--text-muted)]">Weekly average</p>
             </div>
-            <button className="text-slate-400 hover:text-slate-600 p-2 rounded-lg hover:bg-slate-50 transition-colors">
+            <button className="text-[var(--text-muted)] hover:text-[var(--text-secondary)] p-2 rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors">
               <MoreVertical size={20} />
             </button>
           </div>
           <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={attendanceData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border-light)" />
                 <XAxis 
                   dataKey="name" 
                   axisLine={false} 
                   tickLine={false} 
-                  tick={{ fill: '#64748b', fontSize: 12 }}
+                  tick={{ fill: 'var(--text-muted)', fontSize: 12 }}
                   dy={10}
                 />
                 <YAxis 
                   axisLine={false} 
                   tickLine={false} 
-                  tick={{ fill: '#64748b', fontSize: 12 }}
+                  tick={{ fill: 'var(--text-muted)', fontSize: 12 }}
                   tickFormatter={(value) => `${value}%`}
                 />
                 <Tooltip 
-                  cursor={{ fill: '#f1f5f9' }}
+                  cursor={{ fill: 'var(--bg-tertiary)' }}
                   contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                   formatter={(value) => [`${value}%`, undefined]}
                 />
@@ -418,18 +418,18 @@ export default function AdminDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="bg-white rounded-2xl border border-slate-200 shadow-sm lg:col-span-2 overflow-hidden"
+          className="bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-light)] shadow-sm lg:col-span-2 overflow-hidden glass-panel"
         >
-          <div className="p-6 border-b border-slate-200 flex items-center justify-between">
+          <div className="p-6 border-b border-[var(--border-light)] flex items-center justify-between">
             <div>
-              <h3 className="text-lg font-bold text-slate-800 tracking-tight">Recent Payments</h3>
-              <p className="text-sm text-slate-500">Latest fee collections across all branches</p>
+              <h3 className="text-lg font-bold text-[var(--text-primary)] tracking-tight">Recent Payments</h3>
+              <p className="text-sm text-[var(--text-muted)]">Latest fee collections across all branches</p>
             </div>
-            <Link href="/admin/finance" className="text-sm font-medium text-blue-600 hover:text-blue-700">View All</Link>
+            <Link href="/admin/finance" className="text-sm font-medium text-brand-primary hover:text-brand-mid">View All</Link>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left">
-              <thead className="text-xs text-slate-500 uppercase bg-slate-50">
+              <thead className="text-xs text-[var(--text-muted)] uppercase bg-[var(--bg-tertiary)]">
                 <tr>
                   <th className="px-6 py-4 font-medium">Transaction ID</th>
                   <th className="px-6 py-4 font-medium">Student</th>
@@ -438,23 +438,23 @@ export default function AdminDashboard() {
                   <th className="px-6 py-4 font-medium">Date</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200">
+              <tbody className="divide-y divide-[var(--border-light)]">
                 {recentPayments.map((payment) => (
-                  <tr key={payment.id} className="hover:bg-slate-50 transition-colors">
-                    <td className="px-6 py-4 font-medium text-slate-900">{payment.id}</td>
+                  <tr key={payment.id} className="hover:bg-[var(--bg-tertiary)]/50 transition-colors">
+                    <td className="px-6 py-4 font-medium text-[var(--text-primary)]">{payment.id}</td>
                     <td className="px-6 py-4">
-                      <div className="font-medium text-slate-800">{payment.student}</div>
-                      <div className="text-xs text-slate-500">{payment.class}</div>
+                      <div className="font-medium text-[var(--text-primary)]">{payment.student}</div>
+                      <div className="text-xs text-[var(--text-muted)]">{payment.class}</div>
                     </td>
-                    <td className="px-6 py-4 font-semibold text-slate-800">৳ {payment.amount.toLocaleString()}</td>
+                    <td className="px-6 py-4 font-semibold text-[var(--text-primary)]">৳ {payment.amount.toLocaleString()}</td>
                     <td className="px-6 py-4">
-                      <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${
-                        payment.status === 'Completed' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
+                      <span className={`badge ${
+                        payment.status === 'Completed' ? 'badge-green' : 'badge-amber'
                       }`}>
                         {payment.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-slate-500">{payment.date}</td>
+                    <td className="px-6 py-4 text-[var(--text-muted)]">{payment.date}</td>
                   </tr>
                 ))}
               </tbody>
@@ -467,23 +467,23 @@ export default function AdminDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7 }}
-          className="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col"
+          className="bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-light)] shadow-sm flex flex-col glass-panel"
         >
-          <div className="p-6 border-b border-slate-100 flex items-center justify-between">
+          <div className="p-6 border-b border-[var(--border-light)] flex items-center justify-between">
             <div>
-              <h3 className="text-lg font-bold text-slate-800 tracking-tight">Today's Schedule</h3>
-              <p className="text-sm text-slate-500">Upcoming events & classes</p>
+              <h3 className="text-lg font-bold text-[var(--text-primary)] tracking-tight">Today's Schedule</h3>
+              <p className="text-sm text-[var(--text-muted)]">Upcoming events & classes</p>
             </div>
             <button 
               onClick={() => setIsAddEventModalOpen(true)}
-              className="p-2 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors" 
+              className="p-2 bg-[var(--bg-tertiary)] text-brand-primary hover:bg-[var(--bg-tertiary)]/80 rounded-lg transition-colors" 
               title="Add Event"
             >
               <Plus size={18} />
             </button>
           </div>
           
-          <div className="px-6 py-3 border-b border-slate-100 bg-slate-50/50">
+          <div className="px-6 py-3 border-b border-[var(--border-light)] bg-[var(--bg-tertiary)]/50">
             <div className="flex gap-2">
               {(['all', 'meeting', 'class', 'event'] as const).map((tab) => (
                 <button
@@ -491,8 +491,8 @@ export default function AdminDashboard() {
                   onClick={() => setActiveTab(tab)}
                   className={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors capitalize ${
                     activeTab === tab 
-                      ? 'bg-blue-600 text-white shadow-sm' 
-                      : 'text-slate-600 hover:bg-slate-200 bg-slate-100'
+                      ? 'bg-brand-primary text-white shadow-sm' 
+                      : 'text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] bg-[var(--bg-tertiary)]'
                   }`}
                 >
                   {tab}
@@ -512,34 +512,34 @@ export default function AdminDashboard() {
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.2 }}
                     key={item.id} 
-                    className="flex gap-4 p-4 rounded-xl border border-slate-100 bg-white hover:border-blue-100 hover:shadow-md transition-all group relative overflow-hidden"
+                    className="flex gap-4 p-4 rounded-xl border border-[var(--border-light)] bg-[var(--bg-secondary)] hover:border-brand-primary/30 hover:shadow-md transition-all group relative overflow-hidden"
                   >
                     {/* Status Indicator */}
                     <div className="flex flex-col items-center gap-1 min-w-[60px]">
                       <div className={`text-xs font-bold ${
-                        item.status === 'ongoing' ? 'text-blue-600' :
-                        item.status === 'completed' ? 'text-slate-400 line-through' :
-                        'text-slate-700'
+                        item.status === 'ongoing' ? 'text-brand-primary' :
+                        item.status === 'completed' ? 'text-[var(--text-muted)] line-through' :
+                        'text-[var(--text-primary)]'
                       }`}>
                         {item.time.split(' ')[0]}
                       </div>
-                      <div className="text-[10px] text-slate-500">{item.time.split(' ')[1]}</div>
+                      <div className="text-[10px] text-[var(--text-muted)]">{item.time.split(' ')[1]}</div>
                     </div>
 
                     <div className="relative flex-1">
                       {/* Ongoing pulsing dot */}
                       {item.status === 'ongoing' && (
-                        <div className="absolute -left-3 top-1.5 w-1.5 h-1.5 rounded-full bg-blue-500">
-                          <div className="absolute inset-0 rounded-full bg-blue-500 animate-ping opacity-75"></div>
+                        <div className="absolute -left-3 top-1.5 w-1.5 h-1.5 rounded-full bg-brand-primary">
+                          <div className="absolute inset-0 rounded-full bg-brand-primary animate-ping opacity-75"></div>
                         </div>
                       )}
 
                       <div className="flex justify-between items-start mb-1">
-                        <h4 className={`font-semibold text-sm ${item.status === 'completed' ? 'text-slate-500' : 'text-slate-800'} group-hover:text-blue-600 transition-colors`}>
+                        <h4 className={`font-semibold text-sm ${item.status === 'completed' ? 'text-[var(--text-muted)]' : 'text-[var(--text-primary)]'} group-hover:text-brand-primary transition-colors`}>
                           {item.title}
                         </h4>
                         <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full capitalize ${
-                          item.type === 'meeting' ? 'bg-indigo-50 text-indigo-600 border border-indigo-100' : 
+                          item.type === 'meeting' ? 'bg-[var(--bg-tertiary)] text-brand-primary border border-[var(--border-light)]' : 
                           item.type === 'class' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 
                           'bg-amber-50 text-amber-600 border border-amber-100'
                         }`}>
@@ -547,13 +547,13 @@ export default function AdminDashboard() {
                         </span>
                       </div>
                       
-                      <div className="flex items-center gap-3 mt-2 text-xs font-medium text-slate-500">
+                      <div className="flex items-center gap-3 mt-2 text-xs font-medium text-[var(--text-muted)]">
                         <div className="flex items-center gap-1.5">
-                          <MapPin size={12} className={item.status === 'completed' ? 'text-slate-400' : 'text-slate-400'} />
+                          <MapPin size={12} className="text-[var(--text-muted)]" />
                           {item.location}
                         </div>
                         <div className="flex items-center gap-1.5">
-                          <Clock size={12} className="text-slate-400" />
+                          <Clock size={12} className="text-[var(--text-muted)]" />
                           {item.endTime}
                         </div>
                       </div>
@@ -562,14 +562,14 @@ export default function AdminDashboard() {
                         <div className="flex -space-x-2">
                           {item.participants.map((p, i) => (
                             <div key={i} className={`w-6 h-6 rounded-full border-2 border-white flex items-center justify-center text-[9px] font-bold text-white shadow-sm ${
-                              ['bg-blue-500', 'bg-emerald-500', 'bg-rose-500', 'bg-indigo-500', 'bg-amber-500'][i % 5]
+                              ['bg-brand-primary', 'bg-emerald-500', 'bg-rose-500', 'bg-brand-mid', 'bg-amber-500'][i % 5]
                             }`}>
                               {p.substring(0, 2).toUpperCase()}
                             </div>
                           ))}
                         </div>
                         {item.participants.length > 0 && (
-                          <span className="text-[10px] text-slate-400 font-medium ml-1">
+                          <span className="text-[10px] text-[var(--text-muted)] font-medium ml-1">
                             {item.participants.length} {item.type === 'class' ? 'Class' : 'People'}
                           </span>
                         )}
@@ -580,14 +580,14 @@ export default function AdminDashboard() {
               </AnimatePresence>
               
               {filteredSchedule.length === 0 && (
-                <div className="text-center py-8 text-sm text-slate-500">
+                <div className="text-center py-8 text-sm text-[var(--text-muted)]">
                   No {activeTab !== 'all' ? activeTab + 's' : 'events'} scheduled for today.
                 </div>
               )}
             </div>
           </div>
-          <div className="p-4 border-t border-slate-100">
-            <Link href="/admin/timetable" className="block w-full py-2.5 text-sm font-medium text-slate-600 bg-slate-50 hover:bg-slate-100 rounded-xl transition-colors border border-slate-200 text-center">
+          <div className="p-4 border-t border-[var(--border-light)]">
+            <Link href="/admin/timetable" className="block w-full py-2.5 text-sm font-medium text-[var(--text-secondary)] bg-[var(--bg-tertiary)] hover:bg-[var(--bg-tertiary)]/80 rounded-xl transition-colors border border-[var(--border-light)] text-center">
               View Full Calendar
             </Link>
           </div>
@@ -602,76 +602,76 @@ export default function AdminDashboard() {
               initial={{ opacity: 0 }} 
               animate={{ opacity: 1 }} 
               exit={{ opacity: 0 }} 
-              className="absolute inset-0 bg-slate-900/20 backdrop-blur-sm"
+              className="absolute inset-0 bg-[var(--text-primary)]/20 backdrop-blur-sm"
               onClick={() => setIsAddEventModalOpen(false)}
             />
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 20 }} 
               animate={{ opacity: 1, scale: 1, y: 0 }} 
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-md overflow-hidden z-10 flex flex-col"
+              className="relative bg-[var(--bg-secondary)] rounded-2xl shadow-xl border border-[var(--border-light)] w-full max-w-md overflow-hidden z-10 flex flex-col"
             >
-              <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-                <h3 className="font-bold text-slate-800 text-lg">Add New Event</h3>
+              <div className="px-6 py-4 border-b border-[var(--border-light)] flex items-center justify-between bg-[var(--bg-tertiary)]/50">
+                <h3 className="font-bold text-[var(--text-primary)] text-lg">Add New Event</h3>
                 <button 
                   onClick={() => setIsAddEventModalOpen(false)}
-                  className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+                  className="p-2 text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"
                 >
                   <X size={20} />
                 </button>
               </div>
               <form onSubmit={handleAddEvent} className="p-6 space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Event Title</label>
+                  <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">Event Title</label>
                   <input 
                     type="text" 
                     required
                     value={newEvent.title}
                     onChange={(e) => setNewEvent({...newEvent, title: e.target.value})}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary"
                     placeholder="e.g. Staff Meeting"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Start Time</label>
+                    <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">Start Time</label>
                     <input 
                       type="text" 
                       required
                       value={newEvent.time}
                       onChange={(e) => setNewEvent({...newEvent, time: e.target.value})}
-                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary"
                       placeholder="e.g. 09:00 AM"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">End Time</label>
+                    <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">End Time</label>
                     <input 
                       type="text" 
                       value={newEvent.endTime}
                       onChange={(e) => setNewEvent({...newEvent, endTime: e.target.value})}
-                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary"
                       placeholder="e.g. 10:00 AM"
                     />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Location</label>
+                    <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">Location</label>
                     <input 
                       type="text" 
                       value={newEvent.location}
                       onChange={(e) => setNewEvent({...newEvent, location: e.target.value})}
-                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary"
                       placeholder="e.g. Room 302"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Type</label>
+                    <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">Type</label>
                     <select 
                       value={newEvent.type}
                       onChange={(e) => setNewEvent({...newEvent, type: e.target.value as ScheduleType})}
-                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
+                      className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary bg-[var(--bg-secondary)]"
                     >
                       <option value="meeting">Meeting</option>
                       <option value="class">Class</option>
@@ -680,12 +680,12 @@ export default function AdminDashboard() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Participants (comma separated initials)</label>
+                  <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">Participants (comma separated initials)</label>
                   <input 
                     type="text" 
                     value={newEvent.participants?.join(', ')}
                     onChange={(e) => setNewEvent({...newEvent, participants: e.target.value.split(',').map(s => s.trim()).filter(Boolean)})}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary"
                     placeholder="e.g. AS, MR"
                   />
                 </div>
@@ -693,13 +693,13 @@ export default function AdminDashboard() {
                   <button 
                     type="button"
                     onClick={() => setIsAddEventModalOpen(false)}
-                    className="flex-1 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-medium transition-colors"
+                    className="flex-1 px-4 py-2 bg-[var(--bg-tertiary)] hover:bg-[var(--bg-tertiary)]/80 text-[var(--text-primary)] rounded-xl text-sm font-medium transition-colors"
                   >
                     Cancel
                   </button>
                   <button 
                     type="submit"
-                    className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-medium transition-colors shadow-sm shadow-blue-500/20"
+                    className="flex-1 px-4 py-2 bg-brand-primary hover:bg-brand-mid text-white rounded-xl text-sm font-medium transition-colors shadow-sm shadow-brand-primary/20"
                   >
                     Save Event
                   </button>

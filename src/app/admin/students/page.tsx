@@ -144,19 +144,19 @@ export default function StudentManagementPage() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Student Management</h1>
-          <p className="text-sm text-slate-500 mt-1">Manage enrollments, IDs, and student records.</p>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)] tracking-tight">Student Management</h1>
+          <p className="text-sm text-[var(--text-muted)] mt-1">Manage enrollments, IDs, and student records.</p>
         </div>
         <div className="flex items-center gap-3">
           <button
             onClick={handleExport}
-            className="bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 px-4 py-2 rounded-xl text-sm font-medium transition-colors flex items-center gap-2 shadow-sm"
+            className="bg-[var(--bg-secondary)] border-[var(--border-light)] text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] px-4 py-2 rounded-xl text-sm font-medium transition-colors flex items-center gap-2 shadow-sm"
           >
             <Download size={16} />
             Export
           </button>
           <Link href="/admin/students/new">
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-medium shadow-md shadow-blue-500/20 transition-all flex items-center gap-2">
+            <button className="bg-brand-primary hover:bg-brand-mid text-white px-4 py-2 rounded-xl text-sm font-medium shadow-md shadow-brand-primary/20 transition-all flex items-center gap-2">
               <UserPlus size={16} />
               Add Student
             </button>
@@ -165,15 +165,15 @@ export default function StudentManagementPage() {
       </div>
 
       {/* Filters & Search */}
-      <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row gap-4">
+      <div className="bg-[var(--bg-secondary)] p-4 rounded-2xl border-[var(--border-light)] shadow-sm flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[var(--text-muted)]">
             <Search size={18} />
           </div>
           <input
             type="text"
             placeholder="Search by student name, ID, or guardian..."
-            className="block w-full pl-10 pr-3 py-2.5 border border-slate-200 rounded-xl leading-5 bg-slate-50 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 sm:text-sm transition-all"
+            className="block w-full pl-10 pr-3 py-2.5 border-[var(--border-light)] rounded-xl leading-5 bg-[var(--bg-tertiary)] placeholder-slate-400 focus:outline-none focus:bg-[var(--bg-secondary)] focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary sm:text-sm transition-all"
             value={searchTerm}
             onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
           />
@@ -182,7 +182,7 @@ export default function StudentManagementPage() {
           <select
             value={classFilter}
             onChange={(e) => { setClassFilter(e.target.value); setCurrentPage(1); }}
-            className="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+            className="px-4 py-2.5 bg-[var(--bg-tertiary)] border-[var(--border-light)] rounded-xl text-sm text-[var(--text-secondary)] focus:outline-none focus:ring-2 focus:ring-brand-primary/20"
           >
             <option value="">All Classes</option>
             {classOptions.map(cls => (
@@ -192,7 +192,7 @@ export default function StudentManagementPage() {
           <select
             value={statusFilter}
             onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
-            className="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+            className="px-4 py-2.5 bg-[var(--bg-tertiary)] border-[var(--border-light)] rounded-xl text-sm text-[var(--text-secondary)] focus:outline-none focus:ring-2 focus:ring-brand-primary/20"
           >
             <option value="">All Statuses</option>
             {statusOptions.map(st => (
@@ -206,11 +206,11 @@ export default function StudentManagementPage() {
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden"
+        className="bg-[var(--bg-secondary)] rounded-2xl border-[var(--border-light)] shadow-sm overflow-hidden book-page"
       >
         <div className="overflow-x-auto">
-          <table className="w-full text-sm text-left">
-            <thead className="text-xs text-slate-500 uppercase bg-slate-50 border-b border-slate-200">
+          <table className="w-full text-sm text-left data-table">
+            <thead className="text-xs text-[var(--text-muted)] uppercase bg-[var(--bg-tertiary)] border-b border-[var(--border-light)]">
               <tr>
                 <th className="px-6 py-4 font-semibold">Student</th>
                 <th className="px-6 py-4 font-semibold">Student ID</th>
@@ -220,31 +220,31 @@ export default function StudentManagementPage() {
                 <th className="px-6 py-4 font-semibold text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-[var(--border-light)]">
               {paginatedStudents.map((student) => (
-                <tr key={student.id} className="hover:bg-slate-50/50 transition-colors group">
+                <tr key={student.id} className="hover:bg-[var(--bg-tertiary)]/50 transition-colors group">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-blue-100 to-indigo-50 flex items-center justify-center text-blue-600 font-bold border border-blue-200">
+                      <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-brand-primary to-brand-mid flex items-center justify-center text-white font-bold border border-brand-primary">
                         {student.name.charAt(0)}
                       </div>
                       <div>
-                        <div className="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">{student.name}</div>
-                        <div className="text-xs text-slate-500">Roll: {student.roll}</div>
+                        <div className="font-semibold text-[var(--text-primary)] group-hover:text-brand-primary transition-colors">{student.name}</div>
+                        <div className="text-xs text-[var(--text-muted)]">Roll: {student.roll}</div>
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 font-medium text-slate-600">{student.id}</td>
+                  <td className="px-6 py-4 font-medium text-[var(--text-secondary)]">{student.id}</td>
                   <td className="px-6 py-4">
-                    <div className="text-slate-900">{student.class}</div>
-                    <div className="text-xs text-slate-500">{student.section}</div>
+                    <div className="text-[var(--text-primary)]">{student.class}</div>
+                    <div className="text-xs text-[var(--text-muted)]">{student.section}</div>
                   </td>
-                  <td className="px-6 py-4 text-slate-600">{student.guardian}</td>
+                  <td className="px-6 py-4 text-[var(--text-secondary)]">{student.guardian}</td>
                   <td className="px-6 py-4">
                     <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${
-                      student.status === 'Active' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 
-                      student.status === 'Pending' ? 'bg-amber-50 text-amber-700 border-amber-200' : 
-                      'bg-rose-50 text-rose-700 border-rose-200'
+                      student.status === 'Active' ? 'badge-green' : 
+                      student.status === 'Pending' ? 'badge-amber' : 
+                      'badge-rose'
                     }`}>
                       {student.status === 'Active' && <CheckCircle2 size={14} />}
                       {student.status === 'Pending' && <Clock size={14} />}
@@ -255,7 +255,7 @@ export default function StudentManagementPage() {
                   <td className="px-6 py-4 text-right relative">
                     <button
                       onClick={() => setActionMenuStudentId(actionMenuStudentId === student.id ? null : student.id)}
-                      className="text-slate-400 hover:text-slate-600 p-2 rounded-lg hover:bg-slate-100 transition-colors"
+                      className="text-[var(--text-muted)] hover:text-[var(--text-secondary)] p-2 rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors"
                     >
                       <MoreHorizontal size={20} />
                     </button>
@@ -268,7 +268,7 @@ export default function StudentManagementPage() {
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 4 }}
                             transition={{ duration: 0.12 }}
-                            className="absolute right-0 top-12 z-50 w-48 bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden"
+                            className="absolute right-0 top-12 z-50 w-48 bg-[var(--bg-secondary)] rounded-xl shadow-lg border-[var(--border-light)] overflow-hidden"
                           >
                             <div className="p-1">
                               {actionItems.map(item => (
@@ -278,7 +278,7 @@ export default function StudentManagementPage() {
                                   className={`w-full text-left px-3 py-2 text-sm rounded-lg flex items-center gap-3 transition-colors ${
                                     item.danger
                                       ? 'text-rose-600 hover:bg-rose-50'
-                                      : 'text-slate-700 hover:bg-slate-50'
+                                      : 'text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'
                                   }`}
                                 >
                                   <item.icon size={15} className="shrink-0" />
@@ -295,7 +295,7 @@ export default function StudentManagementPage() {
               ))}
               {filteredStudents.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-sm text-slate-400">
+                  <td colSpan={6} className="px-6 py-12 text-center text-sm text-[var(--text-muted)]">
                     No students match your search criteria.
                   </td>
                 </tr>
@@ -306,15 +306,15 @@ export default function StudentManagementPage() {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="px-6 py-4 border-t border-slate-200 flex items-center justify-between bg-slate-50/50">
-            <span className="text-sm text-slate-500">
+          <div className="px-6 py-4 border-t border-[var(--border-light)] flex items-center justify-between bg-[var(--bg-tertiary)]/50">
+            <span className="text-sm text-[var(--text-muted)]">
               Showing {Math.min(filteredStudents.length, 1 + (safePage - 1) * ITEMS_PER_PAGE)} to {Math.min(filteredStudents.length, safePage * ITEMS_PER_PAGE)} of {filteredStudents.length} student{filteredStudents.length !== 1 ? 's' : ''}
             </span>
             <div className="flex gap-2">
               <button
                 disabled={safePage <= 1}
                 onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                className="px-3 py-1 border border-slate-200 rounded-lg text-sm text-slate-600 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                className="px-3 py-1 border-[var(--border-light)] rounded-lg text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
               >
                 Previous
               </button>
@@ -324,8 +324,8 @@ export default function StudentManagementPage() {
                   onClick={() => setCurrentPage(page)}
                   className={`px-3 py-1 border rounded-lg text-sm transition-colors ${
                     page === safePage
-                      ? 'bg-blue-600 text-white border-blue-600 shadow-sm shadow-blue-500/20'
-                      : 'border-slate-200 text-slate-600 hover:bg-slate-100'
+                      ? 'bg-brand-primary text-white border-brand-primary shadow-sm shadow-brand-primary/20'
+                      : 'border-[var(--border-light)] text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)]'
                   }`}
                 >
                   {page}
@@ -333,8 +333,8 @@ export default function StudentManagementPage() {
               ))}
               <button
                 disabled={safePage >= totalPages}
-                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                className="px-3 py-1 border border-slate-200 rounded-lg text-sm text-slate-600 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p - 1))}
+                className="px-3 py-1 border-[var(--border-light)] rounded-lg text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
               >
                 Next
               </button>

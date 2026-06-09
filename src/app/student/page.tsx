@@ -25,8 +25,8 @@ import { StudentAssignmentsView } from "@/components/student/Assignments";
 export default function StudentDashboard() {
   return (
     <Suspense fallback={
-      <div className="h-screen w-full flex items-center justify-center bg-[#f8f9fc]">
-        <div className="animate-spin h-8 w-8 text-[#1a56e8] border-4 border-current border-t-transparent rounded-full"></div>
+      <div className="h-screen w-full flex items-center justify-center bg-[var(--bg-tertiary)]">
+        <div className="animate-spin h-8 w-8 text-brand-primary border-4 border-current border-t-transparent rounded-full"></div>
       </div>
     }>
       <StudentDashboardContent />
@@ -38,7 +38,7 @@ function StudentDashboardContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const { lang, toggleLang, t } = useLanguage();
+  const { lang, t } = useLanguage();
   
   const [activeTab, setActiveTab] = useState(searchParams.get("tab") || "dashboard");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -100,8 +100,8 @@ function StudentDashboardContent() {
 
   if (!isAuthenticated) {
     return (
-      <div className="h-screen w-full flex items-center justify-center bg-[#f8f9fc]">
-        <svg className="animate-spin h-8 w-8 text-[#1a56e8]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <div className="h-screen w-full flex items-center justify-center bg-[var(--bg-tertiary)]">
+        <svg className="animate-spin h-8 w-8 text-brand-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>
@@ -124,16 +124,16 @@ function StudentDashboardContent() {
   return (
     <div className={`text-slate-900 font-sans h-screen overflow-hidden flex flex-col ${lang === 'bn' ? 'font-bangla' : ''}`}>
       {/* TopNavBar */}
-      <header className="fixed top-0 left-0 right-0 z-50 h-16 glass-nav flex items-center justify-between px-4 md:px-6 w-full transition-all duration-300">
+      <header className="fixed top-0 left-0 right-0 z-50 h-16 glass-card flex items-center justify-between px-4 md:px-6 w-full transition-all duration-300">
         <div className="flex items-center gap-3 md:gap-4">
           <button 
-            className="md:hidden p-2 -ml-2 text-slate-600 hover:bg-slate-100 rounded-full transition-colors"
+            className="md:hidden p-2 -ml-2 text-[var(--text-secondary)] hover:bg-slate-100 rounded-full transition-colors"
             onClick={() => setIsSidebarOpen(true)}
           >
             <span className="material-symbols-outlined">menu</span>
           </button>
-          <Link href="/student" className="text-xl font-bold tracking-tight text-indigo-600 no-underline hover:text-indigo-700 transition-colors flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20 group-hover:scale-105 transition-transform">
+          <Link href="/student" className="text-xl font-bold tracking-tight text-brand-primary no-underline hover:text-indigo-700 transition-colors flex items-center gap-2 group">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-primary to-brand-mid flex items-center justify-center text-white shadow-md shadow-brand-primary/20 group-hover:scale-105 transition-transform glow-on-hover">
               <span className="material-symbols-outlined text-[18px]">school</span>
             </div>
             <span className="hidden sm:block font-bricolage">GenSchool</span>
@@ -142,19 +142,13 @@ function StudentDashboardContent() {
         
         <div className="flex items-center gap-2 md:gap-4">
           <ThemeToggle />
-          <button 
-            onClick={toggleLang}
-            className="px-4 py-1.5 bg-slate-100 hover:bg-indigo-100 text-indigo-600 rounded-full text-xs font-bold transition-all border border-slate-200 active:scale-95"
-          >
-            {lang === 'bn' ? 'English' : 'বাংলা'}
-          </button>
           <div className="h-8 w-px bg-slate-200 hidden sm:block"></div>
           <div className="flex items-center gap-3 cursor-pointer group" onClick={() => handleTabChange('profile')}>
             <div className="text-right hidden md:block">
-              <p className="text-sm font-semibold text-slate-900 group-hover:text-indigo-600 transition-colors">
+              <p className="text-sm font-semibold text-slate-900 group-hover:text-brand-primary transition-colors">
                 {lang === 'bn' ? studentData.nameBn : studentData.nameEn}
               </p>
-              <p className="text-xs text-slate-500">{t('profile')}</p>
+              <p className="text-xs text-[var(--text-muted)]">{t('profile')}</p>
             </div>
             <Image 
               alt="Student profile avatar" 
@@ -178,11 +172,11 @@ function StudentDashboardContent() {
         )}
 
         {/* SideNavBar */}
-        <aside className={`fixed md:static inset-y-0 left-0 z-50 w-[280px] glass-sidebar flex flex-col gap-1 p-4 flex-shrink-0 h-[calc(100vh-64px)] overflow-y-auto custom-scrollbar transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
+        <aside className={`fixed md:static inset-y-0 left-0 z-50 w-[280px] glass-panel flex flex-col gap-1 p-4 flex-shrink-0 h-[calc(100vh-64px)] overflow-y-auto custom-scrollbar transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
           <div className="flex items-center justify-between px-3 py-4 mb-2 md:mb-4">
             <div>
               <h2 className="text-lg font-bold text-slate-900 font-bricolage">Dashboard</h2>
-              <p className="text-xs text-slate-500">Student Portal</p>
+              <p className="text-xs text-[var(--text-muted)]">Student Portal</p>
             </div>
             <button 
               className="md:hidden p-2 -mr-2 text-slate-400 hover:bg-slate-100 rounded-full transition-colors"
@@ -196,14 +190,14 @@ function StudentDashboardContent() {
               <button
                 key={tab.id}
                 onClick={() => { handleTabChange(tab.id); setIsSidebarOpen(false); }}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ease-in-out font-sans text-sm font-semibold w-full text-left relative overflow-hidden group
+                className={`nav-item flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ease-in-out font-sans text-sm font-semibold w-full text-left relative overflow-hidden group
                   ${activeTab === tab.id 
-                    ? 'text-indigo-700 bg-indigo-50/80 shadow-sm border border-indigo-100/50' 
-                    : 'text-slate-600 hover:bg-slate-50 hover:text-indigo-600 border border-transparent'
+                    ? 'text-indigo-700 bg-[var(--bg-tertiary)] shadow-sm border border-indigo-100/50' 
+                    : 'text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] hover:text-brand-primary border border-transparent'
                   }`}
               >
                 {activeTab === tab.id && (
-                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-indigo-500 to-purple-500 rounded-r-full"></div>
+                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-brand-primary to-brand-mid rounded-r-full"></div>
                 )}
                 <span className={`material-symbols-outlined transition-transform duration-300 ${activeTab === tab.id ? 'scale-110' : 'group-hover:scale-110'}`}>{tab.icon}</span>
                 <span>{tab.label}</span>
@@ -227,7 +221,7 @@ function StudentDashboardContent() {
         </aside>
 
         {/* Main Content Area */}
-        <main className="flex-1 overflow-y-auto custom-scrollbar p-4 md:p-8 h-full relative">
+        <main className="flex-1 overflow-y-auto custom-scrollbar p-4 md:p-8 h-full relative book-page">
           <div className="max-w-7xl mx-auto space-y-6 md:space-y-8 pb-20">
             
             {activeTab === 'dashboard' && <StudentDashboardView assignments={assignments} events={events} studentData={studentData} />}

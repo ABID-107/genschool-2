@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, DM_Sans, Manrope, Noto_Serif, Tiro_Bangla, Fjalla_One } from "next/font/google";
 import "./globals.css";
-import GlobalLanguageToggle from "@/components/GlobalLanguageToggle";
 
 const bricolage = Bricolage_Grotesque({
   variable: "--font-bricolage-next",
@@ -70,7 +69,6 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         {children}
-        <GlobalLanguageToggle />
       </body>
     </html>
   );
