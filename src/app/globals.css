@@ -1,0 +1,814 @@
+@import "tailwindcss";
+
+:root {
+  /* Brand Palette Light Mode (Warm Earth) */
+  --brand-navy-deep: #2A0800; /* Main Dark */
+  --brand-navy: #775144; /* Secondary Dark */
+  --brand-blue: #C09891; /* Accent */
+  --brand-blue-light: #BEA8A7; /* Surface */
+  --brand-ice: #F4D8D8; /* Global Canvas */
+
+  /* Global Backgrounds */
+  --bg-primary: #F4D8D8;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #BEA8A7;
+  
+  /* Text */
+  --text-primary: #2A0800;
+  --text-secondary: #775144;
+  --text-muted: #775144;
+  
+  /* Borders */
+  --border-color: rgba(190, 168, 167, 0.4);
+  --border-strong: rgba(190, 168, 167, 0.7);
+
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.65);
+  --glass-bg-hover: rgba(255, 255, 255, 0.85);
+  --glass-shadow: 0 4px 24px -4px rgba(42, 8, 0, 0.05);
+  --glass-shadow-hover: 0 8px 32px -4px rgba(119, 81, 68, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.7);
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(42, 8, 0, 0.06), 0 1px 2px rgba(42, 8, 0, 0.04);
+  --shadow: 0 4px 16px rgba(42, 8, 0, 0.08), 0 1px 4px rgba(42, 8, 0, 0.04);
+  --shadow-lg: 0 12px 40px rgba(119, 81, 68, 0.12), 0 4px 12px rgba(119, 81, 68, 0.06);
+
+  /* Shared Radii */
+  --radius: 12px;
+  --radius-lg: 14px;
+  --radius-xl: 16px;
+}
+
+.dark {
+  /* Brand Palette Dark Mode (Adjusted for contrast) */
+  --brand-navy-deep: #010812;
+  --brand-navy: #021024;
+  --brand-blue: #5483B3;
+  --brand-blue-light: #7DA0CA;
+  --brand-ice: #052659; /* Use dark navy instead of ice for dark mode bg blocks */
+
+  /* Global Backgrounds */
+  --bg-primary: #021024;
+  --bg-secondary: #052659;
+  --bg-tertiary: #021024;
+  
+  /* Text */
+  --text-primary: #f0f6fc;
+  --text-secondary: #C1E8FF;
+  --text-muted: #7DA0CA;
+  
+  /* Borders */
+  --border-color: rgba(125, 160, 202, 0.15);
+  --border-strong: rgba(125, 160, 202, 0.3);
+
+  /* Glassmorphism */
+  --glass-bg: rgba(5, 38, 89, 0.45);
+  --glass-bg-hover: rgba(5, 38, 89, 0.65);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  --glass-shadow-hover: 0 12px 48px 0 rgba(0, 0, 0, 0.6);
+  --glass-border: rgba(125, 160, 202, 0.1);
+}
+
+@theme inline {
+  /* Override Tailwind Core Colors to force brand consistency across existing utility classes */
+  
+  /* Map slate to our brand scale */
+  --color-slate-50: var(--bg-tertiary);
+  --color-slate-100: var(--bg-secondary);
+  --color-slate-200: var(--border-color);
+  --color-slate-300: var(--border-strong);
+  --color-slate-400: var(--text-muted);
+  --color-slate-500: var(--text-muted);
+  --color-slate-600: var(--text-secondary);
+  --color-slate-700: var(--text-secondary);
+  --color-slate-800: var(--text-primary);
+  --color-slate-900: var(--text-primary);
+
+  /* Map indigo/blue to brand accents */
+  --color-indigo-50: var(--brand-ice);
+  --color-indigo-100: var(--brand-blue-light);
+  --color-indigo-500: var(--brand-blue);
+  --color-indigo-600: var(--brand-navy);
+  --color-indigo-700: var(--brand-navy-deep);
+  --color-indigo-900: var(--brand-navy-deep);
+  
+  --color-blue-50: var(--brand-ice);
+  --color-blue-500: var(--brand-blue);
+  --color-blue-600: var(--brand-navy);
+  --color-blue-900: var(--brand-navy-deep);
+
+  /* Custom generic variables */
+  --color-brand-deep: var(--brand-navy-deep);
+  --color-brand-navy: var(--brand-navy);
+  --color-brand-blue: var(--brand-blue);
+  --color-brand-light: var(--brand-blue-light);
+  --color-brand-ice: var(--brand-ice);
+
+  /* Fonts */
+  --font-bricolage: var(--font-fjalla-next), 'Fjalla One', sans-serif;
+  --font-dm: var(--font-fjalla-next), 'Fjalla One', sans-serif;
+  --font-manrope: var(--font-fjalla-next), 'Fjalla One', sans-serif;
+  --font-noto-serif: var(--font-fjalla-next), 'Fjalla One', serif;
+  --font-bangla: var(--font-tiro-bangla-next), 'Tiro Bangla', serif;
+  --font-sans: var(--font-fjalla-next), 'Fjalla One', sans-serif;
+  --font-serif: var(--font-fjalla-next), 'Fjalla One', serif;
+}
+
+body {
+  font-family: var(--font-fjalla-next), 'Fjalla One', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Glassmorphism Utilities */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: var(--radius-xl);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  background: var(--glass-bg-hover);
+  box-shadow: var(--glass-shadow-hover);
+  transform: translateY(-2px);
+}
+
+.glass-nav {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--glass-shadow);
+  transition: all 0.3s ease;
+}
+
+.glass-sidebar {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-right: 1px solid var(--border-color);
+  box-shadow: var(--glass-shadow);
+  transition: all 0.3s ease;
+}
+
+.glass-button {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.glass-button:hover {
+  border-color: var(--brand-blue);
+  box-shadow: 0 0 12px rgba(84, 131, 179, 0.3);
+  transform: translateY(-1px);
+}
+
+.glass-button-primary {
+  background: var(--brand-navy);
+  color: var(--bg-secondary);
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 4px 12px var(--border-strong);
+  transition: all 0.2s ease;
+}
+
+.glass-button-primary:hover {
+  background: var(--brand-blue);
+  box-shadow: 0 6px 16px var(--border-strong), 0 0 15px var(--border-color);
+  transform: translateY(-2px);
+}
+
+.glass-panel {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Skeleton Loading Styles */
+.skeleton {
+  background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--border-color) 50%, var(--bg-secondary) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 4px;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Custom Scrollbar for better SaaS feel */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Bangla Typography Utilities */
+.font-bangla {
+  font-family: var(--font-bangla);
+}
+
+.font-noto {
+  font-family: var(--font-bangla);
+}
+
+/* --- Prospectus Page Styles --- */
+.prospectus-page {
+    /* Modern Minimal Palette */
+    --bg:      oklch(99% 0.002 240);
+    --surface: oklch(100% 0 0);
+    --fg:      oklch(18% 0.012 250);
+    --muted:   oklch(54% 0.012 250);
+    --border:  oklch(92% 0.005 250);
+    --accent:  oklch(58% 0.18 255);
+    --danger:  oklch(60% 0.2 25);
+    --success: oklch(65% 0.2 150);
+
+    /* Dark Cinematic Overrides */
+    --hero-bg: oklch(15% 0.02 250);
+    --hero-fg: oklch(98% 0.005 250);
+    
+    --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+    --font-body:    -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+    
+    --book-width: 600px;
+    --book-height: 400px;
+
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+}
+
+@media (max-width: 768px) {
+    .prospectus-page {
+        --book-width: 90vw;
+        --book-height: 50vh;
+    }
+}
+
+.prospectus-page * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Smooth Scroll Container */
+.prospectus-page .scroller {
+    height: 2500vh;
+}
+
+/* Fixed Viewport for Cinematic Experience */
+.prospectus-page .viewport {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--hero-bg);
+    transition: background 1s ease;
+    overflow: hidden;
+}
+
+/* Cinematic Background Layers */
+.prospectus-page .bg-layer-dark, .prospectus-page .bg-layer-light {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    z-index: -2;
+    will-change: transform, opacity;
+}
+
+.prospectus-page .bg-layer-dark {
+    background-image: url('/mplgalaa-Gradiente-Suave.jpg');
+    opacity: 1;
+}
+
+.prospectus-page .bg-layer-light {
+    background-image: url('/mpli7cyd-1110489220641980573.jpg');
+    opacity: 0;
+    filter: contrast(1.02) brightness(1.05);
+}
+
+.prospectus-page .bg-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(15, 18, 25, 0.5), rgba(15, 18, 25, 0.9));
+    z-index: -1;
+    pointer-events: none;
+}
+
+.prospectus-page .vignette {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.6) 150%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Navbar System */
+.prospectus-page .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 30px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    opacity: 0;
+    transform: translateY(-20px);
+    pointer-events: none;
+}
+
+.prospectus-page .navbar.visible {
+    pointer-events: all;
+}
+
+@media (max-width: 768px) {
+    .prospectus-page .tagline {
+        font-size: 2.5rem;
+    }
+    .prospectus-page .navbar {
+        padding: 20px 30px;
+    }
+}
+
+.prospectus-page .logo {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: var(--hero-fg);
+    letter-spacing: -0.02em;
+}
+
+.prospectus-page .nav-login {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--hero-fg);
+    text-decoration: none;
+    padding: 10px 28px;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(15px);
+    transition: all 0.3s ease;
+}
+
+.prospectus-page .nav-login:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-1px);
+}
+
+/* Hero Header */
+.prospectus-page header {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.prospectus-page .tagline {
+    font-family: var(--font-display);
+    font-size: 5rem;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    color: var(--hero-fg);
+    opacity: 1;
+    white-space: nowrap;
+}
+
+/* The Book Container */
+.prospectus-page .book-stage {
+    position: relative;
+    width: var(--book-width);
+    height: var(--book-height);
+    z-index: 5;
+    perspective: 3000px;
+    transform-style: preserve-3d;
+    transition: transform 0.1s ease-out;
+    transform: scale(min(1, calc(100vw / (var(--book-width) + 100))));
+}
+
+.prospectus-page .book {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transform: rotateY(-35deg) rotateX(8deg);
+    will-change: transform;
+}
+
+.prospectus-page .book-shadow {
+    position: absolute;
+    width: 80%;
+    height: 40px;
+    background: rgba(0,0,0,0.3);
+    bottom: -60px;
+    left: 10%;
+    border-radius: 50%;
+    filter: blur(25px);
+    z-index: -1;
+    transform: rotateX(80deg);
+}
+
+.prospectus-page .book-cover-front {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    right: 50%;
+    transform-origin: right center;
+    border-radius: 4px 0 0 4px;
+    z-index: 10;
+    box-shadow: -20px 20px 50px rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: #111;
+}
+
+.prospectus-page .cover-texture {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/mpm3m0u5-Gemini_Generated_Image_quxf8jquxf8jquxf.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.95;
+}
+
+.prospectus-page .cover-glare {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(0,0,0,0.1) 100%);
+    pointer-events: none;
+}
+
+.prospectus-page .book-cover-back {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    background: #111;
+    left: 50%;
+    border-radius: 0 4px 4px 0;
+    z-index: 1;
+    box-shadow: 20px 20px 50px rgba(0,0,0,0.4);
+}
+
+.prospectus-page .book-spine {
+    position: absolute;
+    width: 40px;
+    height: 100%;
+    background: #000;
+    left: 50%;
+    transform: translateX(-50%) rotateY(90deg);
+    z-index: 5;
+    box-shadow: inset 0 0 100px rgba(255,255,255,0.05);
+}
+
+/* Pages Container */
+.prospectus-page .pages-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 50%;
+    transform-style: preserve-3d;
+    z-index: 5;
+}
+
+.prospectus-page .page-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform-origin: left center;
+    transform-style: preserve-3d;
+    will-change: transform, width, height, opacity;
+    pointer-events: none;
+    opacity: 0;
+}
+
+.prospectus-page .page-item.active {
+    pointer-events: all;
+    z-index: 100;
+}
+
+.prospectus-page .page-side {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    backface-visibility: hidden;
+    padding: 60px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 24px;
+    box-shadow: 
+        0 40px 80px rgba(0,0,0,0.1),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+}
+
+/* Decorative Elements */
+.prospectus-page .page-side::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 10% 10%, oklch(58% 0.18 255 / 0.03), transparent 50%);
+    pointer-events: none;
+}
+
+.prospectus-page .page-accent-line {
+    position: absolute;
+    width: 60px;
+    height: 1px;
+    background: var(--accent);
+    opacity: 0.5;
+}
+
+.prospectus-page .page-accent-line.top-left { top: 40px; left: 40px; }
+.prospectus-page .page-accent-line.bottom-right { bottom: 40px; right: 40px; }
+
+.prospectus-page .page-front {
+    z-index: 2;
+}
+
+.prospectus-page .page-back {
+    transform: rotateY(180deg);
+    z-index: 1;
+    background: rgba(250, 250, 250, 0.9);
+}
+
+.prospectus-page .page-back .page-content {
+    transform: rotateY(180deg);
+}
+
+.prospectus-page .page-content {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+.prospectus-page .page-item.active .page-content {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Typography & Layout Modules */
+.prospectus-page .prospectus-heading {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 1.5rem;
+    color: var(--fg);
+}
+
+.prospectus-page .prospectus-sub {
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: var(--muted);
+    max-width: 80%;
+    margin-bottom: 2.5rem;
+}
+
+.prospectus-page .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    width: 100%;
+    padding: 20px;
+}
+
+.prospectus-page .feature-item {
+    text-align: left;
+    padding: 24px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.prospectus-page .feature-item:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent);
+}
+
+.prospectus-page .feature-item h3 {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+    color: var(--fg);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.prospectus-page .feature-item p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+.prospectus-page .split-view {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.prospectus-page .split-col {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.prospectus-page .split-col.danger { background: oklch(98% 0.02 25 / 0.5); }
+.prospectus-page .split-col.success { background: oklch(98% 0.02 150 / 0.5); }
+
+.prospectus-page .role-pills {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.prospectus-page .role-pill {
+    padding: 10px 20px;
+    border-radius: 30px;
+    background: white;
+    border: 1px solid var(--border);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--fg);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+}
+
+.prospectus-page .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    width: 100%;
+}
+
+.prospectus-page .price-card {
+    padding: 30px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.5);
+    text-align: center;
+    position: relative;
+}
+
+.prospectus-page .price-card.featured {
+    border-color: var(--accent);
+    background: oklch(98% 0.03 255 / 0.3);
+    box-shadow: 0 20px 40px oklch(58% 0.18 255 / 0.1);
+}
+
+.prospectus-page .price-card h4 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.prospectus-page .btn-group {
+    display: flex;
+    gap: 20px;
+    margin-top: 40px;
+}
+
+.prospectus-page .btn {
+    padding: 14px 32px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.prospectus-page .btn-primary { background: var(--fg); color: white; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+.prospectus-page .btn-outline { border: 1px solid var(--border); color: var(--fg); background: white; }
+
+.prospectus-page .btn:hover { transform: translateY(-3px) scale(1.02); }
+
+.prospectus-page .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+}
+
+.prospectus-page .stat-item h4 { font-size: 3.5rem; font-weight: 800; color: var(--accent); letter-spacing: -0.05em; }
+.prospectus-page .stat-item p { font-size: 1rem; color: var(--muted); font-weight: 500; }
+
+/* Page 1 Specific Background */
+.prospectus-page .page-background-p1 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 150%;
+    height: 150%;
+    background-image: url('/mpnua481-13581236385626668.jpg');
+    background-size: cover;
+    background-position: center;
+    /* Convert portrait to landscape as requested */
+    transform: translate(-50%, -50%) rotate(-90deg);
+    opacity: 0.15;
+    z-index: -1;
+    pointer-events: none;
+    filter: grayscale(20%) contrast(1.1);
+}
+
+/* Page 2 Specific Background */
+.prospectus-page .page-background-p2 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 150%;
+    height: 150%;
+    background-image: url('/mpo0aq5c-_Add-a-soothing-touch-to-your-home-decor-with-our_.jpg');
+    background-size: cover;
+    background-position: center;
+    /* Convert portrait to landscape as requested (675x1200) */
+    transform: translate(-50%, -50%) rotate(90deg);
+    opacity: 0.12;
+    z-index: -1;
+    pointer-events: none;
+    filter: grayscale(10%) contrast(1.05) blur(2px);
+}
+
+
