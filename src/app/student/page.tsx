@@ -1,11 +1,18 @@
 "use client";
 
 import { useState, useEffect, useMemo, Suspense } from "react";
+<<<<<<< HEAD
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { storage } from "@/lib/store";
 import { Assignment, CalendarEvent } from "@/lib/types";
+=======
+import Link from "next/link";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { storage } from "@/lib/store";
+import { Assignment, CalendarEvent, LibraryBook } from "@/lib/types";
+>>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
 import { useLanguage } from "@/lib/i18n";
 import ThemeToggle from "@/components/ThemeToggle";
 
@@ -62,6 +69,10 @@ function StudentDashboardContent() {
   // ── Data State ──────────────────────────────────────────────────
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [events, setEvents] = useState<CalendarEvent[]>([]);
+<<<<<<< HEAD
+=======
+  const [libraryBooks, setLibraryBooks] = useState<LibraryBook[]>([]);
+>>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
 
   // Mock Student Data
   const studentData = {
@@ -86,6 +97,10 @@ function StudentDashboardContent() {
   useEffect(() => {
     setAssignments(storage.getAssignments());
     setEvents(storage.getEvents());
+<<<<<<< HEAD
+=======
+    setLibraryBooks(storage.getLibrary());
+>>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
   }, []);
 
   useEffect(() => {
@@ -156,12 +171,19 @@ function StudentDashboardContent() {
               </p>
               <p className="text-xs text-slate-500">{t('profile')}</p>
             </div>
+<<<<<<< HEAD
             <Image 
               alt="Student profile avatar" 
               className="w-9 h-9 md:w-10 md:h-10 rounded-full border-2 border-white shadow-sm object-cover group-hover:border-indigo-200 transition-all" 
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJ3rG7ibmqRj09ignTbmUiHQU9DmB-Jnsu49Yz0gHlMWSUwpaodkImSCPCkeBzUnsTzc4HOsHo-4-jOwAXc9tmHmJXdJVToj0htUrah-1VnLRA2kK1JszREZ16nAfPC9IgAMDJgqaUYYurP8QOJeIO1Pmlh67tu7DVEofqRGcahgPBbZDmfpjMWuVCgbdEQVIwXcq8vsfOkEB9g7OUwK8Iy1hF1vu19bzdcVw3l1TUjYMVcEr7PiLJ9Q-YpCewIIRwiUwjNekXtqU"
               width={40}
               height={40}
+=======
+            <img 
+              alt="Student profile avatar" 
+              className="w-9 h-9 md:w-10 md:h-10 rounded-full border-2 border-white shadow-sm object-cover group-hover:border-indigo-200 transition-all" 
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJ3rG7ibmqRj09ignTbmUiHQU9DmB-Jnsu49Yz0gHlMWSUwpaodkImSCPCkeBzUnsTzc4HOsHo-4-jOwAXc9tmHmJXdJVToj0htUrah-1VnLRA2kK1JszREZ16nAfPC9IgAMDJgqaUYYurP8QOJeIO1Pmlh67tu7DVEofqRGcahgPBbZDmfpjMWuVCgbdEQVIwXcq8vsfOkEB9g7OUwK8Iy1hF1vu19bzdcVw3l1TUjYMVcEr7PiLJ9Q-YpCewIIRwiUwjNekXtqU"
+>>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
             />
           </div>
         </div>
@@ -216,7 +238,11 @@ function StudentDashboardContent() {
               onClick={() => {
                 localStorage.removeItem("isAuthenticated");
                 localStorage.removeItem("userRole");
+<<<<<<< HEAD
                 router.replace("/login");
+=======
+                router.push("/login");
+>>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
               }}
               className="flex items-center gap-3 px-4 py-2.5 text-rose-600 hover:bg-rose-50 rounded-xl transition-all duration-200 font-semibold text-sm group w-full"
             >
@@ -247,7 +273,11 @@ function StudentDashboardContent() {
 
             {activeTab === 'library' && (
               <section className="animate-in fade-in duration-500">
+<<<<<<< HEAD
                 <Library />
+=======
+                <Library books={libraryBooks} />
+>>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
               </section>
             )}
 

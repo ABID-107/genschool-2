@@ -1,5 +1,20 @@
+<<<<<<< HEAD
 @import "tailwindcss";
 
+=======
+@import url('https://banglawebfonts.pages.dev/css/ekush.css');
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'Ekush';
+  src: url('https://banglawebfonts.pages.dev/fonts/ekush/ekush-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0980-09FF, U+200C, U+200D, U+25CC;
+}
+
+>>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
 :root {
   /* Brand Palette Light Mode (Warm Earth) */
   --brand-navy-deep: #2A0800; /* Main Dark */
@@ -106,6 +121,7 @@
   --color-brand-ice: var(--brand-ice);
 
   /* Fonts */
+<<<<<<< HEAD
   --font-bricolage: var(--font-fjalla-next), 'Fjalla One', sans-serif;
   --font-dm: var(--font-fjalla-next), 'Fjalla One', sans-serif;
   --font-manrope: var(--font-fjalla-next), 'Fjalla One', sans-serif;
@@ -117,6 +133,20 @@
 
 body {
   font-family: var(--font-fjalla-next), 'Fjalla One', sans-serif;
+=======
+  --font-bricolage: 'Ekush', sans-serif;
+  --font-dm: 'Ekush', sans-serif;
+  --font-manrope: 'Ekush', sans-serif;
+  --font-noto-serif: 'Ekush', serif;
+  --font-hind: 'Ekush', sans-serif;
+  --font-noto-bengali: 'Ekush', sans-serif;
+  --font-sans: 'Ekush', sans-serif;
+  --font-serif: 'Ekush', serif;
+}
+
+body {
+  font-family: 'Ekush', var(--font-dm);
+>>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
   font-weight: 400;
   font-style: normal;
   background: var(--bg-primary);
@@ -227,6 +257,7 @@ body {
 
 /* Bangla Typography Utilities */
 .font-bangla {
+<<<<<<< HEAD
   font-family: var(--font-bangla);
 }
 
@@ -812,3 +843,12 @@ body {
 }
 
 
+=======
+  font-family: var(--font-hind);
+}
+
+.font-noto {
+  font-family: var(--font-noto-bengali);
+}
+
+>>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928

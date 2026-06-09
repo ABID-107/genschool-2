@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 import Image from "next/image";
+=======
+>>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
 import { useLanguage } from "@/lib/i18n";
 
 interface Child {
@@ -31,12 +34,19 @@ export function GuardianProfileView({ childrenList }: { childrenList: Child[] })
       {/* Profile Header */}
       <div className="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm flex flex-col md:flex-row gap-6 items-center md:items-start text-center md:text-left relative overflow-hidden">
         <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-full blur-3xl -z-10"></div>
+<<<<<<< HEAD
         <Image 
           src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_GqNpLIO1iT-CowPy58VSjpKqUke_HfKK6Z9agSyZ7zvsVomKL2uT_qdQc9Oq0VzhPOjbpAnY1UxwxcOXoumvB6ehd3IH0glA_OM9cmbv91b0L9r8hs6kNCKMKN-vE8tvWeonoF16uGva8aDpOhZouX8byDgmKr9-ec9OkveAdoTgCTRrbOTXGmMpfSTqLuOx8Gvtetb6gH8GJOYrCz5dFHcfmguIhGBDDObNpGc-2vhoXnV1yypW-JhhmWJVciAudrRDcB-Ymio" 
           alt="Guardian" 
           className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md"
           width={96}
           height={96}
+=======
+        <img 
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_GqNpLIO1iT-CowPy58VSjpKqUke_HfKK6Z9agSyZ7zvsVomKL2uT_qdQc9Oq0VzhPOjbpAnY1UxwxcOXoumvB6ehd3IH0glA_OM9cmbv91b0L9r8hs6kNCKMKN-vE8tvWeonoF16uGva8aDpOhZouX8byDgmKr9-ec9OkveAdoTgCTRrbOTXGmMpfSTqLuOx8Gvtetb6gH8GJOYrCz5dFHcfmguIhGBDDObNpGc-2vhoXnV1yypW-JhhmWJVciAudrRDcB-Ymio" 
+          alt="Guardian" 
+          className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md"
+>>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
         />
         <div className="flex-1">
           <h2 className="text-2xl font-bold text-slate-900">{lang === 'bn' ? parentProfile.nameBn : parentProfile.nameEn}</h2>
@@ -80,7 +90,11 @@ export function GuardianProfileView({ childrenList }: { childrenList: Child[] })
             {childrenList.map(child => (
               <div key={child.id} className="flex items-center justify-between p-4 rounded-2xl border border-slate-100 bg-slate-50">
                 <div className="flex items-center gap-4">
+<<<<<<< HEAD
                   <Image src={child.avatar} alt={child.nameEn} className="w-12 h-12 rounded-full border border-slate-200 object-cover" width={48} height={48} />
+=======
+                  <img src={child.avatar} alt={child.nameEn} className="w-12 h-12 rounded-full border border-slate-200 object-cover" />
+>>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
                   <div>
                     <h4 className="font-bold text-slate-900">{lang === 'bn' ? child.nameBn : child.nameEn}</h4>
                     <p className="text-xs text-slate-500 font-medium">Class {child.class} • Sec {child.section} • Roll {child.roll}</p>

@@ -1,7 +1,10 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
+<<<<<<< HEAD
 import Image from "next/image";
+=======
+>>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
 import Link from "next/link";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useLanguage } from "@/lib/i18n";
@@ -158,12 +161,19 @@ function GuardianDashboardContent() {
               </p>
               <p className="text-xs text-slate-500">{lang === 'bn' ? 'অভিভাবক পোর্টাল' : 'Guardian Portal'}</p>
             </div>
+<<<<<<< HEAD
             <Image 
               alt="Guardian profile avatar" 
               className="w-9 h-9 md:w-10 md:h-10 rounded-full border-2 border-white shadow-sm object-cover group-hover:border-indigo-200 transition-all" 
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_GqNpLIO1iT-CowPy58VSjpKqUke_HfKK6Z9agSyZ7zvsVomKL2uT_qdQc9Oq0VzhPOjbpAnY1UxwxcOXoumvB6ehd3IH0glA_OM9cmbv91b0L9r8hs6kNCKMKN-vE8tvWeonoF16uGva8aDpOhZouX8byDgmKr9-ec9OkveAdoTgCTRrbOTXGmMpfSTqLuOx8Gvtetb6gH8GJOYrCz5dFHcfmguIhGBDDObNpGc-2vhoXnV1yypW-JhhmWJVciAudrRDcB-Ymio"
               width={40}
               height={40}
+=======
+            <img 
+              alt="Guardian profile avatar" 
+              className="w-9 h-9 md:w-10 md:h-10 rounded-full border-2 border-white shadow-sm object-cover group-hover:border-indigo-200 transition-all" 
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_GqNpLIO1iT-CowPy58VSjpKqUke_HfKK6Z9agSyZ7zvsVomKL2uT_qdQc9Oq0VzhPOjbpAnY1UxwxcOXoumvB6ehd3IH0glA_OM9cmbv91b0L9r8hs6kNCKMKN-vE8tvWeonoF16uGva8aDpOhZouX8byDgmKr9-ec9OkveAdoTgCTRrbOTXGmMpfSTqLuOx8Gvtetb6gH8GJOYrCz5dFHcfmguIhGBDDObNpGc-2vhoXnV1yypW-JhhmWJVciAudrRDcB-Ymio"
+>>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
             />
           </div>
         </div>
@@ -219,8 +229,12 @@ function GuardianDashboardContent() {
               onClick={() => {
                 localStorage.removeItem("isAuthenticated");
                 localStorage.removeItem("userRole");
+<<<<<<< HEAD
                 localStorage.removeItem("childUsername");
                 router.replace("/login");
+=======
+                router.push("/login");
+>>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
               }}
               className="flex items-center gap-3 px-4 py-2.5 text-rose-600 hover:bg-rose-50 rounded-xl transition-all duration-200 font-semibold text-sm group w-full"
             >

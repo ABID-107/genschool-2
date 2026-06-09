@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 import Image from "next/image";
+=======
+>>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
 import Link from "next/link";
 import ThemeToggle from "../ThemeToggle";
 
@@ -35,12 +38,19 @@ export function TeacherTopNav({ onToggleSidebar, teacherName, teacherRole, avata
             <p className="text-sm font-semibold text-slate-900 group-hover:text-indigo-600 transition-colors">{teacherName}</p>
             <p className="text-xs text-slate-500">{teacherRole}</p>
           </div>
+<<<<<<< HEAD
           <Image
             alt="Teacher profile avatar"
             className="w-9 h-9 md:w-10 md:h-10 rounded-full border-2 border-white shadow-sm object-cover group-hover:border-indigo-200 transition-all"
             src={avatarUrl}
             width={40}
             height={40}
+=======
+          <img
+            alt="Teacher profile avatar"
+            className="w-9 h-9 md:w-10 md:h-10 rounded-full border-2 border-white shadow-sm object-cover group-hover:border-indigo-200 transition-all"
+            src={avatarUrl}
+>>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
           />
         </div>
       </div>

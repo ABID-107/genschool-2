@@ -1,6 +1,10 @@
 "use client";
 
+<<<<<<< HEAD
 import { useState } from "react";
+=======
+import { useState, useEffect } from "react";
+>>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -9,7 +13,11 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+<<<<<<< HEAD
   const [role, setRole] = useState<"admin" | "teacher" | "student" | "guardian">("admin");
+=======
+  const [role, setRole] = useState<"teacher" | "student" | "guardian">("teacher");
+>>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
   const router = useRouter();
 
 
@@ -26,8 +34,11 @@ export default function LoginPage() {
         router.push("/guardian");
       } else if (role === "student") {
         router.push("/student");
+<<<<<<< HEAD
       } else if (role === "admin") {
         router.push("/admin");
+=======
+>>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
       } else {
         router.push("/teacher");
       }
@@ -65,6 +76,7 @@ export default function LoginPage() {
         className="mt-8 sm:mx-auto sm:w-full sm:max-w-[420px] z-10"
       >
         <div className="glass-card py-10 px-6 sm:px-12">
+<<<<<<< HEAD
           <div className="flex bg-slate-50 border border-slate-200 p-1 rounded-xl mb-8 flex-wrap sm:flex-nowrap gap-1 sm:gap-0">
             <button
               type="button"
@@ -77,6 +89,9 @@ export default function LoginPage() {
             >
               Admin
             </button>
+=======
+          <div className="flex bg-slate-50 border border-slate-200 p-1 rounded-xl mb-8">
+>>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
             <button
               type="button"
               onClick={() => setRole("teacher")}
@@ -127,7 +142,11 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="block w-full pl-10 pr-4 py-3 rounded-xl border border-[#e2e8f0] bg-[#f8f9fc] text-[#0f172a] placeholder-[#94a3b8] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#1a56e8]/20 focus:border-[#1a56e8] transition-all sm:text-sm"
+<<<<<<< HEAD
                   placeholder={role === "guardian" ? "student_username" : role === "admin" ? "admin@genschool.com" : role === "teacher" ? "teacher@genschool.com" : "student@genschool.com"}
+=======
+                  placeholder={role === "guardian" ? "student_username" : role === "teacher" ? "teacher@genschool.com" : "student@genschool.com"}
+>>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
                 />
               </div>
             </div>

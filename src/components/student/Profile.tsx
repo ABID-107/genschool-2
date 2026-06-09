@@ -1,6 +1,9 @@
 "use client";
 
+<<<<<<< HEAD
 import Image from "next/image";
+=======
+>>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
 import { useLanguage } from "@/lib/i18n";
 import { useState } from "react";
 
@@ -28,7 +31,11 @@ export function ProfileView({ student }: ProfileProps) {
       <div className="bg-gradient-to-br from-indigo-700 to-purple-800 rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden group max-w-sm mx-auto">
         <div className="relative z-10 flex flex-col items-center">
           <div className="w-32 h-32 rounded-2xl border-4 border-white/20 overflow-hidden mb-6 shadow-xl group-hover:scale-105 transition-all duration-500">
+<<<<<<< HEAD
             <Image src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJ3rG7ibmqRj09ignTbmUiHQU9DmB-Jnsu49Yz0gHlMWSUwpaodkImSCPCkeBzUnsTzc4HOsHo-4-jOwAXc9tmHmJXdJVToj0htUrah-1VnLRA2kK1JszREZ16nAfPC9IgAMDJgqaUYYurP8QOJeIO1Pmlh67tu7DVEofqRGcahgPBbZDmfpjMWuVCgbdEQVIwXcq8vsfOkEB9g7OUwK8Iy1hF1vu19bzdcVw3l1TUjYMVcEr7PiLJ9Q-YpCewIIRwiUwjNekXtqU" className="w-full h-full object-cover" alt="Student" width={128} height={128} />
+=======
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJ3rG7ibmqRj09ignTbmUiHQU9DmB-Jnsu49Yz0gHlMWSUwpaodkImSCPCkeBzUnsTzc4HOsHo-4-jOwAXc9tmHmJXdJVToj0htUrah-1VnLRA2kK1JszREZ16nAfPC9IgAMDJgqaUYYurP8QOJeIO1Pmlh67tu7DVEofqRGcahgPBbZDmfpjMWuVCgbdEQVIwXcq8vsfOkEB9g7OUwK8Iy1hF1vu19bzdcVw3l1TUjYMVcEr7PiLJ9Q-YpCewIIRwiUwjNekXtqU" className="w-full h-full object-cover" alt="Student" />
+>>>>>>> 8415be89a19eb0a8cc90a95ab8737463a8d29928
           </div>
           <h2 className="text-2xl font-bold font-bangla text-center">{lang === 'bn' ? student.nameBn : student.nameEn}</h2>
           <p className="text-indigo-200 text-sm font-bold uppercase tracking-widest mt-1">ID: {student.studentId}</p>
