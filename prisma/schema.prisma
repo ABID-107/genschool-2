@@ -1,0 +1,147 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  SCHOOL_ADMIN
+  TEACHER
+  STUDENT
+  GUARDIAN
+  STAFF
+}
+
+enum SchoolType {
+  SCHOOL
+  COLLEGE
+  UNIVERSITY
+  COACHING
+  MADRASAH
+}
+
+model SubscriptionPlan {
+  id            String   @id @default(cuid())
+  name          String
+  slug          String   @unique
+  description   String?
+  price         Float    @default(0)
+  period        String   @default("monthly")
+  maxStudents   Int      @default(200)
+  maxTeachers   Int      @default(10)
+  maxAdmins     Int      @default(1)
+  features      String[]
+  isPopular     Boolean  @default(false)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  schools SchoolSubscription[]
+}
+
+model School {
+  id        String     @id @default(cuid())
+  name      String
+  slug      String     @unique
+  schoolType SchoolType @default(SCHOOL)
+  address   String?
+  phone     String?
+  email     String?
+  eiin      String?
+  domain    String?    @unique
+  logo      String?
+  city      String?
+  state     String?
+  country   String?
+  isActive  Boolean    @default(true)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  users        User[]
+  classes      AcademicClass[]
+  subscriptions SchoolSubscription[]
+}
+
+model SchoolSubscription {
+  id               String           @id @default(cuid())
+  schoolId         String
+  school           School           @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  planId           String
+  plan             SubscriptionPlan @relation(fields: [planId], references: [id])
+  status           String           @default("active")
+  startDate        DateTime         @default(now())
+  endDate          DateTime?
+  cancelledAt      DateTime?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  @@unique([schoolId, planId])
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  phone     String?
+  avatar    String?
+  role      UserRole
+  schoolId  String?
+  school    School?  @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sessions Session[]
+  students Student[]
+  guardianOf Guardian[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model AcademicClass {
+  id        String   @id @default(cuid())
+  name      String
+  numericId Int
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  sections  String[]
+  createdAt DateTime @default(now())
+
+  students Student[]
+}
+
+model Student {
+  id        String        @id @default(cuid())
+  studentId String
+  name      String
+  classId   String?
+  class     AcademicClass? @relation(fields: [classId], references: [id])
+  section   String?
+  roll      String?
+  userId    String?
+  user      User?         @relation(fields: [userId], references: [id])
+  createdAt DateTime      @default(now())
+
+  guardianOf Guardian[]
+}
+
+model Guardian {
+  id         String   @id @default(cuid())
+  studentId  String
+  student    Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  relation   String
+  createdAt  DateTime @default(now())
+}
