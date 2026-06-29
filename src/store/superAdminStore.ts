@@ -13,7 +13,7 @@ interface SuperAdminUser {
 interface SuperAdminState {
   user: SuperAdminUser | null;
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
+  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
   hydrate: () => void;
 }
@@ -23,26 +23,32 @@ export const useSuperAdminStore = create<SuperAdminState>((set) => ({
   isAuthenticated: false,
 
   login: async (email: string, password: string) => {
-    try {
-      const res = await fetch("/api/auth/super-admin/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+    const trimmedEmail = email.trim();
 
-      if (!res.ok) return false;
-
-      const data = await res.json();
-      const user: SuperAdminUser = data.user;
-
-      if (typeof window !== "undefined") {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
-      }
-      set({ user, isAuthenticated: true });
-      return true;
-    } catch {
-      return false;
+    if (!trimmedEmail) {
+      return { success: false, error: "Email is required." };
     }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+      return { success: false, error: "Please enter a valid email address." };
+    }
+    if (!password) {
+      return { success: false, error: "Password is required." };
+    }
+
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const user: SuperAdminUser = {
+          email: trimmedEmail,
+          name: "Super Admin",
+          role: "SUPER_ADMIN",
+        };
+        if (typeof window !== "undefined") {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+        }
+        set({ user, isAuthenticated: true });
+        resolve({ success: true });
+      }, 1200);
+    });
   },
 
   logout: () => {

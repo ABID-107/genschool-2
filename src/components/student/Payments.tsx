@@ -62,7 +62,7 @@ export function PaymentsView({ totalDue, invoices }: PaymentsProps) {
       <div className="bg-gradient-to-br from-rose-500 to-rose-600 rounded-2xl p-8 text-white shadow-xl shadow-rose-500/20 relative overflow-hidden group">
         <div className="relative z-10">
           <p className="text-sm font-bold opacity-80 uppercase tracking-widest mb-2 font-bangla">মোট বকেয়া ফি</p>
-          <h1 className="text-5xl font-bold font-bricolage mb-6 tracking-tight">৳{totalDue}</h1>
+          <h1 className="text-5xl font-bold font-heading mb-6 tracking-tight">৳{totalDue}</h1>
           <div className="flex items-center gap-2 text-rose-100 text-xs font-bold bg-white/10 px-4 py-2 rounded-full w-fit">
             <span className="material-symbols-outlined text-[16px]">event</span>
             শেষ তারিখ: ১৫ মে, ২০২৫
@@ -125,7 +125,7 @@ export function PaymentsView({ totalDue, invoices }: PaymentsProps) {
                 <tr key={inv.id} className="hover:bg-slate-50 transition-colors">
                   <td className="px-6 py-4 text-sm font-bold text-slate-800">{inv.month}</td>
                   <td className="px-6 py-4 text-sm font-medium text-slate-600">{inv.category}</td>
-                  <td className="px-6 py-4 text-sm font-bold text-slate-900 font-bricolage">৳{inv.amount}</td>
+                  <td className="px-6 py-4 text-sm font-bold text-slate-900 font-heading">৳{inv.amount}</td>
                   <td className="px-6 py-4">
                     <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider border ${
                       inv.status === 'paid' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :

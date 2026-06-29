@@ -89,7 +89,7 @@ export default function DemoPage() {
         className={`fixed top-0 left-0 right-0 z-50 h-[68px] flex items-center justify-between px-[5%] transition-shadow duration-300 ${isScrolled ? "glass-nav" : "bg-transparent"
           }`}
       >
-        <Link href="/" className="flex items-center gap-[10px] text-[1.5rem] font-bold text-[var(--text-primary)] no-underline font-bricolage">
+        <Link href="/" className="flex items-center gap-[10px] text-[1.5rem] font-bold text-[var(--text-primary)] no-underline font-heading">
           <div className="w-9 h-9 rounded-[10px] bg-gradient-to-br from-brand-primary to-brand-mid flex items-center justify-center text-white font-extrabold">
             G
           </div>
@@ -139,7 +139,7 @@ export default function DemoPage() {
           className="glass-panel p-8 rounded-2xl text-center mb-10 lg:mb-14 max-w-2xl animate-in"
         >
           <div className="text-[.78rem] font-semibold tracking-[.1em] uppercase text-brand-primary mb-3">Interactive Demo</div>
-          <h1 className="font-bricolage text-[clamp(2rem,4vw,3.2rem)] font-bold leading-[1.1] tracking-[-0.03em] text-[var(--text-primary)] mb-4">
+          <h1 className="font-heading text-[clamp(2rem,4vw,3.2rem)] font-bold leading-[1.1] tracking-[-0.03em] text-[var(--text-primary)] mb-4">
             Select Your <span className="bg-gradient-to-r from-brand-primary to-brand-mid bg-clip-text text-transparent">Experience</span>
           </h1>
           <p className="text-[1.05rem] lg:text-[1.1rem] text-[var(--text-muted)] leading-[1.7]">
@@ -200,7 +200,7 @@ export default function DemoPage() {
                   <div className="absolute bottom-5 left-6 flex items-center gap-2 text-white">
                     <span className="material-symbols-outlined text-[28px]">{card.icon}</span>
                     <motion.span 
-                      className="text-[.85rem] font-semibold tracking-wider font-bricolage"
+                      className="text-[.85rem] font-semibold tracking-wider font-heading"
                       animate={{ opacity: (isHovered && isDesktop) ? 0 : 1 }}
                       transition={{ duration: 0.3 }}
                     >
@@ -223,7 +223,7 @@ export default function DemoPage() {
                   animate={{ opacity: isDesktop ? (isHovered ? 1 : 0) : 0 }}
                   transition={{ duration: 0.4, ease: "easeInOut" }}
                 >
-                  <h3 className="font-bricolage text-[1.5rem] font-bold text-[var(--text-primary)] mb-4 border-b border-[var(--border-light)] pb-4">{card.title}</h3>
+                  <h3 className="font-heading text-[1.5rem] font-bold text-[var(--text-primary)] mb-4 border-b border-[var(--border-light)] pb-4">{card.title}</h3>
                   <p className="text-[.95rem] text-[var(--text-muted)] mb-4 leading-[1.6]">{card.desc1}</p>
                   <p className="text-[.95rem] text-[var(--text-muted)] leading-[1.6]">{card.desc2}</p>
                   
@@ -285,7 +285,7 @@ export default function DemoPage() {
                   className="object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/40 to-transparent flex items-end p-6">
-                  <h3 className="font-bricolage text-[1.8rem] font-bold text-white">
+                  <h3 className="font-heading text-[1.8rem] font-bold text-white">
                     {demoCards.find(c => c.id === selectedCard)?.title}
                   </h3>
                 </div>
@@ -327,7 +327,7 @@ export default function DemoPage() {
       {/* Footer */}
       <footer className="bg-[#0f172a] text-white/70 py-12 px-[5%] mt-auto z-10">
         <div className="max-w-[1100px] mx-auto flex items-center justify-between flex-wrap gap-5">
-          <div className="font-bricolage text-[1.2rem] font-bold text-white">GenSchool</div>
+          <div className="font-heading text-[1.2rem] font-bold text-white">GenSchool</div>
           <div className="flex gap-6">
             <a href="#" className="text-white/60 text-[.85rem] no-underline transition-colors hover:text-white">{t.fp1}</a>
             <a href="#" className="text-white/60 text-[.85rem] no-underline transition-colors hover:text-white">{t.fp2}</a>

@@ -23,7 +23,7 @@ export function TeacherSidebar({ isOpen, activeTab, onTabChange, onCloseSidebar,
     <aside className={`fixed md:static inset-y-0 left-0 z-50 w-[280px] glass-sidebar flex flex-col gap-1 p-4 flex-shrink-0 h-[calc(100vh-64px)] overflow-y-auto custom-scrollbar transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
       <div className="flex items-center justify-between px-3 py-4 mb-2 md:mb-4">
         <div>
-          <h2 className="text-lg font-bold text-[var(--text-primary)] font-bricolage">Teacher Portal</h2>
+          <h2 className="text-lg font-bold text-[var(--text-primary)] font-heading">Teacher Portal</h2>
           <p className="text-xs text-[var(--text-muted)]">Academic Management</p>
         </div>
         <button

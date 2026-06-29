@@ -35,7 +35,7 @@ export function AttendanceView({ summary }: AttendanceProps) {
       <div className="bg-white rounded-2xl border border-slate-200/50 p-6 shadow-sm">
         <div className="flex flex-col md:flex-row items-center gap-8">
           <div className="text-center md:text-left">
-            <h1 className={`text-6xl font-bold font-bricolage ${summary.percentage >= 85 ? 'text-emerald-600' : summary.percentage >= 75 ? 'text-amber-600' : 'text-rose-600'}`}>
+            <h1 className={`text-6xl font-bold font-heading ${summary.percentage >= 85 ? 'text-emerald-600' : summary.percentage >= 75 ? 'text-amber-600' : 'text-rose-600'}`}>
               {summary.percentage}%
             </h1>
             <p className={`text-sm font-bold mt-2 font-bangla ${summary.percentage >= 75 ? 'text-emerald-600' : 'text-rose-600'}`}>
@@ -51,7 +51,7 @@ export function AttendanceView({ summary }: AttendanceProps) {
               { label: "Leave", value: summary.leave, color: "text-blue-600", bg: "bg-blue-50", code: "LV" },
             ].map(item => (
               <div key={item.label} className={`${item.bg} p-4 rounded-xl border border-white/50 flex flex-col items-center justify-center text-center`}>
-                <span className={`text-xl font-bold font-bricolage ${item.color}`}>{item.value}</span>
+                <span className={`text-xl font-bold font-heading ${item.color}`}>{item.value}</span>
                 <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">{item.label} ({item.code})</span>
               </div>
             ))}

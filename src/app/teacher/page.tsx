@@ -539,7 +539,7 @@ function TeacherDashboardContent() {
   }
 
   return (
-    <div className="bg-teacher-background text-teacher-on-surface font-sans h-screen overflow-hidden flex flex-col">
+    <div className="font-sans h-screen overflow-hidden flex flex-col">
       {/* TopNavBar */}
       <TeacherTopNav
         onToggleSidebar={() => setIsSidebarOpen(true)}
@@ -630,7 +630,7 @@ function TeacherDashboardContent() {
                   <div className="flex flex-col gap-6 mb-8">
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                       <div>
-                        <h3 className="text-2xl font-bold text-slate-900 font-bricolage tracking-tight">Course Materials</h3>
+                        <h3 className="text-2xl font-bold text-slate-900 font-heading tracking-tight">Course Materials</h3>
                         <p className="text-sm text-[var(--text-muted)] mt-1">Manage and organize your resources</p>
                       </div>
                       <button
@@ -877,7 +877,7 @@ function TeacherDashboardContent() {
                       <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" onClick={() => !isSavingEdit && setEditingMaterial(null)}></div>
                       <div className="bg-[var(--bg-secondary)] rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden relative z-10 animate-in fade-in zoom-in-95 duration-200">
                         <div className="p-6 border-b border-slate-100 flex items-center justify-between">
-                          <h3 className="text-xl font-bold text-slate-900 font-bricolage">Edit Material</h3>
+                          <h3 className="text-xl font-bold text-slate-900 font-heading">Edit Material</h3>
                           <button onClick={() => !isSavingEdit && setEditingMaterial(null)} className="text-slate-400 hover:text-[var(--text-secondary)] hover:bg-slate-100 p-2 rounded-full transition-colors disabled:opacity-50" disabled={isSavingEdit}>
                             <span className="material-symbols-outlined text-[20px]">close</span>
                           </button>
@@ -1020,7 +1020,7 @@ function TeacherDashboardContent() {
               <section id="schedule" className="animate-in fade-in duration-500 space-y-6">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                   <div>
-                    <h3 className="text-2xl font-bold text-slate-900 font-bricolage tracking-tight">Academic Calendar</h3>
+                    <h3 className="text-2xl font-bold text-slate-900 font-heading tracking-tight">Academic Calendar</h3>
                     <p className="text-sm text-[var(--text-muted)] mt-1">Schedule classes, exams, and events for your students</p>
                   </div>
                   <button 
@@ -1106,7 +1106,7 @@ function TeacherDashboardContent() {
                   <div className="space-y-6">
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                       <div>
-                        <h3 className="text-2xl font-bold text-slate-900 font-bricolage tracking-tight">Manage Assignments</h3>
+                        <h3 className="text-2xl font-bold text-slate-900 font-heading tracking-tight">Manage Assignments</h3>
                         <p className="text-sm text-[var(--text-muted)] mt-1">Track student progress and grade submissions</p>
                       </div>
                       <button 
@@ -1184,7 +1184,7 @@ function TeacherDashboardContent() {
                           <div className="w-20 h-20 bg-[var(--bg-secondary)] shadow-sm border border-slate-100 rounded-2xl flex items-center justify-center mb-4 text-slate-300">
                             <span className="material-symbols-outlined text-4xl">assignment_add</span>
                           </div>
-                          <h4 className="text-xl font-bold text-slate-900 mb-2 font-bricolage">No assignments yet</h4>
+                          <h4 className="text-xl font-bold text-slate-900 mb-2 font-heading">No assignments yet</h4>
                           <p className="text-[var(--text-muted)] max-w-xs mb-8">Create your first assignment to start tracking student progress and grading work.</p>
                           <button onClick={openCreateAssignment} className="px-8 py-3 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-brand-primary/20">Create New Assignment</button>
                         </div>
@@ -1201,7 +1201,7 @@ function TeacherDashboardContent() {
                         <span className="material-symbols-outlined">arrow_back</span>
                       </button>
                       <div>
-                        <h3 className="text-2xl font-bold text-slate-900 font-bricolage tracking-tight">
+                        <h3 className="text-2xl font-bold text-slate-900 font-heading tracking-tight">
                           {assignmentView === 'create' ? 'Create New Assignment' : 'Edit Assignment'}
                         </h3>
                         <p className="text-sm text-[var(--text-muted)] mt-0.5">Fill in the details to set up the learning task</p>
@@ -1347,7 +1347,7 @@ function TeacherDashboardContent() {
                         <span className="material-symbols-outlined">arrow_back</span>
                       </button>
                       <div>
-                        <h3 className="text-2xl font-bold text-slate-900 font-bricolage tracking-tight">Review Submissions</h3>
+                        <h3 className="text-2xl font-bold text-slate-900 font-heading tracking-tight">Review Submissions</h3>
                         <p className="text-sm text-[var(--text-muted)] mt-0.5">{selectedAssignment.title}</p>
                       </div>
                     </div>
@@ -1367,7 +1367,7 @@ function TeacherDashboardContent() {
                             </div>
                             <div>
                               <p className="text-[10px] font-bold text-slate-400 uppercase">Total Marks</p>
-                              <p className="text-sm font-bold text-brand-primary font-bricolage text-lg">{selectedAssignment.totalMarks}</p>
+                              <p className="text-sm font-bold text-brand-primary font-heading text-lg">{selectedAssignment.totalMarks}</p>
                             </div>
                           </div>
                           <div className="mt-6 pt-6 border-t border-slate-100 flex flex-col gap-2">
@@ -1440,7 +1440,7 @@ function TeacherDashboardContent() {
                                       </td>
                                       <td className="px-6 py-4">
                                         {sub.status === 'graded' ? (
-                                          <span className="text-sm font-bold text-brand-primary font-bricolage bg-[var(--bg-tertiary)] px-3 py-1 rounded-lg border border-indigo-100">
+                                          <span className="text-sm font-bold text-brand-primary font-heading bg-[var(--bg-tertiary)] px-3 py-1 rounded-lg border border-indigo-100">
                                             {sub.marks}/{selectedAssignment.totalMarks}
                                           </span>
                                         ) : (
@@ -1560,7 +1560,7 @@ function TeacherDashboardContent() {
               <section id="payments" className="animate-in fade-in duration-500">
                 <div className="glass-card bg-[var(--bg-secondary)]/80 backdrop-blur-sm rounded-2xl border border-slate-200/50 shadow-sm overflow-hidden max-w-6xl mx-auto hover:shadow-lg transition-shadow">
                   <div className="p-6 border-b border-slate-200/60 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[var(--bg-secondary)]/50 backdrop-blur-md">
-                    <h3 className="text-2xl font-bold text-slate-900 font-bricolage tracking-tight">Student Payments</h3>
+                    <h3 className="text-2xl font-bold text-slate-900 font-heading tracking-tight">Student Payments</h3>
                     <button className="flex items-center gap-2 text-sm font-bold text-[var(--text-primary)] border-2 border-slate-200/80 px-5 py-2.5 rounded-xl hover:bg-[var(--bg-secondary)] hover:border-slate-300 hover:shadow-sm transition-all w-full sm:w-auto justify-center">
                       <span className="material-symbols-outlined text-[18px]">download</span>
                       Export Report
@@ -1640,7 +1640,7 @@ function TeacherDashboardContent() {
             {/* Tab: Student Performance */}
             {activeTab === 'performance' && (
               <section id="performance" className="animate-in fade-in duration-500">
-                <h3 className="text-2xl font-bold text-slate-900 mb-6 md:mb-8 font-bricolage tracking-tight">Student Performance</h3>
+                <h3 className="text-2xl font-bold text-slate-900 mb-6 md:mb-8 font-heading tracking-tight">Student Performance</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                   {/* Performance Card 1 */}
                   <div className="stat-card glow-on-hover bg-[var(--bg-secondary)]/80 backdrop-blur-sm p-6 rounded-2xl border border-slate-200/50 shadow-sm hover:shadow-xl hover:shadow-brand-primary/10 hover:-translate-y-1 transition-all duration-300 group">
@@ -1774,7 +1774,7 @@ function TeacherDashboardContent() {
                     <span className="material-symbols-outlined">arrow_back</span>
                   </button>
                   <div>
-                    <h2 className="text-2xl font-bold text-slate-900 font-bricolage tracking-tight">Create New Course</h2>
+                    <h2 className="text-2xl font-bold text-slate-900 font-heading tracking-tight">Create New Course</h2>
                     <p className="text-sm text-[var(--text-muted)]">Set up the foundation, curriculum, and schedule for your new course.</p>
                   </div>
                 </div>
@@ -2040,7 +2040,7 @@ function TeacherDashboardContent() {
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-[var(--text-primary)] flex justify-between">
                     Marks Obtained
-                    <span className="text-brand-primary font-bricolage font-normal">out of {selectedAssignment.totalMarks}</span>
+                    <span className="text-brand-primary font-heading font-normal">out of {selectedAssignment.totalMarks}</span>
                   </label>
                   <div className="relative">
                     <input 
@@ -2098,7 +2098,7 @@ function TeacherDashboardContent() {
             <div className="w-16 h-16 bg-rose-50 text-rose-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
               <span className="material-symbols-outlined text-3xl">delete_forever</span>
             </div>
-            <h4 className="text-xl font-bold text-slate-900 mb-2 font-bricolage">Delete Assignment?</h4>
+            <h4 className="text-xl font-bold text-slate-900 mb-2 font-heading">Delete Assignment?</h4>
             <p className="text-sm text-[var(--text-muted)] mb-8 px-4">This action cannot be undone. All student submissions and grades for <span className="font-bold text-[var(--text-primary)]">"{assignmentToDelete.title}"</span> will be permanently deleted.</p>
             <div className="flex gap-3">
               <button onClick={() => setAssignmentToDelete(null)} className="flex-1 py-3 px-4 border border-slate-200 text-[var(--text-secondary)] font-bold text-sm rounded-xl hover:bg-[var(--bg-tertiary)] transition-colors">Cancel</button>

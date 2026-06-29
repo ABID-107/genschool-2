@@ -1,19 +1,17 @@
 "use client";
 
-import { useState, useEffect, useMemo, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { storage } from "@/lib/store";
 import { Assignment, CalendarEvent } from "@/lib/types";
 import { useLanguage } from "@/lib/i18n";
+import { Menu, X, LogOut, School } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
 
-// Shared Components
 import Calendar from "@/components/Calendar";
 import Library from "@/components/Library";
-
-// Student Components
 import { StudentDashboardView } from "@/components/student/Dashboard";
 import { AttendanceView } from "@/components/student/Attendance";
 import { ResultsView } from "@/components/student/Results";
@@ -25,8 +23,8 @@ import { StudentAssignmentsView } from "@/components/student/Assignments";
 export default function StudentDashboard() {
   return (
     <Suspense fallback={
-      <div className="h-screen w-full flex items-center justify-center bg-[var(--bg-tertiary)]">
-        <div className="animate-spin h-8 w-8 text-brand-primary border-4 border-current border-t-transparent rounded-full"></div>
+      <div className="h-screen w-full flex items-center justify-center bg-[var(--bg-primary)]">
+        <div className="w-8 h-8 border-2 border-[var(--brand-primary)] border-t-transparent rounded-full animate-spin" />
       </div>
     }>
       <StudentDashboardContent />
@@ -44,7 +42,6 @@ function StudentDashboardContent() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // Sync activeTab with URL
   useEffect(() => {
     const tab = searchParams.get("tab");
     if (tab && tab !== activeTab) {
@@ -59,11 +56,9 @@ function StudentDashboardContent() {
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  // ── Data State ──────────────────────────────────────────────────
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [events, setEvents] = useState<CalendarEvent[]>([]);
 
-  // Mock Student Data
   const studentData = {
     nameBn: "আলেক্স জনসন",
     nameEn: "Alex Johnson",
@@ -80,9 +75,6 @@ function StudentDashboardContent() {
     mobile: "017XXXXXXXX",
   };
 
-  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
-
-  // Load data on mount
   useEffect(() => {
     setAssignments(storage.getAssignments());
     setEvents(storage.getEvents());
@@ -100,11 +92,8 @@ function StudentDashboardContent() {
 
   if (!isAuthenticated) {
     return (
-      <div className="h-screen w-full flex items-center justify-center bg-[var(--bg-tertiary)]">
-        <svg className="animate-spin h-8 w-8 text-brand-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
+      <div className="h-screen w-full flex items-center justify-center bg-[var(--bg-primary)]">
+        <div className="w-8 h-8 border-2 border-[var(--brand-primary)] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -122,37 +111,38 @@ function StudentDashboardContent() {
   ];
 
   return (
-    <div className={`text-slate-900 font-sans h-screen overflow-hidden flex flex-col ${lang === 'bn' ? 'font-bangla' : ''}`}>
+    <div className="h-screen overflow-hidden flex flex-col">
       {/* TopNavBar */}
-      <header className="fixed top-0 left-0 right-0 z-50 h-16 glass-card flex items-center justify-between px-4 md:px-6 w-full transition-all duration-300">
+      <header className="fixed top-0 left-0 right-0 z-50 h-16 glass-nav flex items-center justify-between px-4 md:px-6">
         <div className="flex items-center gap-3 md:gap-4">
           <button 
-            className="md:hidden p-2 -ml-2 text-[var(--text-secondary)] hover:bg-slate-100 rounded-full transition-colors"
+            className="md:hidden p-2 -ml-2 rounded-full hover:bg-[var(--bg-tertiary)] transition-colors text-[var(--text-secondary)]"
             onClick={() => setIsSidebarOpen(true)}
+            aria-label="Open menu"
           >
-            <span className="material-symbols-outlined">menu</span>
+            <Menu size={20} />
           </button>
-          <Link href="/student" className="text-xl font-bold tracking-tight text-brand-primary no-underline hover:text-indigo-700 transition-colors flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-primary to-brand-mid flex items-center justify-center text-white shadow-md shadow-brand-primary/20 group-hover:scale-105 transition-transform glow-on-hover">
-              <span className="material-symbols-outlined text-[18px]">school</span>
+          <Link href="/student" className="text-xl font-bold tracking-tight text-[var(--brand-primary)] no-underline hover:text-[var(--brand-mid)] transition-colors flex items-center gap-2 group">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--brand-primary)] to-[var(--brand-mid)] flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition-transform">
+              <School size={18} />
             </div>
-            <span className="hidden sm:block font-bricolage">GenSchool</span>
+            <span className="hidden sm:block font-heading">GenSchool</span>
           </Link>
         </div>
         
         <div className="flex items-center gap-2 md:gap-4">
           <ThemeToggle />
-          <div className="h-8 w-px bg-slate-200 hidden sm:block"></div>
+          <div className="h-8 w-px bg-[var(--border-color)] hidden sm:block" />
           <div className="flex items-center gap-3 cursor-pointer group" onClick={() => handleTabChange('profile')}>
             <div className="text-right hidden md:block">
-              <p className="text-sm font-semibold text-slate-900 group-hover:text-brand-primary transition-colors">
+              <p className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-[var(--brand-primary)] transition-colors">
                 {lang === 'bn' ? studentData.nameBn : studentData.nameEn}
               </p>
               <p className="text-xs text-[var(--text-muted)]">{t('profile')}</p>
             </div>
             <Image 
-              alt="Student profile avatar" 
-              className="w-9 h-9 md:w-10 md:h-10 rounded-full border-2 border-white shadow-sm object-cover group-hover:border-indigo-200 transition-all" 
+              alt="Profile" 
+              className="w-9 h-9 md:w-10 md:h-10 rounded-full border-2 border-[var(--bg-secondary)] shadow-sm object-cover group-hover:border-[var(--brand-primary)]/30 transition-all" 
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJ3rG7ibmqRj09ignTbmUiHQU9DmB-Jnsu49Yz0gHlMWSUwpaodkImSCPCkeBzUnsTzc4HOsHo-4-jOwAXc9tmHmJXdJVToj0htUrah-1VnLRA2kK1JszREZ16nAfPC9IgAMDJgqaUYYurP8QOJeIO1Pmlh67tu7DVEofqRGcahgPBbZDmfpjMWuVCgbdEQVIwXcq8vsfOkEB9g7OUwK8Iy1hF1vu19bzdcVw3l1TUjYMVcEr7PiLJ9Q-YpCewIIRwiUwjNekXtqU"
               width={40}
               height={40}
@@ -161,28 +151,27 @@ function StudentDashboardContent() {
         </div>
       </header>
 
-      {/* SideNavBar & Main Content Wrapper */}
       <div className="flex flex-1 pt-16 overflow-hidden relative">
-        {/* Mobile Sidebar Overlay */}
         {isSidebarOpen && (
           <div 
-            className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-40 md:hidden transition-opacity"
+            className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 md:hidden transition-opacity"
             onClick={() => setIsSidebarOpen(false)}
-          ></div>
+          />
         )}
 
         {/* SideNavBar */}
-        <aside className={`fixed md:static inset-y-0 left-0 z-50 w-[280px] glass-panel flex flex-col gap-1 p-4 flex-shrink-0 h-[calc(100vh-64px)] overflow-y-auto custom-scrollbar transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
+        <aside className={`fixed md:static inset-y-0 left-0 z-50 w-[280px] bg-[var(--bg-secondary)] border-r border-[var(--border-color)] flex flex-col gap-1 p-4 flex-shrink-0 h-[calc(100vh-64px)] overflow-y-auto custom-scrollbar transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
           <div className="flex items-center justify-between px-3 py-4 mb-2 md:mb-4">
             <div>
-              <h2 className="text-lg font-bold text-slate-900 font-bricolage">Dashboard</h2>
+              <h2 className="text-lg font-bold text-[var(--text-primary)] font-heading">Dashboard</h2>
               <p className="text-xs text-[var(--text-muted)]">Student Portal</p>
             </div>
             <button 
-              className="md:hidden p-2 -mr-2 text-slate-400 hover:bg-slate-100 rounded-full transition-colors"
+              className="md:hidden p-2 -mr-2 rounded-full hover:bg-[var(--bg-tertiary)] transition-colors text-[var(--text-muted)]"
               onClick={() => setIsSidebarOpen(false)}
+              aria-label="Close"
             >
-              <span className="material-symbols-outlined">close</span>
+              <X size={18} />
             </button>
           </div>
           <nav className="flex flex-col gap-1.5">
@@ -190,14 +179,14 @@ function StudentDashboardContent() {
               <button
                 key={tab.id}
                 onClick={() => { handleTabChange(tab.id); setIsSidebarOpen(false); }}
-                className={`nav-item flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ease-in-out font-sans text-sm font-semibold w-full text-left relative overflow-hidden group
+                className={`nav-item flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-sm font-semibold w-full text-left relative overflow-hidden group
                   ${activeTab === tab.id 
-                    ? 'text-indigo-700 bg-[var(--bg-tertiary)] shadow-sm border border-indigo-100/50' 
-                    : 'text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] hover:text-brand-primary border border-transparent'
+                    ? 'active' 
+                    : 'text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] hover:text-[var(--brand-primary)] border border-transparent'
                   }`}
               >
                 {activeTab === tab.id && (
-                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-brand-primary to-brand-mid rounded-r-full"></div>
+                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[var(--brand-primary)] to-[var(--brand-mid)] rounded-r-full" />
                 )}
                 <span className={`material-symbols-outlined transition-transform duration-300 ${activeTab === tab.id ? 'scale-110' : 'group-hover:scale-110'}`}>{tab.icon}</span>
                 <span>{tab.label}</span>
@@ -205,29 +194,29 @@ function StudentDashboardContent() {
             ))}
           </nav>
           
-          <div className="mt-auto p-4 border-t border-slate-100">
+          <div className="mt-auto p-4 border-t border-[var(--border-color)]">
             <button 
               onClick={() => {
                   localStorage.removeItem("isAuthenticated");
                 localStorage.removeItem("userRole");
                 router.replace("/login");
               }}
-              className="flex items-center gap-3 px-4 py-2.5 text-rose-600 hover:bg-rose-50 rounded-xl transition-all duration-200 font-semibold text-sm group w-full"
+              className="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-200 font-semibold text-sm group w-full text-rose-500 hover:bg-rose-500/10"
             >
-              <span className="material-symbols-outlined transition-transform group-hover:translate-x-1">logout</span>
+              <LogOut size={18} className="transition-transform group-hover:translate-x-1" />
               <span>{t('logout')}</span>
             </button>
           </div>
         </aside>
 
         {/* Main Content Area */}
-        <main className="flex-1 overflow-y-auto custom-scrollbar p-4 md:p-8 h-full relative book-page">
+        <main className="flex-1 overflow-y-auto custom-scrollbar p-4 md:p-8 h-full">
           <div className="max-w-7xl mx-auto space-y-6 md:space-y-8 pb-20">
             
             {activeTab === 'dashboard' && <StudentDashboardView assignments={assignments} events={events} studentData={studentData} />}
             
             {activeTab === 'schedule' && (
-              <section className="animate-in fade-in duration-500 h-[calc(100vh-180px)]">
+              <section className="h-[calc(100vh-180px)]">
                 <Calendar events={events} />
               </section>
             )}
@@ -240,7 +229,7 @@ function StudentDashboardContent() {
             ]} />}
 
             {activeTab === 'library' && (
-              <section className="animate-in fade-in duration-500">
+              <section>
                 <Library />
               </section>
             )}
@@ -263,4 +252,3 @@ function StudentDashboardContent() {
     </div>
   );
 }
-

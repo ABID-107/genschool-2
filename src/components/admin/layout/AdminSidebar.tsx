@@ -21,7 +21,8 @@ import {
   ChevronRight,
   Settings,
   LogOut,
-  FileBarChart
+  FileBarChart,
+  Menu
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -59,29 +60,29 @@ export default function AdminSidebar() {
       initial={{ width: 280 }}
       animate={{ width: isCollapsed ? 80 : 280 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
-      className="relative h-screen glass-sidebar text-white flex flex-col z-20"
+      className="relative h-screen glass-sidebar flex flex-col z-20 hidden md:flex"
     >
       {/* Logo Area */}
-      <div className="h-16 flex items-center justify-between px-4 border-b border-[var(--border-color)]">
+      <div className="h-16 flex items-center justify-between px-4 border-b border-[var(--border-sidebar)]">
         <AnimatePresence mode="wait">
           {!isCollapsed && (
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
-              className="flex items-center gap-3 font-bold text-xl tracking-tight text-white"
+              className="flex items-center gap-3 font-bold text-xl tracking-tight text-[var(--text-sidebar)]"
             >
-              <div className="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center text-white">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--navy-500)] to-[var(--navy-800)] flex items-center justify-center text-white shadow-sm">
                 <GraduationCap size={20} />
               </div>
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-brand-accent to-brand-light">GenSchool</span>
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[var(--brand-accent)] to-[var(--brand-light)]">GenSchool</span>
             </motion.div>
           )}
         </AnimatePresence>
         
         {isCollapsed && (
           <div className="w-full flex justify-center">
-            <div className="w-10 h-10 bg-brand-primary/20 text-brand-accent rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-[var(--sidebar-hover-bg)] text-[var(--brand-accent)] flex items-center justify-center">
               <GraduationCap size={24} />
             </div>
           </div>
@@ -91,7 +92,7 @@ export default function AdminSidebar() {
       {/* Toggle Button */}
       <button
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className="absolute -right-3 top-20 w-6 h-6 bg-brand-primary rounded-full flex items-center justify-center text-white shadow-lg hover:bg-brand-mid transition-colors z-30"
+        className="absolute -right-3 top-20 w-6 h-6 rounded-full bg-[var(--brand-primary)] flex items-center justify-center text-white shadow-lg hover:bg-[var(--brand-mid)] transition-colors z-30"
       >
         {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
       </button>
@@ -102,7 +103,7 @@ export default function AdminSidebar() {
           {MENU_ITEMS.map((item) => {
             const isActive = pathname.startsWith(item.path);
             return (
-              <Link key={item.name} href={item.path}>
+              <Link key={item.name} href={item.path} className="no-underline">
                 <div
                   className={`nav-item ${
                     isActive 
@@ -126,7 +127,7 @@ export default function AdminSidebar() {
                   </AnimatePresence>
 
                   {isCollapsed && (
-                    <div className="absolute left-full ml-4 px-2 py-1 bg-brand-dark text-white text-xs rounded-md opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50">
+                    <div className="absolute left-full ml-4 px-2 py-1 rounded-md bg-[var(--navy-900)] text-white text-xs opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50 shadow-lg">
                       {item.name}
                     </div>
                   )}
@@ -137,9 +138,9 @@ export default function AdminSidebar() {
         </div>
       </div>
 
-      <div className="p-4 border-t border-[var(--border-color)]">
+      <div className="p-4 border-t border-[var(--border-sidebar)]">
         <div className="space-y-1">
-          <Link href="/admin/settings">
+          <Link href="/admin/settings" className="no-underline">
             <div className="nav-item">
               <Settings size={20} />
               {!isCollapsed && <span className="font-medium text-sm">Settings</span>}
@@ -151,7 +152,7 @@ export default function AdminSidebar() {
               localStorage.removeItem("userRole");
               router.replace("/login");
             }}
-            className="w-full nav-item text-rose-500 hover:text-rose-400"
+            className="w-full nav-item text-rose-400 hover:text-rose-300"
           >
             <LogOut size={20} />
             {!isCollapsed && <span className="font-medium text-sm">Log Out</span>}

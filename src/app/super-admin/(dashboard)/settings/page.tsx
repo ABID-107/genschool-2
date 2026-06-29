@@ -36,14 +36,14 @@ export default function SettingsPage() {
         className="flex items-center justify-between"
       >
         <div>
-          <h1 className="text-2xl font-bold text-navy-900">Platform Settings</h1>
-          <p className="text-sm text-navy-500 mt-1">
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">Platform Settings</h1>
+          <p className="text-sm text-[var(--text-muted)] mt-1">
             Configure global platform preferences and policies.
           </p>
         </div>
         <button
           onClick={handleSave}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-teal-500 text-white text-sm font-semibold hover:bg-teal-600 transition-all shadow-sm"
+          className="glass-button-primary inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold"
         >
           {saved ? <CheckCircle2 size={16} /> : <Save size={16} />}
           {saved ? "Saved!" : "Save Changes"}
@@ -54,44 +54,44 @@ export default function SettingsPage() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="bg-white rounded-xl border border-navy-200 divide-y divide-navy-100"
+        className="bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-light)] divide-y divide-[var(--border-light)]"
       >
         {/* General */}
         <div className="p-6">
           <div className="flex items-center gap-3 mb-5">
-            <div className="w-9 h-9 rounded-lg bg-navy-100 text-navy-600 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-lg bg-[var(--bg-tertiary)] text-[var(--brand-primary)] flex items-center justify-center">
               <Globe size={18} />
             </div>
             <div>
-              <h2 className="text-base font-semibold text-navy-900">General</h2>
-              <p className="text-xs text-navy-400">Basic platform information</p>
+              <h2 className="text-base font-semibold text-[var(--text-primary)]">General</h2>
+              <p className="text-xs text-[var(--text-muted)]">Basic platform information</p>
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-navy-700 mb-1.5">Platform Name</label>
+              <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">Platform Name</label>
               <input
                 type="text"
                 value={form.platformName}
                 onChange={(e) => setForm({ ...form, platformName: e.target.value })}
-                className="w-full h-10 px-3 rounded-xl bg-white border border-navy-200 text-sm text-navy-900 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
+                className="glass-input w-full h-10 px-3 text-sm"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-navy-700 mb-1.5">Support Email</label>
+              <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">Support Email</label>
               <input
                 type="email"
                 value={form.supportEmail}
                 onChange={(e) => setForm({ ...form, supportEmail: e.target.value })}
-                className="w-full h-10 px-3 rounded-xl bg-white border border-navy-200 text-sm text-navy-900 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
+                className="glass-input w-full h-10 px-3 text-sm"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-navy-700 mb-1.5">Default Language</label>
+              <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">Default Language</label>
               <select
                 value={form.defaultLanguage}
                 onChange={(e) => setForm({ ...form, defaultLanguage: e.target.value })}
-                className="w-full h-10 px-3 rounded-xl bg-white border border-navy-200 text-sm text-navy-900 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
+                className="glass-input w-full h-10 px-3 text-sm appearance-none"
               >
                 <option value="en">English</option>
                 <option value="bn">Bengali</option>
@@ -99,11 +99,11 @@ export default function SettingsPage() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-navy-700 mb-1.5">Timezone</label>
+              <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">Timezone</label>
               <select
                 value={form.timezone}
                 onChange={(e) => setForm({ ...form, timezone: e.target.value })}
-                className="w-full h-10 px-3 rounded-xl bg-white border border-navy-200 text-sm text-navy-900 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
+                className="glass-input w-full h-10 px-3 text-sm appearance-none"
               >
                 <option value="UTC">UTC</option>
                 <option value="EST">EST (UTC-5)</option>
@@ -117,24 +117,24 @@ export default function SettingsPage() {
         {/* Security */}
         <div className="p-6">
           <div className="flex items-center gap-3 mb-5">
-            <div className="w-9 h-9 rounded-lg bg-red-50 text-red-500 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-lg bg-rose-50 text-rose-500 flex items-center justify-center">
               <Shield size={18} />
             </div>
             <div>
-              <h2 className="text-base font-semibold text-navy-900">Security</h2>
-              <p className="text-xs text-navy-400">Authentication and access control</p>
+              <h2 className="text-base font-semibold text-[var(--text-primary)]">Security</h2>
+              <p className="text-xs text-[var(--text-muted)]">Authentication and access control</p>
             </div>
           </div>
           <div className="space-y-4">
-            <label className="flex items-center justify-between p-3 rounded-xl border border-navy-100 hover:bg-navy-50/50 transition-colors cursor-pointer">
+            <label className="flex items-center justify-between p-3 rounded-xl border border-[var(--border-light)] hover:bg-[var(--bg-tertiary)]/50 transition-colors cursor-pointer">
               <div>
-                <p className="text-sm font-medium text-navy-900">Two-Factor Authentication</p>
-                <p className="text-xs text-navy-400">Require 2FA for all admin accounts</p>
+                <p className="text-sm font-medium text-[var(--text-primary)]">Two-Factor Authentication</p>
+                <p className="text-xs text-[var(--text-muted)]">Require 2FA for all admin accounts</p>
               </div>
               <div
                 onClick={() => setForm({ ...form, twoFactorAuth: !form.twoFactorAuth })}
                 className={`w-10 h-6 rounded-full transition-colors cursor-pointer ${
-                  form.twoFactorAuth ? "bg-teal-500" : "bg-navy-200"
+                  form.twoFactorAuth ? "bg-[var(--brand-primary)]" : "bg-[var(--border-color)]"
                 } relative`}
               >
                 <div className={`w-4 h-4 bg-white rounded-full absolute top-1 transition-all ${
@@ -142,15 +142,15 @@ export default function SettingsPage() {
                 }`} />
               </div>
             </label>
-            <label className="flex items-center justify-between p-3 rounded-xl border border-navy-100 hover:bg-navy-50/50 transition-colors cursor-pointer">
+            <label className="flex items-center justify-between p-3 rounded-xl border border-[var(--border-light)] hover:bg-[var(--bg-tertiary)]/50 transition-colors cursor-pointer">
               <div>
-                <p className="text-sm font-medium text-navy-900">Allow Registration</p>
-                <p className="text-xs text-navy-400">Let schools register on the platform</p>
+                <p className="text-sm font-medium text-[var(--text-primary)]">Allow Registration</p>
+                <p className="text-xs text-[var(--text-muted)]">Let schools register on the platform</p>
               </div>
               <div
                 onClick={() => setForm({ ...form, allowRegistration: !form.allowRegistration })}
                 className={`w-10 h-6 rounded-full transition-colors cursor-pointer ${
-                  form.allowRegistration ? "bg-teal-500" : "bg-navy-200"
+                  form.allowRegistration ? "bg-[var(--brand-primary)]" : "bg-[var(--border-color)]"
                 } relative`}
               >
                 <div className={`w-4 h-4 bg-white rounded-full absolute top-1 transition-all ${
@@ -168,20 +168,20 @@ export default function SettingsPage() {
               <Bell size={18} />
             </div>
             <div>
-              <h2 className="text-base font-semibold text-navy-900">Notifications</h2>
-              <p className="text-xs text-navy-400">Email and system notification preferences</p>
+              <h2 className="text-base font-semibold text-[var(--text-primary)]">Notifications</h2>
+              <p className="text-xs text-[var(--text-muted)]">Email and system notification preferences</p>
             </div>
           </div>
           <div className="space-y-4">
-            <label className="flex items-center justify-between p-3 rounded-xl border border-navy-100 hover:bg-navy-50/50 transition-colors cursor-pointer">
+            <label className="flex items-center justify-between p-3 rounded-xl border border-[var(--border-light)] hover:bg-[var(--bg-tertiary)]/50 transition-colors cursor-pointer">
               <div>
-                <p className="text-sm font-medium text-navy-900">Email Notifications</p>
-                <p className="text-xs text-navy-400">Receive email alerts for important events</p>
+                <p className="text-sm font-medium text-[var(--text-primary)]">Email Notifications</p>
+                <p className="text-xs text-[var(--text-muted)]">Receive email alerts for important events</p>
               </div>
               <div
                 onClick={() => setForm({ ...form, emailNotifications: !form.emailNotifications })}
                 className={`w-10 h-6 rounded-full transition-colors cursor-pointer ${
-                  form.emailNotifications ? "bg-teal-500" : "bg-navy-200"
+                  form.emailNotifications ? "bg-[var(--brand-primary)]" : "bg-[var(--border-color)]"
                 } relative`}
               >
                 <div className={`w-4 h-4 bg-white rounded-full absolute top-1 transition-all ${
@@ -189,15 +189,15 @@ export default function SettingsPage() {
                 }`} />
               </div>
             </label>
-            <label className="flex items-center justify-between p-3 rounded-xl border border-navy-100 hover:bg-navy-50/50 transition-colors cursor-pointer">
+            <label className="flex items-center justify-between p-3 rounded-xl border border-[var(--border-light)] hover:bg-[var(--bg-tertiary)]/50 transition-colors cursor-pointer">
               <div>
-                <p className="text-sm font-medium text-navy-900">Maintenance Mode</p>
-                <p className="text-xs text-navy-400">Disable platform access for maintenance</p>
+                <p className="text-sm font-medium text-[var(--text-primary)]">Maintenance Mode</p>
+                <p className="text-xs text-[var(--text-muted)]">Disable platform access for maintenance</p>
               </div>
               <div
                 onClick={() => setForm({ ...form, maintenanceMode: !form.maintenanceMode })}
                 className={`w-10 h-6 rounded-full transition-colors cursor-pointer ${
-                  form.maintenanceMode ? "bg-red-500" : "bg-navy-200"
+                  form.maintenanceMode ? "bg-rose-500" : "bg-[var(--border-color)]"
                 } relative`}
               >
                 <div className={`w-4 h-4 bg-white rounded-full absolute top-1 transition-all ${

@@ -127,62 +127,64 @@ export default function StudentManagementPage() {
       case 'edit':
         break;
       case 'suspend':
-        if (confirm(`Suspend ${student.name}?`)) {
-          alert(`${student.name} has been suspended.`);
-        }
+        setAllStudents(prev =>
+          prev.map(s => s.id === studentId
+            ? { ...s, status: s.status === 'Suspended' ? 'Active' : 'Suspended' }
+            : s
+          )
+        );
         break;
       case 'delete':
-        if (confirm(`Delete ${student.name} permanently? This action cannot be undone.`)) {
-          alert(`${student.name} has been deleted.`);
-        }
+        setAllStudents(prev => prev.filter(s => s.id !== studentId));
         break;
+    }
+  };
+
+  const badgeVariant = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'active': return 'badge-green';
+      case 'pending': return 'badge-amber';
+      case 'suspended': return 'badge-rose';
+      default: return 'badge-slate';
     }
   };
 
   return (
     <div className="space-y-6">
-      {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-[var(--text-primary)] tracking-tight">Student Management</h1>
-          <p className="text-sm text-[var(--text-muted)] mt-1">Manage enrollments, IDs, and student records.</p>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)] tracking-tight">Students</h1>
+          <p className="text-sm text-[var(--text-muted)] mt-1">Manage student records and enrollment</p>
         </div>
         <div className="flex items-center gap-3">
-          <button
-            onClick={handleExport}
-            className="bg-[var(--bg-secondary)] border-[var(--border-light)] text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] px-4 py-2 rounded-xl text-sm font-medium transition-colors flex items-center gap-2 shadow-sm"
-          >
+          <button onClick={handleExport} className="btn btn-secondary btn-sm">
             <Download size={16} />
             Export
           </button>
-          <Link href="/admin/students/new">
-            <button className="bg-brand-primary hover:bg-brand-mid text-white px-4 py-2 rounded-xl text-sm font-medium shadow-md shadow-brand-primary/20 transition-all flex items-center gap-2">
-              <UserPlus size={16} />
-              Add Student
-            </button>
+          <Link href="/admin/students/new" className="btn btn-primary btn-sm">
+            <UserPlus size={16} />
+            Add Student
           </Link>
         </div>
       </div>
 
-      {/* Filters & Search */}
-      <div className="bg-[var(--bg-secondary)] p-4 rounded-2xl border-[var(--border-light)] shadow-sm flex flex-col sm:flex-row gap-4">
-        <div className="relative flex-1">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[var(--text-muted)]">
-            <Search size={18} />
+      {/* Filters */}
+      <div className="card p-4">
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="flex-1 relative">
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+              className="input pl-10"
+              placeholder="Search by name, ID, or guardian..."
+            />
           </div>
-          <input
-            type="text"
-            placeholder="Search by student name, ID, or guardian..."
-            className="block w-full pl-10 pr-3 py-2.5 border-[var(--border-light)] rounded-xl leading-5 bg-[var(--bg-tertiary)] placeholder-slate-400 focus:outline-none focus:bg-[var(--bg-secondary)] focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary sm:text-sm transition-all"
-            value={searchTerm}
-            onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
-          />
-        </div>
-        <div className="flex items-center gap-3">
           <select
             value={classFilter}
             onChange={(e) => { setClassFilter(e.target.value); setCurrentPage(1); }}
-            className="px-4 py-2.5 bg-[var(--bg-tertiary)] border-[var(--border-light)] rounded-xl text-sm text-[var(--text-secondary)] focus:outline-none focus:ring-2 focus:ring-brand-primary/20"
+            className="select sm:w-44"
           >
             <option value="">All Classes</option>
             {classOptions.map(cls => (
@@ -192,9 +194,9 @@ export default function StudentManagementPage() {
           <select
             value={statusFilter}
             onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
-            className="px-4 py-2.5 bg-[var(--bg-tertiary)] border-[var(--border-light)] rounded-xl text-sm text-[var(--text-secondary)] focus:outline-none focus:ring-2 focus:ring-brand-primary/20"
+            className="select sm:w-40"
           >
-            <option value="">All Statuses</option>
+            <option value="">All Status</option>
             {statusOptions.map(st => (
               <option key={st} value={st.toLowerCase()}>{st}</option>
             ))}
@@ -202,101 +204,86 @@ export default function StudentManagementPage() {
         </div>
       </div>
 
-      {/* Student List */}
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="bg-[var(--bg-secondary)] rounded-2xl border-[var(--border-light)] shadow-sm overflow-hidden book-page"
-      >
+      {/* Students Table */}
+      <div className="card overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-sm text-left data-table">
-            <thead className="text-xs text-[var(--text-muted)] uppercase bg-[var(--bg-tertiary)] border-b border-[var(--border-light)]">
+          <table className="data-table">
+            <thead>
               <tr>
-                <th className="px-6 py-4 font-semibold">Student</th>
-                <th className="px-6 py-4 font-semibold">Student ID</th>
-                <th className="px-6 py-4 font-semibold">Class & Section</th>
-                <th className="px-6 py-4 font-semibold">Guardian</th>
-                <th className="px-6 py-4 font-semibold">Status</th>
-                <th className="px-6 py-4 font-semibold text-right">Actions</th>
+                <th>Student ID</th>
+                <th>Name</th>
+                <th>Class</th>
+                <th>Section</th>
+                <th>Roll</th>
+                <th>Status</th>
+                <th>Guardian</th>
+                <th className="text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[var(--border-light)]">
-              {paginatedStudents.map((student) => (
-                <tr key={student.id} className="hover:bg-[var(--bg-tertiary)]/50 transition-colors group">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-brand-primary to-brand-mid flex items-center justify-center text-white font-bold border border-brand-primary">
-                        {student.name.charAt(0)}
-                      </div>
-                      <div>
-                        <div className="font-semibold text-[var(--text-primary)] group-hover:text-brand-primary transition-colors">{student.name}</div>
-                        <div className="text-xs text-[var(--text-muted)]">Roll: {student.roll}</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 font-medium text-[var(--text-secondary)]">{student.id}</td>
-                  <td className="px-6 py-4">
-                    <div className="text-[var(--text-primary)]">{student.class}</div>
-                    <div className="text-xs text-[var(--text-muted)]">{student.section}</div>
-                  </td>
-                  <td className="px-6 py-4 text-[var(--text-secondary)]">{student.guardian}</td>
-                  <td className="px-6 py-4">
-                    <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${
-                      student.status === 'Active' ? 'badge-green' : 
-                      student.status === 'Pending' ? 'badge-amber' : 
-                      'badge-rose'
-                    }`}>
-                      {student.status === 'Active' && <CheckCircle2 size={14} />}
-                      {student.status === 'Pending' && <Clock size={14} />}
-                      {student.status === 'Suspended' && <XCircle size={14} />}
-                      {student.status}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-right relative">
-                    <button
-                      onClick={() => setActionMenuStudentId(actionMenuStudentId === student.id ? null : student.id)}
-                      className="text-[var(--text-muted)] hover:text-[var(--text-secondary)] p-2 rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors"
-                    >
-                      <MoreHorizontal size={20} />
-                    </button>
-                    <AnimatePresence>
-                      {actionMenuStudentId === student.id && (
-                        <>
-                          <div className="fixed inset-0 z-40" onClick={() => setActionMenuStudentId(null)} />
+              {paginatedStudents.length > 0 ? (
+                paginatedStudents.map((student) => (
+                  <tr key={student.id} className="hover:bg-[var(--bg-tertiary)]/50 transition-colors">
+                    <td className="font-mono text-xs text-[var(--text-muted)]">{student.id}</td>
+                    <td className="font-medium text-[var(--text-primary)]">{student.name}</td>
+                    <td>{student.class}</td>
+                    <td>{student.section}</td>
+                    <td>{student.roll}</td>
+                    <td>
+                      <span className={`badge ${badgeVariant(student.status)}`}>
+                        {student.status === 'Active' ? <CheckCircle2 size={12} /> : student.status === 'Pending' ? <Clock size={12} /> : <XCircle size={12} />}
+                        {student.status}
+                      </span>
+                    </td>
+                    <td className="text-[var(--text-muted)]">{student.guardian}</td>
+                    <td className="text-right relative">
+                      <button
+                        onClick={() => setActionMenuStudentId(actionMenuStudentId === student.id ? null : student.id)}
+                        className="btn btn-ghost btn-icon-sm"
+                        aria-label="Actions"
+                      >
+                        <MoreHorizontal size={16} />
+                      </button>
+                      <AnimatePresence>
+                        {actionMenuStudentId === student.id && (
                           <motion.div
-                            initial={{ opacity: 0, scale: 0.95, y: 4 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.95, y: 4 }}
-                            transition={{ duration: 0.12 }}
-                            className="absolute right-0 top-12 z-50 w-48 bg-[var(--bg-secondary)] rounded-xl shadow-lg border-[var(--border-light)] overflow-hidden"
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            className="absolute right-0 mt-1 w-44 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl shadow-lg z-50 overflow-hidden"
                           >
                             <div className="p-1">
-                              {actionItems.map(item => (
+                              {actionItems.map(action => (
                                 <button
-                                  key={item.id}
-                                  onClick={() => handleAction(item.id, student.id)}
+                                  key={action.id}
+                                  onClick={() => handleAction(action.id, student.id)}
                                   className={`w-full text-left px-3 py-2 text-sm rounded-lg flex items-center gap-3 transition-colors ${
-                                    item.danger
-                                      ? 'text-rose-600 hover:bg-rose-50'
+                                    action.danger
+                                      ? 'text-rose-500 hover:bg-rose-50'
                                       : 'text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'
                                   }`}
                                 >
-                                  <item.icon size={15} className="shrink-0" />
-                                  {item.label}
+                                  <action.icon size={14} />
+                                  {action.label}
                                 </button>
                               ))}
                             </div>
                           </motion.div>
-                        </>
-                      )}
-                    </AnimatePresence>
-                  </td>
-                </tr>
-              ))}
-              {filteredStudents.length === 0 && (
+                        )}
+                      </AnimatePresence>
+                    </td>
+                  </tr>
+                ))
+              ) : (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-sm text-[var(--text-muted)]">
-                    No students match your search criteria.
+                  <td colSpan={8}>
+                    <div className="empty-state">
+                      <div className="empty-state-icon">
+                        <Search size={24} />
+                      </div>
+                      <div className="empty-state-title">No students found</div>
+                      <div className="empty-state-desc">Try adjusting your search or filter criteria.</div>
+                    </div>
                   </td>
                 </tr>
               )}
@@ -306,15 +293,15 @@ export default function StudentManagementPage() {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="px-6 py-4 border-t border-[var(--border-light)] flex items-center justify-between bg-[var(--bg-tertiary)]/50">
-            <span className="text-sm text-[var(--text-muted)]">
-              Showing {Math.min(filteredStudents.length, 1 + (safePage - 1) * ITEMS_PER_PAGE)} to {Math.min(filteredStudents.length, safePage * ITEMS_PER_PAGE)} of {filteredStudents.length} student{filteredStudents.length !== 1 ? 's' : ''}
-            </span>
-            <div className="flex gap-2">
+          <div className="flex items-center justify-between px-6 py-4 border-t border-[var(--border-color)] bg-[var(--bg-tertiary)]/50">
+            <p className="text-sm text-[var(--text-muted)]">
+              Showing {(safePage - 1) * ITEMS_PER_PAGE + 1} to {Math.min(safePage * ITEMS_PER_PAGE, filteredStudents.length)} of {filteredStudents.length}
+            </p>
+            <div className="flex items-center gap-2">
               <button
+                onClick={() => setCurrentPage(Math.max(1, safePage - 1))}
                 disabled={safePage <= 1}
-                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                className="px-3 py-1 border-[var(--border-light)] rounded-lg text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                className="btn btn-ghost btn-sm disabled:opacity-30"
               >
                 Previous
               </button>
@@ -322,26 +309,26 @@ export default function StudentManagementPage() {
                 <button
                   key={page}
                   onClick={() => setCurrentPage(page)}
-                  className={`px-3 py-1 border rounded-lg text-sm transition-colors ${
+                  className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${
                     page === safePage
-                      ? 'bg-brand-primary text-white border-brand-primary shadow-sm shadow-brand-primary/20'
-                      : 'border-[var(--border-light)] text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)]'
+                      ? 'bg-[var(--brand-primary)] text-white'
+                      : 'text-[var(--text-muted)] hover:bg-[var(--bg-tertiary)]'
                   }`}
                 >
                   {page}
                 </button>
               ))}
               <button
+                onClick={() => setCurrentPage(Math.min(totalPages, safePage + 1))}
                 disabled={safePage >= totalPages}
-                onClick={() => setCurrentPage(p => Math.min(totalPages, p - 1))}
-                className="px-3 py-1 border-[var(--border-light)] rounded-lg text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                className="btn btn-ghost btn-sm disabled:opacity-30"
               >
                 Next
               </button>
             </div>
           </div>
         )}
-      </motion.div>
+      </div>
     </div>
   );
 }

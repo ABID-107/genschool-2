@@ -48,7 +48,7 @@ const colorStyles: Record<Color, { bg: string; border: string; text: string; bar
   slate:   { bg: 'bg-slate-50',   border: 'border-slate-200',   text: 'text-slate-700',   bar: 'bg-slate-500' },
   cyan:    { bg: 'bg-cyan-50',    border: 'border-cyan-200',    text: 'text-cyan-700',    bar: 'bg-cyan-500' },
   orange:  { bg: 'bg-orange-50',  border: 'border-orange-200',  text: 'text-orange-700',  bar: 'bg-orange-500' },
-  teal:    { bg: 'bg-teal-50',    border: 'border-teal-200',    text: 'text-teal-700',    bar: 'bg-teal-500' },
+  teal:    { bg: 'bg-brand-primary/10', border: 'border-brand-primary/20', text: 'text-brand-primary', bar: 'bg-brand-primary' },
 };
 
 const allDays = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];

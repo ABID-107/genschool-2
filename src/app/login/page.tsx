@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Shield } from "lucide-react";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -12,12 +13,10 @@ export default function LoginPage() {
   const [role, setRole] = useState<"admin" | "teacher" | "student" | "guardian">("admin");
   const router = useRouter();
 
-
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
-    // Simulate network request
+
     setTimeout(() => {
       localStorage.setItem("isAuthenticated", "true");
       localStorage.setItem("userRole", role);
@@ -35,44 +34,41 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 cinematic-hero selection:bg-brand-primary/20 selection:text-brand-primary">
-      
-      <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
-        <div className="floating-orb floating-orb-1 top-[-10%] left-[-5%]" />
-        <div className="floating-orb floating-orb-2 bottom-[-10%] right-[-5%]" />
-        <div className="floating-orb floating-orb-3 top-[40%] right-[20%]" />
-      </div>
+    <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-brand-deep relative overflow-hidden selection:bg-brand-primary/20 selection:text-brand-primary">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_20%,rgba(59,130,246,0.10)_0%,transparent_60%),radial-gradient(ellipse_40%_30%_at_80%_80%,rgba(99,102,241,0.05)_0%,transparent_60%)]" />
+      <div className="absolute top-1/3 -left-20 w-[300px] h-[300px] rounded-full bg-brand-primary/10 blur-[100px]" />
+      <div className="absolute bottom-1/4 -right-20 w-[250px] h-[250px] rounded-full bg-brand-accent/5 blur-[80px]" />
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md z-10">
-        <Link href="/" className="flex items-center justify-center gap-[10px] text-[1.8rem] font-bold text-[var(--text-primary)] no-underline font-bricolage hover:opacity-80 transition-opacity">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-primary to-brand-mid flex items-center justify-center text-brand-light font-extrabold text-xl">
+        <Link href="/" className="flex items-center justify-center gap-[10px] text-[1.8rem] font-bold text-white no-underline font-heading hover:opacity-80 transition-opacity">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-accent to-amber-400 flex items-center justify-center text-white font-extrabold text-xl">
             G
           </div>
           <span>GenSchool</span>
         </Link>
-        <h2 className="mt-8 text-center text-[1.8rem] font-bold tracking-tight text-[var(--text-primary)] font-bricolage">
+        <h2 className="mt-8 text-center text-[1.8rem] font-bold tracking-tight text-white font-heading">
           Welcome back
         </h2>
-        <p className="mt-2 text-center text-sm text-[var(--text-muted)]">
+        <p className="mt-2 text-center text-sm text-white/50">
           Please sign in to access your dashboard.
         </p>
       </div>
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="mt-8 sm:mx-auto sm:w-full sm:max-w-[420px] z-10"
       >
         <div className="glass-card py-10 px-6 sm:px-12">
-          <div className="flex bg-[var(--bg-tertiary)] border border-[var(--border-light)] p-1 rounded-xl mb-8 flex-wrap sm:flex-nowrap gap-1 sm:gap-0">
+          <div className="flex bg-white/5 border border-white/10 p-1 rounded-xl mb-8 flex-wrap sm:flex-nowrap gap-1 sm:gap-0">
             <button
               type="button"
               onClick={() => setRole("admin")}
               className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${
                 role === "admin"
-                  ? "bg-[var(--bg-secondary)] text-brand-primary shadow-sm border border-[var(--border-light)]"
-                  : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                  ? "bg-white/10 text-white shadow-sm border border-white/10"
+                  : "text-white/50 hover:text-white/80"
               }`}
             >
               Admin
@@ -82,8 +78,8 @@ export default function LoginPage() {
               onClick={() => setRole("teacher")}
               className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${
                 role === "teacher"
-                  ? "bg-[var(--bg-secondary)] text-brand-primary shadow-sm border border-[var(--border-light)]"
-                  : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                  ? "bg-white/10 text-white shadow-sm border border-white/10"
+                  : "text-white/50 hover:text-white/80"
               }`}
             >
               Teacher
@@ -93,8 +89,8 @@ export default function LoginPage() {
               onClick={() => setRole("student")}
               className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${
                 role === "student"
-                  ? "bg-[var(--bg-secondary)] text-brand-primary shadow-sm border border-[var(--border-light)]"
-                  : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                  ? "bg-white/10 text-white shadow-sm border border-white/10"
+                  : "text-white/50 hover:text-white/80"
               }`}
             >
               Student
@@ -104,8 +100,8 @@ export default function LoginPage() {
               onClick={() => setRole("guardian")}
               className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${
                 role === "guardian"
-                  ? "bg-[var(--bg-secondary)] text-brand-primary shadow-sm border border-[var(--border-light)]"
-                  : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                  ? "bg-white/10 text-white shadow-sm border border-white/10"
+                  : "text-white/50 hover:text-white/80"
               }`}
             >
               Guardian
@@ -113,11 +109,17 @@ export default function LoginPage() {
           </div>
           <form className="space-y-6" onSubmit={handleLogin}>
             <div>
-              <label htmlFor="email" className="block text-sm font-semibold text-[var(--text-primary)] mb-2">
+              <label htmlFor="email" className="block text-sm font-semibold text-white/80 mb-2">
                 {role === "guardian" ? "Child's Username" : "Email address"}
               </label>
               <div className="relative">
-                <span className="material-symbols-outlined absolute left-3 top-3 text-[var(--text-muted)] text-[20px]">{role === "guardian" ? "person" : "mail"}</span>
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 text-[18px]">
+                  {role === "guardian" ? (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  ) : (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                  )}
+                </span>
                 <input
                   id="email"
                   name="email"
@@ -126,7 +128,7 @@ export default function LoginPage() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="glass-input block w-full pl-10 pr-4 py-3 sm:text-sm"
+                  className="block w-full bg-white/5 border border-white/10 text-white placeholder-white/30 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/40 focus:border-brand-accent/60 transition-all"
                   placeholder={role === "guardian" ? "student_username" : role === "admin" ? "admin@genschool.com" : role === "teacher" ? "teacher@genschool.com" : "student@genschool.com"}
                 />
               </div>
@@ -134,15 +136,17 @@ export default function LoginPage() {
 
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label htmlFor="password" className="block text-sm font-semibold text-[var(--text-primary)]">
+                <label htmlFor="password" className="block text-sm font-semibold text-white/80">
                   Password
                 </label>
-                <a href="#" className="text-sm font-medium text-brand-primary hover:text-brand-mid transition-colors">
+                <a href="#" className="text-sm font-medium text-brand-accent hover:text-amber-400 transition-colors">
                   Forgot password?
                 </a>
               </div>
               <div className="relative">
-                <span className="material-symbols-outlined absolute left-3 top-3 text-[var(--text-muted)] text-[20px]">lock</span>
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 text-[18px]">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </span>
                 <input
                   id="password"
                   name="password"
@@ -151,7 +155,7 @@ export default function LoginPage() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="glass-input block w-full pl-10 pr-4 py-3 sm:text-sm"
+                  className="block w-full bg-white/5 border border-white/10 text-white placeholder-white/30 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/40 focus:border-brand-accent/60 transition-all"
                   placeholder={role === "guardian" ? "DD-MM-YYYY" : "••••••••"}
                 />
               </div>
@@ -162,9 +166,9 @@ export default function LoginPage() {
                 id="remember-me"
                 name="remember-me"
                 type="checkbox"
-                className="h-4 w-4 rounded border-[var(--border-color)] text-brand-primary focus:ring-brand-primary"
+                className="h-4 w-4 rounded border-white/20 bg-white/5 text-brand-accent focus:ring-brand-accent/40"
               />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-[var(--text-muted)]">
+              <label htmlFor="remember-me" className="ml-2 block text-sm text-white/50">
                 Remember me
               </label>
             </div>
@@ -172,7 +176,7 @@ export default function LoginPage() {
             <div>
               <button
                 type="submit"
-                className="flex w-full justify-center items-center py-3.5 px-4 rounded-xl text-sm font-bold glass-button-primary disabled:opacity-70 disabled:cursor-not-allowed"
+                className="flex w-full justify-center items-center py-3.5 px-4 rounded-xl text-sm font-bold bg-brand-accent text-white hover:bg-amber-500 transition-all disabled:opacity-70 disabled:cursor-not-allowed shadow-[0_4px_16px_rgba(245,158,11,0.25)]"
               >
                 {isLoading ? (
                   <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -182,24 +186,41 @@ export default function LoginPage() {
                 ) : "Sign in"}
               </button>
             </div>
-            
+
             <div className="mt-6">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-[var(--border-light)]" />
+                  <div className="w-full border-t border-white/10" />
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="bg-[var(--bg-secondary)] px-2 text-[var(--text-muted)]">Demo credentials</span>
+                  <span className="bg-[var(--glass-bg)] px-2 text-white/40">Demo credentials</span>
                 </div>
               </div>
-              <div className="mt-4 text-center text-xs text-[var(--text-muted)]">
+              <div className="mt-4 text-center text-xs text-white/40">
                 Any email and password will work for this demo.
               </div>
             </div>
           </form>
+
+          <div className="mt-6 pt-5 border-t border-white/10">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-white/10" />
+              </div>
+              <div className="relative flex justify-center text-xs">
+                <span className="bg-[var(--glass-bg)] px-2 text-white/40">Administrator access</span>
+              </div>
+            </div>
+            <Link
+              href="/super-admin/login"
+              className="mt-4 flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl border border-amber-400/30 text-amber-400 text-sm font-semibold bg-amber-500/5 hover:bg-amber-500/10 hover:border-amber-400 transition-all no-underline"
+            >
+              <Shield size={16} />
+              Super Admin Login
+            </Link>
+          </div>
         </div>
       </motion.div>
     </div>
   );
 }
-

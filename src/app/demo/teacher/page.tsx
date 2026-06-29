@@ -26,7 +26,7 @@ export default function DemoTeacherPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
             { label: 'My Classes', value: '6', icon: School, color: 'text-blue-600', bg: 'bg-blue-50' },
-            { label: 'Total Students', value: '184', icon: Users, color: 'text-teal-600', bg: 'bg-teal-50' },
+            { label: 'Total Students', value: '184', icon: Users, color: 'text-brand-primary', bg: 'bg-brand-primary/10' },
             { label: 'Assignments', value: '12', icon: BookOpen, color: 'text-purple-600', bg: 'bg-purple-50' },
             { label: 'Avg Performance', value: '87%', icon: BarChart3, color: 'text-green-600', bg: 'bg-green-50' },
           ].map((stat) => (
@@ -77,7 +77,7 @@ export default function DemoTeacherPage() {
                 'Posted learning materials for Chemistry',
               ].map((activity, i) => (
                 <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-navy-50">
-                  <div className="w-2 h-2 rounded-full bg-teal-500 mt-2 shrink-0" />
+                  <div className="w-2 h-2 rounded-full bg-brand-primary mt-2 shrink-0" />
                   <p className="text-sm text-navy-700">{activity}</p>
                 </div>
               ))}

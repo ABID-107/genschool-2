@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Moon, Sun } from "lucide-react";
 
 export default function ThemeToggle() {
   const [theme, setTheme] = useState<"light" | "dark" | null>(null);
@@ -24,21 +25,21 @@ export default function ThemeToggle() {
     }
   };
 
-  // Don't render until mounted to prevent hydration mismatch with icons
   if (theme === null) {
-    return <div className="w-9 h-9"></div>;
+    return <div className="w-9 h-9" />;
   }
 
   return (
     <button
       onClick={toggleTheme}
-      className="p-2 rounded-full glass-button flex items-center justify-center transition-all hover:scale-105 active:scale-95"
-      aria-label="Toggle Dark Mode"
+      className="btn-icon btn-glass rounded-full hover:scale-105 active:scale-95"
+      aria-label={theme === "light" ? "Enable dark mode" : "Enable light mode"}
     >
-      <span className="material-symbols-outlined text-[20px] text-[var(--text-primary)] transition-transform duration-300">
-        {theme === "light" ? "dark_mode" : "light_mode"}
-      </span>
+      {theme === "light" ? (
+        <Moon size={16} />
+      ) : (
+        <Sun size={16} />
+      )}
     </button>
   );
 }
-

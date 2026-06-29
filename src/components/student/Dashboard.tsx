@@ -94,7 +94,7 @@ export function StudentDashboardView({ assignments, events, studentData }: Dashb
               <div className={`p-2 rounded-lg ${studentData.attendance >= 85 ? 'bg-emerald-50 text-emerald-600' : studentData.attendance >= 75 ? 'bg-amber-50 text-amber-600' : 'bg-rose-50 text-rose-600'}`}>
                 <span className="material-symbols-outlined text-[20px]">person_check</span>
               </div>
-              <span className={`text-xl font-bold font-bricolage ${studentData.attendance >= 85 ? 'text-emerald-600' : studentData.attendance >= 75 ? 'text-amber-600' : 'text-rose-600'}`}>
+              <span className={`text-xl font-bold font-heading ${studentData.attendance >= 85 ? 'text-emerald-600' : studentData.attendance >= 75 ? 'text-amber-600' : 'text-rose-600'}`}>
                 {studentData.attendance}%
               </span>
             </div>
@@ -112,7 +112,7 @@ export function StudentDashboardView({ assignments, events, studentData }: Dashb
               <div className="p-2 rounded-lg bg-indigo-50 text-indigo-600">
                 <span className="material-symbols-outlined text-[20px]">assignment</span>
               </div>
-              <span className="text-xl font-bold font-bricolage text-slate-900">{pendingCount}</span>
+              <span className="text-xl font-bold font-heading text-slate-900">{pendingCount}</span>
             </div>
             <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">{t('pending')} {t('assignments')}</p>
           </div>

@@ -94,7 +94,7 @@ export function LessonUpload({ onUploadSuccess }: LessonUploadProps) {
 
   return (
     <div className="bg-white/80 backdrop-blur-sm p-6 md:p-8 rounded-2xl border border-slate-200/50 shadow-sm">
-      <h3 className="text-2xl font-bold text-slate-900 mb-6 font-bricolage tracking-tight">Upload New Lesson</h3>
+      <h3 className="text-2xl font-bold text-slate-900 mb-6 font-heading tracking-tight">Upload New Lesson</h3>
       
       {uploadingState === 'success' && (
         <div className="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-3 text-emerald-700">

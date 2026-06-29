@@ -109,7 +109,7 @@ export default function PublicPaymentPortal() {
           <div className="glass-card p-8 animate-in fade-in duration-500">
             <div className="text-center mb-8">
               <p className="text-sm font-bold text-[var(--text-muted)] uppercase">Alex Johnson • SMS-2025-0982</p>
-              <h2 className="text-4xl font-bold text-[var(--text-primary)] mt-2 font-bricolage">৳২,৪৫০.০০</h2>
+              <h2 className="text-4xl font-bold text-[var(--text-primary)] mt-2 font-heading">৳২,৪৫০.০০</h2>
               <p className="text-xs font-bold text-rose-500 mt-1">মোট বকেয়া ফি</p>
             </div>
 

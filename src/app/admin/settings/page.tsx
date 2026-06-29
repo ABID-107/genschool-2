@@ -119,7 +119,7 @@ export default function SettingsPage() {
           <div>
             <label className="block text-sm font-medium text-navy-700 mb-3">Accent Color</label>
             <div className="flex gap-3">
-              {["bg-teal-500", "bg-amber-500", "bg-blue-500", "bg-purple-500", "bg-green-500"].map((c) => (
+              {["bg-brand-primary", "bg-amber-500", "bg-blue-500", "bg-purple-500", "bg-green-500"].map((c) => (
                 <button key={c} className={`w-8 h-8 rounded-full ${c} ring-2 ring-offset-2 ring-transparent hover:ring-navy-300 transition-all`} />
               ))}
             </div>
