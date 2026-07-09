@@ -39,16 +39,16 @@ const colors = ['indigo', 'blue', 'emerald', 'violet', 'rose', 'amber', 'slate',
 type Color = typeof colors[number];
 
 const colorStyles: Record<Color, { bg: string; border: string; text: string; bar: string }> = {
-  indigo:  { bg: 'bg-indigo-50',  border: 'border-indigo-200',  text: 'text-indigo-700',  bar: 'bg-indigo-500' },
-  blue:    { bg: 'bg-blue-50',    border: 'border-blue-200',    text: 'text-blue-700',    bar: 'bg-blue-500' },
-  emerald: { bg: 'bg-emerald-50', border: 'border-emerald-200', text: 'text-emerald-700', bar: 'bg-emerald-500' },
-  violet:  { bg: 'bg-violet-50',  border: 'border-violet-200',  text: 'text-violet-700',  bar: 'bg-violet-500' },
+  indigo:  { bg: 'bg-[var(--green-50)]',  border: 'border-[var(--green-200)]',  text: 'text-[var(--green-800)]',  bar: 'bg-[var(--brand-primary)]' },
+  blue:    { bg: 'bg-[var(--green-50)]',    border: 'border-[var(--green-200)]',    text: 'text-[var(--green-800)]',    bar: 'bg-[var(--brand-mid)]' },
+  emerald: { bg: 'bg-[var(--green-50)]', border: 'border-[var(--green-200)]', text: 'text-[var(--green-800)]', bar: 'bg-[var(--brand-light)]' },
+  violet:  { bg: 'bg-[var(--green-50)]',  border: 'border-[var(--green-200)]',  text: 'text-[var(--green-800)]',  bar: 'bg-[var(--brand-deep)]' },
   rose:    { bg: 'bg-rose-50',    border: 'border-rose-200',    text: 'text-rose-700',    bar: 'bg-rose-500' },
   amber:   { bg: 'bg-amber-50',   border: 'border-amber-200',   text: 'text-amber-700',   bar: 'bg-amber-500' },
   slate:   { bg: 'bg-slate-50',   border: 'border-slate-200',   text: 'text-slate-700',   bar: 'bg-slate-500' },
-  cyan:    { bg: 'bg-cyan-50',    border: 'border-cyan-200',    text: 'text-cyan-700',    bar: 'bg-cyan-500' },
+  cyan:    { bg: 'bg-[var(--green-50)]',    border: 'border-[var(--green-200)]',    text: 'text-[var(--green-800)]',    bar: 'bg-[var(--brand-light)]' },
   orange:  { bg: 'bg-orange-50',  border: 'border-orange-200',  text: 'text-orange-700',  bar: 'bg-orange-500' },
-  teal:    { bg: 'bg-brand-primary/10', border: 'border-brand-primary/20', text: 'text-brand-primary', bar: 'bg-brand-primary' },
+  teal:    { bg: 'bg-[var(--green-50)]', border: 'border-[var(--green-200)]', text: 'text-[var(--green-800)]', bar: 'bg-[var(--brand-mid)]' },
 };
 
 const allDays = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
@@ -416,7 +416,7 @@ export default function TimetableManagerPage() {
             <Clock size={16} /> Periods
           </button>
           <div className="flex items-center gap-1.5 text-[var(--text-muted)]">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Valid
+            <span className="w-2.5 h-2.5 rounded-full bg-[var(--brand-primary)]"></span> Valid
           </div>
           <div className={`flex items-center gap-1.5 ${conflicts.size > 0 ? 'text-rose-500' : 'text-[var(--text-muted)]'}`}>
             <span className={`w-2.5 h-2.5 rounded-full ${conflicts.size > 0 ? 'bg-rose-500' : 'bg-[var(--border-light)]'}`}></span>
@@ -715,7 +715,7 @@ export default function TimetableManagerPage() {
       <AnimatePresence>
         {published && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
-            className="fixed bottom-6 right-6 bg-emerald-600 text-white px-5 py-3 rounded-xl shadow-lg text-sm font-medium z-50"
+            className="fixed bottom-6 right-6 bg-[var(--brand-primary)] text-white px-5 py-3 rounded-xl shadow-lg text-sm font-medium z-50"
           >
             Timetable published successfully!
           </motion.div>

@@ -83,7 +83,7 @@ export function GuardianAttendanceView({ summary }: { summary: AttendanceSummary
         </div>
 
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-center items-center text-center">
-          <span className="material-symbols-outlined text-indigo-500 text-3xl mb-2">sms</span>
+          <span className="material-symbols-outlined text-[var(--brand-primary)] text-3xl mb-2">sms</span>
           <h4 className="text-2xl font-bold text-slate-900">{summary.smsSent}</h4>
           <p className="text-xs font-semibold text-slate-500 uppercase">{lang === 'bn' ? 'এসএমএস পাঠানো হয়েছে' : 'SMS Alerts'}</p>
         </div>
@@ -93,7 +93,7 @@ export function GuardianAttendanceView({ summary }: { summary: AttendanceSummary
       <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-            <span className="material-symbols-outlined text-indigo-600">calendar_month</span>
+            <span className="material-symbols-outlined text-[var(--brand-primary)]">calendar_month</span>
             {lang === 'bn' ? 'মাসিক রিপোর্ট' : 'Monthly Report'}
           </h3>
           <div className="flex items-center gap-3 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200">
@@ -147,7 +147,7 @@ export function GuardianAttendanceView({ summary }: { summary: AttendanceSummary
       {/* SMS Alert History */}
       <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
         <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2 mb-4">
-          <span className="material-symbols-outlined text-indigo-600">sms</span>
+          <span className="material-symbols-outlined text-[var(--brand-primary)]">sms</span>
           {lang === 'bn' ? 'এসএমএস হিস্ট্রি' : 'SMS Alert History'}
         </h3>
         <div className="space-y-3">

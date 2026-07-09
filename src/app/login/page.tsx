@@ -34,14 +34,21 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-brand-deep relative overflow-hidden selection:bg-brand-primary/20 selection:text-brand-primary">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_20%,rgba(59,130,246,0.10)_0%,transparent_60%),radial-gradient(ellipse_40%_30%_at_80%_80%,rgba(99,102,241,0.05)_0%,transparent_60%)]" />
-      <div className="absolute top-1/3 -left-20 w-[300px] h-[300px] rounded-full bg-brand-primary/10 blur-[100px]" />
-      <div className="absolute bottom-1/4 -right-20 w-[250px] h-[250px] rounded-full bg-brand-accent/5 blur-[80px]" />
+    <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-[var(--brand-deep)] relative overflow-hidden selection:bg-[var(--brand-primary)]/20 selection:text-[var(--brand-primary)]">
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 70% 50% at 50% 20%, rgba(var(--brand-rgb), 0.10) 0%, transparent 60%)," +
+            "radial-gradient(ellipse 40% 30% at 80% 80%, rgba(var(--brand-rgb), 0.05) 0%, transparent 60%)",
+        }}
+      />
+      <div className="absolute top-1/3 -left-20 w-[300px] h-[300px] rounded-full bg-[var(--brand-primary)]/10 blur-[100px]" />
+      <div className="absolute bottom-1/4 -right-20 w-[250px] h-[250px] rounded-full bg-[var(--brand-accent)]/5 blur-[80px]" />
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md z-10">
         <Link href="/" className="flex items-center justify-center gap-[10px] text-[1.8rem] font-bold text-white no-underline font-heading hover:opacity-80 transition-opacity">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-accent to-amber-400 flex items-center justify-center text-white font-extrabold text-xl">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--brand-accent)] to-amber-400 flex items-center justify-center text-white font-extrabold text-xl">
             G
           </div>
           <span>GenSchool</span>
@@ -128,7 +135,7 @@ export default function LoginPage() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full bg-white/5 border border-white/10 text-white placeholder-white/30 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/40 focus:border-brand-accent/60 transition-all"
+                  className="block w-full bg-white/5 border border-white/10 text-white placeholder-white/30 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand-accent)]/40 focus:border-[var(--brand-accent)]/60 transition-all"
                   placeholder={role === "guardian" ? "student_username" : role === "admin" ? "admin@genschool.com" : role === "teacher" ? "teacher@genschool.com" : "student@genschool.com"}
                 />
               </div>
@@ -139,7 +146,7 @@ export default function LoginPage() {
                 <label htmlFor="password" className="block text-sm font-semibold text-white/80">
                   Password
                 </label>
-                <a href="#" className="text-sm font-medium text-brand-accent hover:text-amber-400 transition-colors">
+                <a href="#" className="text-sm font-medium text-[var(--brand-accent)] hover:text-amber-400 transition-colors">
                   Forgot password?
                 </a>
               </div>
@@ -155,7 +162,7 @@ export default function LoginPage() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full bg-white/5 border border-white/10 text-white placeholder-white/30 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent/40 focus:border-brand-accent/60 transition-all"
+                  className="block w-full bg-white/5 border border-white/10 text-white placeholder-white/30 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand-accent)]/40 focus:border-[var(--brand-accent)]/60 transition-all"
                   placeholder={role === "guardian" ? "DD-MM-YYYY" : "••••••••"}
                 />
               </div>
@@ -166,7 +173,7 @@ export default function LoginPage() {
                 id="remember-me"
                 name="remember-me"
                 type="checkbox"
-                className="h-4 w-4 rounded border-white/20 bg-white/5 text-brand-accent focus:ring-brand-accent/40"
+                className="h-4 w-4 rounded border-white/20 bg-white/5 text-[var(--brand-accent)] focus:ring-[var(--brand-accent)]/40"
               />
               <label htmlFor="remember-me" className="ml-2 block text-sm text-white/50">
                 Remember me
@@ -176,7 +183,8 @@ export default function LoginPage() {
             <div>
               <button
                 type="submit"
-                className="flex w-full justify-center items-center py-3.5 px-4 rounded-xl text-sm font-bold bg-brand-accent text-white hover:bg-amber-500 transition-all disabled:opacity-70 disabled:cursor-not-allowed shadow-[0_4px_16px_rgba(245,158,11,0.25)]"
+                disabled={isLoading}
+                className="btn btn-amber w-full btn-lg"
               >
                 {isLoading ? (
                   <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -213,7 +221,7 @@ export default function LoginPage() {
             </div>
             <Link
               href="/super-admin/login"
-              className="mt-4 flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl border border-amber-400/30 text-amber-400 text-sm font-semibold bg-amber-500/5 hover:bg-amber-500/10 hover:border-amber-400 transition-all no-underline"
+              className="btn btn-outline-amber w-full mt-4 no-underline"
             >
               <Shield size={16} />
               Super Admin Login

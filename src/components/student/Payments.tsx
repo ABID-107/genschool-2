@@ -45,7 +45,7 @@ export function PaymentsView({ totalDue, invoices }: PaymentsProps) {
         </div>
 
         <div className="flex gap-4 w-full max-w-sm">
-          <button onClick={() => setStep('summary')} className="flex-1 py-3 bg-indigo-600 text-white rounded-xl font-bold shadow-md">
+          <button onClick={() => setStep('summary')} className="flex-1 py-3 bg-[var(--brand-primary)] text-white rounded-xl font-bold shadow-md">
             ফিরে যান
           </button>
           <button className="flex-1 py-3 border-2 border-slate-200 text-slate-600 rounded-xl font-bold flex items-center justify-center gap-2">
@@ -87,12 +87,12 @@ export function PaymentsView({ totalDue, invoices }: PaymentsProps) {
               { id: 'bkash', name: 'bKash', color: 'bg-[#E2136E]' },
               { id: 'nagad', name: 'Nagad', color: 'bg-[#F7941D]' },
               { id: 'rocket', name: 'Rocket', color: 'bg-[#8B318F]' },
-              { id: 'card', name: 'Card', color: 'bg-indigo-600' },
+              { id: 'card', name: 'Card', color: 'bg-[var(--brand-primary)]' },
             ].map(method => (
               <button 
                 key={method.id}
                 onClick={() => { setSelectedMethod(method.id); setStep('success'); }}
-                className="p-6 border border-slate-100 rounded-2xl flex flex-col items-center justify-center gap-3 hover:border-indigo-200 hover:bg-slate-50 transition-all group"
+                className="p-6 border border-slate-100 rounded-2xl flex flex-col items-center justify-center gap-3 hover:border-[var(--green-200)] hover:bg-slate-50 transition-all group"
               >
                 <div className={`w-12 h-12 rounded-xl ${method.color} text-white flex items-center justify-center shadow-md group-hover:scale-110 transition-transform`}>
                   <span className="material-symbols-outlined">{method.id === 'card' ? 'credit_card' : 'account_balance_wallet'}</span>

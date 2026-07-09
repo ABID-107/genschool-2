@@ -793,7 +793,7 @@ export default function RegisterSchoolModal({
                                   }`}
                                 >
                                   {plan.isPopular && (
-                                    <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-amber-500 text-navy-950 text-[10px] font-bold rounded-full uppercase tracking-wider whitespace-nowrap">
+                                    <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-amber-500 text-[var(--text-primary)] text-[10px] font-bold rounded-full uppercase tracking-wider whitespace-nowrap">
                                       Popular
                                     </div>
                                   )}

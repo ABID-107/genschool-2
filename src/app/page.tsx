@@ -129,11 +129,11 @@ export default function Home() {
       </AnimatePresence>
 
       {/* Hero */}
-      <section className="relative min-h-screen pt-28 pb-20 px-[5%] overflow-hidden flex items-center bg-[var(--brand-deep)]">
-        <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_20%,rgba(59,130,246,0.12)_0%,transparent_60%),radial-gradient(ellipse_50%_40%_at_80%_80%,rgba(99,102,241,0.06)_0%,transparent_60%)]" />
-        <div className="absolute inset-0 z-0 opacity-[0.03] bg-[linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] bg-[size:60px_60px]" />
-        <div className="absolute top-1/4 -left-20 w-[400px] h-[400px] rounded-full bg-[var(--brand-primary)]/10 blur-[120px]" />
-        <div className="absolute bottom-1/4 -right-20 w-[350px] h-[350px] rounded-full bg-[var(--brand-accent)]/8 blur-[100px]" />
+      <section className="relative min-h-screen pt-28 pb-20 px-[5%] overflow-hidden flex items-center bg-[var(--brand-deep)] cinematic-hero">
+        <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_20%,rgba(var(--brand-rgb),0.15)_0%,transparent_60%),radial-gradient(ellipse_50%_40%_at_80%_80%,rgba(var(--brand-rgb),0.08)_0%,transparent_60%)]" />
+        <div className="absolute inset-0 z-0 opacity-[0.04] bg-[linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:60px_60px]" />
+        <div className="floating-orb floating-orb-1 top-1/4 -left-20" />
+        <div className="floating-orb floating-orb-2 bottom-1/4 -right-20" style={{ background: 'radial-gradient(circle, rgba(245,158,11,0.08), transparent)' }} />
         <div className="relative z-10 max-w-[1100px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-[80px] items-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -156,7 +156,7 @@ export default function Home() {
                 whileTap={{ scale: 0.98 }}
                 disabled={isNavigating}
                 onClick={() => navigateTo("/login")}
-                className="px-7 py-3 rounded-xl bg-[var(--brand-accent)] text-white border-none cursor-pointer text-[1rem] font-semibold transition-all hover:shadow-[0_8px_24px_rgba(245,158,11,0.35)] shadow-[0_4px_16px_rgba(245,158,11,0.25)] active:scale-[0.98]"
+                className="btn btn-amber btn-lg"
               >
                 {t.heroBtn1}
               </motion.button>
@@ -198,7 +198,7 @@ export default function Home() {
               <div className="font-heading text-[1rem] font-semibold text-white">Dashboard Overview</div>
               <div className="flex gap-[6px]">
                 <div className="w-2 h-2 rounded-full bg-[var(--brand-accent)]" />
-                <div className="w-2 h-2 rounded-full bg-[#10b981]" />
+                <div className="w-2 h-2 rounded-full bg-[var(--brand-light)]" />
                 <div className="w-2 h-2 rounded-full bg-[var(--brand-primary)]" />
               </div>
             </div>
@@ -224,7 +224,7 @@ export default function Home() {
               <div className="text-[0.78rem] font-semibold text-white/40 mb-[10px] tracking-[0.05em] uppercase">Performance</div>
               {[
                 { label: "Math", val: "84%", w: 84, color: "var(--brand-accent)" },
-                { label: "Science", val: "78%", w: 78, color: "#10b981" },
+                { label: "Science", val: "78%", w: 78, color: "var(--brand-light)" },
                 { label: "English", val: "91%", w: 91, color: "var(--brand-primary)" },
               ].map((bar, i) => (
                 <div key={i} className="flex items-center gap-[10px] mb-2">
@@ -272,7 +272,7 @@ export default function Home() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.1 }}
                   whileHover={{ x: 4 }}
-                  className="flex gap-4 items-start bg-[var(--bg-secondary)] rounded-[var(--radius-xl)] p-[18px_20px] border border-[var(--border-light)] shadow-[var(--shadow-xs)] transition-all hover:shadow-[var(--shadow-md)]"
+                  className="card card-hover flex gap-4 items-start p-[18px_20px]"
                 >
                   <div className="w-[42px] h-[42px] rounded-[var(--radius-md)] flex-shrink-0 flex items-center justify-center text-[1.1rem] bg-[var(--bg-primary)] border border-[var(--border-light)]">
                     {card.icon}
@@ -290,7 +290,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="bg-[var(--bg-secondary)] rounded-[var(--radius-3xl)] border border-[var(--border-light)] p-8 shadow-[var(--shadow-lg)]"
+            className="card p-8"
           >
             <h3 className="font-heading text-[1.1rem] font-semibold mb-6">{t.rolesTitle}</h3>
             <div className="flex flex-wrap gap-2">
@@ -364,7 +364,7 @@ export default function Home() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 whileHover={{ y: -4 }}
-                className="bg-[var(--bg-secondary)] rounded-[var(--radius-2xl)] p-7 border border-[var(--border-light)] shadow-[var(--shadow-xs)] transition-all hover:shadow-[var(--shadow-lg)] relative overflow-hidden group card-hover"
+                className="card card-hover p-7 relative overflow-hidden group"
               >
                 <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-[var(--brand-primary)] to-[var(--brand-accent)] opacity-0 transition-opacity group-hover:opacity-100" />
                 <div className="w-[52px] h-[52px] rounded-[var(--radius-lg)] flex items-center justify-center text-[1.4rem] mb-[18px] bg-[var(--bg-tertiary)] border border-[var(--border-light)]">
@@ -429,7 +429,7 @@ export default function Home() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 whileHover={{ y: -3 }}
-                className="bg-[var(--bg-secondary)] rounded-[var(--radius-2xl)] p-7 border border-[var(--border-light)] shadow-[var(--shadow-xs)] transition-all hover:shadow-[var(--shadow-md)] text-center"
+                className="stat-card text-center"
               >
                 <div className="font-heading text-[2.2rem] font-bold bg-gradient-to-r from-[var(--brand-primary)] to-[var(--brand-mid)] bg-clip-text text-transparent">{item.num}</div>
                 <div className="text-[0.82rem] text-[var(--text-muted)] mt-[6px]">{item.label}</div>
@@ -465,7 +465,7 @@ export default function Home() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 whileHover={{ y: -4 }}
-                className="bg-[var(--bg-secondary)] rounded-[var(--radius-2xl)] p-7 border border-[var(--border-light)] shadow-[var(--shadow-xs)] transition-all hover:shadow-[var(--shadow-lg)] relative card-hover"
+                className="card card-hover p-7 relative"
               >
                 <div className="absolute top-5 right-6 text-[3rem] text-[var(--brand-primary)]/10 font-heading leading-none">&ldquo;</div>
                 <div className="text-[0.9rem] text-[var(--brand-accent)] mb-3 tracking-[2px]">★★★★★</div>
@@ -487,7 +487,7 @@ export default function Home() {
 
       {/* CTA */}
       <section className="py-[100px] px-[5%] bg-[var(--brand-deep)] text-center relative overflow-hidden" id="contact">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_50%,rgba(59,130,246,0.08)_0%,transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_50%,rgba(var(--brand-rgb),0.12)_0%,transparent_60%)]" />
         <div className="absolute top-0 left-1/4 w-[300px] h-[300px] rounded-full bg-[var(--brand-accent)]/5 blur-[100px]" />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -502,7 +502,7 @@ export default function Home() {
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => navigateTo("/login")}
-              className="px-7 py-3 rounded-xl bg-[var(--brand-accent)] text-white border-none cursor-pointer text-[1rem] font-semibold transition-all hover:shadow-[0_8px_24px_rgba(245,158,11,0.35)] shadow-[0_4px_16px_rgba(245,158,11,0.25)]"
+              className="btn btn-amber btn-lg"
             >
               {t.ctaBtn1}
             </motion.button>

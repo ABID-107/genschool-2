@@ -34,7 +34,7 @@ export function GuardianDashboardView({
 
   const recentActivities = [
     { id: 1, type: 'payment', titleEn: 'Payment Confirmed', titleBn: 'পেমেন্ট নিশ্চিত করা হয়েছে', descEn: 'Received $450 for Tuition Fee', descBn: 'বেতন বাবদ ৪৫০ টাকা গ্রহণ করা হয়েছে', time: '10:30 AM', date: 'Today', icon: 'check_circle', color: 'text-green-600', bg: 'bg-green-100' },
-    { id: 2, type: 'attendance', titleEn: 'Student Present', titleBn: 'শিক্ষার্থী উপস্থিত', descEn: 'Entered school premises', descBn: 'বিদ্যালয়ে প্রবেশ করেছে', time: '08:15 AM', date: 'Today', icon: 'sensor_door', color: 'text-indigo-600', bg: 'bg-indigo-100' },
+    { id: 2, type: 'attendance', titleEn: 'Student Present', titleBn: 'শিক্ষার্থী উপস্থিত', descEn: 'Entered school premises', descBn: 'বিদ্যালয়ে প্রবেশ করেছে', time: '08:15 AM', date: 'Today', icon: 'sensor_door', color: 'text-[var(--brand-primary)]', bg: 'bg-[var(--green-100)]' },
     { id: 3, type: 'notice', titleEn: 'New Notice', titleBn: 'নতুন নোটিশ', descEn: 'School will remain closed tomorrow', descBn: 'আগামীকাল বিদ্যালয় বন্ধ থাকবে', time: 'Yesterday', date: 'May 16', icon: 'campaign', color: 'text-amber-600', bg: 'bg-amber-100' },
     { id: 4, type: 'assignment', titleEn: 'Math Assignment Due', titleBn: 'গণিতের কাজ জমা দিতে হবে', descEn: 'Algebra equations chapter 4', descBn: 'বীজগণিত সমীকরণ অধ্যায় ৪', time: '2 Days ago', date: 'May 15', icon: 'assignment_late', color: 'text-rose-600', bg: 'bg-rose-100' },
   ];
@@ -49,19 +49,19 @@ export function GuardianDashboardView({
             onClick={() => onChildSwitch(child.id)}
             className={`flex items-center gap-3 px-4 py-3 rounded-2xl min-w-[200px] transition-all border ${
               activeChildId === child.id 
-                ? 'bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-200' 
-                : 'bg-white text-slate-700 border-slate-200 hover:border-indigo-300'
+                ? 'bg-[var(--brand-primary)] text-white border-[var(--brand-primary)] shadow-md shadow-[var(--green-200)]' 
+                : 'bg-white text-slate-700 border-slate-200 hover:border-[var(--green-300)]'
             }`}
           >
-            <Image src={child.avatar} alt={child.nameEn} className={`w-12 h-12 rounded-full object-cover border-2 ${activeChildId === child.id ? 'border-indigo-300' : 'border-slate-100'}`} width={48} height={48} />
+            <Image src={child.avatar} alt={child.nameEn} className={`w-12 h-12 rounded-full object-cover border-2 ${activeChildId === child.id ? 'border-[var(--green-300)]' : 'border-slate-100'}`} width={48} height={48} />
             <div className="text-left">
               <p className="font-bold text-sm leading-tight">{lang === 'bn' ? child.nameBn : child.nameEn}</p>
-              <p className={`text-xs ${activeChildId === child.id ? 'text-indigo-100' : 'text-slate-500'}`}>Class {child.class} • Sec {child.section}</p>
+              <p className={`text-xs ${activeChildId === child.id ? 'text-[var(--green-100)]' : 'text-slate-500'}`}>Class {child.class} • Sec {child.section}</p>
             </div>
           </button>
         ))}
         
-        <button className="flex items-center justify-center gap-2 px-6 py-3 rounded-2xl border-2 border-dashed border-slate-300 text-slate-500 hover:border-indigo-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all font-semibold whitespace-nowrap">
+        <button className="flex items-center justify-center gap-2 px-6 py-3 rounded-2xl border-2 border-dashed border-slate-300 text-slate-500 hover:border-[var(--brand-light)] hover:text-[var(--brand-primary)] hover:bg-[var(--green-50)] transition-all font-semibold whitespace-nowrap">
           <span className="material-symbols-outlined">add</span>
           {lang === 'bn' ? 'সন্তান যুক্ত করুন' : 'Add Child'}
         </button>
@@ -84,7 +84,7 @@ export function GuardianDashboardView({
           </div>
           
           <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-full bg-[var(--green-100)] text-[var(--brand-primary)] flex items-center justify-center">
               <span className="material-symbols-outlined text-2xl">sms</span>
             </div>
             <div>
@@ -109,7 +109,7 @@ export function GuardianDashboardView({
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
           <div className="flex justify-between items-start mb-2">
-            <div className="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
+            <div className="p-2 bg-[var(--green-50)] text-[var(--brand-primary)] rounded-lg">
               <span className="material-symbols-outlined text-xl">fact_check</span>
             </div>
           </div>
@@ -152,10 +152,10 @@ export function GuardianDashboardView({
       <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
         <div className="p-5 md:p-6 border-b border-slate-100 flex items-center justify-between">
           <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-            <span className="material-symbols-outlined text-indigo-600">history</span>
+            <span className="material-symbols-outlined text-[var(--brand-primary)]">history</span>
             {lang === 'bn' ? 'সাম্প্রতিক কার্যাবলী' : 'Recent Activity'}
           </h3>
-          <button className="text-sm font-bold text-indigo-600 hover:text-indigo-700">{lang === 'bn' ? 'সব দেখুন' : 'View All'}</button>
+          <button className="text-sm font-bold text-[var(--brand-primary)] hover:text-[var(--brand-deep)]">{lang === 'bn' ? 'সব দেখুন' : 'View All'}</button>
         </div>
         <div className="divide-y divide-slate-100">
           {recentActivities.map(activity => (

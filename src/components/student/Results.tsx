@@ -23,7 +23,7 @@ export function ResultsView({ exams }: ResultsProps) {
       <div className="space-y-6 animate-in slide-in-from-right duration-500">
         <button 
           onClick={() => setSelectedExam(null)}
-          className="flex items-center gap-2 text-slate-500 hover:text-indigo-600 font-bold text-sm mb-4"
+          className="flex items-center gap-2 text-slate-500 hover:text-[var(--brand-primary)] font-bold text-sm mb-4"
         >
           <span className="material-symbols-outlined text-[20px]">arrow_back</span>
           ফিরে যান
@@ -31,7 +31,7 @@ export function ResultsView({ exams }: ResultsProps) {
 
         {/* Result Detail Header */}
         <div className="bg-white rounded-2xl border border-slate-200/50 p-6 shadow-sm text-center relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-400 to-indigo-500"></div>
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-400 to-[var(--brand-primary)]"></div>
           <h2 className="text-xl font-bold font-bangla text-slate-900 mb-1">বার্ষিক পরীক্ষা - ২০২৪</h2>
           <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Class 10-A • Roll: 12</p>
           
@@ -42,7 +42,7 @@ export function ResultsView({ exams }: ResultsProps) {
             </div>
             <div className="text-center">
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Overall GPA</p>
-              <p className="text-3xl font-bold text-indigo-600">৫.০০</p>
+              <p className="text-3xl font-bold text-[var(--brand-primary)]">৫.০০</p>
             </div>
             <div className="text-center">
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Position</p>
@@ -79,9 +79,9 @@ export function ResultsView({ exams }: ResultsProps) {
                     <td className="px-4 py-4 text-sm font-medium text-slate-600 text-center">{row.written}</td>
                     <td className="px-4 py-4 text-sm font-medium text-slate-600 text-center">{row.mcq}</td>
                     <td className="px-4 py-4 text-sm font-medium text-slate-600 text-center">{row.prac}</td>
-                    <td className="px-4 py-4 text-sm font-bold text-indigo-600 text-center">{row.total}</td>
+                    <td className="px-4 py-4 text-sm font-bold text-[var(--brand-primary)] text-center">{row.total}</td>
                     <td className="px-6 py-4 text-center">
-                      <span className="px-2.5 py-1 bg-indigo-50 text-indigo-600 text-[10px] font-bold rounded-md border border-indigo-100">{row.grade}</span>
+                      <span className="px-2.5 py-1 bg-[var(--green-50)] text-[var(--brand-primary)] text-[10px] font-bold rounded-md border border-[var(--green-100)]">{row.grade}</span>
                     </td>
                   </tr>
                 ))}
@@ -91,7 +91,7 @@ export function ResultsView({ exams }: ResultsProps) {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 pt-4">
-          <button className="flex-1 py-4 bg-indigo-600 text-white rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20 active:scale-[0.98] transition-all">
+          <button className="flex-1 py-4 bg-[var(--brand-primary)] text-white rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-[var(--brand-primary)]/20 active:scale-[0.98] transition-all">
             <span className="material-symbols-outlined text-[20px]">download</span>
             ডাউনলোড মার্কশীট (বাংলা)
           </button>
@@ -113,21 +113,21 @@ export function ResultsView({ exams }: ResultsProps) {
             <div 
               key={exam.id} 
               onClick={() => setSelectedExam(exam.id)}
-              className="p-4 border border-slate-100 rounded-2xl flex items-center justify-between hover:bg-indigo-50/50 hover:border-indigo-200 cursor-pointer transition-all group"
+              className="p-4 border border-slate-100 rounded-2xl flex items-center justify-between hover:bg-[var(--green-50)]/50 hover:border-[var(--green-200)] cursor-pointer transition-all group"
             >
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-slate-50 text-slate-400 rounded-xl flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-sm">
+                <div className="w-12 h-12 bg-slate-50 text-slate-400 rounded-xl flex items-center justify-center group-hover:bg-[var(--brand-primary)] group-hover:text-white transition-all shadow-sm">
                   <span className="material-symbols-outlined text-2xl">description</span>
                 </div>
                 <div>
-                  <h4 className="font-bold text-slate-900 font-bangla leading-tight group-hover:text-indigo-700 transition-colors">{exam.name}</h4>
+                  <h4 className="font-bold text-slate-900 font-bangla leading-tight group-hover:text-[var(--brand-deep)] transition-colors">{exam.name}</h4>
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">{exam.term} • {exam.date}</p>
                 </div>
               </div>
               <div className="flex items-center gap-4">
                 <div className="text-right">
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">GPA</p>
-                  <p className="text-lg font-bold text-indigo-600">{exam.gpa}</p>
+                  <p className="text-lg font-bold text-[var(--brand-primary)]">{exam.gpa}</p>
                 </div>
                 <span className="material-symbols-outlined text-slate-300 group-hover:translate-x-1 transition-transform">chevron_right</span>
               </div>

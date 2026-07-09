@@ -108,7 +108,7 @@ export default function PublicResultPortal() {
         ) : (
           <div className="space-y-6 animate-in zoom-in-95 duration-500">
             <div className="book-page bg-[var(--bg-secondary)] rounded-3xl border border-[var(--border-light)] p-8 shadow-sm text-center relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-1 bg-emerald-500"></div>
+              <div className="absolute top-0 left-0 w-full h-1 bg-[var(--brand-primary)]"></div>
               <h2 className="text-xl font-bold text-[var(--text-primary)] mb-1">{result.nameBn}</h2>
               <p className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest">{result.nameEn}</p>
               
@@ -117,9 +117,9 @@ export default function PublicResultPortal() {
                   <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase mb-1">GPA</p>
                   <p className="text-2xl font-bold text-brand-primary">{result.gpa}</p>
                 </div>
-                <div className="p-4 bg-emerald-50 rounded-2xl">
-                  <p className="text-[10px] font-bold text-emerald-600 uppercase mb-1">Status</p>
-                  <p className="text-2xl font-bold text-emerald-600">{result.status}</p>
+                <div className="p-4 bg-[var(--green-50)] rounded-2xl">
+<p className="text-[10px] font-bold text-[var(--green-800)] uppercase mb-1">Status</p>
+                   <p className="text-2xl font-bold text-[var(--green-800)]">{result.status}</p>
                 </div>
               </div>
 

@@ -100,7 +100,7 @@ export default function Library({ books: propBooks }: LibraryProps) {
                   </button>
                 </div>
                 <div className="absolute top-4 left-4 flex gap-2">
-                  <span className="badge badge-navy">{book.category}</span>
+                  <span className="badge badge-green">{book.category}</span>
                   {book.availableCopies > 0 ? (
                     <span className="badge badge-green">{book.availableCopies} left</span>
                   ) : (
@@ -184,7 +184,7 @@ export default function Library({ books: propBooks }: LibraryProps) {
                 )}
 
                 <div className="flex flex-wrap justify-center gap-2 mb-4">
-                  <span className="badge badge-navy">{selectedBook.category}</span>
+                  <span className="badge badge-green">{selectedBook.category}</span>
                   {selectedBook.availableCopies > 0 ? (
                     <span className="badge badge-green">{selectedBook.availableCopies} of {selectedBook.totalCopies} available</span>
                   ) : (

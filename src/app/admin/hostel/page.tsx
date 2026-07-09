@@ -5,7 +5,7 @@ import { Building2, BedDouble, Users, Settings } from 'lucide-react';
 export default function HostelManagementPage() {
   const cardColors: Record<string, string> = {
     blue: 'bg-[var(--bg-tertiary)] text-brand-primary',
-    emerald: 'bg-emerald-50 text-emerald-600',
+    emerald: 'bg-[var(--green-50)] text-[var(--green-800)]',
     indigo: 'bg-[var(--bg-tertiary)] text-brand-primary',
   };
 

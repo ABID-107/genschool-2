@@ -17,14 +17,14 @@ export function NoticesView() {
     const map: Record<string, string> = {
       exam: 'bg-amber-100 text-amber-700',
       holiday: 'bg-rose-100 text-rose-700',
-      academic: 'bg-indigo-100 text-indigo-700',
+      academic: 'bg-[var(--green-100)] text-[var(--brand-deep)]',
       emergency: 'bg-red-100 text-red-700',
       general: 'bg-slate-100 text-slate-700',
       finance: 'bg-emerald-100 text-emerald-700',
       event: 'bg-purple-100 text-purple-700',
       sports: 'bg-cyan-100 text-cyan-700',
     };
-    return map[cat] || 'bg-indigo-100 text-indigo-700';
+    return map[cat] || 'bg-[var(--green-100)] text-[var(--brand-deep)]';
   };
 
   const priorityIcon = (p: string) => {
@@ -69,7 +69,7 @@ export function NoticesView() {
                     {new Date(notice.publishDate).toLocaleDateString()}
                   </span>
                 </div>
-                <h4 className="font-bold text-slate-800 font-bangla group-hover:text-indigo-600 transition-colors mb-1">
+                <h4 className="font-bold text-slate-800 font-bangla group-hover:text-[var(--brand-primary)] transition-colors mb-1">
                   {notice.title}
                 </h4>
                 {notice.description && (

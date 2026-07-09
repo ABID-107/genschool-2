@@ -32,15 +32,15 @@ export function GuardianAcademicProgressView() {
   return (
     <div className="animate-in fade-in duration-500 space-y-6">
       {/* Header with Download Report Card Button */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-indigo-600 rounded-3xl p-6 text-white shadow-md relative overflow-hidden">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[var(--brand-primary)] rounded-3xl p-6 text-white shadow-md relative overflow-hidden">
         <div className="absolute -right-10 -bottom-10 opacity-10">
           <span className="material-symbols-outlined text-[150px]">military_tech</span>
         </div>
         <div className="relative z-10">
           <h2 className="text-2xl font-bold">{lang === 'bn' ? 'একাডেমিক অগ্রগতি' : 'Academic Progress'}</h2>
-          <p className="text-indigo-100 text-sm mt-1">{lang === 'bn' ? 'চলতি শিক্ষাবর্ষ ২০২৫' : 'Current Academic Year 2025'}</p>
+          <p className="text-[var(--green-100)] text-sm mt-1">{lang === 'bn' ? 'চলতি শিক্ষাবর্ষ ২০২৫' : 'Current Academic Year 2025'}</p>
         </div>
-        <button className="relative z-10 w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-white text-indigo-700 font-bold rounded-2xl hover:bg-indigo-50 active:scale-95 transition-all shadow-sm">
+        <button className="relative z-10 w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-white text-[var(--brand-deep)] font-bold rounded-2xl hover:bg-[var(--green-50)] active:scale-95 transition-all shadow-sm">
           <span className="material-symbols-outlined">download</span>
           {lang === 'bn' ? 'রিপোর্ট কার্ড ডাউনলোড' : 'Report Card PDF'}
         </button>
@@ -61,7 +61,7 @@ export function GuardianAcademicProgressView() {
                 </div>
                 <div className="text-right">
                   <div className="text-xs font-bold text-slate-500 uppercase">{lang === 'bn' ? 'জিপিএ' : 'GPA'}</div>
-                  <div className="text-2xl font-black text-indigo-600">{res.gpa}</div>
+                  <div className="text-2xl font-black text-[var(--brand-primary)]">{res.gpa}</div>
                 </div>
               </div>
             ))}
@@ -78,21 +78,21 @@ export function GuardianAcademicProgressView() {
               <div className="w-full border-b-2 border-dashed border-slate-200 absolute top-0"></div>
               
               <div className="relative flex flex-col items-center justify-end h-full z-10">
-                <span className="text-xs font-bold text-indigo-600 bg-white px-1 -translate-y-2">4.20</span>
-                <div className="w-3 h-3 bg-indigo-500 rounded-full border-2 border-white mb-[-6px]"></div>
+                <span className="text-xs font-bold text-[var(--brand-primary)] bg-white px-1 -translate-y-2">4.20</span>
+                <div className="w-3 h-3 bg-[var(--brand-primary)] rounded-full border-2 border-white mb-[-6px]"></div>
               </div>
               <div className="relative flex flex-col items-center justify-end h-full z-10 pb-8">
-                <span className="text-xs font-bold text-indigo-600 bg-white px-1 -translate-y-2">4.85</span>
-                <div className="w-3 h-3 bg-indigo-500 rounded-full border-2 border-white mb-[-6px]"></div>
+                <span className="text-xs font-bold text-[var(--brand-primary)] bg-white px-1 -translate-y-2">4.85</span>
+                <div className="w-3 h-3 bg-[var(--brand-primary)] rounded-full border-2 border-white mb-[-6px]"></div>
               </div>
               <div className="relative flex flex-col items-center justify-end h-full z-10 pb-12">
-                <span className="text-xs font-bold text-indigo-600 bg-white px-1 -translate-y-2">4.92</span>
-                <div className="w-3 h-3 bg-indigo-500 rounded-full border-2 border-white mb-[-6px]"></div>
+                <span className="text-xs font-bold text-[var(--brand-primary)] bg-white px-1 -translate-y-2">4.92</span>
+                <div className="w-3 h-3 bg-[var(--brand-primary)] rounded-full border-2 border-white mb-[-6px]"></div>
               </div>
             </div>
             {/* SVG Line */}
             <svg className="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="none" viewBox="0 0 100 100">
-              <path d="M 5,95 L 50,60 L 95,20" fill="none" stroke="#6366f1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M 5,95 L 50,60 L 95,20" fill="none" stroke="var(--brand-primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
           <div className="flex justify-between mt-4 px-2 text-xs font-bold text-slate-500">
@@ -110,7 +110,7 @@ export function GuardianAcademicProgressView() {
             <span className="material-symbols-outlined text-rose-500">assignment</span>
             {lang === 'bn' ? 'অ্যাসাইনমেন্ট ট্র্যাকিং' : 'Assignment Tracking'}
           </h3>
-          <button className="text-sm font-bold text-indigo-600">{lang === 'bn' ? 'সব দেখুন' : 'View All'}</button>
+          <button className="text-sm font-bold text-[var(--brand-primary)]">{lang === 'bn' ? 'সব দেখুন' : 'View All'}</button>
         </div>
         
         <div className="space-y-3">
@@ -148,7 +148,7 @@ export function GuardianAcademicProgressView() {
       {/* Teacher Feedback */}
       <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
         <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2 mb-6">
-          <span className="material-symbols-outlined text-indigo-600">reviews</span>
+          <span className="material-symbols-outlined text-[var(--brand-primary)]">reviews</span>
           {lang === 'bn' ? 'শিক্ষকদের মতামত' : 'Teacher Feedback'}
         </h3>
         
@@ -160,7 +160,7 @@ export function GuardianAcademicProgressView() {
                   <Image src={feedback.avatar} alt={feedback.teacher} className="w-10 h-10 rounded-full border border-slate-100 object-cover" width={40} height={40} />
                   <div>
                     <h4 className="font-bold text-slate-900 text-sm">{feedback.teacher}</h4>
-                    <p className="text-xs font-semibold text-indigo-600">{lang === 'bn' ? feedback.subjectBn : feedback.subject}</p>
+                    <p className="text-xs font-semibold text-[var(--brand-primary)]">{lang === 'bn' ? feedback.subjectBn : feedback.subject}</p>
                   </div>
                 </div>
                 <span className={`px-2 py-1 text-[10px] font-bold rounded-md ${
@@ -169,11 +169,11 @@ export function GuardianAcademicProgressView() {
                   {lang === 'bn' ? feedback.ratingBn : feedback.rating}
                 </span>
               </div>
-              <div className="bg-slate-50 rounded-xl p-4 italic text-sm text-slate-600 border-l-4 border-indigo-400">
+              <div className="bg-slate-50 rounded-xl p-4 italic text-sm text-slate-600 border-l-4 border-[var(--brand-light)]">
                 "{lang === 'bn' ? feedback.feedbackBn : feedback.feedbackEn}"
               </div>
               <div className="mt-4 flex justify-end">
-                <button className="text-xs font-bold text-indigo-600 hover:text-indigo-800 transition-colors flex items-center gap-1">
+                <button className="text-xs font-bold text-[var(--brand-primary)] hover:text-[var(--brand-deep)] transition-colors flex items-center gap-1">
                   <span className="material-symbols-outlined text-[14px]">chat</span>
                   {lang === 'bn' ? 'শিক্ষককে মেসেজ দিন' : 'Message Teacher'}
                 </button>

@@ -69,10 +69,17 @@ export default function SuperAdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-brand-deep relative overflow-hidden selection:bg-brand-primary/20 selection:text-brand-primary">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_20%,rgba(59,130,246,0.10)_0%,transparent_60%),radial-gradient(ellipse_40%_30%_at_80%_80%,rgba(99,102,241,0.05)_0%,transparent_60%)]" />
-      <div className="absolute top-1/3 -left-20 w-[300px] h-[300px] rounded-full bg-brand-primary/10 blur-[100px]" />
-      <div className="absolute bottom-1/4 -right-20 w-[250px] h-[250px] rounded-full bg-brand-accent/5 blur-[80px]" />
+    <div className="min-h-screen flex flex-col bg-[var(--brand-deep)] relative overflow-hidden selection:bg-[var(--brand-primary)]/20 selection:text-[var(--brand-primary)]">
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 70% 50% at 50% 20%, rgba(var(--brand-rgb), 0.10) 0%, transparent 60%)," +
+            "radial-gradient(ellipse 40% 30% at 80% 80%, rgba(var(--brand-rgb), 0.05) 0%, transparent 60%)",
+        }}
+      />
+      <div className="absolute top-1/3 -left-20 w-[300px] h-[300px] rounded-full bg-[var(--brand-primary)]/10 blur-[100px]" />
+      <div className="absolute bottom-1/4 -right-20 w-[250px] h-[250px] rounded-full bg-[var(--brand-accent)]/5 blur-[80px]" />
 
       <div className="flex-1 flex items-center justify-center px-4 py-12 relative z-10">
         <motion.div
@@ -83,7 +90,7 @@ export default function SuperAdminLoginPage() {
         >
           {/* Brand */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-accent to-amber-400 shadow-lg shadow-amber-500/25 mb-4">
+            <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-[var(--brand-accent)] to-amber-400 shadow-lg shadow-amber-500/25 mb-4">
               <Shield size={28} className="text-white" />
             </div>
             <h1 className="text-2xl font-bold text-white tracking-tight">
@@ -131,7 +138,7 @@ export default function SuperAdminLoginPage() {
                     className={`block w-full h-11 bg-white/5 border text-white placeholder-white/30 rounded-xl pl-10 pr-4 text-sm focus:outline-none focus:ring-2 transition-all ${
                       emailError
                         ? "border-rose-400/50 focus:ring-rose-500/20 focus:border-rose-400"
-                        : "border-white/10 focus:ring-brand-accent/40 focus:border-brand-accent/60"
+                        : "border-white/10 focus:ring-[var(--brand-accent)]/40 focus:border-[var(--brand-accent)]/60"
                     }`}
                     placeholder="admin@genschool.com"
                     autoComplete="email"
@@ -172,7 +179,7 @@ export default function SuperAdminLoginPage() {
                     className={`block w-full h-11 bg-white/5 border text-white placeholder-white/30 rounded-xl pl-10 pr-10 text-sm focus:outline-none focus:ring-2 transition-all ${
                       passwordError
                         ? "border-rose-400/50 focus:ring-rose-500/20 focus:border-rose-400"
-                        : "border-white/10 focus:ring-brand-accent/40 focus:border-brand-accent/60"
+                        : "border-white/10 focus:ring-[var(--brand-accent)]/40 focus:border-[var(--brand-accent)]/60"
                     }`}
                     placeholder="Enter your password"
                     autoComplete="current-password"
@@ -200,7 +207,7 @@ export default function SuperAdminLoginPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full h-11 rounded-xl bg-brand-accent text-white text-sm font-bold hover:bg-amber-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-[0_4px_16px_rgba(245,158,11,0.25)]"
+                className="btn btn-amber w-full btn-lg"
               >
                 {isLoading ? (
                   <Loader2 size={16} className="animate-spin" />
@@ -221,7 +228,7 @@ export default function SuperAdminLoginPage() {
           <div className="text-center mt-6">
             <Link
               href="/login"
-              className="text-sm text-white/50 hover:text-brand-accent transition-colors"
+              className="text-sm text-white/50 hover:text-[var(--brand-accent)] transition-colors"
             >
               &larr; Back to login
             </Link>

@@ -176,7 +176,7 @@ export default function NewStudentPage() {
             disabled={saving || saved}
             className={`px-4 py-2 text-sm font-medium text-white rounded-xl transition-colors shadow-md flex items-center gap-2 ${
               saved
-                ? 'bg-emerald-500 cursor-default'
+                ? 'bg-[var(--brand-primary)] cursor-default'
                 : saving
                   ? 'bg-brand-mid cursor-wait'
                   : 'bg-brand-primary hover:bg-brand-mid shadow-brand-primary/20'
@@ -208,7 +208,7 @@ export default function NewStudentPage() {
               >
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
                   activeTab === tab.id ? 'bg-[var(--bg-tertiary)] text-brand-primary' : 
-                  index < currentIndex ? 'bg-emerald-100 text-emerald-600' : 'bg-[var(--bg-tertiary)] text-[var(--text-muted)]'
+                  index < currentIndex ? 'bg-[var(--green-100)] text-[var(--green-800)]' : 'bg-[var(--bg-tertiary)] text-[var(--text-muted)]'
                 }`}>
                   {index < currentIndex ? '✓' : index + 1}
                 </div>

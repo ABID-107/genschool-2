@@ -23,7 +23,7 @@ export function DashboardOverview({ assignments, events, onTabChange, teacherNam
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         <div className="glass-card p-6 flex items-center gap-4 group">
-          <div className="w-14 h-14 bg-gradient-to-br from-indigo-50 to-indigo-100/50 text-indigo-600 rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+          <div className="w-14 h-14 bg-gradient-to-br from-[var(--green-50)] to-[var(--green-100)]/50 text-[var(--brand-primary)] rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
             <span className="material-symbols-outlined text-2xl">group</span>
           </div>
           <div>

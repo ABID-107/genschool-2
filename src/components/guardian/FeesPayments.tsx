@@ -103,8 +103,8 @@ export function GuardianFeesPaymentsView() {
                     <button onClick={() => setPaymentStep('otp')} className="flex flex-col items-center gap-2 p-4 border border-slate-200 rounded-2xl hover:border-purple-500 hover:bg-purple-50 transition-all">
                       <div className="w-12 h-12 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center font-bold">Rocket</div>
                     </button>
-                    <button onClick={() => setPaymentStep('otp')} className="flex flex-col items-center gap-2 p-4 border border-slate-200 rounded-2xl hover:border-indigo-500 hover:bg-indigo-50 transition-all">
-                      <div className="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center font-bold">Card</div>
+                    <button onClick={() => setPaymentStep('otp')} className="flex flex-col items-center gap-2 p-4 border border-slate-200 rounded-2xl hover:border-[var(--brand-primary)] hover:bg-[var(--green-50)] transition-all">
+                      <div className="w-12 h-12 bg-[var(--green-100)] text-[var(--brand-primary)] rounded-full flex items-center justify-center font-bold">Card</div>
                     </button>
                   </div>
                 </div>
@@ -121,12 +121,12 @@ export function GuardianFeesPaymentsView() {
                     onChange={(e) => setOtp(e.target.value)}
                     maxLength={4}
                     placeholder="• • • •"
-                    className="w-full text-center text-3xl font-bold tracking-[1em] p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500"
+                    className="w-full text-center text-3xl font-bold tracking-[1em] p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:border-[var(--brand-primary)]"
                   />
                   <button 
                     onClick={handlePaymentSubmit}
                     disabled={otp.length !== 4 || isProcessing}
-                    className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold hover:bg-indigo-700 disabled:opacity-50 transition-all flex items-center justify-center"
+                    className="w-full py-4 bg-[var(--brand-primary)] text-white rounded-2xl font-bold hover:bg-[var(--brand-deep)] disabled:opacity-50 transition-all flex items-center justify-center"
                   >
                     {isProcessing ? <span className="material-symbols-outlined animate-spin">progress_activity</span> : (lang === 'bn' ? 'নিশ্চিত করুন' : 'Confirm Payment')}
                   </button>
@@ -147,7 +147,7 @@ export function GuardianFeesPaymentsView() {
                       <span className="material-symbols-outlined">download</span>
                       {lang === 'bn' ? 'রসিদ ডাউনলোড' : 'Download Receipt'}
                     </button>
-                    <button onClick={() => setPaymentStep('select')} className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold hover:bg-indigo-700 transition-all">
+                    <button onClick={() => setPaymentStep('select')} className="w-full py-4 bg-[var(--brand-primary)] text-white rounded-2xl font-bold hover:bg-[var(--brand-deep)] transition-all">
                       {lang === 'bn' ? 'ড্যাশবোর্ডে ফিরে যান' : 'Back to Dashboard'}
                     </button>
                   </div>
@@ -163,7 +163,7 @@ export function GuardianFeesPaymentsView() {
         <button
           onClick={() => setActiveTab('due')}
           className={`flex-1 md:flex-none px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${
-            activeTab === 'due' ? 'bg-indigo-50 text-indigo-700 shadow-sm border border-indigo-100' : 'text-slate-500 hover:text-slate-700'
+            activeTab === 'due' ? 'bg-[var(--green-50)] text-[var(--brand-deep)] shadow-sm border border-[var(--green-100)]' : 'text-slate-500 hover:text-slate-700'
           }`}
         >
           {lang === 'bn' ? 'বকেয়া ফি' : 'Due Fees'}
@@ -171,7 +171,7 @@ export function GuardianFeesPaymentsView() {
         <button
           onClick={() => setActiveTab('history')}
           className={`flex-1 md:flex-none px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${
-            activeTab === 'history' ? 'bg-indigo-50 text-indigo-700 shadow-sm border border-indigo-100' : 'text-slate-500 hover:text-slate-700'
+            activeTab === 'history' ? 'bg-[var(--green-50)] text-[var(--brand-deep)] shadow-sm border border-[var(--green-100)]' : 'text-slate-500 hover:text-slate-700'
           }`}
         >
           {lang === 'bn' ? 'পেমেন্ট হিস্ট্রি' : 'Payment History'}

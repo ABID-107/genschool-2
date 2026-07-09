@@ -15,7 +15,7 @@ import type { AttendanceRecord, AttendanceStatus } from '@/lib/attendance';
 
 const colorBarMap: Record<string, string> = {
   blue: 'bg-brand-primary',
-  emerald: 'bg-emerald-500',
+  emerald: 'bg-[var(--brand-primary)]',
   rose: 'bg-rose-500',
   amber: 'bg-amber-500',
 };

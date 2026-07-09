@@ -32,7 +32,7 @@ export function StudentAssignmentsView({ assignments }: AssignmentsProps) {
       <div className="space-y-6 animate-in slide-in-from-right duration-500">
         <button 
           onClick={() => setSelectedAsgn(null)}
-          className="flex items-center gap-2 text-slate-500 hover:text-indigo-600 font-bold text-sm mb-4"
+          className="flex items-center gap-2 text-slate-500 hover:text-[var(--brand-primary)] font-bold text-sm mb-4"
         >
           <span className="material-symbols-outlined text-[20px]">arrow_back</span>
           ফিরে যান
@@ -41,7 +41,7 @@ export function StudentAssignmentsView({ assignments }: AssignmentsProps) {
         <div className="bg-white rounded-2xl border border-slate-200/50 p-6 shadow-sm">
           <div className="flex justify-between items-start mb-6">
             <div>
-              <span className="px-2 py-1 bg-indigo-50 text-indigo-600 text-[10px] font-bold rounded-md border border-indigo-100 uppercase tracking-widest">{selectedAsgn.subject}</span>
+              <span className="px-2 py-1 bg-[var(--green-50)] text-[var(--brand-primary)] text-[10px] font-bold rounded-md border border-[var(--green-100)] uppercase tracking-widest">{selectedAsgn.subject}</span>
               <h2 className="text-2xl font-bold text-slate-900 mt-2 font-bangla">{selectedAsgn.title}</h2>
               <p className="text-xs font-bold text-slate-400 mt-1">শিক্ষক: {selectedAsgn.teacher}</p>
             </div>
@@ -58,16 +58,16 @@ export function StudentAssignmentsView({ assignments }: AssignmentsProps) {
 
           {!isSuccess ? (
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="border-2 border-dashed border-slate-200 rounded-2xl p-8 text-center hover:border-indigo-400 transition-colors cursor-pointer group">
-                <span className="material-symbols-outlined text-4xl text-slate-300 group-hover:text-indigo-500 transition-colors">cloud_upload</span>
-                <p className="text-sm font-bold text-slate-500 mt-2 font-bangla group-hover:text-indigo-600 transition-colors">আপনার ফাইল এখানে ড্র্যাগ করুন অথবা ক্লিক করুন</p>
+              <div className="border-2 border-dashed border-slate-200 rounded-2xl p-8 text-center hover:border-[var(--brand-light)] transition-colors cursor-pointer group">
+                <span className="material-symbols-outlined text-4xl text-slate-300 group-hover:text-[var(--brand-primary)] transition-colors">cloud_upload</span>
+                <p className="text-sm font-bold text-slate-500 mt-2 font-bangla group-hover:text-[var(--brand-primary)] transition-colors">আপনার ফাইল এখানে ড্র্যাগ করুন অথবা ক্লিক করুন</p>
                 <p className="text-[10px] text-slate-400 mt-1 uppercase tracking-widest">PDF, DOCX, JPG (Max 10MB)</p>
               </div>
 
               <button 
                 type="submit" 
                 disabled={isSubmitting}
-                className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold shadow-lg shadow-indigo-500/20 active:scale-95 transition-all flex items-center justify-center gap-2"
+                className="w-full py-4 bg-[var(--brand-primary)] text-white rounded-2xl font-bold shadow-lg shadow-[var(--brand-primary)]/20 active:scale-95 transition-all flex items-center justify-center gap-2"
               >
                 {isSubmitting ? (
                   <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -98,12 +98,12 @@ export function StudentAssignmentsView({ assignments }: AssignmentsProps) {
             <div 
               key={asgn.id} 
               onClick={() => setSelectedAsgn(asgn)}
-              className="p-5 border border-slate-100 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-indigo-200 hover:bg-indigo-50/30 cursor-pointer transition-all group"
+              className="p-5 border border-slate-100 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-[var(--green-200)] hover:bg-[var(--green-50)]/30 cursor-pointer transition-all group"
             >
               <div className="flex items-center gap-4">
                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-sm transition-all group-hover:scale-110 ${
                   asgn.status === 'graded' ? 'bg-emerald-50 text-emerald-600' : 
-                  asgn.status === 'submitted' ? 'bg-indigo-50 text-indigo-600' : 
+                  asgn.status === 'submitted' ? 'bg-[var(--green-50)] text-[var(--brand-primary)]' : 
                   'bg-amber-50 text-amber-600'
                 }`}>
                   <span className="material-symbols-outlined text-2xl">
@@ -111,7 +111,7 @@ export function StudentAssignmentsView({ assignments }: AssignmentsProps) {
                   </span>
                 </div>
                 <div>
-                  <h4 className="font-bold text-slate-800 font-bangla leading-tight group-hover:text-indigo-700 transition-colors">{asgn.title}</h4>
+                  <h4 className="font-bold text-slate-800 font-bangla leading-tight group-hover:text-[var(--brand-deep)] transition-colors">{asgn.title}</h4>
                   <div className="flex items-center gap-2 mt-1">
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{asgn.subject}</span>
                     <span className="text-slate-300">•</span>
@@ -124,7 +124,7 @@ export function StudentAssignmentsView({ assignments }: AssignmentsProps) {
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Status</p>
                   <p className={`text-xs font-bold uppercase tracking-wider ${
                     asgn.status === 'graded' ? 'text-emerald-600' : 
-                    asgn.status === 'submitted' ? 'text-indigo-600' : 
+                    asgn.status === 'submitted' ? 'text-[var(--brand-primary)]' : 
                     'text-amber-600'
                   }`}>{asgn.status}</p>
                 </div>

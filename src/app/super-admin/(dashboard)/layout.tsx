@@ -120,7 +120,7 @@ export default function SuperAdminDashboardLayout({
           </div>
           <div className="flex-1">
             <span className="text-base font-bold tracking-tight block leading-tight text-[var(--text-sidebar)]">GenSchool</span>
-            <span className="text-[10px] font-semibold text-amber-500 uppercase tracking-widest">Super Admin</span>
+            <span className="text-[10px] font-semibold text-[var(--brand-accent)] uppercase tracking-widest">Super Admin</span>
           </div>
           <button
             onClick={closeSidebar}
@@ -140,11 +140,7 @@ export default function SuperAdminDashboardLayout({
                 key={item.href}
                 href={item.href}
                 onClick={closeSidebar}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all no-underline ${
-                  isActive
-                    ? "bg-[var(--sidebar-active-bg)] text-[var(--sidebar-active-text)] border border-[var(--sidebar-active-border)] shadow-sm"
-                    : "text-[var(--text-sidebar-muted)] hover:text-[var(--text-sidebar)] hover:bg-[var(--sidebar-hover-bg)]"
-                }`}
+                className={`nav-item no-underline ${isActive ? "active" : ""}`}
               >
                 <Icon size={18} />
                 {item.label}
@@ -156,11 +152,11 @@ export default function SuperAdminDashboardLayout({
         <div className="p-3 border-t border-[var(--border-sidebar)]">
           <div className="px-3 py-2 mb-2 rounded-xl bg-[var(--sidebar-hover-bg)] border border-[var(--border-sidebar)]">
             <p className="text-xs text-[var(--text-sidebar-muted)] truncate">{user?.email || "superadmin@genschool.com"}</p>
-            <p className="text-[10px] text-amber-500 font-semibold uppercase tracking-wider">SUPER_ADMIN</p>
+            <p className="text-[10px] text-[var(--brand-accent)] font-semibold uppercase tracking-wider">SUPER_ADMIN</p>
           </div>
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-[var(--text-sidebar-muted)] hover:text-rose-500 hover:bg-rose-500/10 transition-all"
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-[var(--text-sidebar-muted)] hover:text-[var(--color-error)] hover:bg-[var(--color-error-bg)] transition-all"
           >
             <LogOut size={18} />
             Sign Out
@@ -198,9 +194,9 @@ export default function SuperAdminDashboardLayout({
             </nav>
           </div>
           <div className="flex items-center gap-3 shrink-0">
-            <div className="hidden sm:flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-amber-50/50 border border-amber-200/50">
-              <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-              <span className="text-[11px] font-semibold text-amber-700 uppercase tracking-wider">
+            <div className="hidden sm:flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-[var(--amber-50)]/50 border border-[var(--amber-200)]/50">
+              <span className="w-2 h-2 rounded-full bg-[var(--brand-accent)] animate-pulse" />
+              <span className="text-[11px] font-semibold text-[var(--amber-700)] uppercase tracking-wider">
                 Dev Mode
               </span>
             </div>

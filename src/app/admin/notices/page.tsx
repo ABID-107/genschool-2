@@ -191,7 +191,7 @@ export default function NoticeBoardPage() {
   // ── Status Badge ──
   const statusBadge = (status: string) => {
     const map: Record<string, { bg: string; text: string; border: string; icon: any }> = {
-      published: { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', icon: CheckCircle2 },
+      published: { bg: 'bg-[var(--green-50)]', text: 'text-[var(--green-800)]', border: 'border-[var(--green-200)]', icon: CheckCircle2 },
       scheduled: { bg: 'bg-[var(--bg-tertiary)]', text: 'text-brand-primary', border: 'border-[var(--border-light)]', icon: Clock },
       draft: { bg: 'bg-[var(--bg-tertiary)]', text: 'text-[var(--text-secondary)]', border: 'border-[var(--border-light)]', icon: FileText },
       archived: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', icon: Archive },

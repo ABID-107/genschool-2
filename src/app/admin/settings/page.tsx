@@ -28,8 +28,8 @@ export default function SettingsPage() {
     <div className="max-w-4xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-navy-900">Settings</h1>
-          <p className="text-sm text-navy-500 mt-1">Manage your school preferences</p>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">Settings</h1>
+          <p className="text-sm text-[var(--text-muted)] mt-1">Manage your school preferences</p>
         </div>
         <button onClick={handleSave} disabled={saving} className="btn btn-primary flex items-center gap-2">
           <Save size={16} />
@@ -37,39 +37,42 @@ export default function SettingsPage() {
         </button>
       </div>
 
-      <div className="flex gap-1 mb-6 bg-navy-100/50 rounded-xl p-1">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-              activeTab === tab.id
-                ? "bg-white text-navy-900 shadow-sm"
-                : "text-navy-500 hover:text-navy-700"
-            }`}
-          >
-            <tab.icon size={16} />
-            {tab.label}
-          </button>
-        ))}
+      <div className="flex gap-1 mb-6 bg-[var(--green-50)]/50 rounded-xl p-1">
+        {tabs.map((tab) => {
+          const Icon = tab.icon;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                activeTab === tab.id
+                  ? "bg-white text-[var(--text-primary)] shadow-sm"
+                  : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
+              }`}
+            >
+              <Icon size={16} />
+              {tab.label}
+            </button>
+          );
+        })}
       </div>
 
       {activeTab === 'general' && (
         <div className="card p-6 space-y-5">
           <div>
-            <label className="block text-sm font-medium text-navy-700 mb-1.5">School Name</label>
+            <label className="label">School Name</label>
             <input type="text" value={schoolName} onChange={(e) => setSchoolName(e.target.value)} className="input w-full" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-navy-700 mb-1.5">Email</label>
+            <label className="label">Email</label>
             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="input w-full" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-navy-700 mb-1.5">Phone</label>
+            <label className="label">Phone</label>
             <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} className="input w-full" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-navy-700 mb-1.5">Address</label>
+            <label className="label">Address</label>
             <textarea value={address} onChange={(e) => setAddress(e.target.value)} className="input w-full" rows={3} />
           </div>
         </div>
@@ -77,11 +80,11 @@ export default function SettingsPage() {
 
       {activeTab === 'notifications' && (
         <div className="card p-6 space-y-4">
-          <h3 className="text-sm font-semibold text-navy-900">Notification Preferences</h3>
+          <h3 className="text-sm font-semibold text-[var(--text-primary)]">Notification Preferences</h3>
           {["Email Alerts", "SMS Notifications", "Push Notifications", "Weekly Reports"].map((item) => (
             <label key={item} className="flex items-center justify-between py-2">
-              <span className="text-sm text-navy-700">{item}</span>
-              <input type="checkbox" defaultChecked className="rounded" />
+              <span className="text-sm text-[var(--text-secondary)]">{item}</span>
+              <input type="checkbox" defaultChecked className="h-4 w-4 rounded border-[var(--border-color)] text-[var(--brand-primary)] focus:ring-[var(--brand-primary)]/40" />
             </label>
           ))}
         </div>
@@ -90,15 +93,15 @@ export default function SettingsPage() {
       {activeTab === 'security' && (
         <div className="card p-6 space-y-5">
           <div>
-            <label className="block text-sm font-medium text-navy-700 mb-1.5">Current Password</label>
+            <label className="label">Current Password</label>
             <input type="password" className="input w-full" placeholder="Enter current password" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-navy-700 mb-1.5">New Password</label>
+            <label className="label">New Password</label>
             <input type="password" className="input w-full" placeholder="Enter new password" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-navy-700 mb-1.5">Confirm New Password</label>
+            <label className="label">Confirm New Password</label>
             <input type="password" className="input w-full" placeholder="Confirm new password" />
           </div>
         </div>
@@ -107,20 +110,20 @@ export default function SettingsPage() {
       {activeTab === 'appearance' && (
         <div className="card p-6 space-y-5">
           <div>
-            <label className="block text-sm font-medium text-navy-700 mb-3">Theme</label>
+            <label className="label mb-3">Theme</label>
             <div className="flex gap-3">
               {["Light", "Dark", "System"].map((t) => (
-                <button key={t} className="px-4 py-2 rounded-lg border border-navy-200 text-sm font-medium text-navy-700 hover:bg-navy-50">
+                <button key={t} className="btn btn-secondary btn-sm">
                   {t}
                 </button>
               ))}
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-navy-700 mb-3">Accent Color</label>
+            <label className="label mb-3">Accent Color</label>
             <div className="flex gap-3">
-              {["bg-brand-primary", "bg-amber-500", "bg-blue-500", "bg-purple-500", "bg-green-500"].map((c) => (
-                <button key={c} className={`w-8 h-8 rounded-full ${c} ring-2 ring-offset-2 ring-transparent hover:ring-navy-300 transition-all`} />
+              {["bg-[var(--brand-primary)]", "bg-[var(--brand-accent)]", "bg-blue-500", "bg-purple-500", "bg-green-500"].map((c) => (
+                <button key={c} className={`w-8 h-8 rounded-full ${c} ring-2 ring-offset-2 ring-transparent hover:ring-[var(--green-300)] transition-all`} />
               ))}
             </div>
           </div>

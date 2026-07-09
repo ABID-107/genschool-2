@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CalendarEvent, EventType } from '../lib/types';
-import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X, Clock, BookOpen, User } from 'lucide-react';
 
 interface CalendarProps {
   events: CalendarEvent[];
@@ -16,7 +16,7 @@ export default function Calendar({ events }: CalendarProps) {
 
   const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
   const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay();
-  
+
   const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
   const prevMonthDays = Array.from({ length: firstDayOfMonth }, (_, i) => i);
 
@@ -26,37 +26,37 @@ export default function Calendar({ events }: CalendarProps) {
   const getEventsForDay = (day: number) => {
     return events.filter(event => {
       const eventDate = new Date(event.start);
-      return eventDate.getDate() === day && 
+      return eventDate.getDate() === day &&
              eventDate.getMonth() === currentDate.getMonth() &&
              eventDate.getFullYear() === currentDate.getFullYear();
     });
   };
 
-  const getEventColor = (type: EventType) => {
+  const getEventBadge = (type: EventType) => {
     switch (type) {
-      case 'class': return 'badge-navy';
-      case 'homework': return 'badge-amber';
-      case 'exam': return 'badge-rose';
-      case 'event': return 'badge-green';
-      default: return 'badge-slate';
+      case 'class': return 'bg-[var(--green-100)] text-[var(--green-800)]';
+      case 'homework': return 'bg-[var(--amber-100)] text-[var(--amber-800)]';
+      case 'exam': return 'bg-[var(--color-error)]/10 text-[var(--color-error)]';
+      case 'event': return 'bg-[var(--green-50)] text-[var(--brand-primary)]';
+      default: return 'bg-[var(--bg-tertiary)] text-[var(--text-muted)]';
     }
   };
 
   return (
-    <div className="card overflow-hidden flex flex-col h-full">
+    <div className="bg-[var(--bg-card)] rounded-2xl border border-[var(--border-color)] overflow-hidden flex flex-col h-full shadow-sm">
       <div className="p-6 border-b border-[var(--border-color)] flex flex-col sm:flex-row justify-between items-center gap-4">
         <div className="flex items-center gap-4">
-          <h3 className="text-xl font-bold text-[var(--text-primary)] font-heading">
+          <h3 className="text-xl font-bold text-[var(--text-primary)]">
             {currentDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
           </h3>
           <div className="flex items-center gap-1 bg-[var(--bg-tertiary)] p-1 rounded-xl border border-[var(--border-color)]">
-            <button onClick={prevMonth} className="p-1.5 hover:bg-[var(--bg-secondary)] hover:shadow-sm rounded-lg transition-all text-[var(--text-muted)]" aria-label="Previous month">
+            <button onClick={prevMonth} className="btn-ghost btn-icon rounded-lg" aria-label="Previous month">
               <ChevronLeft size={20} />
             </button>
-            <button onClick={() => setCurrentDate(new Date())} className="px-3 py-1 text-xs font-bold text-[var(--text-muted)] hover:text-[var(--brand-primary)] transition-colors">
+            <button onClick={() => setCurrentDate(new Date())} className="btn-ghost px-3 py-1 text-xs font-bold">
               Today
             </button>
-            <button onClick={nextMonth} className="p-1.5 hover:bg-[var(--bg-secondary)] hover:shadow-sm rounded-lg transition-all text-[var(--text-muted)]" aria-label="Next month">
+            <button onClick={nextMonth} className="btn-ghost btn-icon rounded-lg" aria-label="Next month">
               <ChevronRight size={20} />
             </button>
           </div>
@@ -89,8 +89,8 @@ export default function Calendar({ events }: CalendarProps) {
         ))}
         {days.map(day => {
           const dayEvents = getEventsForDay(day);
-          const isToday = day === new Date().getDate() && 
-                         currentDate.getMonth() === new Date().getMonth() && 
+          const isToday = day === new Date().getDate() &&
+                         currentDate.getMonth() === new Date().getMonth() &&
                          currentDate.getFullYear() === new Date().getFullYear();
 
           return (
@@ -107,7 +107,7 @@ export default function Calendar({ events }: CalendarProps) {
                     animate={{ opacity: 1, y: 0 }}
                     key={event.id}
                     onClick={() => setSelectedEvent(event)}
-                    className={`badge text-[10px] truncate cursor-pointer hover:shadow-sm hover:scale-[1.02] active:scale-95 transition-all ${getEventColor(event.type)}`}
+                    className={`text-[10px] px-1.5 py-0.5 rounded-md truncate cursor-pointer hover:shadow-sm hover:scale-[1.02] active:scale-95 transition-all font-semibold ${getEventBadge(event.type)}`}
                   >
                     {event.title}
                   </motion.div>
@@ -125,36 +125,36 @@ export default function Calendar({ events }: CalendarProps) {
 
       <AnimatePresence>
         {selectedEvent && (
-          <div className="modal-overlay">
-            <motion.div 
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+            <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="modal-content max-w-md"
+              className="bg-[var(--bg-card)] rounded-2xl border border-[var(--border-color)] shadow-xl max-w-md w-full"
             >
-              <div className="modal-header">
+              <div className="flex items-start justify-between p-6 pb-4 border-b border-[var(--border-color)]">
                 <div>
-                  <span className={`badge mb-2 ${getEventColor(selectedEvent.type)}`}>
+                  <span className={`inline-block text-[10px] px-2 py-0.5 rounded-md font-bold mb-2 ${getEventBadge(selectedEvent.type)}`}>
                     {selectedEvent.type}
                   </span>
-                  <h4 className="text-xl font-bold text-[var(--text-primary)] font-heading">
+                  <h4 className="text-xl font-bold text-[var(--text-primary)]">
                     {selectedEvent.title}
                   </h4>
                 </div>
-                <button onClick={() => setSelectedEvent(null)} className="btn btn-ghost btn-icon" aria-label="Close">
+                <button onClick={() => setSelectedEvent(null)} className="btn-icon btn-ghost rounded-lg" aria-label="Close">
                   <X size={20} />
                 </button>
               </div>
 
-              <div className="modal-body space-y-4">
+              <div className="p-6 space-y-4">
                 <div className="flex items-center gap-3 text-[var(--text-secondary)]">
                   <div className="w-10 h-10 rounded-xl bg-[var(--bg-tertiary)] flex items-center justify-center border border-[var(--border-color)]">
-                    <span className="material-symbols-outlined text-[20px]">schedule</span>
+                    <Clock size={20} className="text-[var(--brand-primary)]" />
                   </div>
                   <div>
                     <p className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest">Time</p>
                     <p className="text-sm font-semibold">
-                      {new Date(selectedEvent.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - 
+                      {new Date(selectedEvent.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} -
                       {new Date(selectedEvent.end).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
                   </div>
@@ -163,7 +163,7 @@ export default function Calendar({ events }: CalendarProps) {
                 {selectedEvent.subject && (
                   <div className="flex items-center gap-3 text-[var(--text-secondary)]">
                     <div className="w-10 h-10 rounded-xl bg-[var(--bg-tertiary)] flex items-center justify-center border border-[var(--border-color)]">
-                      <span className="material-symbols-outlined text-[20px]">book</span>
+                      <BookOpen size={20} className="text-[var(--brand-mid)]" />
                     </div>
                     <div>
                       <p className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest">Subject</p>
@@ -175,7 +175,7 @@ export default function Calendar({ events }: CalendarProps) {
                 {selectedEvent.teacher && (
                   <div className="flex items-center gap-3 text-[var(--text-secondary)]">
                     <div className="w-10 h-10 rounded-xl bg-[var(--bg-tertiary)] flex items-center justify-center border border-[var(--border-color)]">
-                      <span className="material-symbols-outlined text-[20px]">person</span>
+                      <User size={20} className="text-[var(--brand-accent)]" />
                     </div>
                     <div>
                       <p className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest">Teacher</p>
@@ -191,11 +191,11 @@ export default function Calendar({ events }: CalendarProps) {
                 </div>
               </div>
 
-              <div className="modal-footer">
-                <button onClick={() => setSelectedEvent(null)} className="btn btn-secondary flex-1">
+              <div className="flex gap-3 p-6 pt-4 border-t border-[var(--border-color)]">
+                <button onClick={() => setSelectedEvent(null)} className="btn-ghost px-4 py-2 rounded-xl text-sm font-bold text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] transition-all flex-1">
                   Close
                 </button>
-                <button className="btn btn-primary flex-1">
+                <button className="btn px-4 py-2 rounded-xl text-sm font-bold bg-[var(--brand-primary)] text-white hover:bg-[var(--brand-deep)] transition-all flex-1">
                   View Details
                 </button>
               </div>

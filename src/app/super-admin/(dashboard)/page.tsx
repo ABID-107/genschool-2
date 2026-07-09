@@ -87,8 +87,8 @@ const colorMap = {
     card: "border-[var(--border-light)] hover:border-[var(--brand-accent)]/40",
   },
   amber: {
-    icon: "bg-amber-50 text-amber-600",
-    card: "border-[var(--border-light)] hover:border-amber-300",
+    icon: "bg-[var(--amber-50)] text-[var(--amber-600)]",
+    card: "border-[var(--border-light)] hover:border-[var(--amber-300)]",
   },
 };
 
@@ -172,7 +172,7 @@ export default function SuperAdminDashboard() {
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 * i }}
-                  className="bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-light)] p-5 hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer group h-full"
+                  className="card card-hover p-5 h-full"
                 >
                   <div className={`w-10 h-10 rounded-lg ${c.icon} flex items-center justify-center mb-3`}>
                     <Icon size={18} />
@@ -186,7 +186,7 @@ export default function SuperAdminDashboard() {
         </div>
       </div>
 
-      <div className="bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-light)] p-6">
+      <div className="card p-6">
         <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-1">Quick Actions</h2>
         <p className="text-sm text-[var(--text-muted)] mb-5">Frequently used platform management tasks.</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">

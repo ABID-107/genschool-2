@@ -25,25 +25,25 @@ export function ProfileView({ student }: ProfileProps) {
   return (
     <div className="space-y-6 animate-in fade-in duration-500 pb-12">
       {/* Student ID Card Look */}
-      <div className="bg-gradient-to-br from-indigo-700 to-purple-800 rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden group max-w-sm mx-auto">
+      <div className="bg-gradient-to-br from-[var(--brand-deep)] to-[var(--green-900)] rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden group max-w-sm mx-auto">
         <div className="relative z-10 flex flex-col items-center">
           <div className="w-32 h-32 rounded-2xl border-4 border-white/20 overflow-hidden mb-6 shadow-xl group-hover:scale-105 transition-all duration-500">
             <Image src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJ3rG7ibmqRj09ignTbmUiHQU9DmB-Jnsu49Yz0gHlMWSUwpaodkImSCPCkeBzUnsTzc4HOsHo-4-jOwAXc9tmHmJXdJVToj0htUrah-1VnLRA2kK1JszREZ16nAfPC9IgAMDJgqaUYYurP8QOJeIO1Pmlh67tu7DVEofqRGcahgPBbZDmfpjMWuVCgbdEQVIwXcq8vsfOkEB9g7OUwK8Iy1hF1vu19bzdcVw3l1TUjYMVcEr7PiLJ9Q-YpCewIIRwiUwjNekXtqU" className="w-full h-full object-cover" alt="Student" width={128} height={128} />
           </div>
           <h2 className="text-2xl font-bold font-bangla text-center">{lang === 'bn' ? student.nameBn : student.nameEn}</h2>
-          <p className="text-indigo-200 text-sm font-bold uppercase tracking-widest mt-1">ID: {student.studentId}</p>
+          <p className="text-[var(--green-200)] text-sm font-bold uppercase tracking-widest mt-1">ID: {student.studentId}</p>
           
           <div className="mt-8 grid grid-cols-2 gap-8 w-full border-t border-white/10 pt-6">
             <div>
-              <p className="text-[10px] font-bold text-indigo-300 uppercase tracking-wider mb-1">Class</p>
+              <p className="text-[10px] font-bold text-[var(--green-300)] uppercase tracking-wider mb-1">Class</p>
               <p className="text-sm font-bold">{student.class}-{student.section}</p>
             </div>
             <div>
-              <p className="text-[10px] font-bold text-indigo-300 uppercase tracking-wider mb-1">Roll</p>
+              <p className="text-[10px] font-bold text-[var(--green-300)] uppercase tracking-wider mb-1">Roll</p>
               <p className="text-sm font-bold">{student.roll}</p>
             </div>
             <div>
-              <p className="text-[10px] font-bold text-indigo-300 uppercase tracking-wider mb-1">Blood Group</p>
+              <p className="text-[10px] font-bold text-[var(--green-300)] uppercase tracking-wider mb-1">Blood Group</p>
               <p className="text-sm font-bold text-rose-400">{student.bloodGroup}</p>
             </div>
             <div className="flex justify-end">
@@ -76,7 +76,7 @@ export function ProfileView({ student }: ProfileProps) {
             </div>
             <div>
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Mobile No.</p>
-              <p className="text-sm font-bold text-indigo-600">{student.mobile}</p>
+              <p className="text-sm font-bold text-[var(--brand-primary)]">{student.mobile}</p>
             </div>
           </div>
         </div>
@@ -95,7 +95,7 @@ export function ProfileView({ student }: ProfileProps) {
           </div>
         </div>
 
-        <button className="w-full py-4 bg-slate-50 text-slate-600 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-indigo-50 hover:text-indigo-600 transition-all border border-slate-100">
+        <button className="w-full py-4 bg-slate-50 text-slate-600 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-[var(--green-50)] hover:text-[var(--brand-primary)] transition-all border border-slate-100">
           <span className="material-symbols-outlined text-[20px]">badge</span>
           ডাউনলোড স্টুডেন্ট আইডি কার্ড (PDF)
         </button>

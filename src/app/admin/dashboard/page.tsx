@@ -43,7 +43,6 @@ const stats = [
     change: '+12.5%',
     trend: 'up',
     icon: Users,
-    color: 'navy'
   },
   {
     name: 'Total Teachers',
@@ -51,15 +50,13 @@ const stats = [
     change: '+3.2%',
     trend: 'up',
     icon: GraduationCap,
-    color: 'navy'
   },
   {
     name: 'Revenue (MTD)',
-    value: '৳ 2.4M',
+    value: '\u09F3 2.4M',
     change: '+8.1%',
     trend: 'up',
     icon: Wallet,
-    color: 'emerald'
   },
   {
     name: 'Absent Today',
@@ -67,7 +64,6 @@ const stats = [
     change: '-2.4%',
     trend: 'down',
     icon: UserX,
-    color: 'rose'
   }
 ];
 
@@ -135,12 +131,6 @@ export default function AdminDashboard() {
   const [newEvent, setNewEvent] = useState<Partial<ScheduleItem>>({ 
     title: '', time: '', endTime: '', location: '', type: 'meeting', status: 'upcoming', participants: [] 
   });
-
-  const iconColors: Record<string, string> = {
-    navy: 'text-[var(--brand-primary)] bg-[var(--brand-primary)]/10',
-    emerald: 'text-emerald-600 bg-emerald-100',
-    rose: 'text-rose-600 bg-rose-100',
-  };
 
   const handleGenerateReport = (reportId: string) => {
     setIsReportMenuOpen(false);
@@ -280,14 +270,14 @@ export default function AdminDashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 }}
-            className="card p-6 relative overflow-hidden group"
+            className="stat-card"
           >
             <div className="flex justify-between items-start mb-4">
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${iconColors[stat.color]} group-hover:scale-110 transition-transform duration-300`}>
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] group-hover:scale-110 transition-transform duration-300">
                 <stat.icon size={24} />
               </div>
               <div className={`flex items-center gap-1 text-sm font-medium px-2.5 py-1 rounded-full ${
-                stat.trend === 'up' ? 'text-emerald-600 bg-emerald-100' : 'text-rose-600 bg-rose-100'
+                stat.trend === 'up' ? 'badge-green' : 'text-[var(--color-error)] bg-[var(--color-error)]/10'
               }`}>
                 {stat.trend === 'up' ? <ArrowUpRight size={16} /> : <ArrowDownRight size={16} />}
                 {stat.change}
@@ -339,11 +329,11 @@ export default function AdminDashboard() {
                   axisLine={false} 
                   tickLine={false} 
                   tick={{ fill: 'var(--text-muted)', fontSize: 12 }}
-                  tickFormatter={(value) => `৳${(value / 1000000).toFixed(1)}M`}
+                  tickFormatter={(value) => `\u09F3${(value / 1000000).toFixed(1)}M`}
                 />
                 <Tooltip 
                   contentStyle={{ borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)', background: 'var(--bg-secondary)', boxShadow: 'var(--shadow-lg)' }}
-                  formatter={(value) => [typeof value === 'number' ? `৳${value.toLocaleString()}` : String(value), 'Revenue']}
+                  formatter={(value) => [typeof value === 'number' ? `\u09F3${value.toLocaleString()}` : String(value), 'Revenue']}
                 />
                 <Area type="monotone" dataKey="total" stroke="var(--brand-primary)" strokeWidth={3} fillOpacity={1} fill="url(#colorRevenue)" />
               </AreaChart>
@@ -389,8 +379,8 @@ export default function AdminDashboard() {
                   contentStyle={{ borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)', background: 'var(--bg-secondary)' }}
                   formatter={(value) => [`${value}%`, undefined]}
                 />
-                <Bar dataKey="present" name="Present" fill="#10b981" radius={[4, 4, 0, 0]} barSize={20} />
-                <Bar dataKey="absent" name="Absent" fill="#f43f5e" radius={[4, 4, 0, 0]} barSize={20} />
+                <Bar dataKey="present" name="Present" fill="var(--brand-primary)" radius={[4, 4, 0, 0]} barSize={20} />
+                <Bar dataKey="absent" name="Absent" fill="var(--color-error)" radius={[4, 4, 0, 0]} barSize={20} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -489,76 +479,76 @@ export default function AdminDashboard() {
           <div className="p-6 flex-1 overflow-y-auto min-h-[300px]">
             <div className="space-y-4">
               <AnimatePresence mode="popLayout">
-                {filteredSchedule.map((item) => (
-                  <motion.div 
-                    layout
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.2 }}
-                    key={item.id} 
-                    className="flex gap-4 p-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] hover:border-[var(--brand-primary)]/30 hover:shadow-md transition-all group relative overflow-hidden"
-                  >
-                    <div className="flex flex-col items-center gap-1 min-w-[60px]">
-                      <div className={`text-xs font-bold ${
-                        item.status === 'ongoing' ? 'text-[var(--brand-primary)]' :
-                        item.status === 'completed' ? 'text-[var(--text-muted)] line-through' :
-                        'text-[var(--text-primary)]'
+              {filteredSchedule.map((item) => (
+                <motion.div 
+                  layout
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
+                  key={item.id} 
+                  className="flex gap-4 p-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] hover:border-[var(--brand-primary)]/30 hover:shadow-md transition-all group relative overflow-hidden"
+                >
+                  <div className="flex flex-col items-center gap-1 min-w-[60px]">
+                    <div className={`text-xs font-bold ${
+                      item.status === 'ongoing' ? 'text-[var(--brand-primary)]' :
+                      item.status === 'completed' ? 'text-[var(--text-muted)] line-through' :
+                      'text-[var(--text-primary)]'
+                    }`}>
+                      {item.time.split(' ')[0]}
+                    </div>
+                    <div className="text-[10px] text-[var(--text-muted)]">{item.time.split(' ')[1]}</div>
+                  </div>
+
+                  <div className="relative flex-1">
+                    {item.status === 'ongoing' && (
+                      <div className="absolute -left-3 top-1.5 w-1.5 h-1.5 rounded-full bg-[var(--brand-primary)]">
+                        <div className="absolute inset-0 rounded-full bg-[var(--brand-primary)] animate-ping opacity-75"></div>
+                      </div>
+                    )}
+
+                    <div className="flex justify-between items-start mb-1">
+                      <h4 className={`font-semibold text-sm ${item.status === 'completed' ? 'text-[var(--text-muted)]' : 'text-[var(--text-primary)]'} group-hover:text-[var(--brand-primary)] transition-colors`}>
+                        {item.title}
+                      </h4>
+                      <span className={`badge ${
+                        item.type === 'meeting' ? 'badge-green' : 
+                        item.type === 'class' ? 'badge-green' : 
+                        'badge-amber'
                       }`}>
-                        {item.time.split(' ')[0]}
+                        {item.type}
+                      </span>
+                    </div>
+                    
+                    <div className="flex items-center gap-3 mt-2 text-xs font-medium text-[var(--text-muted)]">
+                      <div className="flex items-center gap-1.5">
+                        <MapPin size={12} />
+                        {item.location}
                       </div>
-                      <div className="text-[10px] text-[var(--text-muted)]">{item.time.split(' ')[1]}</div>
+                      <div className="flex items-center gap-1.5">
+                        <Clock size={12} />
+                        {item.endTime}
+                      </div>
                     </div>
 
-                    <div className="relative flex-1">
-                      {item.status === 'ongoing' && (
-                        <div className="absolute -left-3 top-1.5 w-1.5 h-1.5 rounded-full bg-[var(--brand-primary)]">
-                          <div className="absolute inset-0 rounded-full bg-[var(--brand-primary)] animate-ping opacity-75"></div>
-                        </div>
-                      )}
-
-                      <div className="flex justify-between items-start mb-1">
-                        <h4 className={`font-semibold text-sm ${item.status === 'completed' ? 'text-[var(--text-muted)]' : 'text-[var(--text-primary)]'} group-hover:text-[var(--brand-primary)] transition-colors`}>
-                          {item.title}
-                        </h4>
-                        <span className={`badge ${
-                          item.type === 'meeting' ? 'badge-navy' : 
-                          item.type === 'class' ? 'badge-green' : 
-                          'badge-amber'
-                        }`}>
-                          {item.type}
+                    <div className="mt-3 flex items-center gap-2">
+                      <div className="flex -space-x-2">
+                        {item.participants.map((p, i) => (
+                          <div key={i} className={`w-6 h-6 rounded-full border-2 border-[var(--bg-secondary)] flex items-center justify-center text-[9px] font-bold text-white shadow-sm ${
+                            ['bg-[var(--brand-primary)]', 'bg-[var(--brand-light)]', 'bg-[var(--brand-mid)]', 'bg-[var(--brand-deep)]', 'bg-amber-500'][i % 5]
+                          }`}>
+                            {p.substring(0, 2).toUpperCase()}
+                          </div>
+                        ))}
+                      </div>
+                      {item.participants.length > 0 && (
+                        <span className="text-[10px] text-[var(--text-muted)] font-medium ml-1">
+                          {item.participants.length} {item.type === 'class' ? 'Class' : 'People'}
                         </span>
-                      </div>
-                      
-                      <div className="flex items-center gap-3 mt-2 text-xs font-medium text-[var(--text-muted)]">
-                        <div className="flex items-center gap-1.5">
-                          <MapPin size={12} />
-                          {item.location}
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                          <Clock size={12} />
-                          {item.endTime}
-                        </div>
-                      </div>
-
-                      <div className="mt-3 flex items-center gap-2">
-                        <div className="flex -space-x-2">
-                          {item.participants.map((p, i) => (
-                            <div key={i} className={`w-6 h-6 rounded-full border-2 border-[var(--bg-secondary)] flex items-center justify-center text-[9px] font-bold text-white shadow-sm ${
-                              ['bg-[var(--brand-primary)]', 'bg-emerald-500', 'bg-rose-500', 'bg-[var(--brand-mid)]', 'bg-amber-500'][i % 5]
-                            }`}>
-                              {p.substring(0, 2).toUpperCase()}
-                            </div>
-                          ))}
-                        </div>
-                        {item.participants.length > 0 && (
-                          <span className="text-[10px] text-[var(--text-muted)] font-medium ml-1">
-                            {item.participants.length} {item.type === 'class' ? 'Class' : 'People'}
-                          </span>
-                        )}
-                      </div>
+                      )}
                     </div>
-                  </motion.div>
+                  </div>
+                </motion.div>
                 ))}
               </AnimatePresence>
               

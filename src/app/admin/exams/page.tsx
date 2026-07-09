@@ -411,9 +411,9 @@ export default function ExamManagementPage() {
   const statusBadge = (status: ExamStatus) => {
     const map: Record<ExamStatus, { bg: string; text: string; border: string; icon: any }> = {
       draft: { bg: 'bg-[var(--bg-tertiary)]', text: 'text-[var(--text-primary)]', border: 'border-[var(--border-light)]', icon: Settings },
-      upcoming: { bg: 'bg-indigo-50', text: 'text-indigo-700', border: 'border-indigo-200', icon: Clock },
+      upcoming: { bg: 'bg-[var(--green-50)]', text: 'text-[var(--green-800)]', border: 'border-[var(--green-200)]', icon: Clock },
       grading: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', icon: Settings },
-      published: { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', icon: CheckCircle2 },
+      published: { bg: 'bg-[var(--green-50)]', text: 'text-[var(--green-800)]', border: 'border-[var(--green-200)]', icon: CheckCircle2 },
       archived: { bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-200', icon: Archive },
     };
     const s = map[status] || map.draft;
@@ -1337,7 +1337,7 @@ function FormSelect({ label, value, onChange, options, required }: { label: stri
 }
 
 function StatCard({ label, value, color }: { label: string; value: string; color: string }) {
-  const colorBar: Record<string, string> = { blue: 'bg-brand-primary', indigo: 'bg-brand-primary', emerald: 'bg-emerald-500', rose: 'bg-rose-500', amber: 'bg-amber-500' };
+  const colorBar: Record<string, string> = { blue: 'bg-[var(--brand-primary)]', indigo: 'bg-[var(--brand-primary)]', emerald: 'bg-[var(--brand-primary)]', rose: 'bg-rose-500', amber: 'bg-amber-500' };
   return (
     <div className="bg-[var(--bg-secondary)] p-4 rounded-2xl border border-[var(--border-light)] shadow-sm flex items-center gap-4">
       <div className={`w-1.5 h-12 rounded-full ${colorBar[color] || 'bg-[var(--bg-tertiary)]0'}`} />

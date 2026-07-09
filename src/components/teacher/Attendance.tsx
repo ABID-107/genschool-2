@@ -23,7 +23,7 @@ export function Attendance() {
                 <button
                   key={status}
                   onClick={() => toggleStatus(student.id, status)}
-                  className={`px-3 py-1 rounded text-xs capitalize ${student.status === status ? 'bg-indigo-600 text-white' : 'bg-slate-100'}`}
+                  className={`px-3 py-1 rounded text-xs capitalize ${student.status === status ? 'bg-[var(--brand-primary)] text-white' : 'bg-slate-100'}`}
                 >
                   {status}
                 </button>
@@ -32,7 +32,7 @@ export function Attendance() {
           </div>
         ))}
       </div>
-      <button className="mt-6 bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold">Submit Attendance</button>
+      <button className="mt-6 bg-[var(--brand-primary)] text-white px-6 py-2 rounded-lg font-bold">Submit Attendance</button>
     </div>
   );
 }

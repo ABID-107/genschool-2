@@ -72,7 +72,7 @@ export default function AdminSidebar() {
               exit={{ opacity: 0, x: -20 }}
               className="flex items-center gap-3 font-bold text-xl tracking-tight text-[var(--text-sidebar)]"
             >
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--navy-500)] to-[var(--navy-800)] flex items-center justify-center text-white shadow-sm">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--brand-primary)] to-[var(--brand-deep)] flex items-center justify-center text-white shadow-sm">
                 <GraduationCap size={20} />
               </div>
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-[var(--brand-accent)] to-[var(--brand-light)]">GenSchool</span>
@@ -127,7 +127,7 @@ export default function AdminSidebar() {
                   </AnimatePresence>
 
                   {isCollapsed && (
-                    <div className="absolute left-full ml-4 px-2 py-1 rounded-md bg-[var(--navy-900)] text-white text-xs opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50 shadow-lg">
+                    <div className="absolute left-full ml-4 px-2 py-1 rounded-md bg-[var(--bg-sidebar)] text-[var(--text-sidebar)] text-xs opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50 shadow-lg">
                       {item.name}
                     </div>
                   )}

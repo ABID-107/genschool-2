@@ -130,7 +130,7 @@ export function AttendanceView({ summary }: AttendanceProps) {
                 </div>
                 <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
                   <div 
-                    className={`h-full rounded-full transition-all duration-500 ${sub.percent < 75 ? 'bg-rose-500' : 'bg-indigo-500'}`}
+                    className={`h-full rounded-full transition-all duration-500 ${sub.percent < 75 ? 'bg-rose-500' : 'bg-[var(--brand-primary)]'}`}
                     style={{ width: `${sub.percent}%` }}
                   />
                 </div>

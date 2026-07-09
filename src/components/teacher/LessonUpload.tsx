@@ -117,7 +117,7 @@ export function LessonUpload({ onUploadSuccess }: LessonUploadProps) {
                 <input
                 type="text"
                 placeholder="e.g., Introduction to CSS Grid"
-                className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3.5 outline-none bg-slate-50/50 hover:bg-white transition-colors"
+                className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-[var(--brand-primary)]/20 focus:border-[var(--brand-primary)] p-3.5 outline-none bg-slate-50/50 hover:bg-white transition-colors"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 />
@@ -128,7 +128,7 @@ export function LessonUpload({ onUploadSuccess }: LessonUploadProps) {
                 <textarea
                 placeholder="Brief description of the lesson content..."
                 rows={4}
-                className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 p-3.5 outline-none bg-slate-50/50 hover:bg-white transition-colors resize-none"
+                className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-[var(--brand-primary)]/20 focus:border-[var(--brand-primary)] p-3.5 outline-none bg-slate-50/50 hover:bg-white transition-colors resize-none"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 ></textarea>
@@ -175,15 +175,15 @@ export function LessonUpload({ onUploadSuccess }: LessonUploadProps) {
                             setUploadingState("idle");
                         }
                     }}
-                    className="border-2 border-dashed border-slate-200 rounded-xl p-8 flex flex-col items-center text-center hover:border-indigo-300 transition-colors bg-slate-50/50"
+                    className="border-2 border-dashed border-slate-200 rounded-xl p-8 flex flex-col items-center text-center hover:border-[var(--green-300)] transition-colors bg-slate-50/50"
                 >
                     <span className="material-symbols-outlined text-slate-400 text-3xl mb-2">upload_file</span>
                     <p className="text-sm font-semibold text-slate-600">Drag & Drop file here or</p>
-                    <label className="text-indigo-600 font-bold text-sm cursor-pointer hover:underline mt-1">
+                    <label className="text-[var(--brand-primary)] font-bold text-sm cursor-pointer hover:underline mt-1">
                         browse files
                         <input type="file" className="hidden" onChange={handleFileChange} />
                     </label>
-                    {file && <p className="text-xs text-indigo-600 font-medium mt-2">Selected: {file.name}</p>}
+                    {file && <p className="text-xs text-[var(--brand-primary)] font-medium mt-2">Selected: {file.name}</p>}
                 </div>
             </div>
         </div>
@@ -193,7 +193,7 @@ export function LessonUpload({ onUploadSuccess }: LessonUploadProps) {
         <button
             onClick={submitUpload}
             disabled={uploadingState === 'uploading'}
-            className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold text-sm shadow-lg shadow-indigo-500/20 hover:bg-indigo-700 transition-all active:scale-95 disabled:opacity-50"
+            className="bg-[var(--brand-primary)] text-white px-8 py-3 rounded-xl font-bold text-sm shadow-lg shadow-[var(--brand-primary)]/20 hover:bg-[var(--brand-deep)] transition-all active:scale-95 disabled:opacity-50"
         >
             {uploadingState === 'uploading' ? `Uploading ${progress}%` : 'Upload Lesson'}
         </button>

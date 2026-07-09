@@ -278,12 +278,12 @@ export default function FinanceManagementPage() {
 
   const statusBadge = (status: string) => {
     const map: Record<string, { bg: string; text: string; border: string; icon: any }> = {
-      paid: { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', icon: CheckCircle2 },
+      paid: { bg: 'bg-[var(--green-50)]', text: 'text-[var(--green-800)]', border: 'border-[var(--green-200)]', icon: CheckCircle2 },
       unpaid: { bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-200', icon: Clock },
       partial: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', icon: Clock },
       overpaid: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200', icon: TrendingUp },
       refunded: { bg: 'bg-[var(--bg-tertiary)]', text: 'text-[var(--text-secondary)]', border: 'border-[var(--border-light)]', icon: Undo2 },
-      completed: { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', icon: CheckCircle2 },
+      completed: { bg: 'bg-[var(--green-50)]', text: 'text-[var(--green-800)]', border: 'border-[var(--green-200)]', icon: CheckCircle2 },
       pending: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', icon: Clock },
       cancelled: { bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-200', icon: Ban },
     };

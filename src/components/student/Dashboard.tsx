@@ -29,7 +29,7 @@ export function StudentDashboardView({ assignments, events, studentData }: Dashb
       {/* S-P1: Top Identity Bar */}
       <div className="bg-white/80 backdrop-blur-md rounded-2xl border border-slate-200/50 p-5 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-4 w-full sm:w-auto">
-          <div className="w-16 h-16 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-600 flex-shrink-0">
+          <div className="w-16 h-16 rounded-xl bg-[var(--green-100)] flex items-center justify-center text-[var(--brand-primary)] flex-shrink-0">
             <span className="material-symbols-outlined text-3xl">account_circle</span>
           </div>
           <div>
@@ -39,7 +39,7 @@ export function StudentDashboardView({ assignments, events, studentData }: Dashb
             <p className="text-xs font-semibold text-slate-500 mt-1 uppercase tracking-wider">
               {studentData.class}-{studentData.section} • Roll: {studentData.roll}
             </p>
-            <p className="text-[10px] font-bold text-indigo-600 mt-0.5">ID: {studentData.studentId}</p>
+            <p className="text-[10px] font-bold text-[var(--brand-primary)] mt-0.5">ID: {studentData.studentId}</p>
           </div>
         </div>
         <div className="text-center sm:text-right w-full sm:w-auto">
@@ -66,19 +66,19 @@ export function StudentDashboardView({ assignments, events, studentData }: Dashb
                 { time: "09:50 - 10:35", subject: "বাংলা", teacher: "মিস আয়েশা", room: "১০২", current: false },
                 { time: "১০:৪০ - ১১:২৫", subject: "ইংরেজি", teacher: "জনাব করিম", room: "১০৩", current: false },
               ].map((cls, idx) => (
-                <div key={idx} className={`p-4 rounded-xl border transition-all flex items-center justify-between ${cls.current ? 'bg-indigo-50 border-indigo-200 shadow-sm scale-[1.02]' : 'bg-slate-50/50 border-slate-100 text-slate-500'}`}>
+                <div key={idx} className={`p-4 rounded-xl border transition-all flex items-center justify-between ${cls.current ? 'bg-[var(--green-50)] border-[var(--green-200)] shadow-sm scale-[1.02]' : 'bg-slate-50/50 border-slate-100 text-slate-500'}`}>
                   <div className="flex items-center gap-4">
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold text-xs ${cls.current ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200' : 'bg-slate-100 text-slate-400'}`}>
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold text-xs ${cls.current ? 'bg-[var(--brand-primary)] text-white shadow-lg shadow-[var(--green-200)]' : 'bg-slate-100 text-slate-400'}`}>
                       {idx + 1}
                     </div>
                     <div>
-                      <p className={`font-bold font-bangla ${cls.current ? 'text-indigo-900' : 'text-slate-700'}`}>{cls.subject}</p>
+                      <p className={`font-bold font-bangla ${cls.current ? 'text-[var(--brand-deep)]' : 'text-slate-700'}`}>{cls.subject}</p>
                       <p className="text-[11px] font-medium opacity-80">{cls.teacher} • Room {cls.room}</p>
                     </div>
                   </div>
                   <div className="text-right">
                     <p className="text-xs font-bold">{cls.time}</p>
-                    {cls.current && <p className="text-[9px] font-bold text-indigo-500 uppercase mt-1">১০ মিনিট {t('time_remaining')}</p>}
+                    {cls.current && <p className="text-[9px] font-bold text-[var(--brand-primary)] uppercase mt-1">১০ মিনিট {t('time_remaining')}</p>}
                   </div>
                 </div>
               ))}
@@ -109,7 +109,7 @@ export function StudentDashboardView({ assignments, events, studentData }: Dashb
           {/* Assignments Card */}
           <div className="bg-white p-5 rounded-2xl border border-slate-200/50 shadow-sm group hover:-translate-y-1 transition-all">
             <div className="flex justify-between items-start mb-3">
-              <div className="p-2 rounded-lg bg-indigo-50 text-indigo-600">
+              <div className="p-2 rounded-lg bg-[var(--green-50)] text-[var(--brand-primary)]">
                 <span className="material-symbols-outlined text-[20px]">assignment</span>
               </div>
               <span className="text-xl font-bold font-heading text-slate-900">{pendingCount}</span>

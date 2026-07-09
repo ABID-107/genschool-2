@@ -37,7 +37,7 @@ export default function PublicPaymentPortal() {
           </Link>
           <div className="text-right">
             <p className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest">Fee Portal</p>
-            <p className="text-sm font-bold text-rose-600">অনলাইন পেমেন্ট</p>
+            <p className="text-sm font-bold text-[var(--brand-accent)]">অনলাইন পেমেন্ট</p>
           </div>
         </div>
       </header>
@@ -110,7 +110,7 @@ export default function PublicPaymentPortal() {
             <div className="text-center mb-8">
               <p className="text-sm font-bold text-[var(--text-muted)] uppercase">Alex Johnson • SMS-2025-0982</p>
               <h2 className="text-4xl font-bold text-[var(--text-primary)] mt-2 font-heading">৳২,৪৫০.০০</h2>
-              <p className="text-xs font-bold text-rose-500 mt-1">মোট বকেয়া ফি</p>
+              <p className="text-xs font-bold text-[var(--color-warning)] mt-1">মোট বকেয়া ফি</p>
             </div>
 
             <div className="space-y-4">

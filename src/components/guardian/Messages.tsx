@@ -45,7 +45,7 @@ export function GuardianMessagesView() {
               <input 
                 type="text" 
                 placeholder={lang === 'bn' ? 'শিক্ষক খুঁজুন...' : 'Search teachers...'}
-                className="w-full pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                className="w-full pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-[var(--brand-primary)] focus:ring-1 focus:ring-[var(--brand-primary)] transition-all"
               />
             </div>
           </div>
@@ -55,7 +55,7 @@ export function GuardianMessagesView() {
               <button 
                 key={teacher.id}
                 onClick={() => setActiveChat(teacher.id)}
-                className={`w-full p-4 flex items-center gap-3 transition-colors border-b border-slate-50 text-left ${activeChat === teacher.id ? 'bg-indigo-50 border-l-4 border-l-indigo-600' : 'hover:bg-slate-50 border-l-4 border-l-transparent'}`}
+                className={`w-full p-4 flex items-center gap-3 transition-colors border-b border-slate-50 text-left ${activeChat === teacher.id ? 'bg-[var(--green-50)] border-l-4 border-l-[var(--brand-primary)]' : 'hover:bg-slate-50 border-l-4 border-l-transparent'}`}
               >
                 <div className="relative">
                   <Image src={teacher.avatar} alt={teacher.name} className="w-12 h-12 rounded-full object-cover border border-slate-200" width={48} height={48} />
@@ -68,11 +68,11 @@ export function GuardianMessagesView() {
                     <h5 className="font-bold text-slate-900 text-sm truncate">{teacher.name}</h5>
                     <span className="text-[10px] font-bold text-slate-400">10:30 AM</span>
                   </div>
-                  <p className="text-xs font-semibold text-indigo-600 mt-0.5">{lang === 'bn' ? teacher.subjectBn : teacher.subject}</p>
+                  <p className="text-xs font-semibold text-[var(--brand-primary)] mt-0.5">{lang === 'bn' ? teacher.subjectBn : teacher.subject}</p>
                   <p className="text-xs text-slate-500 truncate mt-1">{teacher.lastMsg}</p>
                 </div>
                 {teacher.unread > 0 && (
-                  <span className="w-5 h-5 bg-indigo-600 text-white rounded-full text-[10px] font-bold flex items-center justify-center shrink-0">
+                  <span className="w-5 h-5 bg-[var(--brand-primary)] text-white rounded-full text-[10px] font-bold flex items-center justify-center shrink-0">
                     {teacher.unread}
                   </span>
                 )}
@@ -90,7 +90,7 @@ export function GuardianMessagesView() {
                 <div className="flex items-center gap-3">
                   <button 
                     onClick={() => setActiveChat(null)}
-                    className="md:hidden p-2 -ml-2 text-slate-400 hover:text-indigo-600 rounded-full"
+                    className="md:hidden p-2 -ml-2 text-slate-400 hover:text-[var(--brand-primary)] rounded-full"
                   >
                     <span className="material-symbols-outlined">arrow_back</span>
                   </button>
@@ -130,15 +130,15 @@ export function GuardianMessagesView() {
                 </div>
 
                 <div className="flex justify-end">
-                  <div className="max-w-[85%] md:max-w-[70%] bg-indigo-600 text-white rounded-2xl rounded-tr-none p-4 shadow-md">
+                  <div className="max-w-[85%] md:max-w-[70%] bg-[var(--brand-primary)] text-white rounded-2xl rounded-tr-none p-4 shadow-md">
                     <p className="text-sm">
                       {lang === 'bn' 
                         ? 'ধন্যবাদ জানানোর জন্য। আমি তাকে বাড়িতে জ্যামিতি অনুশীলনে সাহায্য করব।' 
                         : 'Thank you for letting me know. I will help him practice Geometry at home.'}
                     </p>
                     <div className="flex items-center justify-end gap-1 mt-2">
-                      <span className="text-[10px] font-bold text-indigo-200">10:30 AM</span>
-                      <span className="material-symbols-outlined text-[14px] text-indigo-200">done_all</span>
+                      <span className="text-[10px] font-bold text-[var(--green-200)]">10:30 AM</span>
+                      <span className="material-symbols-outlined text-[14px] text-[var(--green-200)]">done_all</span>
                     </div>
                   </div>
                 </div>
@@ -147,15 +147,15 @@ export function GuardianMessagesView() {
               {/* Chat Input */}
               <div className="p-4 bg-white border-t border-slate-100">
                 <div className="flex items-center gap-2">
-                  <button className="p-2 text-slate-400 hover:text-indigo-600 transition-colors">
+                  <button className="p-2 text-slate-400 hover:text-[var(--brand-primary)] transition-colors">
                     <span className="material-symbols-outlined">add_circle</span>
                   </button>
                   <input 
                     type="text" 
                     placeholder={lang === 'bn' ? 'মেসেজ লিখুন...' : 'Type a message...'}
-                    className="flex-1 bg-slate-100 border-none rounded-full px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                    className="flex-1 bg-slate-100 border-none rounded-full px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)]/20"
                   />
-                  <button className="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center hover:bg-indigo-700 active:scale-95 transition-all shadow-md shrink-0">
+                  <button className="w-12 h-12 bg-[var(--brand-primary)] text-white rounded-full flex items-center justify-center hover:bg-[var(--brand-deep)] active:scale-95 transition-all shadow-md shrink-0">
                     <span className="material-symbols-outlined ml-1">send</span>
                   </button>
                 </div>
