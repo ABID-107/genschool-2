@@ -412,9 +412,9 @@ export default function ExamManagementPage() {
     const map: Record<ExamStatus, { bg: string; text: string; border: string; icon: any }> = {
       draft: { bg: 'bg-[var(--bg-tertiary)]', text: 'text-[var(--text-primary)]', border: 'border-[var(--border-light)]', icon: Settings },
       upcoming: { bg: 'bg-[var(--green-50)]', text: 'text-[var(--green-800)]', border: 'border-[var(--green-200)]', icon: Clock },
-      grading: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', icon: Settings },
+      grading: { bg: 'bg-[var(--color-warning-bg)]', text: 'text-[var(--color-warning)]', border: 'border-[var(--color-warning)]/20', icon: Settings },
       published: { bg: 'bg-[var(--green-50)]', text: 'text-[var(--green-800)]', border: 'border-[var(--green-200)]', icon: CheckCircle2 },
-      archived: { bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-200', icon: Archive },
+      archived: { bg: 'bg-[var(--color-error-bg)]', text: 'text-[var(--color-error)]', border: 'border-[var(--color-error)]/20', icon: Archive },
     };
     const s = map[status] || map.draft;
     return (
@@ -507,12 +507,12 @@ export default function ExamManagementPage() {
                             <div className="flex items-center justify-end gap-1">
                               <button onClick={() => openExamModal('edit', exam)} className="p-2 text-[var(--text-muted)] hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors" title="Edit"><Pencil size={16} /></button>
                               {exam.status !== 'archived' && exam.status !== 'published' && (
-                                <button onClick={() => handlePublishExam(exam.id)} className="p-2 text-[var(--text-muted)] hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Publish"><Share2 size={16} /></button>
+                                <button onClick={() => handlePublishExam(exam.id)} className="p-2 text-[var(--text-muted)] hover:text-[var(--color-success)] hover:bg-[var(--color-success-bg)] rounded-lg transition-colors" title="Publish"><Share2 size={16} /></button>
                               )}
                               {exam.status !== 'archived' && (
-                                <button onClick={() => handleArchiveExam(exam.id)} className="p-2 text-[var(--text-muted)] hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors" title="Archive"><Archive size={16} /></button>
+                                <button onClick={() => handleArchiveExam(exam.id)} className="p-2 text-[var(--text-muted)] hover:text-[var(--color-warning)] hover:bg-[var(--color-warning-bg)] rounded-lg transition-colors" title="Archive"><Archive size={16} /></button>
                               )}
-                              <button onClick={() => setConfirmDelete({ type: 'exam', id: exam.id, label: exam.name })} className="p-2 text-[var(--text-muted)] hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Delete"><Trash2 size={16} /></button>
+                              <button onClick={() => setConfirmDelete({ type: 'exam', id: exam.id, label: exam.name })} className="p-2 text-[var(--text-muted)] hover:text-[var(--color-error)] hover:bg-[var(--color-error-bg)] rounded-lg transition-colors" title="Delete"><Trash2 size={16} /></button>
                             </div>
                           </td>
                         </tr>
@@ -546,7 +546,7 @@ export default function ExamManagementPage() {
 
                 {!selectedExamForSchedule ? (
                   <div className="flex flex-col items-center justify-center py-12 text-[var(--text-muted)]">
-                    <Calendar size={48} className="text-slate-300 mb-4" />
+                    <Calendar size={48} className="text-[var(--text-dim)] mb-4" />
                     <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-1">Exam Schedule</h3>
                     <p className="text-sm max-w-sm text-center">Select an exam above to manage its schedule/routine.</p>
                   </div>
@@ -572,7 +572,7 @@ export default function ExamManagementPage() {
                             <td className="px-6 py-4 font-semibold text-[var(--text-primary)]">{new Date(sch.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</td>
                             <td className="px-6 py-4">
                               <span className="font-medium text-[var(--text-primary)]">{sch.subjectName}</span>
-                              {sch.isPractical && <span className="ml-2 text-[10px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-700 font-medium">Practical</span>}
+                              {sch.isPractical && <span className="ml-2 text-[10px] px-1.5 py-0.5 rounded bg-[var(--color-warning-bg)] text-[var(--color-warning)] font-medium">Practical</span>}
                             </td>
                             <td className="px-6 py-4 text-[var(--text-secondary)]">{sch.startTime} – {sch.endTime}</td>
                             <td className="px-6 py-4 text-[var(--text-secondary)]">{sch.room || '—'}</td>
@@ -581,7 +581,7 @@ export default function ExamManagementPage() {
                             <td className="px-6 py-4">
                               <div className="flex items-center justify-end gap-1">
                                 <button onClick={() => openScheduleModal('edit', sch)} className="p-2 text-[var(--text-muted)] hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors" title="Edit"><Pencil size={16} /></button>
-                                <button onClick={() => { if (confirm(`Delete schedule for ${sch.subjectName}?`)) handleDeleteSchedule(sch.id); }} className="p-2 text-[var(--text-muted)] hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Delete"><Trash2 size={16} /></button>
+                                <button onClick={() => { if (confirm(`Delete schedule for ${sch.subjectName}?`)) handleDeleteSchedule(sch.id); }} className="p-2 text-[var(--text-muted)] hover:text-[var(--color-error)] hover:bg-[var(--color-error-bg)] rounded-lg transition-colors" title="Delete"><Trash2 size={16} /></button>
                               </div>
                             </td>
                           </tr>
@@ -678,9 +678,9 @@ export default function ExamManagementPage() {
                                 <td className="px-4 py-3">
                                   <input type="number" value={entry.obtained} onChange={e => handleMarksChange(s.id, 'obtained', e.target.value)}
                                     disabled={entry.isAbsent}
-                                    className={`w-20 px-2 py-1 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 ${entry.isAbsent ? 'bg-[var(--bg-tertiary)] text-[var(--text-muted)]' : isValid ? 'border-[var(--border-light)]' : 'border-rose-300 bg-rose-50/30'}`}
+                                    className={`w-20 px-2 py-1 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 ${entry.isAbsent ? 'bg-[var(--bg-tertiary)] text-[var(--text-muted)]' : isValid ? 'border-[var(--border-light)]' : 'border-[var(--color-error)]/20 bg-[var(--color-error-bg)]/30'}`}
                                     min={0} max={marksSelectedSchedule.fullMarks} />
-                                  {!isValid && entry.obtained !== '' && <span className="text-[10px] text-rose-500 ml-1">Invalid</span>}
+                                  {!isValid && entry.obtained !== '' && <span className="text-[10px] text-[var(--color-error)] ml-1">Invalid</span>}
                                 </td>
                                 <td className="px-4 py-3">
                                   {entry.obtained !== '' && isValid && !entry.isAbsent && (
@@ -689,7 +689,7 @@ export default function ExamManagementPage() {
                                 </td>
                                 <td className="px-4 py-3">
                                   <button onClick={() => handleMarksAbsentToggle(s.id)}
-                                    className={`w-6 h-6 rounded border flex items-center justify-center transition-colors ${entry.isAbsent ? 'bg-rose-100 border-rose-300 text-rose-600' : 'border-[var(--border-light)] text-[var(--text-muted)] hover:border-[var(--text-muted)]'}`}>
+                                    className={`w-6 h-6 rounded border flex items-center justify-center transition-colors ${entry.isAbsent ? 'bg-[var(--color-error-bg)] border-[var(--color-error)]/20 text-[var(--color-error)]' : 'border-[var(--border-light)] text-[var(--text-muted)] hover:border-[var(--text-muted)]'}`}>
                                     {entry.isAbsent && <X size={12} />}
                                   </button>
                                 </td>
@@ -721,7 +721,7 @@ export default function ExamManagementPage() {
 
                 {!marksExamId && (
                   <div className="flex flex-col items-center justify-center py-12 text-[var(--text-muted)]">
-                    <CheckCircle2 size={48} className="text-slate-300 mb-4" />
+                    <CheckCircle2 size={48} className="text-[var(--text-dim)] mb-4" />
                     <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-1">Marks Entry Portal</h3>
                     <p className="text-sm max-w-sm text-center">Select an exam and subject schedule above to begin entering marks.</p>
                   </div>
@@ -787,9 +787,9 @@ export default function ExamManagementPage() {
                           <tr key={r.id} className="hover:bg-[var(--bg-tertiary)]/50 transition-colors">
                             <td className="px-4 py-3">
                               <span className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold ${
-                                r.meritPosition === 1 ? 'bg-amber-100 text-amber-700' :
+                                r.meritPosition === 1 ? 'bg-[var(--color-warning-bg)] text-[var(--color-warning)]' :
                                 r.meritPosition === 2 ? 'bg-[var(--bg-tertiary)] text-[var(--text-secondary)]' :
-                                r.meritPosition === 3 ? 'bg-orange-100 text-orange-700' :
+                                r.meritPosition === 3 ? 'bg-[var(--color-warning-bg)] text-[var(--color-warning)]' :
                                 'bg-[var(--bg-tertiary)] text-[var(--text-muted)]'
                               }`}>{r.meritPosition}</span>
                             </td>
@@ -799,16 +799,16 @@ export default function ExamManagementPage() {
                             <td className="px-4 py-3 font-bold text-lg">{r.gpa.toFixed(2)}</td>
                             <td className="px-4 py-3">
                               <span className={`inline-flex items-center justify-center w-10 h-10 rounded-full text-sm font-bold ${
-                                r.grade === 'A+' ? 'bg-emerald-100 text-emerald-700' :
-                                r.grade === 'A' ? 'bg-blue-100 text-blue-700' :
-                                r.grade === 'A-' ? 'bg-indigo-100 text-indigo-700' :
-                                r.grade === 'F' ? 'bg-rose-100 text-rose-700' :
+                                r.grade === 'A+' ? 'bg-[var(--color-success-bg)] text-[var(--color-success)]' :
+                                r.grade === 'A' ? 'bg-[var(--color-info-bg)] text-[var(--color-info)]' :
+                                r.grade === 'A-' ? 'bg-[var(--color-info-bg)] text-[var(--color-info)]' :
+                                r.grade === 'F' ? 'bg-[var(--color-error-bg)] text-[var(--color-error)]' :
                                 'bg-[var(--bg-tertiary)] text-[var(--text-primary)]'
                               }`}>{r.grade}</span>
                             </td>
                             <td className="px-4 py-3">
                               <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium border ${
-                                r.isPassed ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-700 border-rose-200'
+                                r.isPassed ? 'bg-[var(--color-success-bg)] text-[var(--color-success)] border-[var(--color-success)]/20' : 'bg-[var(--color-error-bg)] text-[var(--color-error)] border-[var(--color-error)]/20'
                               }`}>
                                 {r.isPassed ? <CheckCircle2 size={12} /> : <X size={12} />}
                                 {r.isPassed ? 'Passed' : 'Failed'}
@@ -832,7 +832,7 @@ export default function ExamManagementPage() {
 
                 {!resultExamId && (
                   <div className="flex flex-col items-center justify-center py-12 text-[var(--text-muted)]">
-                    <GraduationCap size={48} className="text-slate-300 mb-4" />
+                    <GraduationCap size={48} className="text-[var(--text-dim)] mb-4" />
                     <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-1">Exam Results</h3>
                     <p className="text-sm max-w-sm text-center">Select an exam above to view, generate, and manage results with GPA and merit positions.</p>
                   </div>
@@ -887,14 +887,14 @@ export default function ExamManagementPage() {
                             <td className="px-4 py-3 font-bold">{r.gpa.toFixed(2)}</td>
                             <td className="px-4 py-3">
                               <span className={`inline-flex items-center justify-center w-8 h-8 rounded-full text-xs font-bold ${
-                                r.grade === 'A+' ? 'bg-emerald-100 text-emerald-700' :
-                                r.grade === 'F' ? 'bg-rose-100 text-rose-700' :
+                                r.grade === 'A+' ? 'bg-[var(--color-success-bg)] text-[var(--color-success)]' :
+                                r.grade === 'F' ? 'bg-[var(--color-error-bg)] text-[var(--color-error)]' :
                                 'bg-[var(--bg-tertiary)] text-[var(--text-primary)]'
                               }`}>{r.grade}</span>
                             </td>
                             <td className="px-4 py-3">
                               <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium border ${
-                                r.isPassed ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-700 border-rose-200'
+                                r.isPassed ? 'bg-[var(--color-success-bg)] text-[var(--color-success)] border-[var(--color-success)]/20' : 'bg-[var(--color-error-bg)] text-[var(--color-error)] border-[var(--color-error)]/20'
                               }`}>{r.isPassed ? 'Passed' : 'Failed'}</span>
                             </td>
                             <td className="px-4 py-3 text-right">
@@ -915,7 +915,7 @@ export default function ExamManagementPage() {
 
                 {!reportExamId && (
                   <div className="flex flex-col items-center justify-center py-12 text-[var(--text-muted)]">
-                    <Printer size={48} className="text-slate-300 mb-4" />
+                    <Printer size={48} className="text-[var(--text-dim)] mb-4" />
                     <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-1">Report Cards</h3>
                     <p className="text-sm max-w-sm text-center">Select a published exam to generate and print individual or bulk report cards.</p>
                   </div>
@@ -954,20 +954,20 @@ export default function ExamManagementPage() {
                         <div className="flex items-center gap-4">
                           <div className="flex-1">
                             <div className="flex justify-between text-sm mb-1">
-                              <span className="text-emerald-600 font-medium">Pass Rate</span>
+                              <span className="text-[var(--color-success)] font-medium">Pass Rate</span>
                               <span className="font-bold text-[var(--text-primary)]">{analyticsData.passRate}%</span>
                             </div>
                             <div className="w-full bg-[var(--bg-tertiary)] rounded-full h-2.5">
-                              <div className="bg-emerald-500 h-2.5 rounded-full transition-all" style={{ width: `${analyticsData.passRate}%` }} />
+                              <div className="bg-[var(--color-success)] h-2.5 rounded-full transition-all" style={{ width: `${analyticsData.passRate}%` }} />
                             </div>
                           </div>
                           <div className="flex-1">
                             <div className="flex justify-between text-sm mb-1">
-                              <span className="text-rose-600 font-medium">Failure Rate</span>
+                              <span className="text-[var(--color-error)] font-medium">Failure Rate</span>
                               <span className="font-bold text-[var(--text-primary)]">{analyticsData.failureRate}%</span>
                             </div>
                             <div className="w-full bg-[var(--bg-tertiary)] rounded-full h-2.5">
-                              <div className="bg-rose-500 h-2.5 rounded-full transition-all" style={{ width: `${analyticsData.failureRate}%` }} />
+                              <div className="bg-[var(--color-error)] h-2.5 rounded-full transition-all" style={{ width: `${analyticsData.failureRate}%` }} />
                             </div>
                           </div>
                         </div>
@@ -994,7 +994,7 @@ export default function ExamManagementPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="p-5 bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-light)] shadow-sm">
                         <h4 className="text-sm font-semibold text-[var(--text-primary)] mb-3 flex items-center gap-2">
-                          <CheckCircle2 size={16} className="text-emerald-500" /> Top Performers
+                          <CheckCircle2 size={16} className="text-[var(--color-success)]" /> Top Performers
                         </h4>
                         <div className="space-y-2">
                           {analyticsData.topPerformers.slice(0, 5).map((p, i) => (
@@ -1003,14 +1003,14 @@ export default function ExamManagementPage() {
                                 <span className="text-xs font-bold text-[var(--text-muted)] w-5">{i + 1}.</span>
                                 <span className="text-sm font-medium text-[var(--text-primary)]">{p.studentName}</span>
                               </div>
-                              <span className="text-sm font-bold text-emerald-600">{p.gpa.toFixed(2)}</span>
+                              <span className="text-sm font-bold text-[var(--color-success)]">{p.gpa.toFixed(2)}</span>
                             </div>
                           ))}
                         </div>
                       </div>
                       <div className="p-5 bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-light)] shadow-sm">
                         <h4 className="text-sm font-semibold text-[var(--text-primary)] mb-3 flex items-center gap-2">
-                          <AlertTriangle size={16} className="text-rose-500" /> Needs Improvement
+                          <AlertTriangle size={16} className="text-[var(--color-error)]" /> Needs Improvement
                         </h4>
                         <div className="space-y-2">
                           {analyticsData.weakPerformers.slice(0, 5).map((p, i) => (
@@ -1019,7 +1019,7 @@ export default function ExamManagementPage() {
                                 <span className="text-xs font-bold text-[var(--text-muted)] w-5">{i + 1}.</span>
                                 <span className="text-sm font-medium text-[var(--text-primary)]">{p.studentName}</span>
                               </div>
-                              <span className="text-sm font-bold text-rose-600">{p.gpa.toFixed(2)}</span>
+                              <span className="text-sm font-bold text-[var(--color-error)]">{p.gpa.toFixed(2)}</span>
                             </div>
                           ))}
                         </div>
@@ -1048,9 +1048,9 @@ export default function ExamManagementPage() {
                                 <td className="px-4 py-2">
                                   <div className="flex items-center gap-2">
                                     <div className="w-24 bg-[var(--bg-tertiary)] rounded-full h-2">
-                                      <div className={`h-2 rounded-full ${sp.passRate >= 80 ? 'bg-emerald-500' : sp.passRate >= 50 ? 'bg-amber-500' : 'bg-rose-500'}`} style={{ width: `${sp.passRate}%` }} />
+                                      <div className={`h-2 rounded-full ${sp.passRate >= 80 ? 'bg-[var(--color-success)]' : sp.passRate >= 50 ? 'bg-[var(--color-warning)]' : 'bg-[var(--color-error)]'}`} style={{ width: `${sp.passRate}%` }} />
                                     </div>
-                                    <span className={`text-xs font-medium ${sp.passRate >= 80 ? 'text-emerald-600' : sp.passRate >= 50 ? 'text-amber-600' : 'text-rose-600'}`}>{sp.passRate}%</span>
+                                    <span className={`text-xs font-medium ${sp.passRate >= 80 ? 'text-[var(--color-success)]' : sp.passRate >= 50 ? 'text-[var(--color-warning)]' : 'text-[var(--color-error)]'}`}>{sp.passRate}%</span>
                                   </div>
                                 </td>
                               </tr>
@@ -1062,7 +1062,7 @@ export default function ExamManagementPage() {
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center py-12 text-[var(--text-muted)]">
-                    <BarChart2 size={48} className="text-slate-300 mb-4" />
+                    <BarChart2 size={48} className="text-[var(--text-dim)] mb-4" />
                     <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-1">Exam Analytics</h3>
                     <p className="text-sm max-w-sm text-center">Select a published exam to view detailed performance analytics, pass rates, and subject analysis.</p>
                   </div>
@@ -1098,7 +1098,7 @@ export default function ExamManagementPage() {
                   <FormField label="End Date" type="date" value={examModal.data.endDate || ''} onChange={v => setExamModal(prev => ({ ...prev, data: { ...prev.data, endDate: v } }))} required />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-[var(--text-primary)] block mb-2">Applicable Classes <span className="text-rose-500">*</span></label>
+                  <label className="text-sm font-medium text-[var(--text-primary)] block mb-2">Applicable Classes <span className="text-[var(--color-error)]">*</span></label>
                   <div className="max-h-40 overflow-y-auto border border-[var(--border-light)] rounded-xl p-2 space-y-0.5">
                     {classes.map(c => {
                       const checked = (examModal.data.classIds || []).includes(c.id);
@@ -1169,11 +1169,11 @@ export default function ExamManagementPage() {
                     <AlertTriangle size={15} /> Check Conflicts
                   </button>
                   {scheduleConflicts.length > 0 && (
-                    <div className="mt-3 p-3 bg-rose-50 border border-rose-200 rounded-xl">
+                    <div className="mt-3 p-3 bg-[var(--color-error-bg)] border border-[var(--color-error)]/20 rounded-xl">
                       <p className="text-xs font-semibold badge-rose mb-1.5">{scheduleConflicts.length} Conflict(s) Detected:</p>
                       <ul className="space-y-1">
                         {scheduleConflicts.map((c, i) => (
-                          <li key={i} className="text-xs text-rose-600 flex items-start gap-1.5">
+                          <li key={i} className="text-xs text-[var(--color-error)] flex items-start gap-1.5">
                             <AlertTriangle size={11} className="mt-0.5 shrink-0" />
                             <span>{c.message}</span>
                           </li>
@@ -1186,7 +1186,7 @@ export default function ExamManagementPage() {
               <div className="px-6 py-4 border-t border-[var(--border-light)] flex gap-3">
                 {scheduleModal.mode === 'edit' && scheduleModal.data.id && (
                   <button onClick={() => { if (confirm('Delete this schedule entry?')) { handleDeleteSchedule(scheduleModal.data.id!); closeScheduleModal(); } }}
-                    className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-sm font-medium transition-colors flex items-center gap-2">
+                    className="px-4 py-2 bg-[var(--color-error)] hover:bg-[var(--color-error)] text-white rounded-xl text-sm font-medium transition-colors flex items-center gap-2">
                     <Trash2 size={16} /> Delete
                   </button>
                 )}
@@ -1225,7 +1225,7 @@ export default function ExamManagementPage() {
                   </div>
                   <div className="text-right">
                     <div className="text-3xl font-bold text-[var(--text-primary)]">{viewingResult.gpa.toFixed(2)}</div>
-                    <div className={`text-sm font-semibold ${viewingResult.isPassed ? 'text-emerald-600' : 'text-rose-600'}`}>
+                    <div className={`text-sm font-semibold ${viewingResult.isPassed ? 'text-[var(--color-success)]' : 'text-[var(--color-error)]'}`}>
                       {viewingResult.isPassed ? 'Passed' : 'Failed'} &bull; Merit #{viewingResult.meritPosition}
                     </div>
                   </div>
@@ -1252,14 +1252,14 @@ export default function ExamManagementPage() {
                         <td className="px-4 py-2.5 text-center font-semibold">{sr.isAbsent ? '—' : sr.obtainedMarks}</td>
                         <td className="px-4 py-2.5 text-center">
                           <span className={`inline-flex items-center justify-center w-8 h-8 rounded-full text-xs font-bold ${
-                            sr.grade === 'A+' ? 'bg-emerald-100 text-emerald-700' :
-                            sr.grade === 'F' || sr.grade === '—' ? 'bg-rose-100 text-rose-700' :
+                            sr.grade === 'A+' ? 'bg-[var(--color-success-bg)] text-[var(--color-success)]' :
+                            sr.grade === 'F' || sr.grade === '—' ? 'bg-[var(--color-error-bg)] text-[var(--color-error)]' :
                             'bg-[var(--bg-tertiary)] text-[var(--text-primary)]'
                           }`}>{sr.grade}</span>
                         </td>
                         <td className="px-4 py-2.5 text-center font-medium">{sr.gradePoint.toFixed(2)}</td>
                         <td className="px-4 py-2.5 text-center">
-                          {sr.isAbsent ? <span className="text-xs text-rose-500">Absent</span> : sr.isPassed ? <Check size={14} className="text-emerald-500 mx-auto" /> : <X size={14} className="text-rose-500 mx-auto" />}
+                          {sr.isAbsent ? <span className="text-xs text-[var(--color-error)]">Absent</span> : sr.isPassed ? <Check size={14} className="text-[var(--color-success)] mx-auto" /> : <X size={14} className="text-[var(--color-error)] mx-auto" />}
                         </td>
                       </tr>
                     ))}
@@ -1272,8 +1272,8 @@ export default function ExamManagementPage() {
                       <td className="px-4 py-3 text-center text-[var(--text-primary)]">{viewingResult.totalMarks}</td>
                       <td className="px-4 py-3 text-center">
                         <span className={`inline-flex items-center justify-center w-9 h-9 rounded-full text-sm font-bold ${
-                          viewingResult.grade === 'A+' ? 'bg-emerald-100 text-emerald-700' :
-                          viewingResult.grade === 'F' ? 'bg-rose-100 text-rose-700' :
+                          viewingResult.grade === 'A+' ? 'bg-[var(--color-success-bg)] text-[var(--color-success)]' :
+                          viewingResult.grade === 'F' ? 'bg-[var(--color-error-bg)] text-[var(--color-error)]' :
                           'bg-[var(--bg-tertiary)] text-[var(--text-primary)]'
                         }`}>{viewingResult.grade}</span>
                       </td>
@@ -1294,14 +1294,14 @@ export default function ExamManagementPage() {
           <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[var(--text-primary)]/20 backdrop-blur-sm" onClick={() => setConfirmDelete(null)} />
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="relative bg-[var(--bg-secondary)] rounded-2xl shadow-xl border border-[var(--border-light)] w-full max-w-sm z-10 p-6 text-center">
-              <div className="w-12 h-12 rounded-full bg-rose-100 flex items-center justify-center mx-auto mb-4"><Trash2 size={24} className="text-rose-600" /></div>
+              <div className="w-12 h-12 rounded-full bg-[var(--color-error-bg)] flex items-center justify-center mx-auto mb-4"><Trash2 size={24} className="text-[var(--color-error)]" /></div>
               <h3 className="text-lg font-bold text-[var(--text-primary)] mb-2">Delete {confirmDelete.type === 'exam' ? 'Exam' : 'Schedule'}?</h3>
               <p className="text-sm text-[var(--text-muted)] mb-6">
                 Are you sure you want to delete <span className="font-semibold text-[var(--text-primary)]">{confirmDelete.label}</span>? This will also remove associated schedules and marks.
               </p>
               <div className="flex gap-3">
                 <button onClick={() => setConfirmDelete(null)} className="flex-1 px-4 py-2 bg-[var(--bg-tertiary)] hover:bg-[var(--bg-tertiary)]/80 text-[var(--text-primary)] rounded-xl text-sm font-medium transition-colors">Cancel</button>
-                <button onClick={() => handleDeleteExam(confirmDelete.id)} className="flex-1 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-sm font-medium transition-colors shadow-sm">Delete</button>
+                <button onClick={() => handleDeleteExam(confirmDelete.id)} className="flex-1 px-4 py-2 bg-[var(--color-error)] hover:bg-[var(--color-error)] text-white rounded-xl text-sm font-medium transition-colors shadow-sm">Delete</button>
               </div>
             </motion.div>
           </div>
@@ -1315,7 +1315,7 @@ export default function ExamManagementPage() {
 function FormField({ label, value, onChange, type = 'text', required }: { label: string; value: string; onChange: (v: string) => void; type?: string; required?: boolean }) {
   return (
     <div className="space-y-1">
-      <label className="text-sm font-medium text-[var(--text-primary)]">{label} {required && <span className="text-rose-500">*</span>}</label>
+      <label className="text-sm font-medium text-[var(--text-primary)]">{label} {required && <span className="text-[var(--color-error)]">*</span>}</label>
       <input type={type} value={value} onChange={e => onChange(e.target.value)}
         className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary" />
     </div>
@@ -1326,7 +1326,7 @@ function FormSelect({ label, value, onChange, options, required }: { label: stri
   const opts = Array.isArray(options) ? (typeof options[0] === 'string' ? (options as string[]).map(o => ({ value: o, label: o })) : options as { value: string; label: string }[]) : [];
   return (
     <div className="space-y-1">
-      <label className="text-sm font-medium text-[var(--text-primary)]">{label} {required && <span className="text-rose-500">*</span>}</label>
+      <label className="text-sm font-medium text-[var(--text-primary)]">{label} {required && <span className="text-[var(--color-error)]">*</span>}</label>
       <select value={value} onChange={e => onChange(e.target.value)}
         className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary bg-[var(--bg-secondary)]">
         <option value="">— Select —</option>
@@ -1337,7 +1337,7 @@ function FormSelect({ label, value, onChange, options, required }: { label: stri
 }
 
 function StatCard({ label, value, color }: { label: string; value: string; color: string }) {
-  const colorBar: Record<string, string> = { blue: 'bg-[var(--brand-primary)]', indigo: 'bg-[var(--brand-primary)]', emerald: 'bg-[var(--brand-primary)]', rose: 'bg-rose-500', amber: 'bg-amber-500' };
+  const colorBar: Record<string, string> = { blue: 'bg-[var(--brand-primary)]', indigo: 'bg-[var(--brand-primary)]', emerald: 'bg-[var(--brand-primary)]', rose: 'bg-[var(--color-error)]', amber: 'bg-[var(--color-warning)]' };
   return (
     <div className="bg-[var(--bg-secondary)] p-4 rounded-2xl border border-[var(--border-light)] shadow-sm flex items-center gap-4">
       <div className={`w-1.5 h-12 rounded-full ${colorBar[color] || 'bg-[var(--bg-tertiary)]0'}`} />

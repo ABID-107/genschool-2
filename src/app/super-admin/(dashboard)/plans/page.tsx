@@ -54,18 +54,18 @@ export default function PlansPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 }}
             className={`relative bg-[var(--bg-secondary)] rounded-xl border ${
-              plan.popular ? "border-amber-300 ring-2 ring-amber-200" : "border-[var(--border-light)]"
+              plan.popular ? "border-[var(--color-warning)]/20 ring-2 ring-amber-200" : "border-[var(--border-light)]"
             } p-6 hover:shadow-lg transition-all`}
           >
             {plan.popular && (
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-amber-500 text-white text-[11px] font-bold rounded-full uppercase tracking-wider">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-[var(--color-warning)] text-white text-[11px] font-bold rounded-full uppercase tracking-wider">
                 Most Popular
               </div>
             )}
             <div className="flex items-center gap-3 mb-4">
               <div className={`w-10 h-10 rounded-lg ${
                 plan.color === "brand" ? "bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]" :
-                "bg-amber-50 text-amber-600"
+                "bg-[var(--color-warning-bg)] text-[var(--color-warning)]"
               } flex items-center justify-center`}>
                 <CreditCard size={20} />
               </div>
@@ -92,7 +92,7 @@ export default function PlansPage() {
             <div className="flex gap-2">
               <button className={`flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all ${
                 plan.popular
-                  ? "bg-amber-500 text-white hover:bg-amber-400"
+                  ? "bg-[var(--color-warning)] text-white hover:bg-amber-400"
                   : "bg-[var(--brand-primary)] text-white hover:bg-[var(--brand-mid)]"
               }`}>
                 Edit Plan
@@ -116,7 +116,7 @@ export default function PlansPage() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[
             { label: "Starter", count: "1", icon: Building2, bg: "bg-[var(--brand-primary)]/10", text: "text-[var(--brand-primary)]" },
-            { label: "Professional", count: "2", icon: Users, bg: "bg-amber-50", text: "text-amber-600" },
+            { label: "Professional", count: "2", icon: Users, bg: "bg-[var(--color-warning-bg)]", text: "text-[var(--color-warning)]" },
             { label: "Enterprise", count: "2", icon: Database, bg: "bg-[var(--brand-primary)]/10", text: "text-[var(--brand-primary)]" },
           ].map((item) => {
             const Icon = item.icon;

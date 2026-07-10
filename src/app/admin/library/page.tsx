@@ -27,9 +27,9 @@ const TABS = [
 
 const statusBadge = (status: string) => {
   const map: Record<string, { bg: string; text: string; border: string; icon: any }> = {
-    issued: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200', icon: BookMarked },
+    issued: { bg: 'bg-[var(--color-info-bg)]', text: 'text-[var(--color-info)]', border: 'border-[var(--color-info)]/20', icon: BookMarked },
     returned: { bg: 'bg-[var(--green-50)]', text: 'text-[var(--green-800)]', border: 'border-[var(--green-200)]', icon: CheckCircle2 },
-    overdue: { bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-200', icon: Clock },
+    overdue: { bg: 'bg-[var(--color-error-bg)]', text: 'text-[var(--color-error)]', border: 'border-[var(--color-error)]/20', icon: Clock },
     lost: { bg: 'bg-[var(--bg-tertiary)]', text: 'text-[var(--text-secondary)]', border: 'border-[var(--border-light)]', icon: Ban },
   };
   const s = map[status] || map.issued;
@@ -238,7 +238,7 @@ export default function LibraryManagementPage() {
           {activeTab === 'catalog' && (
             <>
               <button onClick={() => { setFilters(p => ({ ...p, isArchived: !p.isArchived })); }}
-                className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors border shadow-sm ${filters.isArchived ? 'bg-amber-50 text-amber-700 border-amber-200' : 'bg-[var(--bg-secondary)] text-[var(--text-secondary)] border-[var(--border-light)] hover:bg-[var(--bg-tertiary)]'}`}>
+                className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors border shadow-sm ${filters.isArchived ? 'bg-[var(--color-warning-bg)] text-[var(--color-warning)] border-[var(--color-warning)]/20' : 'bg-[var(--bg-secondary)] text-[var(--text-secondary)] border-[var(--border-light)] hover:bg-[var(--bg-tertiary)]'}`}>
                 <Archive size={16} className="inline mr-1.5" />{filters.isArchived ? 'Archived' : 'Active'}
               </button>
               <button onClick={() => exportBooksToCSV(books)} className="bg-[var(--bg-secondary)] border border-[var(--border-light)] text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] px-4 py-2 rounded-xl text-sm font-medium transition-colors shadow-sm flex items-center gap-2">
@@ -266,7 +266,7 @@ export default function LibraryManagementPage() {
         </div>
         <div className="bg-[var(--bg-secondary)] p-5 rounded-2xl border border-[var(--border-light)] shadow-sm">
           <p className="text-sm font-medium text-[var(--text-muted)]">Available Copies</p>
-          <p className="text-2xl font-bold text-emerald-600 mt-1">{inventory.availableCopies}</p>
+          <p className="text-2xl font-bold text-[var(--color-success)] mt-1">{inventory.availableCopies}</p>
         </div>
         <div className="bg-[var(--bg-secondary)] p-5 rounded-2xl border border-[var(--border-light)] shadow-sm">
           <p className="text-sm font-medium text-[var(--text-muted)]">Currently Issued</p>
@@ -274,7 +274,7 @@ export default function LibraryManagementPage() {
         </div>
         <div className="bg-[var(--bg-secondary)] p-5 rounded-2xl border border-[var(--border-light)] shadow-sm">
           <p className="text-sm font-medium text-[var(--text-muted)]">Overdue Returns</p>
-          <p className={`text-2xl font-bold mt-1 ${overdueCount > 0 ? 'text-rose-600' : 'text-[var(--text-primary)]'}`}>{overdueCount}</p>
+          <p className={`text-2xl font-bold mt-1 ${overdueCount > 0 ? 'text-[var(--color-error)]' : 'text-[var(--text-primary)]'}`}>{overdueCount}</p>
         </div>
       </div>
 
@@ -354,7 +354,7 @@ export default function LibraryManagementPage() {
                           </td>
                           <td className="px-6 py-4 font-medium text-[var(--text-primary)]">{book.totalCopies}</td>
                           <td className="px-6 py-4">
-                            <span className={`font-medium ${book.availableCopies > 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
+                            <span className={`font-medium ${book.availableCopies > 0 ? 'text-[var(--color-success)]' : 'text-[var(--color-error)]'}`}>
                               {book.availableCopies}
                             </span>
                           </td>
@@ -364,14 +364,14 @@ export default function LibraryManagementPage() {
                               <button onClick={() => openBookModal('view', book)} className="p-1.5 text-[var(--text-muted)] hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors" title="View"><Eye size={15} /></button>
                               <button onClick={() => openBookModal('edit', book)} className="p-1.5 text-[var(--text-muted)] hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors" title="Edit"><Pencil size={15} /></button>
                               {!filters.isArchived && book.availableCopies > 0 && (
-                                <button onClick={() => openIssueModal(book.id)} className="p-1.5 text-[var(--text-muted)] hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Issue"><BookMarked size={15} /></button>
+                                <button onClick={() => openIssueModal(book.id)} className="p-1.5 text-[var(--text-muted)] hover:text-[var(--color-success)] hover:bg-[var(--color-success-bg)] rounded-lg transition-colors" title="Issue"><BookMarked size={15} /></button>
                               )}
                               {!filters.isArchived ? (
-                                <button onClick={() => handleBookAction('archive', book.id)} className="p-1.5 text-[var(--text-muted)] hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors" title="Archive"><Archive size={15} /></button>
+                                <button onClick={() => handleBookAction('archive', book.id)} className="p-1.5 text-[var(--text-muted)] hover:text-[var(--color-warning)] hover:bg-[var(--color-warning-bg)] rounded-lg transition-colors" title="Archive"><Archive size={15} /></button>
                               ) : (
                                 <button onClick={() => handleBookAction('restore', book.id)} className="p-1.5 text-[var(--text-muted)] hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors" title="Restore"><Undo2 size={15} /></button>
                               )}
-                              <button onClick={() => handleBookAction('delete', book.id)} className="p-1.5 text-[var(--text-muted)] hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Delete"><Trash2 size={15} /></button>
+                              <button onClick={() => handleBookAction('delete', book.id)} className="p-1.5 text-[var(--text-muted)] hover:text-[var(--color-error)] hover:bg-[var(--color-error-bg)] rounded-lg transition-colors" title="Delete"><Trash2 size={15} /></button>
                             </div>
                           </td>
                         </tr>
@@ -423,14 +423,14 @@ export default function LibraryManagementPage() {
                           </td>
                           <td className="px-6 py-4 text-[var(--text-secondary)] capitalize">{record.userRole}</td>
                           <td className="px-6 py-4 text-[var(--text-muted)]">{new Date(record.issueDate).toLocaleDateString()}</td>
-                          <td className={`px-6 py-4 font-medium ${record.status === 'overdue' ? 'text-rose-600' : 'text-[var(--text-secondary)]'}`}>
+                          <td className={`px-6 py-4 font-medium ${record.status === 'overdue' ? 'text-[var(--color-error)]' : 'text-[var(--text-secondary)]'}`}>
                             {new Date(record.dueDate).toLocaleDateString()}
                           </td>
                           <td className="px-6 py-4 text-[var(--text-muted)]">{record.returnDate ? new Date(record.returnDate).toLocaleDateString() : '—'}</td>
                           <td className="px-6 py-4">{statusBadge(record.status)}</td>
                           <td className="px-6 py-4">
                             {record.fine > 0 ? (
-                              <span className={`font-medium ${record.finePaid ? 'text-[var(--text-muted)]' : 'text-rose-600'}`}>
+                              <span className={`font-medium ${record.finePaid ? 'text-[var(--text-muted)]' : 'text-[var(--color-error)]'}`}>
                                 ৳{record.fine}{record.finePaid ? ' (paid)' : ''}
                               </span>
                             ) : '—'}
@@ -439,16 +439,16 @@ export default function LibraryManagementPage() {
                             <div className="flex items-center justify-end gap-0.5">
                               {record.status === 'issued' && (
                                 <>
-                                  <button onClick={() => openReturnModal(record)} className="p-1.5 text-[var(--text-muted)] hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Return"><RotateCcw size={15} /></button>
+                                  <button onClick={() => openReturnModal(record)} className="p-1.5 text-[var(--text-muted)] hover:text-[var(--color-success)] hover:bg-[var(--color-success-bg)] rounded-lg transition-colors" title="Return"><RotateCcw size={15} /></button>
                                   <button onClick={() => { if (renewBook(record.id)) refreshBorrows(); else alert('Cannot renew (max 2 renewals).'); }} className="p-1.5 text-[var(--text-muted)] hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors" title="Renew"><RotateCcw size={15} /></button>
-                                  <button onClick={() => { markAsLost(record.id); refreshBooks(); refreshBorrows(); }} className="p-1.5 text-[var(--text-muted)] hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Mark Lost"><Ban size={15} /></button>
+                                  <button onClick={() => { markAsLost(record.id); refreshBooks(); refreshBorrows(); }} className="p-1.5 text-[var(--text-muted)] hover:text-[var(--color-error)] hover:bg-[var(--color-error-bg)] rounded-lg transition-colors" title="Mark Lost"><Ban size={15} /></button>
                                 </>
                               )}
                               {record.status === 'overdue' && (
                                 <>
-                                  <button onClick={() => openReturnModal(record)} className="p-1.5 text-[var(--text-muted)] hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Return"><RotateCcw size={15} /></button>
+                                  <button onClick={() => openReturnModal(record)} className="p-1.5 text-[var(--text-muted)] hover:text-[var(--color-success)] hover:bg-[var(--color-success-bg)] rounded-lg transition-colors" title="Return"><RotateCcw size={15} /></button>
                                   {!record.finePaid && record.fine > 0 && (
-                                    <button onClick={() => { payFine(record.id); refreshBorrows(); }} className="p-1.5 text-[var(--text-muted)] hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Pay Fine"><DollarSign size={15} /></button>
+                                    <button onClick={() => { payFine(record.id); refreshBorrows(); }} className="p-1.5 text-[var(--text-muted)] hover:text-[var(--color-success)] hover:bg-[var(--color-success-bg)] rounded-lg transition-colors" title="Pay Fine"><DollarSign size={15} /></button>
                                   )}
                                 </>
                               )}
@@ -493,7 +493,7 @@ export default function LibraryManagementPage() {
                     </div>
                     <div className="p-5 bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-light)] shadow-sm">
                       <p className="text-sm text-[var(--text-muted)]">Available</p>
-                      <p className="text-2xl font-bold text-emerald-600 mt-1">{inventory.availableCopies}</p>
+                      <p className="text-2xl font-bold text-[var(--color-success)] mt-1">{inventory.availableCopies}</p>
                     </div>
                     <div className="p-5 bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-light)] shadow-sm">
                       <p className="text-sm text-[var(--text-muted)]">Issued</p>
@@ -501,11 +501,11 @@ export default function LibraryManagementPage() {
                     </div>
                     <div className="p-5 bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-light)] shadow-sm">
                       <p className="text-sm text-[var(--text-muted)]">Lost</p>
-                      <p className="text-2xl font-bold text-rose-600 mt-1">{inventory.lostCopies}</p>
+                      <p className="text-2xl font-bold text-[var(--color-error)] mt-1">{inventory.lostCopies}</p>
                     </div>
                     <div className="p-5 bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-light)] shadow-sm">
                       <p className="text-sm text-[var(--text-muted)]">Archived</p>
-                      <p className="text-2xl font-bold text-amber-600 mt-1">{inventory.archivedBooks}</p>
+                      <p className="text-2xl font-bold text-[var(--color-warning)] mt-1">{inventory.archivedBooks}</p>
                     </div>
                   </div>
                 )}
@@ -534,9 +534,9 @@ export default function LibraryManagementPage() {
                                 <td className="px-6 py-4 font-medium text-[var(--text-primary)]">{r.bookTitle}</td>
                                 <td className="px-6 py-4">{r.userName}</td>
                                 <td className="px-6 py-4 text-[var(--text-muted)]">{new Date(r.issueDate).toLocaleDateString()}</td>
-                                <td className="px-6 py-4 text-rose-600 font-medium">{new Date(r.dueDate).toLocaleDateString()}</td>
-                                <td className="px-6 py-4"><span className="font-bold text-rose-600">{daysOver}</span></td>
-                                <td className="px-6 py-4 font-medium text-rose-600">৳{r.fine}</td>
+                                <td className="px-6 py-4 text-[var(--color-error)] font-medium">{new Date(r.dueDate).toLocaleDateString()}</td>
+                                <td className="px-6 py-4"><span className="font-bold text-[var(--color-error)]">{daysOver}</span></td>
+                                <td className="px-6 py-4 font-medium text-[var(--color-error)]">৳{r.fine}</td>
                               </tr>
                             );
                           })}
@@ -592,17 +592,17 @@ export default function LibraryManagementPage() {
               </div>
               <div className="p-6 space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Title <span className="text-rose-500">*</span></label>
+                  <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Title <span className="text-[var(--color-error)]">*</span></label>
                     <input type="text" value={bookModal.data.title || ''} onChange={e => setBookModal(p => ({ ...p, data: { ...p.data, title: e.target.value } }))}
                       readOnly={bookModal.mode === 'view'}
                       className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 bg-[var(--bg-secondary)] read-only:bg-[var(--bg-tertiary)]" /></div>
-                  <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Author <span className="text-rose-500">*</span></label>
+                  <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Author <span className="text-[var(--color-error)]">*</span></label>
                     <input type="text" value={bookModal.data.author || ''} onChange={e => setBookModal(p => ({ ...p, data: { ...p.data, author: e.target.value } }))}
                       readOnly={bookModal.mode === 'view'}
                       className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 bg-[var(--bg-secondary)] read-only:bg-[var(--bg-tertiary)]" /></div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">ISBN <span className="text-rose-500">*</span></label>
+                  <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">ISBN <span className="text-[var(--color-error)]">*</span></label>
                     <input type="text" value={bookModal.data.isbn || ''} onChange={e => setBookModal(p => ({ ...p, data: { ...p.data, isbn: e.target.value } }))}
                       readOnly={bookModal.mode === 'view'}
                       className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 bg-[var(--bg-secondary)] read-only:bg-[var(--bg-tertiary)]" /></div>
@@ -616,7 +616,7 @@ export default function LibraryManagementPage() {
                     <input type="text" value={bookModal.data.edition || ''} onChange={e => setBookModal(p => ({ ...p, data: { ...p.data, edition: e.target.value } }))}
                       readOnly={bookModal.mode === 'view'}
                       className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 bg-[var(--bg-secondary)] read-only:bg-[var(--bg-tertiary)]" /></div>
-                  <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Category <span className="text-rose-500">*</span></label>
+                  <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Category <span className="text-[var(--color-error)]">*</span></label>
                     <select value={bookModal.data.category || ''} onChange={e => setBookModal(p => ({ ...p, data: { ...p.data, category: e.target.value } }))}
                       disabled={bookModal.mode === 'view'}
                       className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 bg-[var(--bg-secondary)] disabled:bg-[var(--bg-tertiary)]">
@@ -640,7 +640,7 @@ export default function LibraryManagementPage() {
                       className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 bg-[var(--bg-secondary)] read-only:bg-[var(--bg-tertiary)]" /></div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Total Copies <span className="text-rose-500">*</span></label>
+                  <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Total Copies <span className="text-[var(--color-error)]">*</span></label>
                     <input type="number" value={bookModal.data.totalCopies || ''} onChange={e => setBookModal(p => ({ ...p, data: { ...p.data, totalCopies: Number(e.target.value) } }))}
                       readOnly={bookModal.mode === 'view'}
                       className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 bg-[var(--bg-secondary)] read-only:bg-[var(--bg-tertiary)]" /></div>
@@ -733,7 +733,7 @@ export default function LibraryManagementPage() {
                 <button onClick={closeIssueModal} className="p-2 text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"><X size={20} /></button>
               </div>
               <div className="p-6 space-y-4">
-                <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Book <span className="text-rose-500">*</span></label>
+                <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Book <span className="text-[var(--color-error)]">*</span></label>
                   <select value={issueData.bookId} onChange={e => setIssueData(p => ({ ...p, bookId: e.target.value }))}
                     className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 bg-[var(--bg-secondary)]">
                     <option value="">— Select —</option>
@@ -750,7 +750,7 @@ export default function LibraryManagementPage() {
                     <option value="staff">Staff</option>
                   </select></div>
 
-                <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">User <span className="text-rose-500">*</span></label>
+                <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">User <span className="text-[var(--color-error)]">*</span></label>
                   <select value={issueData.userId} onChange={e => {
                     const users = getUserOptions();
                     const u = users.find((u: any) => u.id === e.target.value);
@@ -762,7 +762,7 @@ export default function LibraryManagementPage() {
                     ))}
                   </select></div>
 
-                <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Due Date <span className="text-rose-500">*</span></label>
+                <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Due Date <span className="text-[var(--color-error)]">*</span></label>
                   <input type="date" value={issueData.dueDate} onChange={e => setIssueData(p => ({ ...p, dueDate: e.target.value }))}
                     className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20" /></div>
               </div>
@@ -797,7 +797,7 @@ export default function LibraryManagementPage() {
                   {(() => {
                     const fine = calculateFine(returnModal.record.dueDate, returnDate || new Date().toISOString().split('T')[0]);
                     return fine > 0 ? (
-                      <div className="flex justify-between"><span className="text-[var(--text-muted)]">Fine:</span><span className="font-bold text-rose-600">৳{fine}</span></div>
+                      <div className="flex justify-between"><span className="text-[var(--text-muted)]">Fine:</span><span className="font-bold text-[var(--color-error)]">৳{fine}</span></div>
                     ) : null;
                   })()}
                 </div>
@@ -807,7 +807,7 @@ export default function LibraryManagementPage() {
               </div>
               <div className="px-6 py-4 border-t border-[var(--border-light)] flex gap-3">
                 <button onClick={closeReturnModal} className="flex-1 px-4 py-2 bg-[var(--bg-tertiary)] hover:bg-[var(--bg-tertiary)]/80 text-[var(--text-primary)] rounded-xl text-sm font-medium transition-colors">Cancel</button>
-                <button onClick={handleReturn} className="flex-1 px-4 py-2 rounded-xl text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm transition-colors flex items-center justify-center gap-2">
+                <button onClick={handleReturn} className="flex-1 px-4 py-2 rounded-xl text-sm font-medium text-white bg-[var(--color-success)] hover:bg-[var(--color-success)] shadow-sm transition-colors flex items-center justify-center gap-2">
                   <CheckCircle2 size={16} /> Confirm Return
                 </button>
               </div>

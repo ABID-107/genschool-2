@@ -43,11 +43,11 @@ const colorStyles: Record<Color, { bg: string; border: string; text: string; bar
   blue:    { bg: 'bg-[var(--green-50)]',    border: 'border-[var(--green-200)]',    text: 'text-[var(--green-800)]',    bar: 'bg-[var(--brand-mid)]' },
   emerald: { bg: 'bg-[var(--green-50)]', border: 'border-[var(--green-200)]', text: 'text-[var(--green-800)]', bar: 'bg-[var(--brand-light)]' },
   violet:  { bg: 'bg-[var(--green-50)]',  border: 'border-[var(--green-200)]',  text: 'text-[var(--green-800)]',  bar: 'bg-[var(--brand-deep)]' },
-  rose:    { bg: 'bg-rose-50',    border: 'border-rose-200',    text: 'text-rose-700',    bar: 'bg-rose-500' },
-  amber:   { bg: 'bg-amber-50',   border: 'border-amber-200',   text: 'text-amber-700',   bar: 'bg-amber-500' },
-  slate:   { bg: 'bg-slate-50',   border: 'border-slate-200',   text: 'text-slate-700',   bar: 'bg-slate-500' },
+  rose:    { bg: 'bg-[var(--color-error-bg)]',    border: 'border-[var(--color-error)]/20',    text: 'text-[var(--color-error)]',    bar: 'bg-[var(--color-error)]' },
+  amber:   { bg: 'bg-[var(--color-warning-bg)]',   border: 'border-[var(--color-warning)]/20',   text: 'text-[var(--color-warning)]',   bar: 'bg-[var(--color-warning)]' },
+  slate:   { bg: 'bg-[var(--bg-secondary)]',   border: 'border-[var(--border-color)]',   text: 'text-[var(--text-secondary)]',   bar: 'bg-slate-500' },
   cyan:    { bg: 'bg-[var(--green-50)]',    border: 'border-[var(--green-200)]',    text: 'text-[var(--green-800)]',    bar: 'bg-[var(--brand-light)]' },
-  orange:  { bg: 'bg-orange-50',  border: 'border-orange-200',  text: 'text-orange-700',  bar: 'bg-orange-500' },
+  orange:  { bg: 'bg-[var(--color-warning-bg)]',  border: 'border-[var(--color-warning)]/20',  text: 'text-[var(--color-warning)]',  bar: 'bg-[var(--color-warning)]' },
   teal:    { bg: 'bg-[var(--green-50)]', border: 'border-[var(--green-200)]', text: 'text-[var(--green-800)]', bar: 'bg-[var(--brand-mid)]' },
 };
 
@@ -418,8 +418,8 @@ export default function TimetableManagerPage() {
           <div className="flex items-center gap-1.5 text-[var(--text-muted)]">
             <span className="w-2.5 h-2.5 rounded-full bg-[var(--brand-primary)]"></span> Valid
           </div>
-          <div className={`flex items-center gap-1.5 ${conflicts.size > 0 ? 'text-rose-500' : 'text-[var(--text-muted)]'}`}>
-            <span className={`w-2.5 h-2.5 rounded-full ${conflicts.size > 0 ? 'bg-rose-500' : 'bg-[var(--border-light)]'}`}></span>
+          <div className={`flex items-center gap-1.5 ${conflicts.size > 0 ? 'text-[var(--color-error)]' : 'text-[var(--text-muted)]'}`}>
+            <span className={`w-2.5 h-2.5 rounded-full ${conflicts.size > 0 ? 'bg-[var(--color-error)]' : 'bg-[var(--border-light)]'}`}></span>
             {conflicts.size > 0 ? `${conflicts.size} Conflict${conflicts.size > 1 ? 's' : ''} Detected` : 'No Conflicts'}
           </div>
           <div className="relative">
@@ -453,7 +453,7 @@ export default function TimetableManagerPage() {
                 Period
               </th>
               {allDays.map(day => (
-                <th key={day} className={`px-4 py-4 font-semibold border-b border-r border-[var(--border-light)] last:border-r-0 text-center ${day === 'Friday' ? 'bg-[var(--bg-tertiary)] text-amber-600' : 'bg-[var(--bg-tertiary)] text-[var(--text-primary)]'}`}>
+                <th key={day} className={`px-4 py-4 font-semibold border-b border-r border-[var(--border-light)] last:border-r-0 text-center ${day === 'Friday' ? 'bg-[var(--bg-tertiary)] text-[var(--color-warning)]' : 'bg-[var(--bg-tertiary)] text-[var(--text-primary)]'}`}>
                   {day}
                   {day === 'Friday' && <div className="text-[10px] font-normal mt-0.5">Holiday</div>}
                 </th>
@@ -480,8 +480,8 @@ export default function TimetableManagerPage() {
                     allDays.map(day => {
                       if (day === 'Friday') {
                         return (
-                          <td key={`${day}-${period.id}`} className="p-2 border-b border-r border-[var(--border-light)] bg-amber-50/30 text-center align-middle">
-                            <span className="text-xs font-medium text-amber-500">HOLIDAY</span>
+                          <td key={`${day}-${period.id}`} className="p-2 border-b border-r border-[var(--border-light)] bg-[var(--color-warning-bg)]/30 text-center align-middle">
+                            <span className="text-xs font-medium text-[var(--color-warning)]">HOLIDAY</span>
                           </td>
                         );
                       }
@@ -504,7 +504,7 @@ export default function TimetableManagerPage() {
                               <div className="text-xs text-[var(--text-muted)] mt-1 flex items-center justify-between">
                                 <span>{slotData.room}</span>
                                 {hasConflict && (
-                                  <div className="w-5 h-5 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center" title="Teacher double booked">
+                                  <div className="w-5 h-5 rounded-full bg-[var(--color-error-bg)] text-[var(--color-error)] flex items-center justify-center" title="Teacher double booked">
                                     <AlertTriangle size={12} />
                                   </div>
                                 )}
@@ -557,7 +557,7 @@ export default function TimetableManagerPage() {
                 </div>
                 <div className="flex gap-3 pt-4 border-t border-[var(--border-light)] mt-6">
                   {modal.mode === 'edit' && (
-                    <button onClick={handleDelete} className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-sm font-medium transition-colors shadow-sm flex items-center gap-2">
+                    <button onClick={handleDelete} className="px-4 py-2 bg-[var(--color-error)] hover:bg-[var(--color-error)] text-white rounded-xl text-sm font-medium transition-colors shadow-sm flex items-center gap-2">
                       <Trash2 size={16} /> Delete
                     </button>
                   )}
@@ -596,7 +596,7 @@ export default function TimetableManagerPage() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
                           <span className="font-medium text-[var(--text-primary)]">{p.label}</span>
-                          {p.isBreak && <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-700 font-medium">Break</span>}
+                          {p.isBreak && <span className="text-[10px] px-1.5 py-0.5 rounded bg-[var(--color-warning-bg)] text-[var(--color-warning)] font-medium">Break</span>}
                         </div>
                         {!p.isBreak && (
                           <div className="text-xs text-[var(--text-muted)] mt-0.5">{p.start} - {p.end}</div>
@@ -605,7 +605,7 @@ export default function TimetableManagerPage() {
                       <button onClick={() => openEditPeriod(p)} className="p-2 text-[var(--text-muted)] hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors">
                         <Pencil size={15} />
                       </button>
-                      <button onClick={() => handleDeletePeriod(p.id)} className="p-2 text-[var(--text-muted)] hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors">
+                      <button onClick={() => handleDeletePeriod(p.id)} className="p-2 text-[var(--text-muted)] hover:text-[var(--color-error)] hover:bg-[var(--color-error-bg)] rounded-lg transition-colors">
                         <Trash2 size={15} />
                       </button>
                     </div>
@@ -644,7 +644,7 @@ export default function TimetableManagerPage() {
                       <Plus size={16} /> {periodModal.mode === 'add' ? 'Add Period' : 'Update Period'}
                     </button>
                     {periodModal.mode === 'edit' && (
-                      <button onClick={() => handleDeletePeriod(periodModal.data.id)} className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-sm font-medium shadow-sm transition-colors flex items-center gap-2">
+                      <button onClick={() => handleDeletePeriod(periodModal.data.id)} className="px-4 py-2 bg-[var(--color-error)] hover:bg-[var(--color-error)] text-white rounded-xl text-sm font-medium shadow-sm transition-colors flex items-center gap-2">
                         <Trash2 size={16} /> Delete This Period
                       </button>
                     )}

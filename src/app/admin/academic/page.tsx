@@ -211,7 +211,7 @@ export default function AcademicStructurePage() {
                   <td className="px-6 py-4">
                     <div className="flex items-center justify-end gap-2">
                       <button onClick={() => openEdit('class', cls)} className="p-2 text-[var(--text-muted)] hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"><Pencil size={16} /></button>
-                      <button onClick={() => handleDelete('class', cls.id, cls.name)} className="p-2 text-[var(--text-muted)] hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"><Trash2 size={16} /></button>
+                      <button onClick={() => handleDelete('class', cls.id, cls.name)} className="p-2 text-[var(--text-muted)] hover:text-[var(--color-error)] hover:bg-[var(--color-error-bg)] rounded-lg transition-colors"><Trash2 size={16} /></button>
                     </div>
                   </td>
                 </tr>
@@ -243,14 +243,14 @@ export default function AcademicStructurePage() {
                   <td className="px-6 py-4 text-[var(--text-secondary)]">{s.capacity}</td>
                   <td className="px-6 py-4 text-[var(--text-secondary)]">{s.students}</td>
                   <td className="px-6 py-4">
-                    <span className={`text-xs font-medium ${s.capacity - s.students > 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
+                    <span className={`text-xs font-medium ${s.capacity - s.students > 0 ? 'text-[var(--color-success)]' : 'text-[var(--color-error)]'}`}>
                       {s.capacity - s.students}
                     </span>
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center justify-end gap-2">
                       <button onClick={() => openEdit('section', s)} className="p-2 text-[var(--text-muted)] hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"><Pencil size={16} /></button>
-                      <button onClick={() => handleDelete('section', s.id, s.name)} className="p-2 text-[var(--text-muted)] hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"><Trash2 size={16} /></button>
+                      <button onClick={() => handleDelete('section', s.id, s.name)} className="p-2 text-[var(--text-muted)] hover:text-[var(--color-error)] hover:bg-[var(--color-error-bg)] rounded-lg transition-colors"><Trash2 size={16} /></button>
                     </div>
                   </td>
                 </tr>
@@ -281,7 +281,7 @@ export default function AcademicStructurePage() {
                   <td className="px-6 py-4">
                     <span className={`px-2.5 py-1 rounded-full text-xs font-medium border ${
                       subject.type === 'Core' ? 'badge bg-[var(--bg-tertiary)] text-brand-primary border-[var(--border-light)]'
-                      : subject.type === 'Elective' ? 'bg-violet-50 text-violet-700 border-violet-200'
+                      : subject.type === 'Elective' ? 'bg-[var(--color-info-bg)] text-[var(--color-info)] border-[var(--color-info)]/20'
                       : subject.type === 'Practical' ? 'badge-green'
                       : subject.type === 'Lab' ? 'badge-amber'
                       : 'bg-[var(--bg-tertiary)] text-[var(--text-primary)] border-[var(--border-light)]'
@@ -293,7 +293,7 @@ export default function AcademicStructurePage() {
                   <td className="px-6 py-4">
                     <div className="flex items-center justify-end gap-2">
                       <button onClick={() => openEdit('subject', subject)} className="p-2 text-[var(--text-muted)] hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"><Pencil size={16} /></button>
-                      <button onClick={() => handleDelete('subject', subject.id, subject.name)} className="p-2 text-[var(--text-muted)] hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"><Trash2 size={16} /></button>
+                      <button onClick={() => handleDelete('subject', subject.id, subject.name)} className="p-2 text-[var(--text-muted)] hover:text-[var(--color-error)] hover:bg-[var(--color-error-bg)] rounded-lg transition-colors"><Trash2 size={16} /></button>
                     </div>
                   </td>
                 </tr>
@@ -408,7 +408,7 @@ export default function AcademicStructurePage() {
                     <Field label="Subject Code (optional)" value={modal.data.code} onChange={v => setModal(m => ({ ...m, data: { ...m.data, code: v } }))} />
                     <Select label="Subject Type" value={modal.data.type} onChange={v => setModal(m => ({ ...m, data: { ...m.data, type: v } }))} options={['Core', 'Elective', 'Optional', 'Practical', 'Lab']} />
                     <div className="space-y-1">
-                      <label className="text-sm font-medium text-[var(--text-primary)]">Applicable Classes <span className="text-rose-500">*</span></label>
+                      <label className="text-sm font-medium text-[var(--text-primary)]">Applicable Classes <span className="text-[var(--color-error)]">*</span></label>
                       <div className="max-h-44 overflow-y-auto border-[var(--border-light)] rounded-xl p-2 space-y-0.5">
                         {classes.map(c => {
                           const checked = (modal.data.classIds || []).includes(c.id);
@@ -417,7 +417,7 @@ export default function AcademicStructurePage() {
                               <input type="checkbox" checked={checked} onChange={() => {
                                 const ids: number[] = modal.data.classIds || [];
                                 setModal(m => ({ ...m, data: { ...m.data, classIds: checked ? ids.filter(id => id !== c.id) : [...ids, c.id] } }));
-                              }} className="w-4 h-4 rounded border-slate-300 text-brand-primary focus:ring-brand-primary" />
+                              }} className="w-4 h-4 rounded border-[var(--border-color)] text-brand-primary focus:ring-brand-primary" />
                               {c.name}
                             </label>
                           );
@@ -446,14 +446,14 @@ export default function AcademicStructurePage() {
           <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[var(--text-primary)]/20 backdrop-blur-sm" onClick={() => setConfirmDelete(null)} />
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="relative bg-[var(--bg-secondary)] rounded-2xl shadow-xl border-[var(--border-light)] w-full max-w-sm z-10 p-6 text-center">
-              <div className="w-12 h-12 rounded-full bg-rose-100 flex items-center justify-center mx-auto mb-4"><Trash2 size={24} className="text-rose-600" /></div>
+              <div className="w-12 h-12 rounded-full bg-[var(--color-error-bg)] flex items-center justify-center mx-auto mb-4"><Trash2 size={24} className="text-[var(--color-error)]" /></div>
               <h3 className="text-lg font-bold text-[var(--text-primary)] mb-2">Delete {confirmDelete.entity}?</h3>
               <p className="text-sm text-[var(--text-muted)] mb-6">
                 Are you sure you want to delete <span className="font-semibold text-[var(--text-primary)]">{confirmDelete.label}</span>? This action cannot be undone.
               </p>
               <div className="flex gap-3">
                 <button onClick={() => setConfirmDelete(null)} className="flex-1 px-4 py-2 bg-[var(--bg-tertiary)] hover:bg-[var(--bg-tertiary)] text-[var(--text-primary)] rounded-xl text-sm font-medium transition-colors">Cancel</button>
-                <button onClick={confirmDeleteAction} className="flex-1 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-sm font-medium transition-colors shadow-sm">Delete</button>
+                <button onClick={confirmDeleteAction} className="flex-1 px-4 py-2 bg-[var(--color-error)] hover:bg-[var(--color-error)] text-white rounded-xl text-sm font-medium transition-colors shadow-sm">Delete</button>
               </div>
             </motion.div>
           </div>

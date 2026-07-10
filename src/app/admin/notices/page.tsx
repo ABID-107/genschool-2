@@ -194,7 +194,7 @@ export default function NoticeBoardPage() {
       published: { bg: 'bg-[var(--green-50)]', text: 'text-[var(--green-800)]', border: 'border-[var(--green-200)]', icon: CheckCircle2 },
       scheduled: { bg: 'bg-[var(--bg-tertiary)]', text: 'text-brand-primary', border: 'border-[var(--border-light)]', icon: Clock },
       draft: { bg: 'bg-[var(--bg-tertiary)]', text: 'text-[var(--text-secondary)]', border: 'border-[var(--border-light)]', icon: FileText },
-      archived: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', icon: Archive },
+      archived: { bg: 'bg-[var(--color-warning-bg)]', text: 'text-[var(--color-warning)]', border: 'border-[var(--color-warning)]/20', icon: Archive },
     };
     const s = map[status] || map.draft;
     return (
@@ -245,7 +245,7 @@ export default function NoticeBoardPage() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="bg-[var(--bg-secondary)] p-4 rounded-2xl border-[var(--border-light)] shadow-sm stat-card">
             <p className="text-sm font-medium text-[var(--text-muted)]">Published</p>
-            <p className="text-2xl font-bold text-emerald-600 mt-1">{kpi.published}</p>
+            <p className="text-2xl font-bold text-[var(--color-success)] mt-1">{kpi.published}</p>
           </div>
           <div className="bg-[var(--bg-secondary)] p-4 rounded-2xl border-[var(--border-light)] shadow-sm stat-card">
             <p className="text-sm font-medium text-[var(--text-muted)]">Scheduled</p>
@@ -257,7 +257,7 @@ export default function NoticeBoardPage() {
           </div>
           <div className="bg-[var(--bg-secondary)] p-4 rounded-2xl border-[var(--border-light)] shadow-sm stat-card">
             <p className="text-sm font-medium text-[var(--text-muted)]">Archived</p>
-            <p className="text-2xl font-bold text-amber-600 mt-1">{kpi.archived}</p>
+            <p className="text-2xl font-bold text-[var(--color-warning)] mt-1">{kpi.archived}</p>
           </div>
         </div>
       )}
@@ -350,15 +350,15 @@ export default function NoticeBoardPage() {
                               <button onClick={() => openNoticeModal('edit', notice)} className="p-1.5 text-[var(--text-muted)] hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors" title="Edit"><Pencil size={15} /></button>
                               <button onClick={() => handleAction('duplicate', notice.id)} className="p-1.5 text-[var(--text-muted)] hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors" title="Duplicate"><Copy size={15} /></button>
                               {notice.status === 'draft' && (
-                                <button onClick={() => handleAction('publish', notice.id)} className="p-1.5 text-[var(--text-muted)] hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Publish"><CheckCircle2 size={15} /></button>
+                                <button onClick={() => handleAction('publish', notice.id)} className="p-1.5 text-[var(--text-muted)] hover:text-[var(--color-success)] hover:bg-[var(--color-success-bg)] rounded-lg transition-colors" title="Publish"><CheckCircle2 size={15} /></button>
                               )}
                               {notice.status === 'published' && (
-                                <button onClick={() => handleAction('archive', notice.id)} className="p-1.5 text-[var(--text-muted)] hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors" title="Archive"><Archive size={15} /></button>
+                                <button onClick={() => handleAction('archive', notice.id)} className="p-1.5 text-[var(--text-muted)] hover:text-[var(--color-warning)] hover:bg-[var(--color-warning-bg)] rounded-lg transition-colors" title="Archive"><Archive size={15} /></button>
                               )}
                               {notice.status === 'archived' && (
                                 <button onClick={() => handleAction('restore', notice.id)} className="p-1.5 text-[var(--text-muted)] hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors" title="Restore"><Undo2 size={15} /></button>
                               )}
-                              <button onClick={() => handleAction('delete', notice.id)} className="p-1.5 text-[var(--text-muted)] hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Delete"><Trash2 size={15} /></button>
+                              <button onClick={() => handleAction('delete', notice.id)} className="p-1.5 text-[var(--text-muted)] hover:text-[var(--color-error)] hover:bg-[var(--color-error-bg)] rounded-lg transition-colors" title="Delete"><Trash2 size={15} /></button>
                             </div>
                           </td>
                         </tr>
@@ -385,7 +385,7 @@ export default function NoticeBoardPage() {
                   </div>
                   <div className="space-y-4">
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-[var(--text-primary)]">Select Audience <span className="text-rose-500">*</span></label>
+                      <label className="text-sm font-medium text-[var(--text-primary)]">Select Audience <span className="text-[var(--color-error)]">*</span></label>
                       <select className="w-full px-4 py-2 border-[var(--border-light)] rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 text-[var(--text-secondary)] bg-[var(--bg-secondary)]">
                         <option>All Guardians (Defaulters)</option>
                         <option>All Guardians (Class 10)</option>
@@ -394,7 +394,7 @@ export default function NoticeBoardPage() {
                     </div>
                     <div className="space-y-1.5">
                       <label className="text-sm font-medium text-[var(--text-primary)] flex justify-between">
-                        <span>Message Content <span className="text-rose-500">*</span></span>
+                        <span>Message Content <span className="text-[var(--color-error)]">*</span></span>
                         <span className="text-[var(--text-muted)] text-xs">0 / 160 characters (1 SMS)</span>
                       </label>
                       <textarea
@@ -429,7 +429,7 @@ export default function NoticeBoardPage() {
               <div className="p-6 space-y-5">
                 {/* Title */}
                 <div className="space-y-1">
-                  <label className="text-sm font-medium text-[var(--text-primary)]">Title <span className="text-rose-500">*</span></label>
+                  <label className="text-sm font-medium text-[var(--text-primary)]">Title <span className="text-[var(--color-error)]">*</span></label>
                   <input type="text" value={noticeModal.data.title || ''} onChange={e => setNoticeModal(p => ({ ...p, data: { ...p.data, title: e.target.value } }))}
                     readOnly={noticeModal.mode === 'view'}
                     className="w-full px-3 py-2 border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 bg-[var(--bg-secondary)] read-only:bg-[var(--bg-tertiary)] read-only:text-[var(--text-secondary)]" />
@@ -437,7 +437,7 @@ export default function NoticeBoardPage() {
 
                 {/* Description */}
                 <div className="space-y-1">
-                  <label className="text-sm font-medium text-[var(--text-primary)]">Description <span className="text-rose-500">*</span></label>
+                  <label className="text-sm font-medium text-[var(--text-primary)]">Description <span className="text-[var(--color-error)]">*</span></label>
                   <textarea value={noticeModal.data.description || ''} onChange={e => setNoticeModal(p => ({ ...p, data: { ...p.data, description: e.target.value } }))}
                     readOnly={noticeModal.mode === 'view'}
                     className="w-full px-3 py-2 border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 min-h-[100px] bg-[var(--bg-secondary)] read-only:bg-[var(--bg-tertiary)] read-only:text-[var(--text-secondary)]" />
@@ -446,7 +446,7 @@ export default function NoticeBoardPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Category */}
                   <div className="space-y-1">
-                    <label className="text-sm font-medium text-[var(--text-primary)]">Category <span className="text-rose-500">*</span></label>
+                    <label className="text-sm font-medium text-[var(--text-primary)]">Category <span className="text-[var(--color-error)]">*</span></label>
                     <select value={noticeModal.data.category || 'general'} onChange={e => setNoticeModal(p => ({ ...p, data: { ...p.data, category: e.target.value as NoticeCategory } }))}
                       disabled={noticeModal.mode === 'view'}
                       className="w-full px-3 py-2 border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 bg-[var(--bg-secondary)] disabled:bg-[var(--bg-tertiary)]">
@@ -456,7 +456,7 @@ export default function NoticeBoardPage() {
 
                   {/* Priority */}
                   <div className="space-y-1">
-                    <label className="text-sm font-medium text-[var(--text-primary)]">Priority <span className="text-rose-500">*</span></label>
+                    <label className="text-sm font-medium text-[var(--text-primary)]">Priority <span className="text-[var(--color-error)]">*</span></label>
                     <select value={noticeModal.data.priority || 'medium'} onChange={e => setNoticeModal(p => ({ ...p, data: { ...p.data, priority: e.target.value as NoticePriority } }))}
                       disabled={noticeModal.mode === 'view'}
                       className="w-full px-3 py-2 border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 bg-[var(--bg-secondary)] disabled:bg-[var(--bg-tertiary)]">
@@ -468,7 +468,7 @@ export default function NoticeBoardPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Publish Date */}
                   <div className="space-y-1">
-                    <label className="text-sm font-medium text-[var(--text-primary)]">Publish Date <span className="text-rose-500">*</span></label>
+                    <label className="text-sm font-medium text-[var(--text-primary)]">Publish Date <span className="text-[var(--color-error)]">*</span></label>
                     <input type="date" value={noticeModal.data.publishDate || ''} onChange={e => setNoticeModal(p => ({ ...p, data: { ...p.data, publishDate: e.target.value } }))}
                       readOnly={noticeModal.mode === 'view'}
                       className="w-full px-3 py-2 border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 bg-[var(--bg-secondary)] read-only:bg-[var(--bg-tertiary)]" />
@@ -487,7 +487,7 @@ export default function NoticeBoardPage() {
                 {/* Author + Status */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-sm font-medium text-[var(--text-primary)]">Author <span className="text-rose-500">*</span></label>
+                    <label className="text-sm font-medium text-[var(--text-primary)]">Author <span className="text-[var(--color-error)]">*</span></label>
                     <input type="text" value={noticeModal.data.author || ''} onChange={e => setNoticeModal(p => ({ ...p, data: { ...p.data, author: e.target.value } }))}
                       readOnly={noticeModal.mode === 'view'}
                       className="w-full px-3 py-2 border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 bg-[var(--bg-secondary)] read-only:bg-[var(--bg-tertiary)]" />
@@ -505,7 +505,7 @@ export default function NoticeBoardPage() {
 
                 {/* Target Audience */}
                 <div>
-                  <label className="text-sm font-medium text-[var(--text-primary)] block mb-2">Target Audience <span className="text-rose-500">*</span></label>
+                  <label className="text-sm font-medium text-[var(--text-primary)] block mb-2">Target Audience <span className="text-[var(--color-error)]">*</span></label>
                   <div className="space-y-2">
                     <div className="flex flex-wrap gap-2">
                       {AUDIENCE_OPTIONS.map(a => {
@@ -554,7 +554,7 @@ export default function NoticeBoardPage() {
                             <FileText size={14} className="text-[var(--text-muted)]" />
                             <span className="flex-1 text-[var(--text-primary)]">{att.name}</span>
                             <span className="text-xs text-[var(--text-muted)] uppercase">.{att.type}</span>
-                            <button onClick={() => removeAttachment(att.id)} className="p-0.5 text-[var(--text-muted)] hover:text-rose-600"><X size={14} /></button>
+                            <button onClick={() => removeAttachment(att.id)} className="p-0.5 text-[var(--text-muted)] hover:text-[var(--color-error)]"><X size={14} /></button>
                           </div>
                         ))}
                       </div>

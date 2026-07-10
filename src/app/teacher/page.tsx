@@ -3,8 +3,6 @@
 import { Suspense, useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { TeacherTopNav } from "@/components/teacher/TeacherTopNav";
-import { TeacherSidebar } from "@/components/teacher/TeacherSidebar";
 import { LessonUpload } from "@/components/teacher/LessonUpload";
 import { Attendance } from "@/components/teacher/Attendance";
 import { Assignments } from "@/components/teacher/Assignments";
@@ -267,10 +265,10 @@ function TeacherDashboardContent() {
   const isOverdue = (dueDate: string, dueTime: string) => new Date(`${dueDate}T${dueTime}`) < new Date();
 
   const statusConfig: Record<Submission['status'], { label: string; color: string; icon: string }> = {
-    not_submitted: { label: 'Not Submitted', color: 'bg-slate-100 text-[var(--text-secondary)] border-slate-200', icon: 'schedule' },
-    submitted: { label: 'Submitted', color: 'bg-blue-50 text-blue-700 border-blue-200', icon: 'task_alt' },
-    late: { label: 'Late', color: 'bg-amber-50 text-amber-700 border-amber-200', icon: 'warning' },
-    graded: { label: 'Graded', color: 'bg-emerald-50 text-emerald-700 border-emerald-200', icon: 'military_tech' },
+    not_submitted: { label: 'Not Submitted', color: 'bg-[var(--bg-secondary)] text-[var(--text-secondary)] border-[var(--border-color)]', icon: 'schedule' },
+    submitted: { label: 'Submitted', color: 'bg-[var(--color-info-bg)] text-[var(--color-info)] border-[var(--color-info)]/20', icon: 'task_alt' },
+    late: { label: 'Late', color: 'bg-[var(--color-warning-bg)] text-[var(--color-warning)] border-[var(--color-warning)]/20', icon: 'warning' },
+    graded: { label: 'Graded', color: 'bg-[var(--color-success-bg)] text-[var(--color-success)] border-[var(--color-success)]/20', icon: 'military_tech' },
   };
 
   const filteredAndSortedMaterials = useMemo(() => {
@@ -539,46 +537,7 @@ function TeacherDashboardContent() {
   }
 
   return (
-    <div className="font-sans h-screen overflow-hidden flex flex-col">
-      {/* TopNavBar */}
-      <TeacherTopNav
-        onToggleSidebar={() => setIsSidebarOpen(true)}
-        teacherName="Dr. Sarah Jenkins"
-        teacherRole="Senior Educator"
-        avatarUrl="https://lh3.googleusercontent.com/aida-public/AB6AXuCW_k1UDJKVTHEb0vxQzYL6VWv9GY90kK7a7iRg-LqTHQ6_3ChbNeshcUf0XN_KFMzFLuCC27LFsWygLjphkw2pxAfmtLf0fNQ0e4h_S4tkGHHsBYlJ2OtxdMsraFPxjORddmtIH6BUJ4DM5zzewdyqkdcQOuNkOe0eTK_qDfy8B6knNUw2_z0cLmJwlBRBr3XR7Od38LUJju-YCUFxNN5HoTefz3L09BoJtFHNNeXlO4_xhM3hlJef9ALLRbqoUXw0bMp9uQAkJTs"
-        onSignOut={() => {
-          localStorage.removeItem("isAuthenticated");
-          localStorage.removeItem("userRole");
-          router.replace("/login");
-        }}
-      />
-
-      {/* SideNavBar & Main Content Wrapper */}
-      <div className="flex flex-1 pt-16 overflow-hidden relative">
-        {/* Mobile Sidebar Overlay */}
-        {isSidebarOpen && (
-          <div
-            className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-40 md:hidden transition-opacity"
-            onClick={() => setIsSidebarOpen(false)}
-          ></div>
-        )}
-
-        {/* SideNavBar */}
-        <TeacherSidebar
-          isOpen={isSidebarOpen}
-          activeTab={activeTab}
-          onTabChange={handleTabChange}
-          onCloseSidebar={() => setIsSidebarOpen(false)}
-          onSignOut={() => {
-            localStorage.removeItem("isAuthenticated");
-            localStorage.removeItem("userRole");
-            router.replace("/login");
-          }}
-        />
-
-        {/* Main Content Area */}
-        <main className="flex-1 overflow-y-auto custom-scrollbar bg-[var(--bg-tertiary)]/50 p-4 md:p-8 h-full relative">
-          <div className="max-w-7xl mx-auto space-y-6 md:space-y-8 pb-12">
+    <div className="space-y-6">
 
             {/* Tab: Dashboard Overview */}
             {activeTab === 'dashboard' && (
@@ -602,17 +561,17 @@ function TeacherDashboardContent() {
                 
                 {/* Display uploaded lessons list */}
                 {uploadedLessonsList.length > 0 && (
-                  <div className="bg-[var(--bg-secondary)] p-6 rounded-2xl border border-slate-200 shadow-sm">
+                  <div className="bg-[var(--bg-secondary)] p-6 rounded-2xl border border-[var(--border-color)] shadow-sm">
                     <h4 className="font-bold text-lg mb-4">Recent Uploads</h4>
                     <div className="space-y-3">
                       {uploadedLessonsList.map(lesson => (
-                        <div key={lesson.id} className="flex items-center gap-4 p-4 bg-[var(--bg-tertiary)] rounded-xl border border-slate-100">
+                        <div key={lesson.id} className="flex items-center gap-4 p-4 bg-[var(--bg-tertiary)] rounded-xl border border-[var(--border-light)]">
                           <span className="material-symbols-outlined text-[var(--brand-primary)]">article</span>
                           <div className="flex-1">
                             <p className="font-semibold text-sm">{lesson.title}</p>
                             <p className="text-xs text-[var(--text-muted)]">{lesson.filename} • {lesson.size}</p>
                           </div>
-                          <span className="text-xs text-slate-400">{lesson.date}</span>
+                          <span className="text-xs text-[var(--text-muted)]">{lesson.date}</span>
                         </div>
                       ))}
                     </div>
@@ -624,13 +583,13 @@ function TeacherDashboardContent() {
             {/* Tab: Course Materials */}
             {activeTab === 'materials' && (
               <section id="materials" className="animate-in fade-in duration-500">
-                <div className="glass-card bg-[var(--bg-secondary)]/80 backdrop-blur-sm p-6 md:p-8 rounded-2xl border border-slate-200/50 shadow-sm overflow-hidden w-full max-w-5xl hover:shadow-lg transition-shadow relative">
+                <div className="glass-card bg-[var(--bg-secondary)]/80 backdrop-blur-sm p-6 md:p-8 rounded-2xl border border-[var(--border-color)]/50 shadow-sm overflow-hidden w-full max-w-5xl hover:shadow-lg transition-shadow relative">
 
                   {/* Header and Controls */}
                   <div className="flex flex-col gap-6 mb-8">
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                       <div>
-                        <h3 className="text-2xl font-bold text-slate-900 font-heading tracking-tight">Course Materials</h3>
+                        <h3 className="text-2xl font-bold text-[var(--text-primary)] font-heading tracking-tight">Course Materials</h3>
                         <p className="text-sm text-[var(--text-muted)] mt-1">Manage and organize your resources</p>
                       </div>
                       <button
@@ -642,11 +601,11 @@ function TeacherDashboardContent() {
                       </button>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-[var(--bg-tertiary)]/50 p-3 rounded-xl border border-slate-100">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-[var(--bg-tertiary)]/50 p-3 rounded-xl border border-[var(--border-light)]">
                       <div className="relative w-full">
-                        <span className="material-symbols-outlined absolute left-3 top-2.5 text-slate-400 text-[18px]">search</span>
+                        <span className="material-symbols-outlined absolute left-3 top-2.5 text-[var(--text-muted)] text-[18px]">search</span>
                         <input
-                          className="w-full pl-9 pr-4 py-2 bg-[var(--bg-secondary)] border border-slate-200/80 rounded-lg text-sm focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] outline-none transition-all"
+                          className="w-full pl-9 pr-4 py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)]/80 rounded-lg text-sm focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] outline-none transition-all"
                           placeholder="Search files..."
                           type="text"
                           value={materialSearchQuery}
@@ -654,7 +613,7 @@ function TeacherDashboardContent() {
                         />
                       </div>
                       <select
-                        className="w-full px-3 py-2 bg-[var(--bg-secondary)] border border-slate-200/80 rounded-lg text-sm focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] outline-none transition-all text-[var(--text-secondary)] cursor-pointer"
+                        className="w-full px-3 py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)]/80 rounded-lg text-sm focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] outline-none transition-all text-[var(--text-secondary)] cursor-pointer"
                         value={materialFilterType}
                         onChange={(e) => setMaterialFilterType(e.target.value)}
                       >
@@ -666,7 +625,7 @@ function TeacherDashboardContent() {
                         <option value="zip">ZIP Archives</option>
                       </select>
                       <select
-                        className="w-full px-3 py-2 bg-[var(--bg-secondary)] border border-slate-200/80 rounded-lg text-sm focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] outline-none transition-all text-[var(--text-secondary)] cursor-pointer"
+                        className="w-full px-3 py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)]/80 rounded-lg text-sm focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] outline-none transition-all text-[var(--text-secondary)] cursor-pointer"
                         value={materialFilterModule}
                         onChange={(e) => setMaterialFilterModule(e.target.value)}
                       >
@@ -676,7 +635,7 @@ function TeacherDashboardContent() {
                         ))}
                       </select>
                       <select
-                        className="w-full px-3 py-2 bg-[var(--bg-secondary)] border border-slate-200/80 rounded-lg text-sm focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] outline-none transition-all text-[var(--text-secondary)] cursor-pointer"
+                        className="w-full px-3 py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)]/80 rounded-lg text-sm focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] outline-none transition-all text-[var(--text-secondary)] cursor-pointer"
                         value={materialSortOrder}
                         onChange={(e) => setMaterialSortOrder(e.target.value)}
                       >
@@ -689,15 +648,15 @@ function TeacherDashboardContent() {
                   {/* Upload Material Section */}
                   {isUploadMaterialOpen && (
                     <div className="mb-8 p-6 bg-[var(--bg-tertiary)] border border-[var(--green-100)] rounded-2xl animate-in fade-in slide-in-from-top-4 duration-300">
-                      <h4 className="text-lg font-bold text-slate-900 mb-4">Upload New Material</h4>
+                      <h4 className="text-lg font-bold text-[var(--text-primary)] mb-4">Upload New Material</h4>
                       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <div className="lg:col-span-2 space-y-4">
                           <div className="space-y-1.5">
-                            <label className="text-sm font-bold text-[var(--text-primary)] ml-1">Title <span className="text-rose-500">*</span></label>
+                            <label className="text-sm font-bold text-[var(--text-primary)] ml-1">Title <span className="text-[var(--color-error)]">*</span></label>
                             <input
                               type="text"
                               placeholder="e.g., Week 1 Reading Materials"
-                              className="w-full border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-3 outline-none bg-[var(--bg-secondary)] transition-colors text-sm"
+                              className="w-full border border-[var(--border-color)] rounded-xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-3 outline-none bg-[var(--bg-secondary)] transition-colors text-sm"
                               value={uploadMatTitle}
                               onChange={(e) => setUploadMatTitle(e.target.value)}
                               disabled={isMatUploading}
@@ -707,7 +666,7 @@ function TeacherDashboardContent() {
                             <label className="text-sm font-bold text-[var(--text-primary)] ml-1">Description</label>
                             <textarea
                               placeholder="Optional description of the material..."
-                              className="w-full border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-3 outline-none bg-[var(--bg-secondary)] transition-colors resize-none text-sm"
+                              className="w-full border border-[var(--border-color)] rounded-xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-3 outline-none bg-[var(--bg-secondary)] transition-colors resize-none text-sm"
                               rows={2}
                               value={uploadMatDescription}
                               onChange={(e) => setUploadMatDescription(e.target.value)}
@@ -717,7 +676,7 @@ function TeacherDashboardContent() {
                           <div className="space-y-1.5">
                             <label className="text-sm font-bold text-[var(--text-primary)] ml-1">Assign to Module</label>
                             <select
-                              className="w-full border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-3 outline-none bg-[var(--bg-secondary)] transition-colors text-sm text-[var(--text-secondary)] cursor-pointer"
+                              className="w-full border border-[var(--border-color)] rounded-xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-3 outline-none bg-[var(--bg-secondary)] transition-colors text-sm text-[var(--text-secondary)] cursor-pointer"
                               value={uploadMatModule}
                               onChange={(e) => setUploadMatModule(e.target.value)}
                               disabled={isMatUploading}
@@ -731,9 +690,9 @@ function TeacherDashboardContent() {
                         </div>
 
                         <div className="space-y-1.5 flex flex-col">
-                          <label className="text-sm font-bold text-[var(--text-primary)] ml-1">File <span className="text-rose-500">*</span></label>
+                          <label className="text-sm font-bold text-[var(--text-primary)] ml-1">File <span className="text-[var(--color-error)]">*</span></label>
                           <div
-                            className={`flex-1 border-2 border-dashed rounded-xl p-4 flex flex-col items-center justify-center text-center transition-all duration-300 relative overflow-hidden group ${uploadMatFile ? 'border-emerald-400 bg-emerald-50' : 'border-slate-300 hover:border-[var(--brand-primary)] hover:bg-[var(--bg-tertiary)]/50 bg-[var(--bg-secondary)] cursor-pointer'}`}
+                            className={`flex-1 border-2 border-dashed rounded-xl p-4 flex flex-col items-center justify-center text-center transition-all duration-300 relative overflow-hidden group ${uploadMatFile ? 'border-[var(--color-success)] bg-[var(--color-success-bg)]' : 'border-[var(--border-color)] hover:border-[var(--brand-primary)] hover:bg-[var(--bg-tertiary)]/50 bg-[var(--bg-secondary)] cursor-pointer'}`}
                             onDragOver={(e) => e.preventDefault()}
                             onDrop={handleMaterialDrop}
                           >
@@ -741,20 +700,20 @@ function TeacherDashboardContent() {
 
                             {uploadMatFile ? (
                               <div className="flex flex-col items-center w-full z-10">
-                                <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center mb-3 shadow-sm">
+                                <div className="w-12 h-12 bg-[var(--color-success-bg)] text-[var(--color-success)] rounded-xl flex items-center justify-center mb-3 shadow-sm">
                                   <span className="material-symbols-outlined text-2xl">check_circle</span>
                                 </div>
-                                <p className="font-bold text-slate-800 text-sm truncate w-full px-2">{uploadMatFile.name}</p>
+                                <p className="font-bold text-[var(--text-primary)] text-sm truncate w-full px-2">{uploadMatFile.name}</p>
                                 <p className="text-[var(--text-muted)] text-xs mt-0.5">{(uploadMatFile.size / (1024 * 1024)).toFixed(2)} MB</p>
                                 {!isMatUploading && (
-                                  <button onClick={() => setUploadMatFile(null)} className="mt-3 text-rose-600 font-bold border border-rose-200 bg-[var(--bg-secondary)] px-3 py-1 rounded-lg text-xs hover:bg-rose-50 transition-colors">
+                                  <button onClick={() => setUploadMatFile(null)} className="mt-3 text-[var(--color-error)] font-bold border border-[var(--color-error)]/20 bg-[var(--bg-secondary)] px-3 py-1 rounded-lg text-xs hover:bg-[var(--color-error-bg)] transition-colors">
                                     Remove
                                   </button>
                                 )}
                               </div>
                             ) : (
                               <>
-                                <div className="w-12 h-12 bg-[var(--bg-tertiary)] text-slate-400 border border-slate-100 rounded-xl flex items-center justify-center mb-2 group-hover:text-brand-primary group-hover:bg-[var(--green-100)] group-hover:border-[var(--green-200)] transition-all z-10">
+                                <div className="w-12 h-12 bg-[var(--bg-tertiary)] text-[var(--text-muted)] border border-[var(--border-light)] rounded-xl flex items-center justify-center mb-2 group-hover:text-brand-primary group-hover:bg-[var(--green-100)] group-hover:border-[var(--green-200)] transition-all z-10">
                                   <span className="material-symbols-outlined text-2xl">cloud_upload</span>
                                 </div>
                                 <p className="font-bold text-[var(--text-primary)] text-sm z-10">Click or drag file</p>
@@ -766,7 +725,7 @@ function TeacherDashboardContent() {
                       </div>
 
                       {uploadMatError && (
-                        <div className="mt-4 p-3 bg-rose-50 border border-rose-200 rounded-lg flex items-center gap-2 text-rose-700 text-sm font-medium animate-in fade-in">
+                        <div className="mt-4 p-3 bg-[var(--color-error-bg)] border border-[var(--color-error)]/20 rounded-lg flex items-center gap-2 text-[var(--color-error)] text-sm font-medium animate-in fade-in">
                           <span className="material-symbols-outlined text-[18px]">error</span>
                           {uploadMatError}
                         </div>
@@ -778,20 +737,20 @@ function TeacherDashboardContent() {
                             <span>Uploading & Processing...</span>
                             <span className="text-brand-primary">{uploadMatProgress}%</span>
                           </div>
-                          <div className="h-1.5 w-full bg-slate-200 rounded-full overflow-hidden">
+                          <div className="h-1.5 w-full bg-[var(--bg-tertiary)] rounded-full overflow-hidden">
                             <div className="h-full bg-[var(--bg-tertiary)]0 rounded-full transition-all duration-200" style={{ width: `${uploadMatProgress}%` }}></div>
                           </div>
                         </div>
                       )}
 
                       {uploadMatSuccess && (
-                        <div className="mt-6 p-3 bg-emerald-50 border border-emerald-200 rounded-lg flex items-center gap-2 text-emerald-700 text-sm font-medium animate-in slide-in-from-bottom-2">
+                        <div className="mt-6 p-3 bg-[var(--color-success-bg)] border border-[var(--color-success)]/20 rounded-lg flex items-center gap-2 text-[var(--color-success)] text-sm font-medium animate-in slide-in-from-bottom-2">
                           <span className="material-symbols-outlined text-[18px]">check_circle</span>
                           Material uploaded successfully!
                         </div>
                       )}
 
-                      <div className="mt-6 pt-4 border-t border-slate-200 flex justify-end">
+                      <div className="mt-6 pt-4 border-t border-[var(--border-color)] flex justify-end">
                         <button
                           onClick={submitMaterialUpload}
                           disabled={isMatUploading || uploadMatSuccess}
@@ -819,35 +778,35 @@ function TeacherDashboardContent() {
                         other: 'insert_drive_file'
                       };
                       const colorMap: Record<string, string> = {
-                        pdf: 'bg-rose-50 text-rose-600 group-hover:bg-rose-100 border-rose-100',
+                        pdf: 'bg-[var(--color-error-bg)] text-[var(--color-error)] group-hover:bg-[var(--color-error-bg)] border-[var(--color-error)]/20',
                         video: 'bg-[var(--bg-tertiary)] text-brand-primary group-hover:bg-[var(--green-100)] border-[var(--green-100)]',
-                        zip: 'bg-emerald-50 text-emerald-600 group-hover:bg-emerald-100 border-emerald-100',
-                        ppt: 'bg-amber-50 text-amber-600 group-hover:bg-amber-100 border-amber-100',
-                        doc: 'bg-blue-50 text-blue-600 group-hover:bg-blue-100 border-blue-100',
-                        other: 'bg-[var(--bg-tertiary)] text-[var(--text-secondary)] group-hover:bg-slate-100 border-slate-200'
+                        zip: 'bg-[var(--color-success-bg)] text-[var(--color-success)] group-hover:bg-[var(--color-success-bg)] border-[var(--color-success)]/20',
+                        ppt: 'bg-[var(--color-warning-bg)] text-[var(--color-warning)] group-hover:bg-[var(--color-warning-bg)] border-[var(--color-warning)]/20',
+                        doc: 'bg-[var(--color-info-bg)] text-[var(--color-info)] group-hover:bg-[var(--color-info-bg)] border-[var(--color-info)]/20',
+                        other: 'bg-[var(--bg-tertiary)] text-[var(--text-secondary)] group-hover:bg-[var(--bg-secondary)] border-[var(--border-color)]'
                       };
                       const assignedModule = courseModules.find(m => m.id === material.moduleId);
 
                       return (
-                        <div key={material.id} className="glow-on-hover flex flex-col p-4 border border-slate-200/80 rounded-xl hover:bg-[var(--bg-tertiary)] hover:shadow-md hover:border-[var(--green-200)] transition-all duration-300 group relative">
+                        <div key={material.id} className="glow-on-hover flex flex-col p-4 border border-[var(--border-color)]/80 rounded-xl hover:bg-[var(--bg-tertiary)] hover:shadow-md hover:border-[var(--green-200)] transition-all duration-300 group relative">
                           <div className="flex items-start gap-4">
                             <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-all border ${colorMap[material.type] || colorMap.other}`}>
                               <span className="material-symbols-outlined">{iconMap[material.type] || iconMap.other}</span>
                             </div>
                             <div className="flex-1 overflow-hidden pr-2">
-                              <h4 className="text-sm font-bold text-slate-800 truncate" title={material.title}>{material.title}</h4>
+                              <h4 className="text-sm font-bold text-[var(--text-primary)] truncate" title={material.title}>{material.title}</h4>
                               <p className="text-xs text-[var(--text-muted)] mt-1 line-clamp-2 min-h-[2rem]">{material.description || "No description provided."}</p>
                             </div>
 
-                            <div className="flex flex-col gap-1 sm:flex-row opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity bg-[var(--bg-secondary)]/80 backdrop-blur-sm rounded-lg p-0.5 shadow-sm border border-slate-100">
-                              <button onClick={(e) => { e.stopPropagation(); setPreviewMaterial(material); }} className="p-1.5 text-slate-400 hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-md transition-colors" title="Preview"><span className="material-symbols-outlined text-[18px]">visibility</span></button>
-                              <button onClick={(e) => { e.stopPropagation(); handleEditMaterialClick(material); }} className="p-1.5 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-md transition-colors" title="Edit"><span className="material-symbols-outlined text-[18px]">edit</span></button>
-                              <button onClick={(e) => { e.stopPropagation(); setMaterialToDelete(material); }} className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors" title="Delete"><span className="material-symbols-outlined text-[18px]">delete</span></button>
+                            <div className="flex flex-col gap-1 sm:flex-row opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity bg-[var(--bg-secondary)]/80 backdrop-blur-sm rounded-lg p-0.5 shadow-sm border border-[var(--border-light)]">
+                              <button onClick={(e) => { e.stopPropagation(); setPreviewMaterial(material); }} className="p-1.5 text-[var(--text-muted)] hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-md transition-colors" title="Preview"><span className="material-symbols-outlined text-[18px]">visibility</span></button>
+                              <button onClick={(e) => { e.stopPropagation(); handleEditMaterialClick(material); }} className="p-1.5 text-[var(--text-muted)] hover:text-[var(--color-warning)] hover:bg-[var(--color-warning-bg)] rounded-md transition-colors" title="Edit"><span className="material-symbols-outlined text-[18px]">edit</span></button>
+                              <button onClick={(e) => { e.stopPropagation(); setMaterialToDelete(material); }} className="p-1.5 text-[var(--text-muted)] hover:text-[var(--color-error)] hover:bg-[var(--color-error-bg)] rounded-md transition-colors" title="Delete"><span className="material-symbols-outlined text-[18px]">delete</span></button>
                             </div>
                           </div>
-                          <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-semibold text-slate-400">
+                          <div className="mt-4 pt-3 border-t border-[var(--border-light)] flex items-center justify-between text-[11px] font-semibold text-[var(--text-muted)]">
                             <div className="flex items-center gap-2">
-                              <span className="bg-slate-100 text-[var(--text-secondary)] px-2 py-0.5 rounded-md uppercase tracking-wider">{material.type}</span>
+                              <span className="bg-[var(--bg-secondary)] text-[var(--text-secondary)] px-2 py-0.5 rounded-md uppercase tracking-wider">{material.type}</span>
                               <span>{material.size}</span>
                             </div>
                             <div className="flex flex-col items-end">
@@ -860,8 +819,8 @@ function TeacherDashboardContent() {
                     })}
 
                     {filteredAndSortedMaterials.length === 0 && (
-                      <div className="md:col-span-2 text-center py-12 px-4 border-2 border-dashed border-slate-200 rounded-2xl bg-[var(--bg-tertiary)]/50">
-                        <div className="w-16 h-16 bg-[var(--bg-secondary)] border border-slate-100 shadow-sm text-slate-300 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <div className="md:col-span-2 text-center py-12 px-4 border-2 border-dashed border-[var(--border-color)] rounded-2xl bg-[var(--bg-tertiary)]/50">
+                        <div className="w-16 h-16 bg-[var(--bg-secondary)] border border-[var(--border-light)] shadow-sm text-[var(--text-muted)] rounded-full flex items-center justify-center mx-auto mb-4">
                           <span className="material-symbols-outlined text-3xl">search_off</span>
                         </div>
                         <h4 className="text-lg font-bold text-[var(--text-primary)] mb-1">No materials found</h4>
@@ -874,11 +833,11 @@ function TeacherDashboardContent() {
                   {/* Edit Modal */}
                   {editingMaterial && (
                     <div className="fixed inset-0 z-[60] flex items-center justify-center px-4">
-                      <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" onClick={() => !isSavingEdit && setEditingMaterial(null)}></div>
+                      <div className="absolute inset-0 bg-[var(--text-primary)]/40 backdrop-blur-sm transition-opacity" onClick={() => !isSavingEdit && setEditingMaterial(null)}></div>
                       <div className="bg-[var(--bg-secondary)] rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden relative z-10 animate-in fade-in zoom-in-95 duration-200">
-                        <div className="p-6 border-b border-slate-100 flex items-center justify-between">
-                          <h3 className="text-xl font-bold text-slate-900 font-heading">Edit Material</h3>
-                          <button onClick={() => !isSavingEdit && setEditingMaterial(null)} className="text-slate-400 hover:text-[var(--text-secondary)] hover:bg-slate-100 p-2 rounded-full transition-colors disabled:opacity-50" disabled={isSavingEdit}>
+                        <div className="p-6 border-b border-[var(--border-light)] flex items-center justify-between">
+                          <h3 className="text-xl font-bold text-[var(--text-primary)] font-heading">Edit Material</h3>
+                          <button onClick={() => !isSavingEdit && setEditingMaterial(null)} className="text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] p-2 rounded-full transition-colors disabled:opacity-50" disabled={isSavingEdit}>
                             <span className="material-symbols-outlined text-[20px]">close</span>
                           </button>
                         </div>
@@ -887,16 +846,16 @@ function TeacherDashboardContent() {
                             <label className="text-sm font-bold text-[var(--text-primary)] ml-1">Title</label>
                             <input
                               type="text"
-                              className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-3 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors text-sm"
+                              className="w-full border border-[var(--border-color)]/80 rounded-xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-3 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors text-sm"
                               value={editMaterialTitle}
                               onChange={(e) => setEditMaterialTitle(e.target.value)}
                               disabled={isSavingEdit}
                             />
                           </div>
                           <div className="space-y-1.5">
-                            <label className="text-sm font-bold text-[var(--text-primary)] ml-1">Description <span className="text-xs font-normal text-slate-400">(Optional)</span></label>
+                            <label className="text-sm font-bold text-[var(--text-primary)] ml-1">Description <span className="text-xs font-normal text-[var(--text-muted)]">(Optional)</span></label>
                             <textarea
-                              className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-3 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors resize-none text-sm"
+                              className="w-full border border-[var(--border-color)]/80 rounded-xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-3 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors resize-none text-sm"
                               rows={3}
                               value={editMaterialDescription}
                               onChange={(e) => setEditMaterialDescription(e.target.value)}
@@ -906,8 +865,8 @@ function TeacherDashboardContent() {
                           <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-1.5">
                               <label className="text-sm font-bold text-[var(--text-primary)] ml-1">Update File</label>
-                              <label className={`block border border-slate-200 border-dashed rounded-xl p-4 text-center cursor-pointer hover:bg-[var(--bg-tertiary)] hover:border-[var(--green-300)] transition-colors ${isSavingEdit ? 'opacity-50 pointer-events-none' : ''}`}>
-                                <span className="material-symbols-outlined text-slate-400 mb-1">upload_file</span>
+                              <label className={`block border border-[var(--border-color)] border-dashed rounded-xl p-4 text-center cursor-pointer hover:bg-[var(--bg-tertiary)] hover:border-[var(--green-300)] transition-colors ${isSavingEdit ? 'opacity-50 pointer-events-none' : ''}`}>
+                                <span className="material-symbols-outlined text-[var(--text-muted)] mb-1">upload_file</span>
                                 <p className="text-xs font-bold text-brand-primary">Choose file</p>
                                 <p className="text-[10px] text-[var(--text-muted)] mt-1 truncate">{editMaterialFile ? editMaterialFile.name : 'No file chosen'}</p>
                                 <input type="file" className="hidden" onChange={(e) => setEditMaterialFile(e.target.files?.[0] || null)} disabled={isSavingEdit} />
@@ -917,15 +876,15 @@ function TeacherDashboardContent() {
                               <label className="text-sm font-bold text-[var(--text-primary)] ml-1">Thumbnail Image</label>
                               <div className="flex flex-col gap-2">
                                                                   {editMaterialThumbnail ? (
-                                  <div className="relative h-16 w-full rounded-xl overflow-hidden border border-slate-200">
+                                  <div className="relative h-16 w-full rounded-xl overflow-hidden border border-[var(--border-color)]">
                                     <Image src={editMaterialThumbnail} alt="Thumbnail" fill className="object-cover" unoptimized />
                                     <button onClick={() => setEditMaterialThumbnail(null)} className="absolute top-1 right-1 bg-black/50 text-white rounded-full p-0.5 hover:bg-black/70 transition-colors" disabled={isSavingEdit}>
                                       <span className="material-symbols-outlined text-[14px]">close</span>
                                     </button>
                                   </div>
                                 ) : (
-                                  <label className={`block border border-slate-200 border-dashed rounded-xl p-4 text-center cursor-pointer hover:bg-[var(--bg-tertiary)] hover:border-[var(--green-300)] transition-colors ${isSavingEdit ? 'opacity-50 pointer-events-none' : ''}`}>
-                                    <span className="material-symbols-outlined text-slate-400 mb-1">image</span>
+                                  <label className={`block border border-[var(--border-color)] border-dashed rounded-xl p-4 text-center cursor-pointer hover:bg-[var(--bg-tertiary)] hover:border-[var(--green-300)] transition-colors ${isSavingEdit ? 'opacity-50 pointer-events-none' : ''}`}>
+                                    <span className="material-symbols-outlined text-[var(--text-muted)] mb-1">image</span>
                                     <p className="text-xs font-bold text-brand-primary">Upload image</p>
                                     <input type="file" accept="image/*" className="hidden" onChange={handleEditMaterialThumbnailUpload} disabled={isSavingEdit} />
                                   </label>
@@ -934,8 +893,8 @@ function TeacherDashboardContent() {
                             </div>
                           </div>
                         </div>
-                        <div className="p-4 bg-[var(--bg-tertiary)] border-t border-slate-100 flex justify-end gap-3">
-                          <button onClick={() => setEditingMaterial(null)} className="px-5 py-2.5 text-sm font-bold text-[var(--text-secondary)] hover:bg-slate-200 bg-slate-100 rounded-xl transition-colors disabled:opacity-50" disabled={isSavingEdit}>Cancel</button>
+                        <div className="p-4 bg-[var(--bg-tertiary)] border-t border-[var(--border-light)] flex justify-end gap-3">
+                          <button onClick={() => setEditingMaterial(null)} className="px-5 py-2.5 text-sm font-bold text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] bg-[var(--bg-secondary)] rounded-xl transition-colors disabled:opacity-50" disabled={isSavingEdit}>Cancel</button>
                           <button onClick={saveEditedMaterial} disabled={isSavingEdit || !editMaterialTitle} className="px-6 py-2.5 text-sm font-bold text-white bg-[var(--brand-primary)] hover:bg-[var(--brand-deep)] rounded-xl transition-colors shadow-md shadow-brand-primary/20 disabled:opacity-50 disabled:shadow-none flex items-center gap-2">
                             {isSavingEdit ? (
                               <><span className="material-symbols-outlined animate-spin text-[16px]">progress_activity</span> Saving...</>
@@ -949,16 +908,16 @@ function TeacherDashboardContent() {
                   {/* Delete Confirmation Modal */}
                   {materialToDelete && (
                     <div className="fixed inset-0 z-[60] flex items-center justify-center px-4">
-                      <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" onClick={() => !isDeleting && setMaterialToDelete(null)}></div>
+                      <div className="absolute inset-0 bg-[var(--text-primary)]/40 backdrop-blur-sm transition-opacity" onClick={() => !isDeleting && setMaterialToDelete(null)}></div>
                       <div className="bg-[var(--bg-secondary)] rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden relative z-10 animate-in fade-in zoom-in-95 duration-200 p-6 text-center">
-                        <div className="w-16 h-16 bg-rose-50 text-rose-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <div className="w-16 h-16 bg-[var(--color-error-bg)] text-[var(--color-error)] rounded-full flex items-center justify-center mx-auto mb-4">
                           <span className="material-symbols-outlined text-3xl">warning</span>
                         </div>
-                        <h3 className="text-xl font-bold text-slate-900 mb-2">Delete Material?</h3>
+                        <h3 className="text-xl font-bold text-[var(--text-primary)] mb-2">Delete Material?</h3>
                         <p className="text-sm text-[var(--text-muted)] mb-6">Are you sure you want to delete "<span className="font-semibold text-[var(--text-primary)]">{materialToDelete.title}</span>"? This action cannot be undone.</p>
                         <div className="flex gap-3 w-full">
-                          <button onClick={() => setMaterialToDelete(null)} className="flex-1 py-2.5 text-sm font-bold text-[var(--text-primary)] hover:bg-slate-100 bg-[var(--bg-tertiary)] border border-slate-200 rounded-xl transition-colors disabled:opacity-50" disabled={isDeleting}>Cancel</button>
-                          <button onClick={confirmDeleteMaterial} disabled={isDeleting} className="flex-1 py-2.5 text-sm font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl transition-colors shadow-md shadow-rose-500/20 disabled:opacity-50 flex items-center justify-center gap-2">
+                          <button onClick={() => setMaterialToDelete(null)} className="flex-1 py-2.5 text-sm font-bold text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-xl transition-colors disabled:opacity-50" disabled={isDeleting}>Cancel</button>
+                          <button onClick={confirmDeleteMaterial} disabled={isDeleting} className="flex-1 py-2.5 text-sm font-bold text-white bg-[var(--color-error)] hover:bg-[var(--color-error)]/80 rounded-xl transition-colors shadow-md shadow-[var(--color-error)]/20 disabled:opacity-50 flex items-center justify-center gap-2">
                             {isDeleting ? (
                               <><span className="material-symbols-outlined animate-spin text-[16px]">progress_activity</span> Deleting...</>
                             ) : "Delete"}
@@ -971,9 +930,9 @@ function TeacherDashboardContent() {
                   {/* Preview Modal */}
                   {previewMaterial && (
                     <div className="fixed inset-0 z-[70] flex items-center justify-center px-4">
-                      <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm transition-opacity" onClick={() => setPreviewMaterial(null)}></div>
+                      <div className="absolute inset-0 bg-[var(--text-primary)]/80 backdrop-blur-sm transition-opacity" onClick={() => setPreviewMaterial(null)}></div>
                       <div className="bg-[var(--bg-secondary)] rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden relative z-10 animate-in zoom-in-95 duration-200">
-                        <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-[var(--bg-tertiary)]">
+                        <div className="p-4 border-b border-[var(--border-light)] flex items-center justify-between bg-[var(--bg-tertiary)]">
                           <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-lg bg-[var(--green-100)] text-brand-primary flex items-center justify-center">
                               <span className="material-symbols-outlined">
@@ -981,27 +940,27 @@ function TeacherDashboardContent() {
                               </span>
                             </div>
                             <div>
-                              <h3 className="text-lg font-bold text-slate-900 line-clamp-1">{previewMaterial.title}</h3>
+                              <h3 className="text-lg font-bold text-[var(--text-primary)] line-clamp-1">{previewMaterial.title}</h3>
                               <p className="text-xs text-[var(--text-muted)]">{previewMaterial.size} • {previewMaterial.type.toUpperCase()}</p>
                             </div>
                           </div>
-                          <button onClick={() => setPreviewMaterial(null)} className="text-slate-400 hover:text-rose-600 hover:bg-rose-50 p-2 rounded-full transition-colors">
+                          <button onClick={() => setPreviewMaterial(null)} className="text-[var(--text-muted)] hover:text-[var(--color-error)] hover:bg-[var(--color-error-bg)] p-2 rounded-full transition-colors">
                             <span className="material-symbols-outlined text-[24px]">close</span>
                           </button>
                         </div>
-                        <div className="flex-1 overflow-hidden bg-slate-100 relative min-h-[400px] flex items-center justify-center p-6">
+                        <div className="flex-1 overflow-hidden bg-[var(--bg-secondary)] relative min-h-[400px] flex items-center justify-center p-6">
                           {previewMaterial.type === 'video' ? (
-                            <div className="w-full max-w-2xl bg-black rounded-xl aspect-video flex items-center justify-center shadow-lg border border-slate-800">
+                            <div className="w-full max-w-2xl bg-black rounded-xl aspect-video flex items-center justify-center shadow-lg border border-[var(--text-primary)]">
                               <span className="material-symbols-outlined text-white text-6xl opacity-50">play_circle</span>
                             </div>
                           ) : previewMaterial.type === 'pdf' ? (
-                            <div className="w-full max-w-2xl h-full bg-[var(--bg-secondary)] rounded-xl shadow-lg border border-slate-200 flex flex-col items-center justify-center">
-                              <span className="material-symbols-outlined text-rose-300 text-6xl mb-4">picture_as_pdf</span>
+                            <div className="w-full max-w-2xl h-full bg-[var(--bg-secondary)] rounded-xl shadow-lg border border-[var(--border-color)] flex flex-col items-center justify-center">
+                              <span className="material-symbols-outlined text-[var(--color-error)] text-6xl mb-4">picture_as_pdf</span>
                               <p className="text-[var(--text-muted)] font-medium">PDF Preview (Mock)</p>
                             </div>
                           ) : (
                             <div className="text-center">
-                              <span className="material-symbols-outlined text-slate-300 text-6xl mb-4">inventory_2</span>
+                              <span className="material-symbols-outlined text-[var(--text-muted)] text-6xl mb-4">inventory_2</span>
                               <h4 className="text-lg font-bold text-[var(--text-primary)] mb-2">No preview available</h4>
                               <p className="text-sm text-[var(--text-muted)]">This file type cannot be previewed in the browser.</p>
                               <button className="mt-6 px-6 py-2 bg-[var(--brand-primary)] hover:bg-[var(--brand-deep)] text-white rounded-lg font-bold shadow-sm transition-colors">Download File</button>
@@ -1020,7 +979,7 @@ function TeacherDashboardContent() {
               <section id="schedule" className="animate-in fade-in duration-500 space-y-6">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                   <div>
-                    <h3 className="text-2xl font-bold text-slate-900 font-heading tracking-tight">Academic Calendar</h3>
+                    <h3 className="text-2xl font-bold text-[var(--text-primary)] font-heading tracking-tight">Academic Calendar</h3>
                     <p className="text-sm text-[var(--text-muted)] mt-1">Schedule classes, exams, and events for your students</p>
                   </div>
                   <button 
@@ -1052,19 +1011,19 @@ function TeacherDashboardContent() {
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                  <div className="glass-card lg:col-span-2 bg-[var(--bg-secondary)] rounded-3xl border border-slate-200/50 p-6 shadow-sm">
+                  <div className="glass-card lg:col-span-2 bg-[var(--bg-secondary)] rounded-3xl border border-[var(--border-color)]/50 p-6 shadow-sm">
                     <Calendar events={events} />
                   </div>
                   <div className="space-y-4">
-                    <h4 className="font-bold text-slate-900 px-2">Upcoming Schedule</h4>
+                    <h4 className="font-bold text-[var(--text-primary)] px-2">Upcoming Schedule</h4>
                     <div className="space-y-3">
                       {events.sort((a,b) => new Date(a.start).getTime() - new Date(b.start).getTime()).map(evt => (
-                        <div key={evt.id} className="p-4 bg-[var(--bg-secondary)] border border-slate-100 rounded-2xl hover:shadow-md transition-all group">
+                        <div key={evt.id} className="p-4 bg-[var(--bg-secondary)] border border-[var(--border-light)] rounded-2xl hover:shadow-md transition-all group">
                           <div className="flex justify-between items-start mb-2">
                             <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border uppercase tracking-wider ${
                               evt.type === 'class' ? 'bg-[var(--bg-tertiary)] text-brand-primary border-[var(--green-100)]' :
-                              evt.type === 'exam' ? 'bg-rose-50 text-rose-600 border-rose-100' :
-                              'bg-[var(--bg-tertiary)] text-[var(--text-secondary)] border-slate-100'
+                              evt.type === 'exam' ? 'bg-[var(--color-error-bg)] text-[var(--color-error)] border-[var(--color-error)]/20' :
+                              'bg-[var(--bg-tertiary)] text-[var(--text-secondary)] border-[var(--border-light)]'
                             }`}>
                               {evt.type}
                             </span>
@@ -1075,13 +1034,13 @@ function TeacherDashboardContent() {
                                 storage.saveEvents(updated);
                                 showToast('Event removed.');
                               }}
-                              className="text-slate-300 hover:text-rose-500 transition-colors"
+                              className="text-[var(--text-muted)] hover:text-[var(--color-error)] transition-colors"
                             >
                               <span className="material-symbols-outlined text-[18px]">delete</span>
                             </button>
                           </div>
-                          <h5 className="font-bold text-slate-800 text-sm">{evt.title}</h5>
-                          <div className="flex items-center gap-3 mt-2 text-[11px] font-semibold text-slate-400">
+                          <h5 className="font-bold text-[var(--text-primary)] text-sm">{evt.title}</h5>
+                          <div className="flex items-center gap-3 mt-2 text-[11px] font-semibold text-[var(--text-muted)]">
                             <div className="flex items-center gap-1">
                               <span className="material-symbols-outlined text-[14px]">calendar_today</span>
                               {new Date(evt.start).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
@@ -1106,7 +1065,7 @@ function TeacherDashboardContent() {
                   <div className="space-y-6">
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                       <div>
-                        <h3 className="text-2xl font-bold text-slate-900 font-heading tracking-tight">Manage Assignments</h3>
+                        <h3 className="text-2xl font-bold text-[var(--text-primary)] font-heading tracking-tight">Manage Assignments</h3>
                         <p className="text-sm text-[var(--text-muted)] mt-1">Track student progress and grade submissions</p>
                       </div>
                       <button 
@@ -1125,9 +1084,9 @@ function TeacherDashboardContent() {
                         const overdue = isOverdue(asgn.dueDate, asgn.dueTime) && counts.submitted < counts.total;
 
                         return (
-                          <div key={asgn.id} className="glow-on-hover bg-[var(--bg-secondary)]/80 backdrop-blur-sm rounded-2xl border border-slate-200/50 p-6 hover:shadow-xl hover:shadow-brand-primary/5 transition-all group relative overflow-hidden">
+                          <div key={asgn.id} className="glow-on-hover bg-[var(--bg-secondary)]/80 backdrop-blur-sm rounded-2xl border border-[var(--border-color)]/50 p-6 hover:shadow-xl hover:shadow-brand-primary/5 transition-all group relative overflow-hidden">
                             {asgn.status === 'draft' && (
-                              <div className="absolute top-0 right-0 px-3 py-1 bg-slate-100 text-[var(--text-muted)] text-[10px] font-bold uppercase rounded-bl-xl border-b border-l border-slate-200/50">Draft</div>
+                              <div className="absolute top-0 right-0 px-3 py-1 bg-[var(--bg-secondary)] text-[var(--text-muted)] text-[10px] font-bold uppercase rounded-bl-xl border-b border-l border-[var(--border-color)]/50">Draft</div>
                             )}
                             
                             <div className="flex justify-between items-start mb-4">
@@ -1137,12 +1096,12 @@ function TeacherDashboardContent() {
                                 </span>
                               </div>
                               <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button onClick={() => openEditAssignment(asgn)} className="p-1.5 text-slate-400 hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"><span className="material-symbols-outlined text-[18px]">edit</span></button>
-                                <button onClick={() => setAssignmentToDelete(asgn)} className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"><span className="material-symbols-outlined text-[18px]">delete</span></button>
+                                <button onClick={() => openEditAssignment(asgn)} className="p-1.5 text-[var(--text-muted)] hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"><span className="material-symbols-outlined text-[18px]">edit</span></button>
+                                <button onClick={() => setAssignmentToDelete(asgn)} className="p-1.5 text-[var(--text-muted)] hover:text-[var(--color-error)] hover:bg-[var(--color-error-bg)] rounded-lg transition-colors"><span className="material-symbols-outlined text-[18px]">delete</span></button>
                               </div>
                             </div>
 
-                            <h4 className="font-bold text-slate-900 mb-1 line-clamp-1">{asgn.title}</h4>
+                            <h4 className="font-bold text-[var(--text-primary)] mb-1 line-clamp-1">{asgn.title}</h4>
                             <p className="text-xs text-[var(--text-muted)] font-medium mb-4">{asgn.subject} • {asgn.classGroup}</p>
 
                             <div className="space-y-4">
@@ -1151,9 +1110,9 @@ function TeacherDashboardContent() {
                                   <span>Submissions</span>
                                   <span className="text-brand-primary">{counts.submitted}/{counts.total || 0}</span>
                                 </div>
-                                <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                                <div className="h-1.5 w-full bg-[var(--bg-secondary)] rounded-full overflow-hidden">
                                   <div 
-                                    className={`h-full rounded-full transition-all duration-500 ${overdue ? 'bg-rose-500' : 'bg-gradient-to-r from-brand-primary to-brand-mid'}`}
+                                    className={`h-full rounded-full transition-all duration-500 ${overdue ? 'bg-[var(--color-error-bg)]0' : 'bg-gradient-to-r from-brand-primary to-brand-mid'}`}
                                     style={{ width: `${progress}%` }}
                                   ></div>
                                 </div>
@@ -1161,8 +1120,8 @@ function TeacherDashboardContent() {
 
                               <div className="flex items-center justify-between pt-2">
                                 <div className="flex items-center gap-1.5 text-[var(--text-muted)]">
-                                  <span className={`material-symbols-outlined text-[16px] ${overdue ? 'text-rose-500 animate-pulse' : ''}`}>event</span>
-                                  <span className={`text-[11px] font-bold ${overdue ? 'text-rose-500' : ''}`}>
+                                  <span className={`material-symbols-outlined text-[16px] ${overdue ? 'text-[var(--color-error)] animate-pulse' : ''}`}>event</span>
+                                  <span className={`text-[11px] font-bold ${overdue ? 'text-[var(--color-error)]' : ''}`}>
                                     Due {new Date(asgn.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                                   </span>
                                 </div>
@@ -1180,11 +1139,11 @@ function TeacherDashboardContent() {
                       })}
 
                       {assignments.length === 0 && (
-                        <div className="col-span-full py-16 flex flex-col items-center justify-center text-center bg-[var(--bg-secondary)]/50 rounded-3xl border-2 border-dashed border-slate-200">
-                          <div className="w-20 h-20 bg-[var(--bg-secondary)] shadow-sm border border-slate-100 rounded-2xl flex items-center justify-center mb-4 text-slate-300">
+                        <div className="col-span-full py-16 flex flex-col items-center justify-center text-center bg-[var(--bg-secondary)]/50 rounded-3xl border-2 border-dashed border-[var(--border-color)]">
+                          <div className="w-20 h-20 bg-[var(--bg-secondary)] shadow-sm border border-[var(--border-light)] rounded-2xl flex items-center justify-center mb-4 text-[var(--text-muted)]">
                             <span className="material-symbols-outlined text-4xl">assignment_add</span>
                           </div>
-                          <h4 className="text-xl font-bold text-slate-900 mb-2 font-heading">No assignments yet</h4>
+                          <h4 className="text-xl font-bold text-[var(--text-primary)] mb-2 font-heading">No assignments yet</h4>
                           <p className="text-[var(--text-muted)] max-w-xs mb-8">Create your first assignment to start tracking student progress and grading work.</p>
                           <button onClick={openCreateAssignment} className="px-8 py-3 bg-[var(--brand-primary)] text-white rounded-xl font-bold hover:bg-[var(--brand-deep)] transition-all shadow-lg shadow-brand-primary/20">Create New Assignment</button>
                         </div>
@@ -1197,20 +1156,20 @@ function TeacherDashboardContent() {
                 {(assignmentView === 'create' || assignmentView === 'edit') && (
                   <div className="max-w-4xl mx-auto space-y-6">
                     <div className="flex items-center gap-4 mb-2">
-                      <button onClick={() => setAssignmentView('list')} className="p-2 bg-[var(--bg-secondary)] border border-slate-200/80 hover:bg-[var(--bg-tertiary)] text-[var(--text-secondary)] rounded-full transition-colors shadow-sm">
+                      <button onClick={() => setAssignmentView('list')} className="p-2 bg-[var(--bg-secondary)] border border-[var(--border-color)]/80 hover:bg-[var(--bg-tertiary)] text-[var(--text-secondary)] rounded-full transition-colors shadow-sm">
                         <span className="material-symbols-outlined">arrow_back</span>
                       </button>
                       <div>
-                        <h3 className="text-2xl font-bold text-slate-900 font-heading tracking-tight">
+                        <h3 className="text-2xl font-bold text-[var(--text-primary)] font-heading tracking-tight">
                           {assignmentView === 'create' ? 'Create New Assignment' : 'Edit Assignment'}
                         </h3>
                         <p className="text-sm text-[var(--text-muted)] mt-0.5">Fill in the details to set up the learning task</p>
                       </div>
                     </div>
 
-                    <div className="book-page bg-[var(--bg-secondary)]/80 backdrop-blur-sm p-6 md:p-8 rounded-3xl border border-slate-200/50 shadow-sm space-y-8">
+                    <div className="book-page bg-[var(--bg-secondary)]/80 backdrop-blur-sm p-6 md:p-8 rounded-3xl border border-[var(--border-color)]/50 shadow-sm space-y-8">
                       {aFormError && (
-                        <div className="p-4 bg-rose-50 border border-rose-200 rounded-2xl flex items-center gap-3 text-rose-700 animate-in slide-in-from-top-2">
+                        <div className="p-4 bg-[var(--color-error-bg)] border border-[var(--color-error)]/20 rounded-2xl flex items-center gap-3 text-[var(--color-error)] animate-in slide-in-from-top-2">
                           <span className="material-symbols-outlined">error</span>
                           <p className="font-bold text-sm">{aFormError}</p>
                         </div>
@@ -1218,11 +1177,11 @@ function TeacherDashboardContent() {
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="md:col-span-2 space-y-1.5">
-                          <label className="text-sm font-bold text-[var(--text-primary)] ml-1">Assignment Title <span className="text-rose-500">*</span></label>
+                          <label className="text-sm font-bold text-[var(--text-primary)] ml-1">Assignment Title <span className="text-[var(--color-error)]">*</span></label>
                           <input 
                             type="text" 
                             placeholder="e.g., Final Year Thesis Proposal"
-                            className="w-full border border-slate-200/80 rounded-2xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-4 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors font-medium shadow-sm"
+                            className="w-full border border-[var(--border-color)]/80 rounded-2xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-4 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors font-medium shadow-sm"
                             value={aFormTitle}
                             onChange={e => setAFormTitle(e.target.value)}
                           />
@@ -1231,7 +1190,7 @@ function TeacherDashboardContent() {
                         <div className="space-y-1.5">
                           <label className="text-sm font-bold text-[var(--text-primary)] ml-1">Subject</label>
                           <select 
-                            className="w-full border border-slate-200/80 rounded-2xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-4 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors cursor-pointer text-[var(--text-primary)] shadow-sm"
+                            className="w-full border border-[var(--border-color)]/80 rounded-2xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-4 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors cursor-pointer text-[var(--text-primary)] shadow-sm"
                             value={aFormSubject}
                             onChange={e => setAFormSubject(e.target.value)}
                           >
@@ -1244,7 +1203,7 @@ function TeacherDashboardContent() {
                         <div className="space-y-1.5">
                           <label className="text-sm font-bold text-[var(--text-primary)] ml-1">Class / Grade</label>
                           <select 
-                            className="w-full border border-slate-200/80 rounded-2xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-4 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors cursor-pointer text-[var(--text-primary)] shadow-sm"
+                            className="w-full border border-[var(--border-color)]/80 rounded-2xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-4 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors cursor-pointer text-[var(--text-primary)] shadow-sm"
                             value={aFormClass}
                             onChange={e => setAFormClass(e.target.value)}
                           >
@@ -1257,7 +1216,7 @@ function TeacherDashboardContent() {
                         <div className="space-y-1.5">
                           <label className="text-sm font-bold text-[var(--text-primary)] ml-1">Assignment Type</label>
                           <select 
-                            className="w-full border border-slate-200/80 rounded-2xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-4 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors cursor-pointer text-[var(--text-primary)] shadow-sm"
+                            className="w-full border border-[var(--border-color)]/80 rounded-2xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-4 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors cursor-pointer text-[var(--text-primary)] shadow-sm"
                             value={aFormType}
                             onChange={e => setAFormType(e.target.value)}
                           >
@@ -1271,17 +1230,17 @@ function TeacherDashboardContent() {
                           <label className="text-sm font-bold text-[var(--text-primary)] ml-1">Total Marks</label>
                           <input 
                             type="number" 
-                            className="w-full border border-slate-200/80 rounded-2xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-4 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors shadow-sm"
+                            className="w-full border border-[var(--border-color)]/80 rounded-2xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-4 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors shadow-sm"
                             value={aFormMarks}
                             onChange={e => setAFormMarks(parseInt(e.target.value) || 0)}
                           />
                         </div>
 
                         <div className="space-y-1.5">
-                          <label className="text-sm font-bold text-[var(--text-primary)] ml-1">Due Date <span className="text-rose-500">*</span></label>
+                          <label className="text-sm font-bold text-[var(--text-primary)] ml-1">Due Date <span className="text-[var(--color-error)]">*</span></label>
                           <input 
                             type="date" 
-                            className="w-full border border-slate-200/80 rounded-2xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-4 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors shadow-sm"
+                            className="w-full border border-[var(--border-color)]/80 rounded-2xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-4 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors shadow-sm"
                             value={aFormDueDate}
                             onChange={e => setAFormDueDate(e.target.value)}
                           />
@@ -1291,29 +1250,29 @@ function TeacherDashboardContent() {
                           <label className="text-sm font-bold text-[var(--text-primary)] ml-1">Due Time</label>
                           <input 
                             type="time" 
-                            className="w-full border border-slate-200/80 rounded-2xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-4 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors shadow-sm"
+                            className="w-full border border-[var(--border-color)]/80 rounded-2xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-4 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors shadow-sm"
                             value={aFormDueTime}
                             onChange={e => setAFormDueTime(e.target.value)}
                           />
                         </div>
 
                         <div className="md:col-span-2 space-y-1.5 pt-2">
-                          <label className="text-sm font-bold text-[var(--text-primary)] ml-1">Detailed Instructions <span className="text-rose-500">*</span></label>
+                          <label className="text-sm font-bold text-[var(--text-primary)] ml-1">Detailed Instructions <span className="text-[var(--color-error)]">*</span></label>
                           <textarea 
                             rows={6}
                             placeholder="Provide clear steps and requirements for students..."
-                            className="w-full border border-slate-200/80 rounded-2xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-5 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors shadow-sm resize-none"
+                            className="w-full border border-[var(--border-color)]/80 rounded-2xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-5 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors shadow-sm resize-none"
                             value={aFormInstructions}
                             onChange={e => setAFormInstructions(e.target.value)}
                           ></textarea>
                         </div>
                       </div>
 
-                      <div className="flex flex-col sm:flex-row justify-end gap-3 pt-8 border-t border-slate-100">
+                      <div className="flex flex-col sm:flex-row justify-end gap-3 pt-8 border-t border-[var(--border-light)]">
                         <button 
                           onClick={() => saveAssignment(false)}
                           disabled={aFormSaving}
-                          className="px-8 py-3.5 border-2 border-slate-200 rounded-2xl font-bold text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] hover:border-slate-300 transition-all disabled:opacity-50"
+                          className="px-8 py-3.5 border-2 border-[var(--border-color)] rounded-2xl font-bold text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] hover:border-[var(--border-color)] transition-all disabled:opacity-50"
                         >
                           Save as Draft
                         </button>
@@ -1343,34 +1302,34 @@ function TeacherDashboardContent() {
                 {assignmentView === 'submissions' && selectedAssignment && (
                   <div className="space-y-6">
                     <div className="flex items-center gap-4 mb-2">
-                      <button onClick={() => setAssignmentView('list')} className="p-2 bg-[var(--bg-secondary)] border border-slate-200/80 hover:bg-[var(--bg-tertiary)] text-[var(--text-secondary)] rounded-full transition-colors shadow-sm">
+                      <button onClick={() => setAssignmentView('list')} className="p-2 bg-[var(--bg-secondary)] border border-[var(--border-color)]/80 hover:bg-[var(--bg-tertiary)] text-[var(--text-secondary)] rounded-full transition-colors shadow-sm">
                         <span className="material-symbols-outlined">arrow_back</span>
                       </button>
                       <div>
-                        <h3 className="text-2xl font-bold text-slate-900 font-heading tracking-tight">Review Submissions</h3>
+                        <h3 className="text-2xl font-bold text-[var(--text-primary)] font-heading tracking-tight">Review Submissions</h3>
                         <p className="text-sm text-[var(--text-muted)] mt-0.5">{selectedAssignment.title}</p>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                       <div className="lg:col-span-1 space-y-6">
-                        <div className="bg-[var(--bg-secondary)]/80 backdrop-blur-sm p-6 rounded-3xl border border-slate-200/50 shadow-sm">
-                          <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-4">Assignment Info</h4>
+                        <div className="bg-[var(--bg-secondary)]/80 backdrop-blur-sm p-6 rounded-3xl border border-[var(--border-color)]/50 shadow-sm">
+                          <h4 className="text-[11px] font-bold text-[var(--text-muted)] uppercase tracking-[0.2em] mb-4">Assignment Info</h4>
                           <div className="space-y-4">
                             <div>
-                              <p className="text-[10px] font-bold text-slate-400 uppercase">Class</p>
-                              <p className="text-sm font-bold text-slate-800">{selectedAssignment.classGroup}</p>
+                              <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase">Class</p>
+                              <p className="text-sm font-bold text-[var(--text-primary)]">{selectedAssignment.classGroup}</p>
                             </div>
                             <div>
-                              <p className="text-[10px] font-bold text-slate-400 uppercase">Due Date</p>
-                              <p className="text-sm font-bold text-slate-800">{new Date(selectedAssignment.dueDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                              <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase">Due Date</p>
+                              <p className="text-sm font-bold text-[var(--text-primary)]">{new Date(selectedAssignment.dueDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
                             </div>
                             <div>
-                              <p className="text-[10px] font-bold text-slate-400 uppercase">Total Marks</p>
+                              <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase">Total Marks</p>
                               <p className="text-sm font-bold text-brand-primary font-heading text-lg">{selectedAssignment.totalMarks}</p>
                             </div>
                           </div>
-                          <div className="mt-6 pt-6 border-t border-slate-100 flex flex-col gap-2">
+                          <div className="mt-6 pt-6 border-t border-[var(--border-light)] flex flex-col gap-2">
                             <button onClick={() => openEditAssignment(selectedAssignment)} className="w-full py-2.5 bg-[var(--bg-tertiary)] text-[var(--text-primary)] font-bold text-xs rounded-xl hover:bg-[var(--bg-tertiary)] hover:text-brand-primary transition-colors flex items-center justify-center gap-2">
                               <span className="material-symbols-outlined text-[16px]">edit</span> Edit Details
                             </button>
@@ -1404,10 +1363,10 @@ function TeacherDashboardContent() {
                       </div>
 
                       <div className="lg:col-span-3">
-                        <div className="bg-[var(--bg-secondary)]/80 backdrop-blur-sm rounded-3xl border border-slate-200/50 shadow-sm overflow-hidden">
+                        <div className="bg-[var(--bg-secondary)]/80 backdrop-blur-sm rounded-3xl border border-[var(--border-color)]/50 shadow-sm overflow-hidden">
                           <div className="overflow-x-auto custom-scrollbar">
                             <table className="w-full text-left">
-                              <thead className="bg-[var(--bg-tertiary)]/50 text-[var(--text-muted)] text-[10px] uppercase font-bold tracking-widest border-b border-slate-100">
+                              <thead className="bg-[var(--bg-tertiary)]/50 text-[var(--text-muted)] text-[10px] uppercase font-bold tracking-widest border-b border-[var(--border-light)]">
                                 <tr>
                                   <th className="px-6 py-5">Student</th>
                                   <th className="px-6 py-5">Status</th>
@@ -1424,7 +1383,7 @@ function TeacherDashboardContent() {
                                       <td className="px-6 py-4">
                                         <div className="flex items-center gap-3">
                                           <Image alt={sub.studentName} className="w-9 h-9 rounded-full object-cover ring-2 ring-white shadow-sm" src={sub.studentAvatar} width={36} height={36} />
-                                          <span className="text-sm font-bold text-slate-800">{sub.studentName}</span>
+                                          <span className="text-sm font-bold text-[var(--text-primary)]">{sub.studentName}</span>
                                         </div>
                                       </td>
                                       <td className="px-6 py-4">
@@ -1444,19 +1403,19 @@ function TeacherDashboardContent() {
                                             {sub.marks}/{selectedAssignment.totalMarks}
                                           </span>
                                         ) : (
-                                          <span className="text-[10px] font-bold text-slate-300 uppercase tracking-tighter">Not Graded</span>
+                                          <span className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-tighter">Not Graded</span>
                                         )}
                                       </td>
                                       <td className="px-6 py-4 text-right">
                                         {sub.status !== 'not_submitted' ? (
                                           <button 
                                             onClick={() => openGrading(sub)}
-                                            className="px-4 py-2 bg-[var(--bg-secondary)] border border-slate-200 text-[var(--text-primary)] text-[11px] font-bold rounded-xl hover:bg-[var(--brand-primary)] hover:text-white hover:border-[var(--brand-primary)] transition-all shadow-sm active:scale-95"
+                                            className="px-4 py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)] text-[11px] font-bold rounded-xl hover:bg-[var(--brand-primary)] hover:text-white hover:border-[var(--brand-primary)] transition-all shadow-sm active:scale-95"
                                           >
                                             {sub.status === 'graded' ? 'Update Grade' : 'Grade Now'}
                                           </button>
                                         ) : (
-                                          <button className="px-4 py-2 bg-[var(--bg-tertiary)] text-slate-300 text-[11px] font-bold rounded-xl cursor-not-allowed border border-slate-100">
+                                          <button className="px-4 py-2 bg-[var(--bg-tertiary)] text-[var(--text-muted)] text-[11px] font-bold rounded-xl cursor-not-allowed border border-[var(--border-light)]">
                                             No Submission
                                           </button>
                                         )}
@@ -1478,12 +1437,12 @@ function TeacherDashboardContent() {
             {/* Tab: Student Chat */}
             {activeTab === 'chat' && (
               <section id="chat" className="animate-in fade-in duration-500">
-                <div className="glass-panel bg-[var(--bg-secondary)]/80 backdrop-blur-sm rounded-2xl border border-slate-200/50 shadow-sm overflow-hidden flex h-[calc(100vh-180px)] min-h-[500px] max-h-[700px] max-w-6xl mx-auto hover:shadow-lg transition-shadow">
-                  <div className="w-full md:w-[320px] border-r border-slate-200/60 flex flex-col flex-shrink-0 bg-[var(--bg-tertiary)]/30 hidden md:flex">
-                    <div className="p-4 border-b border-slate-200/60 bg-[var(--bg-secondary)]/50 backdrop-blur-md">
+                <div className="glass-panel bg-[var(--bg-secondary)]/80 backdrop-blur-sm rounded-2xl border border-[var(--border-color)]/50 shadow-sm overflow-hidden flex h-[calc(100vh-180px)] min-h-[500px] max-h-[700px] max-w-6xl mx-auto hover:shadow-lg transition-shadow">
+                  <div className="w-full md:w-[320px] border-r border-[var(--border-color)]/60 flex flex-col flex-shrink-0 bg-[var(--bg-tertiary)]/30 hidden md:flex">
+                    <div className="p-4 border-b border-[var(--border-color)]/60 bg-[var(--bg-secondary)]/50 backdrop-blur-md">
                       <div className="relative">
-                        <span className="material-symbols-outlined absolute left-3 top-2.5 text-slate-400 text-[18px]">search</span>
-                        <input className="w-full pl-10 pr-4 py-2 border border-slate-200/80 rounded-xl text-sm focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] outline-none bg-[var(--bg-secondary)]/80 transition-all" placeholder="Search students..." type="text" />
+                        <span className="material-symbols-outlined absolute left-3 top-2.5 text-[var(--text-muted)] text-[18px]">search</span>
+                        <input className="w-full pl-10 pr-4 py-2 border border-[var(--border-color)]/80 rounded-xl text-sm focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] outline-none bg-[var(--bg-secondary)]/80 transition-all" placeholder="Search students..." type="text" />
                       </div>
                     </div>
                     <div className="flex-1 overflow-y-auto custom-scrollbar">
@@ -1491,18 +1450,18 @@ function TeacherDashboardContent() {
                         <Image alt="Alice" className="w-10 h-10 rounded-full object-cover shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5YtzuGGhQtoMSYb1z4CZnqzzcbjq48xkrOrRAS800ySrm9ocI5a1BzLYwxIk0eZnIcgUfFelkA_eQMCMIc7W08pM-TNUrEQ6mXISeFxVR6YfFBWO1eJoxwM9CgWegDXdxbPoVGlQZxdbmq74kNvWgTuV2Ms4t1n07gHVb4LG_ao3lxXxeamT2cw4fEHaXZ-GRkv6nwiprw6xMch0nuLsJBE30XbcNwDgFCq9ntroDL6ffKWyYToxeDEiPLoO48Pjk38Y0tPqGFSk" width={40} height={40} />
                         <div className="flex-1 overflow-hidden">
                           <div className="flex justify-between items-start mb-0.5">
-                            <h4 className="text-sm font-bold text-slate-900 truncate">Alice Lin</h4>
+                            <h4 className="text-sm font-bold text-[var(--text-primary)] truncate">Alice Lin</h4>
                             <span className="text-[10px] text-brand-primary font-bold">2m ago</span>
                           </div>
                           <p className="text-xs text-brand-primary font-medium truncate">Professor, I had a question about the assignment deadline...</p>
                         </div>
                       </div>
-                      <div className="p-4 flex items-center gap-3 hover:bg-[var(--bg-secondary)] cursor-pointer transition-colors border-b border-slate-100">
+                      <div className="p-4 flex items-center gap-3 hover:bg-[var(--bg-secondary)] cursor-pointer transition-colors border-b border-[var(--border-light)]">
                         <Image alt="John" className="w-10 h-10 rounded-full object-cover shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAy8gYSxsWIXMDJgBjagtAXPCLznBLwOX3tX91ZKO1QApfFfzvMpXemInFjapK_SL975FXP5atiFYnV9MrfDspQpMEP3S0p8hsB_v3RUiQBcWjIWJR1Q1FvCajAygB3f3k1g870DiNbZW8WXYOnx8Uvlf2Q8Nvwye97E9lHwRnwGMBZ-RmRfKbclN-RyH1HupK7BprpxsdP6g9Z3ITKw4EIF_HRwaojxOktYUbH0FcuJKyQ_M0kZUEhKC0hNYdgn1zpIDF6koegTO8" width={40} height={40} />
                         <div className="flex-1 overflow-hidden">
                           <div className="flex justify-between items-start mb-0.5">
                             <h4 className="text-sm font-bold text-[var(--text-primary)] truncate">John Davis</h4>
-                            <span className="text-[10px] text-slate-400 font-semibold">1h ago</span>
+                            <span className="text-[10px] text-[var(--text-muted)] font-semibold">1h ago</span>
                           </div>
                           <p className="text-xs text-[var(--text-muted)] truncate">Thanks for the feedback on my last project!</p>
                         </div>
@@ -1512,40 +1471,40 @@ function TeacherDashboardContent() {
                   <div className="flex-1 flex flex-col bg-[var(--bg-secondary)]/60 relative">
                     {/* Background Pattern */}
                     <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, var(--brand-mid) 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
-                    <div className="px-4 md:px-6 py-4 border-b border-slate-200/60 flex items-center justify-between shadow-sm z-10 bg-[var(--bg-secondary)]/80 backdrop-blur-md">
+                    <div className="px-4 md:px-6 py-4 border-b border-[var(--border-color)]/60 flex items-center justify-between shadow-sm z-10 bg-[var(--bg-secondary)]/80 backdrop-blur-md">
                       <div className="flex items-center gap-3">
                         <div className="relative">
                           <Image alt="Alice" className="w-10 h-10 rounded-full object-cover shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCk7Wsjskynl2H5KXiECGBzgWR0Hvt0bSNn7-cg5jZS-lQ0Er7esj0N3SyiGOTxgCx92nEYZv8IT8Fj86UZ6VPrEcvcABG8HENglXyWqnEclvYp_Xh_Z449VX2aygqq4jg1mO-nYvCx3fl2-xuEX_1JAW6HfWjBPpVELirlTSEq-2bX4ICAQnHQVf67hRONetlckhbPzDpoKM9kULnCc--Ahe9IW68YL8tqaVrfFRULnVFCWgiiK-3c025F8JbTI1JU39_WgzQUA_M" width={40} height={40} />
-                          <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full"></span>
+                          <span className="absolute bottom-0 right-0 w-3 h-3 bg-[var(--color-success)] border-2 border-white rounded-full"></span>
                         </div>
                         <div>
-                          <h4 className="text-base font-bold text-slate-900">Alice Lin</h4>
-                          <p className="text-[10px] text-emerald-500 font-bold uppercase tracking-wider">Online</p>
+                          <h4 className="text-base font-bold text-[var(--text-primary)]">Alice Lin</h4>
+                          <p className="text-[10px] text-[var(--color-success)] font-bold uppercase tracking-wider">Online</p>
                         </div>
                       </div>
                       <div className="flex gap-1 md:gap-2">
-                        <button className="p-2 text-slate-400 hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-full transition-colors"><span className="material-symbols-outlined">call</span></button>
-                        <button className="p-2 text-slate-400 hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-full transition-colors"><span className="material-symbols-outlined">videocam</span></button>
-                        <button className="p-2 text-slate-400 hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-full transition-colors"><span className="material-symbols-outlined">more_vert</span></button>
+                        <button className="p-2 text-[var(--text-muted)] hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-full transition-colors"><span className="material-symbols-outlined">call</span></button>
+                        <button className="p-2 text-[var(--text-muted)] hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-full transition-colors"><span className="material-symbols-outlined">videocam</span></button>
+                        <button className="p-2 text-[var(--text-muted)] hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-full transition-colors"><span className="material-symbols-outlined">more_vert</span></button>
                       </div>
                     </div>
                     <div className="flex-1 p-4 md:p-6 overflow-y-auto custom-scrollbar space-y-6 z-10">
                       <div className="flex flex-col items-start max-w-[85%] md:max-w-[70%]">
-                        <div className="bg-[var(--bg-secondary)] p-4 rounded-2xl rounded-tl-sm border border-slate-200/80 shadow-sm text-[.95rem] text-[var(--text-primary)] leading-relaxed hover:shadow-md transition-shadow">
+                        <div className="bg-[var(--bg-secondary)] p-4 rounded-2xl rounded-tl-sm border border-[var(--border-color)]/80 shadow-sm text-[.95rem] text-[var(--text-primary)] leading-relaxed hover:shadow-md transition-shadow">
                           Professor, I had a question about the assignment deadline. Can we submit by Monday morning?
                         </div>
-                        <span className="text-[11px] font-medium text-slate-400 mt-1.5 ml-1">10:42 AM</span>
+                        <span className="text-[11px] font-medium text-[var(--text-muted)] mt-1.5 ml-1">10:42 AM</span>
                       </div>
                       <div className="flex flex-col items-end ml-auto max-w-[85%] md:max-w-[70%]">
                         <div className="bg-gradient-to-br from-brand-primary to-brand-mid text-white p-4 rounded-2xl rounded-tr-sm shadow-md shadow-brand-primary/20 text-[.95rem] leading-relaxed hover:shadow-lg hover:shadow-brand-primary/30 transition-shadow">
                           Hello Alice! Yes, the portal will remain open until Monday at 9:00 AM.
                         </div>
-                        <span className="text-[11px] font-medium text-slate-400 mt-1.5 mr-1 text-right">10:45 AM</span>
+                        <span className="text-[11px] font-medium text-[var(--text-muted)] mt-1.5 mr-1 text-right">10:45 AM</span>
                       </div>
                     </div>
-                    <div className="p-4 bg-[var(--bg-secondary)]/80 backdrop-blur-md border-t border-slate-200/60 z-10">
-                      <div className="flex items-center gap-2 md:gap-3 bg-[var(--bg-secondary)] border border-slate-200 rounded-full px-2 py-1.5 md:px-4 md:py-2 focus-within:border-[var(--brand-light)] focus-within:ring-2 focus-within:ring-[var(--brand-light)]/20 transition-all shadow-sm">
-                        <button className="p-2 text-slate-400 hover:text-brand-primary transition-colors rounded-full hover:bg-[var(--bg-tertiary)]"><span className="material-symbols-outlined">attach_file</span></button>
+                    <div className="p-4 bg-[var(--bg-secondary)]/80 backdrop-blur-md border-t border-[var(--border-color)]/60 z-10">
+                      <div className="flex items-center gap-2 md:gap-3 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-full px-2 py-1.5 md:px-4 md:py-2 focus-within:border-[var(--brand-light)] focus-within:ring-2 focus-within:ring-[var(--brand-light)]/20 transition-all shadow-sm">
+                        <button className="p-2 text-[var(--text-muted)] hover:text-brand-primary transition-colors rounded-full hover:bg-[var(--bg-tertiary)]"><span className="material-symbols-outlined">attach_file</span></button>
                         <input className="flex-1 bg-transparent border-none outline-none focus:ring-0 text-[.95rem] py-1" placeholder="Type a message..." type="text" />
                         <button className="w-10 h-10 rounded-full bg-gradient-to-r from-brand-primary to-brand-mid text-white flex items-center justify-center hover:shadow-lg hover:shadow-brand-primary/30 transition-all active:scale-95 flex-shrink-0"><span className="material-symbols-outlined text-[18px] ml-1">send</span></button>
                       </div>
@@ -1558,17 +1517,17 @@ function TeacherDashboardContent() {
             {/* Tab: Payments */}
             {activeTab === 'payments' && (
               <section id="payments" className="animate-in fade-in duration-500">
-                <div className="glass-card bg-[var(--bg-secondary)]/80 backdrop-blur-sm rounded-2xl border border-slate-200/50 shadow-sm overflow-hidden max-w-6xl mx-auto hover:shadow-lg transition-shadow">
-                  <div className="p-6 border-b border-slate-200/60 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[var(--bg-secondary)]/50 backdrop-blur-md">
-                    <h3 className="text-2xl font-bold text-slate-900 font-heading tracking-tight">Student Payments</h3>
-                    <button className="flex items-center gap-2 text-sm font-bold text-[var(--text-primary)] border-2 border-slate-200/80 px-5 py-2.5 rounded-xl hover:bg-[var(--bg-secondary)] hover:border-slate-300 hover:shadow-sm transition-all w-full sm:w-auto justify-center">
+                <div className="glass-card bg-[var(--bg-secondary)]/80 backdrop-blur-sm rounded-2xl border border-[var(--border-color)]/50 shadow-sm overflow-hidden max-w-6xl mx-auto hover:shadow-lg transition-shadow">
+                  <div className="p-6 border-b border-[var(--border-color)]/60 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[var(--bg-secondary)]/50 backdrop-blur-md">
+                    <h3 className="text-2xl font-bold text-[var(--text-primary)] font-heading tracking-tight">Student Payments</h3>
+                    <button className="flex items-center gap-2 text-sm font-bold text-[var(--text-primary)] border-2 border-[var(--border-color)]/80 px-5 py-2.5 rounded-xl hover:bg-[var(--bg-secondary)] hover:border-[var(--border-color)] hover:shadow-sm transition-all w-full sm:w-auto justify-center">
                       <span className="material-symbols-outlined text-[18px]">download</span>
                       Export Report
                     </button>
                   </div>
                   <div className="overflow-x-auto custom-scrollbar">
                     <table className="w-full text-left min-w-[700px]">
-                      <thead className="bg-[var(--bg-tertiary)]/50 text-[var(--text-muted)] text-[11px] uppercase font-bold tracking-wider border-b border-slate-200/60">
+                      <thead className="bg-[var(--bg-tertiary)]/50 text-[var(--text-muted)] text-[11px] uppercase font-bold tracking-wider border-b border-[var(--border-color)]/60">
                         <tr>
                           <th className="px-6 py-4">Student</th>
                           <th className="px-6 py-4">Course</th>
@@ -1583,51 +1542,51 @@ function TeacherDashboardContent() {
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
                               <Image alt="Alice" className="w-9 h-9 rounded-full object-cover ring-2 ring-white shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9mHyOpfSCUbiESMFCtXc425X4i_scXPSJ355x5z2tvsXovxMF4YcauUy9SPqHOhBZMVzunimUCkt808Po8jmGgPhKLI3ls39stBnquuE7NPpSItbEWhSqFuJAAxCG9oF-xwoZkfS2oFGkVIV8TmanlvL8KvUUwo0BpAgW0X4NWCCS713yUgurEW0qIjQC-02tAu1H0LyB8iDQvisNYRjeyXlJ51_cVO2s5hmGwHDSGbtJQbc5tr_ZEkYSeaPhw3KbygvS3VNKB1U" width={36} height={36} />
-                              <span className="text-sm font-bold text-slate-800">Alice Lin</span>
+                              <span className="text-sm font-bold text-[var(--text-primary)]">Alice Lin</span>
                             </div>
                           </td>
                           <td className="px-6 py-4 text-sm text-[var(--text-secondary)] font-medium">Visual Design Fundamentals</td>
-                          <td className="px-6 py-4 text-sm font-bold text-slate-900">$450.00</td>
+                          <td className="px-6 py-4 text-sm font-bold text-[var(--text-primary)]">$450.00</td>
                           <td className="px-6 py-4 text-sm text-[var(--text-muted)] font-medium">Oct 12, 2023</td>
                           <td className="px-6 py-4">
-                            <span className="px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-md border border-emerald-200/50 shadow-sm">Paid</span>
+                            <span className="px-3 py-1 bg-[var(--color-success-bg)] text-[var(--color-success)] text-xs font-bold rounded-md border border-[var(--color-success)]/20 shadow-sm">Paid</span>
                           </td>
                           <td className="px-6 py-4 text-center">
-                            <button className="text-slate-400 hover:text-brand-primary transition-colors p-2 hover:bg-[var(--bg-tertiary)] rounded-lg"><span className="material-symbols-outlined text-[20px]">receipt_long</span></button>
+                            <button className="text-[var(--text-muted)] hover:text-brand-primary transition-colors p-2 hover:bg-[var(--bg-tertiary)] rounded-lg"><span className="material-symbols-outlined text-[20px]">receipt_long</span></button>
                           </td>
                         </tr>
                         <tr className="hover:bg-[var(--bg-tertiary)]/80 transition-colors group">
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
                               <Image alt="John" className="w-9 h-9 rounded-full object-cover ring-2 ring-white shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmPoMtVfIX5bjeysfE5jkYUNIIW75DMIK5Iomw2TOqwAKMsjNMVnAoL9HrEjPvWSvgxLmnZsBUQFm9FYfe6MpexIcSgwv9Ny1D46trNo71N_fRZP1cDVK1iFoeCvkL9JfKTtQd2yalMe_jLtSELGcfH6YD2ElEhlWh-U8zK1hnzpV0HeRKHTQ-PcVKiidLKbQCjNKVfylWp69brSrGaEmo20TuUuZvb7rS4jpaO5_N1kJbbe8PLg5dgbY9ZlzKN9wuR9zHn_gayFc" width={36} height={36} />
-                              <span className="text-sm font-bold text-slate-800">John Davis</span>
+                              <span className="text-sm font-bold text-[var(--text-primary)]">John Davis</span>
                             </div>
                           </td>
                           <td className="px-6 py-4 text-sm text-[var(--text-secondary)] font-medium">Advanced Typography</td>
-                          <td className="px-6 py-4 text-sm font-bold text-slate-900">$450.00</td>
+                          <td className="px-6 py-4 text-sm font-bold text-[var(--text-primary)]">$450.00</td>
                           <td className="px-6 py-4 text-sm text-[var(--text-muted)] font-medium">Oct 10, 2023</td>
                           <td className="px-6 py-4">
-                            <span className="px-3 py-1 bg-amber-50 text-amber-700 text-xs font-bold rounded-md border border-amber-200/50 shadow-sm">Pending</span>
+                            <span className="px-3 py-1 bg-[var(--color-warning-bg)] text-[var(--color-warning)] text-xs font-bold rounded-md border border-[var(--color-warning)]/20 shadow-sm">Pending</span>
                           </td>
                           <td className="px-6 py-4 text-center">
-                            <button className="text-slate-400 hover:text-brand-primary transition-colors p-2 hover:bg-[var(--bg-tertiary)] rounded-lg"><span className="material-symbols-outlined text-[20px]">receipt_long</span></button>
+                            <button className="text-[var(--text-muted)] hover:text-brand-primary transition-colors p-2 hover:bg-[var(--bg-tertiary)] rounded-lg"><span className="material-symbols-outlined text-[20px]">receipt_long</span></button>
                           </td>
                         </tr>
                         <tr className="hover:bg-[var(--bg-tertiary)]/80 transition-colors group">
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
                               <Image alt="Mark" className="w-9 h-9 rounded-full object-cover ring-2 ring-white shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDcgi-CLEqUU8zIHTUR56qJbJoiJAZY8qrON2bZktQHFCl-IFRykhaMeyKz7MGz8KOeHAFu3ItwGrVG1FbSovsUICpIhke9K8wrwXQneuNanWHIqWGJYtZKqXQPAH2xHIHupzl4oSi7hgzB7CeE0jM21JjNubI6Ldp2-DEErJHEFf5ByfmLIsMtkuqMAWyhwHYq4XThBV7i-doIZmIJWfH31bbwDkDTxUduW5mB-u4O1x10rpZ7fkV0f-oz3uiZNCoVQ92ia2HCHI" width={36} height={36} />
-                              <span className="text-sm font-bold text-slate-800">Mark Smith</span>
+                              <span className="text-sm font-bold text-[var(--text-primary)]">Mark Smith</span>
                             </div>
                           </td>
                           <td className="px-6 py-4 text-sm text-[var(--text-secondary)] font-medium">UI/UX Masterclass</td>
-                          <td className="px-6 py-4 text-sm font-bold text-slate-900">$1,200.00</td>
+                          <td className="px-6 py-4 text-sm font-bold text-[var(--text-primary)]">$1,200.00</td>
                           <td className="px-6 py-4 text-sm text-[var(--text-muted)] font-medium">Oct 08, 2023</td>
                           <td className="px-6 py-4">
-                            <span className="px-3 py-1 bg-rose-50 text-rose-700 text-xs font-bold rounded-md border border-rose-200/50 shadow-sm">Overdue</span>
+                            <span className="px-3 py-1 bg-[var(--color-error-bg)] text-[var(--color-error)] text-xs font-bold rounded-md border border-[var(--color-error)]/20 shadow-sm">Overdue</span>
                           </td>
                           <td className="px-6 py-4 text-center">
-                            <button className="text-slate-400 hover:text-brand-primary transition-colors p-2 hover:bg-[var(--bg-tertiary)] rounded-lg"><span className="material-symbols-outlined text-[20px]">receipt_long</span></button>
+                            <button className="text-[var(--text-muted)] hover:text-brand-primary transition-colors p-2 hover:bg-[var(--bg-tertiary)] rounded-lg"><span className="material-symbols-outlined text-[20px]">receipt_long</span></button>
                           </td>
                         </tr>
                       </tbody>
@@ -1640,14 +1599,14 @@ function TeacherDashboardContent() {
             {/* Tab: Student Performance */}
             {activeTab === 'performance' && (
               <section id="performance" className="animate-in fade-in duration-500">
-                <h3 className="text-2xl font-bold text-slate-900 mb-6 md:mb-8 font-heading tracking-tight">Student Performance</h3>
+                <h3 className="text-2xl font-bold text-[var(--text-primary)] mb-6 md:mb-8 font-heading tracking-tight">Student Performance</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                   {/* Performance Card 1 */}
-                  <div className="stat-card glow-on-hover bg-[var(--bg-secondary)]/80 backdrop-blur-sm p-6 rounded-2xl border border-slate-200/50 shadow-sm hover:shadow-xl hover:shadow-brand-primary/10 hover:-translate-y-1 transition-all duration-300 group">
+                  <div className="stat-card glow-on-hover bg-[var(--bg-secondary)]/80 backdrop-blur-sm p-6 rounded-2xl border border-[var(--border-color)]/50 shadow-sm hover:shadow-xl hover:shadow-brand-primary/10 hover:-translate-y-1 transition-all duration-300 group">
                     <div className="flex items-center gap-4 mb-6">
                       <Image alt="Student" className="w-14 h-14 rounded-full object-cover ring-4 ring-[var(--green-50)] shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRoIrPJRN_BrWX01RR8f0AidZH8aBVFIbIfr9_PGC963olWCk0-KoGdC5jetNAN_dbBUWheyA615feqT02UyK-L-rw8bO9gZfTpU0ToSOaOrT1dS8JifmmzWea4HtSIv5kFsc8AWakRrSeKz2fbD2Fu0w6sgKIWs8HBux0lwkHMh6EsVTI0oY2gM4w7cCd0tBeKJ4WJYHOmuSW6To4zEaPvDSnyMFIO6VUhTyq2hI8LUKT6-Az2vrawQOh6dlvzGA8nn_0XH1SQ-c" width={56} height={56} />
                       <div>
-                        <h4 className="font-bold text-lg text-slate-900">Alice Lin</h4>
+                        <h4 className="font-bold text-lg text-[var(--text-primary)]">Alice Lin</h4>
                         <p className="text-sm font-medium text-[var(--text-muted)]">Advanced UI Design</p>
                       </div>
                     </div>
@@ -1657,37 +1616,37 @@ function TeacherDashboardContent() {
                           <span>Assignment Score</span>
                           <span className="text-brand-primary">98%</span>
                         </div>
-                        <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                        <div className="h-2 w-full bg-[var(--bg-secondary)] rounded-full overflow-hidden">
                           <div className="h-full bg-gradient-to-r from-brand-primary to-brand-mid w-[98%] rounded-full group-hover:shadow-[0_0_8px_rgba(79,70,229,0.5)] transition-shadow"></div>
                         </div>
                       </div>
                       <div>
                         <div className="flex justify-between text-sm font-bold mb-1.5 text-[var(--text-primary)]">
                           <span>Attendance</span>
-                          <span className="text-emerald-600">100%</span>
+                          <span className="text-[var(--color-success)]">100%</span>
                         </div>
-                        <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                        <div className="h-2 w-full bg-[var(--bg-secondary)] rounded-full overflow-hidden">
                           <div className="h-full bg-gradient-to-r from-emerald-400 to-emerald-500 w-[100%] rounded-full group-hover:shadow-[0_0_8px_rgba(16,185,129,0.5)] transition-shadow"></div>
                         </div>
                       </div>
                     </div>
-                    <div className="mt-8 pt-4 border-t border-slate-100 flex justify-between items-center">
+                    <div className="mt-8 pt-4 border-t border-[var(--border-light)] flex justify-between items-center">
                       <div className="flex gap-1">
-                        <span className="material-symbols-outlined text-amber-400 text-[18px]">star</span>
-                        <span className="material-symbols-outlined text-amber-400 text-[18px]">star</span>
-                        <span className="material-symbols-outlined text-amber-400 text-[18px]">star</span>
-                        <span className="material-symbols-outlined text-amber-400 text-[18px]">star</span>
-                        <span className="material-symbols-outlined text-amber-400 text-[18px]">star</span>
+                        <span className="material-symbols-outlined text-[var(--color-warning)] text-[18px]">star</span>
+                        <span className="material-symbols-outlined text-[var(--color-warning)] text-[18px]">star</span>
+                        <span className="material-symbols-outlined text-[var(--color-warning)] text-[18px]">star</span>
+                        <span className="material-symbols-outlined text-[var(--color-warning)] text-[18px]">star</span>
+                        <span className="material-symbols-outlined text-[var(--color-warning)] text-[18px]">star</span>
                       </div>
                       <button className="text-sm font-bold text-brand-primary bg-[var(--bg-tertiary)] px-4 py-2 rounded-xl hover:bg-[var(--green-100)] hover:scale-[1.02] transition-all">Details</button>
                     </div>
                   </div>
                   {/* Performance Card 2 */}
-                  <div className="stat-card glow-on-hover bg-[var(--bg-secondary)]/80 backdrop-blur-sm p-6 rounded-2xl border border-slate-200/50 shadow-sm hover:shadow-xl hover:shadow-brand-primary/10 hover:-translate-y-1 transition-all duration-300 group">
+                  <div className="stat-card glow-on-hover bg-[var(--bg-secondary)]/80 backdrop-blur-sm p-6 rounded-2xl border border-[var(--border-color)]/50 shadow-sm hover:shadow-xl hover:shadow-brand-primary/10 hover:-translate-y-1 transition-all duration-300 group">
                     <div className="flex items-center gap-4 mb-6">
                       <Image alt="Student" className="w-14 h-14 rounded-full object-cover ring-4 ring-[var(--green-50)] shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAFTxG276x_Z4LVfft4tt1hBs7bup9oQmpfVV2XgMnl7dXKG5teUkOp1eTTIC_FRxEWUBOI21u5Yxlvz83VaDGyuSn0bGIRJMdLZ-bo8366x0UwzF0yk6HOePwihU1EVgPocRR-a5N2F9D4lL6l6cjQwbpy5-S_4GTtRraaG6nSDEfqOf6PkoSxZWZg3RqkaVbETOuludXT4IVGx2tTVVF-ZIvLAFeJCXvCj5fWKFU-iFJ1tXaJBrP_v99VUrEHsbl4LGLpMFvmVo" width={56} height={56} />
                       <div>
-                        <h4 className="font-bold text-lg text-slate-900">John Davis</h4>
+                        <h4 className="font-bold text-lg text-[var(--text-primary)]">John Davis</h4>
                         <p className="text-sm font-medium text-[var(--text-muted)]">History of Arts</p>
                       </div>
                     </div>
@@ -1695,39 +1654,39 @@ function TeacherDashboardContent() {
                       <div>
                         <div className="flex justify-between text-sm font-bold mb-1.5 text-[var(--text-primary)]">
                           <span>Assignment Score</span>
-                          <span className="text-amber-500">65%</span>
+                          <span className="text-[var(--color-warning)]">65%</span>
                         </div>
-                        <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                        <div className="h-2 w-full bg-[var(--bg-secondary)] rounded-full overflow-hidden">
                           <div className="h-full bg-gradient-to-r from-amber-400 to-amber-500 w-[65%] rounded-full group-hover:shadow-[0_0_8px_rgba(245,158,11,0.5)] transition-shadow"></div>
                         </div>
                       </div>
                       <div>
                         <div className="flex justify-between text-sm font-bold mb-1.5 text-[var(--text-primary)]">
                           <span>Attendance</span>
-                          <span className="text-rose-500">45%</span>
+                          <span className="text-[var(--color-error)]">45%</span>
                         </div>
-                        <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                        <div className="h-2 w-full bg-[var(--bg-secondary)] rounded-full overflow-hidden">
                           <div className="h-full bg-gradient-to-r from-rose-400 to-rose-500 w-[45%] rounded-full group-hover:shadow-[0_0_8px_rgba(244,63,94,0.5)] transition-shadow"></div>
                         </div>
                       </div>
                     </div>
-                    <div className="mt-8 pt-4 border-t border-slate-100 flex justify-between items-center">
+                    <div className="mt-8 pt-4 border-t border-[var(--border-light)] flex justify-between items-center">
                       <div className="flex gap-1">
-                        <span className="material-symbols-outlined text-amber-400 text-[18px]">star</span>
-                        <span className="material-symbols-outlined text-amber-400 text-[18px]">star</span>
-                        <span className="material-symbols-outlined text-slate-200 text-[18px]">star</span>
-                        <span className="material-symbols-outlined text-slate-200 text-[18px]">star</span>
-                        <span className="material-symbols-outlined text-slate-200 text-[18px]">star</span>
+                        <span className="material-symbols-outlined text-[var(--color-warning)] text-[18px]">star</span>
+                        <span className="material-symbols-outlined text-[var(--color-warning)] text-[18px]">star</span>
+                        <span className="material-symbols-outlined text-[var(--text-muted)] text-[18px]">star</span>
+                        <span className="material-symbols-outlined text-[var(--text-muted)] text-[18px]">star</span>
+                        <span className="material-symbols-outlined text-[var(--text-muted)] text-[18px]">star</span>
                       </div>
                       <button className="text-sm font-bold text-brand-primary bg-[var(--bg-tertiary)] px-4 py-2 rounded-xl hover:bg-[var(--green-100)] hover:scale-[1.02] transition-all">Details</button>
                     </div>
                   </div>
                   {/* Performance Card 3 */}
-                  <div className="stat-card glow-on-hover bg-[var(--bg-secondary)]/80 backdrop-blur-sm p-6 rounded-2xl border border-slate-200/50 shadow-sm hover:shadow-xl hover:shadow-brand-primary/10 hover:-translate-y-1 transition-all duration-300 group">
+                  <div className="stat-card glow-on-hover bg-[var(--bg-secondary)]/80 backdrop-blur-sm p-6 rounded-2xl border border-[var(--border-color)]/50 shadow-sm hover:shadow-xl hover:shadow-brand-primary/10 hover:-translate-y-1 transition-all duration-300 group">
                     <div className="flex items-center gap-4 mb-6">
                       <Image alt="Student" className="w-14 h-14 rounded-full object-cover ring-4 ring-[var(--green-50)] shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAa0y1_Zx64Vgpu1sMu9xw0D21fYr7vU5hcCkBQXpcHFLdtifXectSd8jDSEChWVsLzVjG_BVJREON9Ixmx_k58jWMqote5seR0GvxoGM3QEHEQ8PdjfWle-sdVCsbIsLCcZ-aFATKOjBdSlBYPNf9n8u2RbYQBk4WOSMlUf-PbMDt-QHfh9XN9ZF0mrE2QbOjXGg6bcIzn72uabgWpnVmv9L29dAqXlx5iYvad-RX_EfICXDPRssCHxZKUwoOU_YAT_a-2R0hFUe0" width={56} height={56} />
                       <div>
-                        <h4 className="font-bold text-lg text-slate-900">Mark Smith</h4>
+                        <h4 className="font-bold text-lg text-[var(--text-primary)]">Mark Smith</h4>
                         <p className="text-sm font-medium text-[var(--text-muted)]">UX Research Pro</p>
                       </div>
                     </div>
@@ -1737,27 +1696,27 @@ function TeacherDashboardContent() {
                           <span>Assignment Score</span>
                           <span className="text-brand-primary">82%</span>
                         </div>
-                        <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                        <div className="h-2 w-full bg-[var(--bg-secondary)] rounded-full overflow-hidden">
                           <div className="h-full bg-gradient-to-r from-brand-primary to-brand-mid w-[82%] rounded-full group-hover:shadow-[0_0_8px_rgba(79,70,229,0.5)] transition-shadow"></div>
                         </div>
                       </div>
                       <div>
                         <div className="flex justify-between text-sm font-bold mb-1.5 text-[var(--text-primary)]">
                           <span>Attendance</span>
-                          <span className="text-emerald-500">92%</span>
+                          <span className="text-[var(--color-success)]">92%</span>
                         </div>
-                        <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                        <div className="h-2 w-full bg-[var(--bg-secondary)] rounded-full overflow-hidden">
                           <div className="h-full bg-gradient-to-r from-emerald-400 to-emerald-500 w-[92%] rounded-full group-hover:shadow-[0_0_8px_rgba(16,185,129,0.5)] transition-shadow"></div>
                         </div>
                       </div>
                     </div>
-                    <div className="mt-8 pt-4 border-t border-slate-100 flex justify-between items-center">
+                    <div className="mt-8 pt-4 border-t border-[var(--border-light)] flex justify-between items-center">
                       <div className="flex gap-1">
-                        <span className="material-symbols-outlined text-amber-400 text-[18px]">star</span>
-                        <span className="material-symbols-outlined text-amber-400 text-[18px]">star</span>
-                        <span className="material-symbols-outlined text-amber-400 text-[18px]">star</span>
-                        <span className="material-symbols-outlined text-amber-400 text-[18px]">star</span>
-                        <span className="material-symbols-outlined text-slate-200 text-[18px]">star</span>
+                        <span className="material-symbols-outlined text-[var(--color-warning)] text-[18px]">star</span>
+                        <span className="material-symbols-outlined text-[var(--color-warning)] text-[18px]">star</span>
+                        <span className="material-symbols-outlined text-[var(--color-warning)] text-[18px]">star</span>
+                        <span className="material-symbols-outlined text-[var(--color-warning)] text-[18px]">star</span>
+                        <span className="material-symbols-outlined text-[var(--text-muted)] text-[18px]">star</span>
                       </div>
                       <button className="text-sm font-bold text-brand-primary bg-[var(--bg-tertiary)] px-4 py-2 rounded-xl hover:bg-[var(--green-100)] hover:scale-[1.02] transition-all">Details</button>
                     </div>
@@ -1770,18 +1729,18 @@ function TeacherDashboardContent() {
             {activeTab === 'new-course' && (
               <section id="new-course" className="animate-in fade-in duration-500 max-w-4xl mx-auto space-y-6 pb-24">
                 <div className="flex items-center gap-4 mb-8">
-                  <button onClick={() => setActiveTab('dashboard')} className="p-2 bg-[var(--bg-secondary)] border border-slate-200/80 hover:bg-[var(--bg-tertiary)] text-[var(--text-secondary)] rounded-full transition-colors shadow-sm">
+                  <button onClick={() => setActiveTab('dashboard')} className="p-2 bg-[var(--bg-secondary)] border border-[var(--border-color)]/80 hover:bg-[var(--bg-tertiary)] text-[var(--text-secondary)] rounded-full transition-colors shadow-sm">
                     <span className="material-symbols-outlined">arrow_back</span>
                   </button>
                   <div>
-                    <h2 className="text-2xl font-bold text-slate-900 font-heading tracking-tight">Create New Course</h2>
+                    <h2 className="text-2xl font-bold text-[var(--text-primary)] font-heading tracking-tight">Create New Course</h2>
                     <p className="text-sm text-[var(--text-muted)]">Set up the foundation, curriculum, and schedule for your new course.</p>
                   </div>
                 </div>
 
                 {/* Card 1: Basic Course Information */}
-                <div className="book-page bg-[var(--bg-secondary)]/80 backdrop-blur-sm p-6 md:p-8 rounded-2xl border border-slate-200/50 shadow-sm transition-shadow">
-                  <h3 className="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2 border-b border-slate-100 pb-3">
+                <div className="book-page bg-[var(--bg-secondary)]/80 backdrop-blur-sm p-6 md:p-8 rounded-2xl border border-[var(--border-color)]/50 shadow-sm transition-shadow">
+                  <h3 className="text-lg font-bold text-[var(--text-primary)] mb-6 flex items-center gap-2 border-b border-[var(--border-light)] pb-3">
                     <div className="w-8 h-8 rounded-lg bg-[var(--bg-tertiary)] text-brand-primary flex items-center justify-center"><span className="material-symbols-outlined text-[18px]">info</span></div>
                     Basic Information
                   </h3>
@@ -1790,12 +1749,12 @@ function TeacherDashboardContent() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                       <div className="col-span-1 md:col-span-2 space-y-1.5">
                         <label className="text-sm font-bold text-[var(--text-primary)] ml-1">Course Title</label>
-                        <input type="text" placeholder="e.g., Introduction to Advanced UI Design" className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-3.5 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors" />
+                        <input type="text" placeholder="e.g., Introduction to Advanced UI Design" className="w-full border border-[var(--border-color)]/80 rounded-xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-3.5 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors" />
                       </div>
 
                       <div className="space-y-1.5">
                         <label className="text-sm font-bold text-[var(--text-primary)] ml-1">Subject & Category</label>
-                        <select className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-3.5 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors cursor-pointer text-[var(--text-primary)]">
+                        <select className="w-full border border-[var(--border-color)]/80 rounded-xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-3.5 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors cursor-pointer text-[var(--text-primary)]">
                           <option value="">Select a category...</option>
                           <option>Design & Art</option>
                           <option>Computer Science</option>
@@ -1805,7 +1764,7 @@ function TeacherDashboardContent() {
 
                       <div className="space-y-1.5">
                         <label className="text-sm font-bold text-[var(--text-primary)] ml-1">Target Class / Grade</label>
-                        <select className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-3.5 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors cursor-pointer text-[var(--text-primary)]">
+                        <select className="w-full border border-[var(--border-color)]/80 rounded-xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-3.5 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors cursor-pointer text-[var(--text-primary)]">
                           <option value="">Select a grade level...</option>
                           <option>Beginner / Freshman</option>
                           <option>Intermediate / Sophomore</option>
@@ -1816,29 +1775,29 @@ function TeacherDashboardContent() {
 
                     <div className="space-y-1.5">
                       <label className="text-sm font-bold text-[var(--text-primary)] ml-1">Short Description</label>
-                      <textarea placeholder="A brief summary of the course (max 150 characters)..." maxLength={150} rows={2} className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-3.5 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors resize-none"></textarea>
+                      <textarea placeholder="A brief summary of the course (max 150 characters)..." maxLength={150} rows={2} className="w-full border border-[var(--border-color)]/80 rounded-xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-3.5 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors resize-none"></textarea>
                     </div>
 
                     <div className="space-y-1.5">
                       <label className="text-sm font-bold text-[var(--text-primary)] ml-1 flex justify-between">
                         <span>Detailed Syllabus / Description</span>
-                        <span className="text-xs font-normal text-slate-400">Optional</span>
+                        <span className="text-xs font-normal text-[var(--text-muted)]">Optional</span>
                       </label>
-                      <textarea placeholder="Provide a comprehensive breakdown of what students will learn..." rows={4} className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-3.5 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors resize-y"></textarea>
+                      <textarea placeholder="Provide a comprehensive breakdown of what students will learn..." rows={4} className="w-full border border-[var(--border-color)]/80 rounded-xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-3.5 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors resize-y"></textarea>
                     </div>
 
                     <div className="space-y-1.5">
                       <label className="text-sm font-bold text-[var(--text-primary)] ml-1">Course Thumbnail</label>
-                      <div className="border-2 border-dashed border-slate-300 rounded-2xl p-6 flex flex-col items-center justify-center text-center hover:bg-[var(--bg-tertiary)]/50 hover:border-[var(--brand-light)] transition-all cursor-pointer relative overflow-hidden bg-[var(--bg-tertiary)]/50">
+                      <div className="border-2 border-dashed border-[var(--border-color)] rounded-2xl p-6 flex flex-col items-center justify-center text-center hover:bg-[var(--bg-tertiary)]/50 hover:border-[var(--brand-light)] transition-all cursor-pointer relative overflow-hidden bg-[var(--bg-tertiary)]/50">
                         <input type="file" accept="image/*" onChange={handleImageUpload} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
                         {thumbnailPreview ? (
                           <div className="w-full flex flex-col items-center">
-                            <Image src={thumbnailPreview} alt="Thumbnail Preview" width={200} height={128} className="h-32 object-cover rounded-xl border border-slate-200 shadow-sm mb-3" unoptimized />
+                            <Image src={thumbnailPreview} alt="Thumbnail Preview" width={200} height={128} className="h-32 object-cover rounded-xl border border-[var(--border-color)] shadow-sm mb-3" unoptimized />
                             <p className="text-xs font-semibold text-brand-primary bg-[var(--bg-tertiary)] px-3 py-1 rounded-full">Change Image</p>
                           </div>
                         ) : (
                           <>
-                            <div className="w-12 h-12 bg-[var(--bg-secondary)] text-slate-400 shadow-sm border border-slate-100 rounded-full flex items-center justify-center mb-3">
+                            <div className="w-12 h-12 bg-[var(--bg-secondary)] text-[var(--text-muted)] shadow-sm border border-[var(--border-light)] rounded-full flex items-center justify-center mb-3">
                               <span className="material-symbols-outlined text-2xl">image</span>
                             </div>
                             <p className="font-semibold text-sm text-[var(--text-primary)]">Click to upload or drag and drop</p>
@@ -1851,10 +1810,10 @@ function TeacherDashboardContent() {
                 </div>
 
                 {/* Card 2: Course Structure */}
-                <div className="book-page bg-[var(--bg-secondary)]/80 backdrop-blur-sm p-6 md:p-8 rounded-2xl border border-slate-200/50 shadow-sm transition-shadow">
-                  <div className="flex items-center justify-between mb-6 border-b border-slate-100 pb-3">
-                    <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center"><span className="material-symbols-outlined text-[18px]">view_list</span></div>
+                <div className="book-page bg-[var(--bg-secondary)]/80 backdrop-blur-sm p-6 md:p-8 rounded-2xl border border-[var(--border-color)]/50 shadow-sm transition-shadow">
+                  <div className="flex items-center justify-between mb-6 border-b border-[var(--border-light)] pb-3">
+                    <h3 className="text-lg font-bold text-[var(--text-primary)] flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-lg bg-[var(--color-success-bg)] text-[var(--color-success)] flex items-center justify-center"><span className="material-symbols-outlined text-[18px]">view_list</span></div>
                       Course Structure
                     </h3>
                     <button onClick={addModule} className="text-sm font-bold text-brand-primary hover:text-[var(--brand-deep)] bg-[var(--bg-tertiary)] hover:bg-[var(--green-100)] px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1">
@@ -1864,28 +1823,28 @@ function TeacherDashboardContent() {
 
                   <div className="space-y-4">
                     {courseModules.map((module, mIndex) => (
-                      <div key={module.id} className="border border-slate-200 rounded-xl bg-[var(--bg-tertiary)] overflow-hidden shadow-sm">
+                      <div key={module.id} className="border border-[var(--border-color)] rounded-xl bg-[var(--bg-tertiary)] overflow-hidden shadow-sm">
                         <div className="flex items-center justify-between p-4 bg-[var(--bg-secondary)] hover:bg-[var(--bg-tertiary)] transition-colors">
                           <div className="flex items-center gap-3 flex-1">
-                            <button onClick={() => toggleModuleExpansion(module.id)} className="text-slate-400 hover:text-brand-primary transition-colors p-1">
+                            <button onClick={() => toggleModuleExpansion(module.id)} className="text-[var(--text-muted)] hover:text-brand-primary transition-colors p-1">
                               <span className="material-symbols-outlined">{module.isExpanded ? 'expand_more' : 'chevron_right'}</span>
                             </button>
                             <input
                               type="text"
                               value={module.title}
                               onChange={(e) => updateModuleTitle(module.id, e.target.value)}
-                              className="font-bold text-slate-800 bg-transparent border-none focus:ring-0 p-0 text-base w-full max-w-sm focus:outline-none placeholder-slate-400"
+                              className="font-bold text-[var(--text-primary)] bg-transparent border-none focus:ring-0 p-0 text-base w-full max-w-sm focus:outline-none placeholder-slate-400"
                               placeholder="Module Title..."
                             />
                           </div>
-                          <button onClick={() => removeModule(module.id)} className="text-slate-300 hover:text-rose-500 transition-colors p-2 rounded-lg hover:bg-rose-50">
+                          <button onClick={() => removeModule(module.id)} className="text-[var(--text-muted)] hover:text-[var(--color-error)] transition-colors p-2 rounded-lg hover:bg-[var(--color-error-bg)]">
                             <span className="material-symbols-outlined text-[18px]">delete</span>
                           </button>
                         </div>
 
                         {module.isExpanded && (
                           <div
-                            className="p-4 pt-2 space-y-2 border-t border-slate-100 min-h-[60px]"
+                            className="p-4 pt-2 space-y-2 border-t border-[var(--border-light)] min-h-[60px]"
                             onDragOver={handleDragOver}
                             onDrop={(e) => handleDrop(e, module.id, null)}
                           >
@@ -1897,9 +1856,9 @@ function TeacherDashboardContent() {
                                 onDragEnd={handleDragEnd}
                                 onDragOver={handleDragOver}
                                 onDrop={(e) => { e.stopPropagation(); handleDrop(e, module.id, lesson.id); }}
-                                className="flex items-center gap-3 p-3 bg-[var(--bg-secondary)] border border-slate-200 rounded-lg shadow-sm group hover:border-[var(--green-200)] transition-all cursor-move"
+                                className="flex items-center gap-3 p-3 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-sm group hover:border-[var(--green-200)] transition-all cursor-move"
                               >
-                                <span className="material-symbols-outlined text-slate-300 cursor-grab active:cursor-grabbing">drag_indicator</span>
+                                <span className="material-symbols-outlined text-[var(--text-muted)] cursor-grab active:cursor-grabbing">drag_indicator</span>
                                 <div className="w-6 h-6 rounded-md bg-[var(--bg-tertiary)] text-brand-primary flex items-center justify-center text-xs font-bold shrink-0">{mIndex + 1}.{lIndex + 1}</div>
                                 <input
                                   type="text"
@@ -1908,12 +1867,12 @@ function TeacherDashboardContent() {
                                   className="flex-1 text-sm font-medium text-[var(--text-primary)] bg-transparent border-none focus:ring-0 p-0 focus:outline-none placeholder-slate-400"
                                   placeholder="Lesson Title..."
                                 />
-                                <button onClick={() => removeLesson(module.id, lesson.id)} className="text-slate-300 hover:text-rose-500 opacity-0 group-hover:opacity-100 transition-all p-1.5 rounded-md hover:bg-rose-50">
+                                <button onClick={() => removeLesson(module.id, lesson.id)} className="text-[var(--text-muted)] hover:text-[var(--color-error)] opacity-0 group-hover:opacity-100 transition-all p-1.5 rounded-md hover:bg-[var(--color-error-bg)]">
                                   <span className="material-symbols-outlined text-[16px]">close</span>
                                 </button>
                               </div>
                             ))}
-                            <button onClick={() => addLesson(module.id)} className="w-full py-2.5 border-2 border-dashed border-slate-200 hover:border-[var(--green-300)] hover:bg-[var(--bg-tertiary)]/50 rounded-lg text-sm font-semibold text-[var(--text-muted)] hover:text-brand-primary transition-all flex items-center justify-center gap-1 mt-2">
+                            <button onClick={() => addLesson(module.id)} className="w-full py-2.5 border-2 border-dashed border-[var(--border-color)] hover:border-[var(--green-300)] hover:bg-[var(--bg-tertiary)]/50 rounded-lg text-sm font-semibold text-[var(--text-muted)] hover:text-brand-primary transition-all flex items-center justify-center gap-1 mt-2">
                               <span className="material-symbols-outlined text-[16px]">add</span> Add Lesson
                             </button>
                           </div>
@@ -1922,7 +1881,7 @@ function TeacherDashboardContent() {
                     ))}
 
                     {courseModules.length === 0 && (
-                      <div className="text-center py-8 text-[var(--text-muted)] border-2 border-dashed border-slate-200 rounded-xl bg-[var(--bg-tertiary)]">
+                      <div className="text-center py-8 text-[var(--text-muted)] border-2 border-dashed border-[var(--border-color)] rounded-xl bg-[var(--bg-tertiary)]">
                         <p>No modules added yet. Start by adding a module!</p>
                       </div>
                     )}
@@ -1930,9 +1889,9 @@ function TeacherDashboardContent() {
                 </div>
 
                 {/* Card 3: Scheduling */}
-                <div className="book-page bg-[var(--bg-secondary)]/80 backdrop-blur-sm p-6 md:p-8 rounded-2xl border border-slate-200/50 shadow-sm transition-shadow">
-                  <h3 className="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2 border-b border-slate-100 pb-3">
-                    <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center"><span className="material-symbols-outlined text-[18px]">calendar_month</span></div>
+                <div className="book-page bg-[var(--bg-secondary)]/80 backdrop-blur-sm p-6 md:p-8 rounded-2xl border border-[var(--border-color)]/50 shadow-sm transition-shadow">
+                  <h3 className="text-lg font-bold text-[var(--text-primary)] mb-6 flex items-center gap-2 border-b border-[var(--border-light)] pb-3">
+                    <div className="w-8 h-8 rounded-lg bg-[var(--color-warning-bg)] text-[var(--color-warning)] flex items-center justify-center"><span className="material-symbols-outlined text-[18px]">calendar_month</span></div>
                     Scheduling Options
                   </h3>
 
@@ -1940,37 +1899,37 @@ function TeacherDashboardContent() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                       <div className="space-y-1.5">
                         <label className="text-sm font-bold text-[var(--text-primary)] ml-1">Start Date</label>
-                        <input type="date" className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-3.5 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors text-[var(--text-primary)] cursor-text" />
+                        <input type="date" className="w-full border border-[var(--border-color)]/80 rounded-xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-3.5 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors text-[var(--text-primary)] cursor-text" />
                       </div>
                       <div className="space-y-1.5">
-                        <label className="text-sm font-bold text-[var(--text-primary)] ml-1">End Date <span className="text-xs font-normal text-slate-400 ml-1">(Optional)</span></label>
-                        <input type="date" className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-3.5 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors text-[var(--text-primary)] cursor-text" />
+                        <label className="text-sm font-bold text-[var(--text-primary)] ml-1">End Date <span className="text-xs font-normal text-[var(--text-muted)] ml-1">(Optional)</span></label>
+                        <input type="date" className="w-full border border-[var(--border-color)]/80 rounded-xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-3.5 outline-none bg-[var(--bg-tertiary)]/50 hover:bg-[var(--bg-secondary)] transition-colors text-[var(--text-primary)] cursor-text" />
                       </div>
                     </div>
 
-                    <div className="border border-slate-200 rounded-xl p-5 bg-[var(--bg-tertiary)]/50">
+                    <div className="border border-[var(--border-color)] rounded-xl p-5 bg-[var(--bg-tertiary)]/50">
                       <div className="flex items-center justify-between">
                         <div>
-                          <h4 className="font-bold text-slate-800">Live Class Schedule</h4>
+                          <h4 className="font-bold text-[var(--text-primary)]">Live Class Schedule</h4>
                           <p className="text-sm text-[var(--text-muted)] mt-0.5">Will this course include synchronous live sessions?</p>
                         </div>
                         <button
                           onClick={() => setIsLiveClass(!isLiveClass)}
-                          className={`relative w-12 h-6 rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--green-50)]0 ${isLiveClass ? 'bg-[var(--brand-primary)]' : 'bg-slate-300'}`}
+                          className={`relative w-12 h-6 rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--green-50)]0 ${isLiveClass ? 'bg-[var(--brand-primary)]' : 'bg-[var(--bg-tertiary)]'}`}
                         >
                           <span className={`absolute top-1 left-1 bg-[var(--bg-secondary)] w-4 h-4 rounded-full transition-transform duration-300 shadow-sm ${isLiveClass ? 'translate-x-6' : 'translate-x-0'}`}></span>
                         </button>
                       </div>
 
                       {/* Dynamic Live Class Fields */}
-                      <div className={`grid grid-cols-1 md:grid-cols-2 gap-5 overflow-hidden transition-all duration-500 ease-in-out ${isLiveClass ? 'max-h-[500px] opacity-100 mt-5 pt-5 border-t border-slate-200' : 'max-h-0 opacity-0 mt-0 pt-0'}`}>
+                      <div className={`grid grid-cols-1 md:grid-cols-2 gap-5 overflow-hidden transition-all duration-500 ease-in-out ${isLiveClass ? 'max-h-[500px] opacity-100 mt-5 pt-5 border-t border-[var(--border-color)]' : 'max-h-0 opacity-0 mt-0 pt-0'}`}>
                         <div className="space-y-1.5">
                           <label className="text-sm font-bold text-[var(--text-primary)] ml-1">Class Time</label>
-                          <input type="time" className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-3.5 outline-none bg-[var(--bg-secondary)] hover:bg-[var(--bg-tertiary)] transition-colors text-[var(--text-primary)]" />
+                          <input type="time" className="w-full border border-[var(--border-color)]/80 rounded-xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-3.5 outline-none bg-[var(--bg-secondary)] hover:bg-[var(--bg-tertiary)] transition-colors text-[var(--text-primary)]" />
                         </div>
                         <div className="space-y-1.5">
                           <label className="text-sm font-bold text-[var(--text-primary)] ml-1">Automated Reminders</label>
-                          <select className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-3.5 outline-none bg-[var(--bg-secondary)] hover:bg-[var(--bg-tertiary)] transition-colors text-[var(--text-primary)]">
+                          <select className="w-full border border-[var(--border-color)]/80 rounded-xl focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] p-3.5 outline-none bg-[var(--bg-secondary)] hover:bg-[var(--bg-tertiary)] transition-colors text-[var(--text-primary)]">
                             <option>1 Hour Before</option>
                             <option>24 Hours Before</option>
                             <option>15 Minutes Before</option>
@@ -1983,12 +1942,12 @@ function TeacherDashboardContent() {
                 </div>
 
                 {/* Sticky Action Footer */}
-                <div className="fixed bottom-0 left-0 right-0 md:left-[280px] bg-[var(--bg-secondary)]/90 backdrop-blur-md border-t border-slate-200 shadow-[0_-4px_20px_rgba(0,0,0,0.03)] z-40 p-4 transition-all">
+                <div className="fixed bottom-0 left-0 right-0 md:left-[280px] bg-[var(--bg-secondary)]/90 backdrop-blur-md border-t border-[var(--border-color)] shadow-[0_-4px_20px_rgba(0,0,0,0.03)] z-40 p-4 transition-all">
                   <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-end gap-3 sm:gap-4">
-                    <button onClick={() => setActiveTab('dashboard')} className="w-full sm:w-auto px-6 py-2.5 text-[var(--text-secondary)] font-bold hover:bg-slate-100 rounded-xl transition-colors">
+                    <button onClick={() => setActiveTab('dashboard')} className="w-full sm:w-auto px-6 py-2.5 text-[var(--text-secondary)] font-bold hover:bg-[var(--bg-secondary)] rounded-xl transition-colors">
                       Cancel
                     </button>
-                    <button className="w-full sm:w-auto px-6 py-2.5 border-2 border-slate-200/80 text-[var(--text-primary)] font-bold hover:border-slate-300 hover:bg-[var(--bg-tertiary)] rounded-xl transition-all shadow-sm">
+                    <button className="w-full sm:w-auto px-6 py-2.5 border-2 border-[var(--border-color)]/80 text-[var(--text-primary)] font-bold hover:border-[var(--border-color)] hover:bg-[var(--bg-tertiary)] rounded-xl transition-all shadow-sm">
                       Save Draft
                     </button>
                     <button className="w-full sm:w-auto bg-gradient-to-r from-brand-primary to-brand-mid hover:from-brand-primary hover:to-brand-mid text-white px-8 py-2.5 rounded-xl font-bold transition-all shadow-lg shadow-brand-primary/25 hover:shadow-brand-primary/40 hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2">
@@ -2000,39 +1959,35 @@ function TeacherDashboardContent() {
               </section>
             )}
 
-          </div>
-        </main>
-      </div>
-
       {/* ── Assignment Overlays ────────────────────────────────────── */}
 
       {/* 1. Grading Sidebar */}
       {gradingSubmission && selectedAssignment && (
         <div className="fixed inset-0 z-[60] flex justify-end">
-          <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-300" onClick={() => setGradingSubmission(null)}></div>
+          <div className="absolute inset-0 bg-[var(--text-primary)]/40 backdrop-blur-sm animate-in fade-in duration-300" onClick={() => setGradingSubmission(null)}></div>
           <div className="relative w-full max-w-md bg-[var(--bg-secondary)] h-full shadow-2xl animate-in slide-in-from-right duration-300 flex flex-col">
-            <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-[var(--bg-tertiary)]/50">
+            <div className="p-6 border-b border-[var(--border-light)] flex justify-between items-center bg-[var(--bg-tertiary)]/50">
               <div>
-                <h4 className="font-bold text-slate-900">Grade Submission</h4>
+                <h4 className="font-bold text-[var(--text-primary)]">Grade Submission</h4>
                 <p className="text-xs text-[var(--text-muted)] font-medium">{gradingSubmission.studentName}</p>
               </div>
-              <button onClick={() => setGradingSubmission(null)} className="p-2 hover:bg-[var(--bg-secondary)] rounded-full text-slate-400 transition-colors shadow-sm border border-transparent hover:border-slate-100">
+              <button onClick={() => setGradingSubmission(null)} className="p-2 hover:bg-[var(--bg-secondary)] rounded-full text-[var(--text-muted)] transition-colors shadow-sm border border-transparent hover:border-[var(--border-light)]">
                 <span className="material-symbols-outlined">close</span>
               </button>
             </div>
 
             <div className="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">
               <div className="space-y-4">
-                <h5 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Submitted File</h5>
-                <div className="p-4 bg-[var(--bg-tertiary)] rounded-2xl border border-slate-100 flex items-center gap-4 group cursor-pointer hover:bg-[var(--bg-secondary)] hover:border-[var(--green-200)] transition-all">
-                  <div className="w-12 h-12 bg-rose-100 text-rose-600 rounded-xl flex items-center justify-center shadow-sm">
+                <h5 className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest">Submitted File</h5>
+                <div className="p-4 bg-[var(--bg-tertiary)] rounded-2xl border border-[var(--border-light)] flex items-center gap-4 group cursor-pointer hover:bg-[var(--bg-secondary)] hover:border-[var(--green-200)] transition-all">
+                  <div className="w-12 h-12 bg-[var(--color-error-bg)] text-[var(--color-error)] rounded-xl flex items-center justify-center shadow-sm">
                     <span className="material-symbols-outlined text-[28px]">description</span>
                   </div>
                   <div className="flex-1 overflow-hidden">
-                    <p className="text-sm font-bold text-slate-800 truncate">{gradingSubmission.fileName || 'submission.pdf'}</p>
+                    <p className="text-sm font-bold text-[var(--text-primary)] truncate">{gradingSubmission.fileName || 'submission.pdf'}</p>
                     <p className="text-[10px] font-medium text-[var(--text-muted)] uppercase">2.4 MB • PDF Document</p>
                   </div>
-                  <span className="material-symbols-outlined text-slate-300 group-hover:text-brand-primary transition-colors">download</span>
+                  <span className="material-symbols-outlined text-[var(--text-muted)] group-hover:text-brand-primary transition-colors">download</span>
                 </div>
               </div>
 
@@ -2045,12 +2000,12 @@ function TeacherDashboardContent() {
                   <div className="relative">
                     <input 
                       type="number" 
-                      className="w-full border border-slate-200 rounded-2xl p-4 pr-16 outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] bg-[var(--bg-tertiary)]/30 font-bold text-lg text-slate-800"
+                      className="w-full border border-[var(--border-color)] rounded-2xl p-4 pr-16 outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] bg-[var(--bg-tertiary)]/30 font-bold text-lg text-[var(--text-primary)]"
                       placeholder="0"
                       value={gradeMarks}
                       onChange={e => setGradeMarks(e.target.value)}
                     />
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">/ {selectedAssignment.totalMarks}</div>
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--text-muted)] font-bold">/ {selectedAssignment.totalMarks}</div>
                   </div>
                 </div>
 
@@ -2058,7 +2013,7 @@ function TeacherDashboardContent() {
                   <label className="text-sm font-bold text-[var(--text-primary)]">Teacher Feedback</label>
                   <textarea 
                     rows={8}
-                    className="w-full border border-slate-200 rounded-2xl p-4 outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] bg-[var(--bg-tertiary)]/30 text-sm resize-none"
+                    className="w-full border border-[var(--border-color)] rounded-2xl p-4 outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-[var(--brand-primary)] bg-[var(--bg-tertiary)]/30 text-sm resize-none"
                     placeholder="Provide constructive feedback for the student..."
                     value={gradeFeedback}
                     onChange={e => setGradeFeedback(e.target.value)}
@@ -2067,7 +2022,7 @@ function TeacherDashboardContent() {
               </div>
             </div>
 
-            <div className="p-6 border-t border-slate-100 bg-[var(--bg-tertiary)]/50">
+            <div className="p-6 border-t border-[var(--border-light)] bg-[var(--bg-tertiary)]/50">
               <button 
                 onClick={saveGrade}
                 disabled={gradeSaving}
@@ -2093,19 +2048,19 @@ function TeacherDashboardContent() {
       {/* 2. Delete Assignment Confirmation */}
       {assignmentToDelete && (
         <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-300" onClick={() => setAssignmentToDelete(null)}></div>
+          <div className="absolute inset-0 bg-[var(--text-primary)]/60 backdrop-blur-md animate-in fade-in duration-300" onClick={() => setAssignmentToDelete(null)}></div>
           <div className="relative bg-[var(--bg-secondary)] w-full max-w-sm rounded-[2rem] p-8 shadow-2xl animate-in zoom-in-95 duration-300 text-center">
-            <div className="w-16 h-16 bg-rose-50 text-rose-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <div className="w-16 h-16 bg-[var(--color-error-bg)] text-[var(--color-error)] rounded-2xl flex items-center justify-center mx-auto mb-6">
               <span className="material-symbols-outlined text-3xl">delete_forever</span>
             </div>
-            <h4 className="text-xl font-bold text-slate-900 mb-2 font-heading">Delete Assignment?</h4>
+            <h4 className="text-xl font-bold text-[var(--text-primary)] mb-2 font-heading">Delete Assignment?</h4>
             <p className="text-sm text-[var(--text-muted)] mb-8 px-4">This action cannot be undone. All student submissions and grades for <span className="font-bold text-[var(--text-primary)]">"{assignmentToDelete.title}"</span> will be permanently deleted.</p>
             <div className="flex gap-3">
-              <button onClick={() => setAssignmentToDelete(null)} className="flex-1 py-3 px-4 border border-slate-200 text-[var(--text-secondary)] font-bold text-sm rounded-xl hover:bg-[var(--bg-tertiary)] transition-colors">Cancel</button>
+              <button onClick={() => setAssignmentToDelete(null)} className="flex-1 py-3 px-4 border border-[var(--border-color)] text-[var(--text-secondary)] font-bold text-sm rounded-xl hover:bg-[var(--bg-tertiary)] transition-colors">Cancel</button>
               <button 
                 onClick={deleteAssignment}
                 disabled={isDeletingAssignment}
-                className="flex-1 py-3 px-4 bg-rose-500 hover:bg-rose-600 text-white font-bold text-sm rounded-xl transition-all shadow-lg shadow-rose-500/20 disabled:opacity-50 flex items-center justify-center gap-2"
+                className="flex-1 py-3 px-4 bg-[var(--color-error)] hover:bg-[var(--color-error)]/80 text-white font-bold text-sm rounded-xl transition-all shadow-lg shadow-[var(--color-error)]/20 disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {isDeletingAssignment ? 'Deleting...' : 'Delete Now'}
               </button>
@@ -2117,7 +2072,7 @@ function TeacherDashboardContent() {
       {/* 3. Global Toast Notifications */}
       {toast && (
         <div className={`fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] animate-in slide-in-from-bottom-10 fade-in duration-500`}>
-          <div className={`px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 backdrop-blur-md border ${toast.type === 'success' ? 'bg-emerald-600/90 text-white border-emerald-400/20' : 'bg-rose-600/90 text-white border-rose-400/20'}`}>
+          <div className={`px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 backdrop-blur-md border ${toast.type === 'success' ? 'bg-[var(--color-success)]/90 text-white border-[var(--color-success)]/20' : 'bg-[var(--color-error)]/90 text-white border-[var(--color-error)]/20'}`}>
             <span className="material-symbols-outlined text-[20px]">
               {toast.type === 'success' ? 'check_circle' : 'error'}
             </span>

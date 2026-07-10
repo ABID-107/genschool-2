@@ -90,7 +90,7 @@ export default function DemoPage() {
           }`}
       >
         <Link href="/" className="flex items-center gap-[10px] text-[1.5rem] font-bold text-[var(--text-primary)] no-underline font-heading">
-          <div className="w-9 h-9 rounded-[10px] bg-gradient-to-br from-brand-primary to-brand-mid flex items-center justify-center text-white font-extrabold">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-primary to-brand-mid flex items-center justify-center text-white font-extrabold">
             G
           </div>
           <span>GenSchool</span>
@@ -99,13 +99,13 @@ export default function DemoPage() {
           <ThemeToggle />
           <button
             onClick={() => router.push("/login")}
-            className="px-5 py-2 rounded-[10px] border border-brand-primary text-brand-primary cursor-pointer text-[.9rem] font-medium transition-all hover:bg-brand-primary hover:text-white"
+            className="px-5 py-2 rounded-xl border border-brand-primary text-brand-primary cursor-pointer text-[.9rem] font-medium transition-all hover:bg-brand-primary hover:text-white"
           >
             Login
           </button>
           <button
             onClick={() => router.push("/demo")}
-            className="px-5 py-2 rounded-[10px] glass-button-primary flex items-center gap-2 text-[.9rem] font-medium"
+            className="px-5 py-2 rounded-xl glass-button-primary flex items-center gap-2 text-[.9rem] font-medium"
           >
             {t.demoBtn}
           </button>
@@ -196,7 +196,7 @@ export default function DemoPage() {
                       className="object-cover opacity-90 group-hover:opacity-100 transition-opacity"
                     />
                   </motion.div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a]/90 via-[#0f172a]/20 to-transparent"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--text-primary)]/90 via-[var(--text-primary)]/20 to-transparent"></div>
                   <div className="absolute bottom-5 left-6 flex items-center gap-2 text-white">
                     <span className="material-symbols-outlined text-[28px]">{card.icon}</span>
                     <motion.span 
@@ -257,7 +257,7 @@ export default function DemoPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[200] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+            className="fixed inset-0 z-[200] bg-[var(--text-primary)]/60 backdrop-blur-sm flex items-center justify-center p-4"
             onClick={() => setSelectedCard(null)}
           >
             <motion.div
@@ -271,7 +271,7 @@ export default function DemoPage() {
               {/* Close Button */}
               <button 
                 onClick={() => setSelectedCard(null)}
-                className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-black/30 text-white backdrop-blur-md"
+                className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-[var(--text-primary)]/30 text-white backdrop-blur-md"
               >
                 ✕
               </button>
@@ -284,7 +284,7 @@ export default function DemoPage() {
                   fill
                   className="object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/40 to-transparent flex items-end p-6">
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--text-primary)] via-[var(--text-primary)]/40 to-transparent flex items-end p-6">
                   <h3 className="font-heading text-[1.8rem] font-bold text-white">
                     {demoCards.find(c => c.id === selectedCard)?.title}
                   </h3>
@@ -325,14 +325,14 @@ export default function DemoPage() {
       </AnimatePresence>
 
       {/* Footer */}
-      <footer className="bg-[#0f172a] text-white/70 py-12 px-[5%] mt-auto z-10">
+      <footer className="bg-[var(--bg-primary)] text-[var(--text-muted)] py-12 px-[5%] mt-auto z-10">
         <div className="max-w-[1100px] mx-auto flex items-center justify-between flex-wrap gap-5">
-          <div className="font-heading text-[1.2rem] font-bold text-white">GenSchool</div>
+          <div className="font-heading text-[1.2rem] font-bold text-[var(--text-primary)]">GenSchool</div>
           <div className="flex gap-6">
-            <a href="#" className="text-white/60 text-[.85rem] no-underline transition-colors hover:text-white">{t.fp1}</a>
-            <a href="#" className="text-white/60 text-[.85rem] no-underline transition-colors hover:text-white">{t.fp2}</a>
-            <a href="#" className="text-white/60 text-[.85rem] no-underline transition-colors hover:text-white">{t.fp3}</a>
-            <a href="#" className="text-white/60 text-[.85rem] no-underline transition-colors hover:text-white">{t.fp4}</a>
+            <a href="#" className="text-[var(--text-muted)] text-[.85rem] no-underline transition-colors hover:text-[var(--text-primary)]">{t.fp1}</a>
+            <a href="#" className="text-[var(--text-muted)] text-[.85rem] no-underline transition-colors hover:text-[var(--text-primary)]">{t.fp2}</a>
+            <a href="#" className="text-[var(--text-muted)] text-[.85rem] no-underline transition-colors hover:text-[var(--text-primary)]">{t.fp3}</a>
+            <a href="#" className="text-[var(--text-muted)] text-[.85rem] no-underline transition-colors hover:text-[var(--text-primary)]">{t.fp4}</a>
           </div>
           <div className="text-[.82rem] opacity-50">{t.footerCopy}</div>
         </div>

@@ -279,13 +279,13 @@ export default function FinanceManagementPage() {
   const statusBadge = (status: string) => {
     const map: Record<string, { bg: string; text: string; border: string; icon: any }> = {
       paid: { bg: 'bg-[var(--green-50)]', text: 'text-[var(--green-800)]', border: 'border-[var(--green-200)]', icon: CheckCircle2 },
-      unpaid: { bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-200', icon: Clock },
-      partial: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', icon: Clock },
-      overpaid: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200', icon: TrendingUp },
+      unpaid: { bg: 'bg-[var(--color-error-bg)]', text: 'text-[var(--color-error)]', border: 'border-[var(--color-error)]/20', icon: Clock },
+      partial: { bg: 'bg-[var(--color-warning-bg)]', text: 'text-[var(--color-warning)]', border: 'border-[var(--color-warning)]/20', icon: Clock },
+      overpaid: { bg: 'bg-[var(--color-info-bg)]', text: 'text-[var(--color-info)]', border: 'border-[var(--color-info)]/20', icon: TrendingUp },
       refunded: { bg: 'bg-[var(--bg-tertiary)]', text: 'text-[var(--text-secondary)]', border: 'border-[var(--border-light)]', icon: Undo2 },
       completed: { bg: 'bg-[var(--green-50)]', text: 'text-[var(--green-800)]', border: 'border-[var(--green-200)]', icon: CheckCircle2 },
-      pending: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', icon: Clock },
-      cancelled: { bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-200', icon: Ban },
+      pending: { bg: 'bg-[var(--color-warning-bg)]', text: 'text-[var(--color-warning)]', border: 'border-[var(--color-warning)]/20', icon: Clock },
+      cancelled: { bg: 'bg-[var(--color-error-bg)]', text: 'text-[var(--color-error)]', border: 'border-[var(--color-error)]/20', icon: Ban },
     };
     const s = map[status.toLowerCase()] || map.unpaid;
     return (
@@ -353,7 +353,7 @@ export default function FinanceManagementPage() {
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="bg-[var(--bg-secondary)] p-5 rounded-2xl border border-[var(--border-light)] shadow-sm relative overflow-hidden group">
-          <div className="absolute top-0 right-0 p-4 opacity-10 text-brand-primary transform group-hover:scale-110 transition-transform"><Wallet size={48} /></div>
+          <div className="absolute top-0 right-0 p-4 opacity-10 text-[var(--brand-primary)] transform group-hover:scale-110 transition-transform"><Wallet size={48} /></div>
           <p className="text-sm font-medium text-[var(--text-muted)] relative z-10">Total Revenue (MTD)</p>
           <p className="text-2xl font-bold text-[var(--text-primary)] mt-1 relative z-10">৳ {kpiData.totalRevenue.toLocaleString()}</p>
         </div>
@@ -370,7 +370,7 @@ export default function FinanceManagementPage() {
         <div className="bg-[var(--bg-secondary)] p-5 rounded-2xl border border-[var(--border-light)] shadow-sm relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-4 opacity-10 text-emerald-500 transform group-hover:scale-110 transition-transform"><PiggyBank size={48} /></div>
           <p className="text-sm font-medium text-[var(--text-muted)] relative z-10">Net Balance</p>
-          <p className={`text-2xl font-bold mt-1 relative z-10 ${kpiData.netBalance >= 0 ? 'text-[var(--text-primary)]' : 'text-rose-600'}`}>৳ {kpiData.netBalance.toLocaleString()}</p>
+          <p className={`text-2xl font-bold mt-1 relative z-10 ${kpiData.netBalance >= 0 ? 'text-[var(--text-primary)]' : 'text-[var(--color-error)]'}`}>৳ {kpiData.netBalance.toLocaleString()}</p>
         </div>
       </div>
 
@@ -422,7 +422,7 @@ export default function FinanceManagementPage() {
                         <th className="px-6 py-4 font-semibold text-right rounded-tr-xl">Actions</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-[var(--border-light)]">
                       {filteredInvoices.map(inv => (
                         <tr key={inv.id} className="hover:bg-[var(--bg-tertiary)]/50 transition-colors">
                           <td className="px-6 py-4 font-medium text-[var(--text-secondary)]">{inv.id}</td>
@@ -431,18 +431,18 @@ export default function FinanceManagementPage() {
                             <div className="text-xs text-[var(--text-muted)] mt-0.5">{inv.className}</div>
                           </td>
                           <td className="px-6 py-4 font-bold text-[var(--text-primary)]">৳ {inv.totalAmount.toLocaleString()}</td>
-                          <td className="px-6 py-4 text-emerald-600 font-medium">৳ {inv.paidAmount.toLocaleString()}</td>
+                          <td className="px-6 py-4 text-[var(--color-success)] font-medium">৳ {inv.paidAmount.toLocaleString()}</td>
                           <td className="px-6 py-4">
-                            <span className={inv.dueAmount > 0 ? 'text-rose-600 font-medium' : 'text-[var(--text-muted)]'}>{inv.dueAmount > 0 ? `৳ ${inv.dueAmount.toLocaleString()}` : '—'}</span>
+                            <span className={inv.dueAmount > 0 ? 'text-[var(--color-error)] font-medium' : 'text-[var(--text-muted)]'}>{inv.dueAmount > 0 ? `৳ ${inv.dueAmount.toLocaleString()}` : '—'}</span>
                           </td>
                           <td className="px-6 py-4">{statusBadge(inv.status)}</td>
                           <td className="px-6 py-4">
                             <div className="flex items-center justify-end gap-1">
                               {inv.status !== 'refunded' && (
-                                <button onClick={() => openReceivePayment(inv)} className="p-2 text-[var(--text-muted)] hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Receive Payment"><CreditCard size={16} /></button>
+                                <button onClick={() => openReceivePayment(inv)} className="p-2 text-[var(--text-muted)] hover:text-[var(--color-success)] hover:bg-[var(--color-success-bg)] rounded-lg transition-colors" title="Receive Payment"><CreditCard size={16} /></button>
                               )}
-                              <button onClick={() => handleRefundInvoice(inv.id)} className="p-2 text-[var(--text-muted)] hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors" title="Refund"><Undo2 size={16} /></button>
-                              <button onClick={() => { if (confirm(`Delete invoice ${inv.id}?`)) handleDeleteInvoice(inv.id); }} className="p-2 text-[var(--text-muted)] hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Delete"><Trash2 size={16} /></button>
+                              <button onClick={() => handleRefundInvoice(inv.id)} className="p-2 text-[var(--text-muted)] hover:text-[var(--color-warning)] hover:bg-[var(--color-warning-bg)] rounded-lg transition-colors" title="Refund"><Undo2 size={16} /></button>
+                              <button onClick={() => { if (confirm(`Delete invoice ${inv.id}?`)) handleDeleteInvoice(inv.id); }} className="p-2 text-[var(--text-muted)] hover:text-[var(--color-error)] hover:bg-[var(--color-error-bg)] rounded-lg transition-colors" title="Delete"><Trash2 size={16} /></button>
                             </div>
                           </td>
                         </tr>
@@ -472,7 +472,7 @@ export default function FinanceManagementPage() {
                         <th className="px-6 py-4 font-semibold">Status</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-[var(--border-light)]">
                       {payments.length === 0 ? (
                         <tr><td colSpan={7} className="px-6 py-12 text-center text-sm text-[var(--text-muted)]">No payments recorded yet. Receive payments from the Invoices tab.</td></tr>
                       ) : payments.sort((a, b) => b.paymentDate.localeCompare(a.paymentDate)).map(p => (
@@ -505,7 +505,7 @@ export default function FinanceManagementPage() {
                         </div>
                         <div className="flex gap-1">
                           <button onClick={() => openFSModal('edit', fs)} className="p-1.5 text-[var(--text-muted)] hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"><Pencil size={15} /></button>
-                          <button onClick={() => { if (confirm(`Delete ${fs.name}?`)) { deleteFeeStructure(fs.id); setFeeStructures(prev => prev.filter(f => f.id !== fs.id)); } }} className="p-1.5 text-[var(--text-muted)] hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"><Trash2 size={15} /></button>
+                          <button onClick={() => { if (confirm(`Delete ${fs.name}?`)) { deleteFeeStructure(fs.id); setFeeStructures(prev => prev.filter(f => f.id !== fs.id)); } }} className="p-1.5 text-[var(--text-muted)] hover:text-[var(--color-error)] hover:bg-[var(--color-error-bg)] rounded-lg transition-colors"><Trash2 size={15} /></button>
                         </div>
                       </div>
                       <div className="space-y-1.5">
@@ -545,7 +545,7 @@ export default function FinanceManagementPage() {
                         <th className="px-6 py-4 font-semibold text-right rounded-tr-xl">Actions</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-[var(--border-light)]">
                       {expenses.length === 0 ? (
                         <tr><td colSpan={7} className="px-6 py-12 text-center text-sm text-[var(--text-muted)]">No expenses recorded.</td></tr>
                       ) : expenses.sort((a, b) => b.expenseDate.localeCompare(a.expenseDate)).map(exp => (
@@ -555,13 +555,13 @@ export default function FinanceManagementPage() {
                           <td className="px-6 py-4">
                             <span className="px-2 py-0.5 rounded-lg text-xs font-medium bg-[var(--bg-tertiary)] text-[var(--text-primary)]">{exp.categoryName}</span>
                           </td>
-                          <td className="px-6 py-4 font-bold text-rose-600">৳ {exp.amount.toLocaleString()}</td>
+                          <td className="px-6 py-4 font-bold text-[var(--color-error)]">৳ {exp.amount.toLocaleString()}</td>
                           <td className="px-6 py-4 text-[var(--text-secondary)] capitalize">{exp.paymentMethod.replace('-', ' ')}</td>
                           <td className="px-6 py-4 text-[var(--text-secondary)]">{exp.paidTo}</td>
                           <td className="px-6 py-4 text-right">
                             <div className="flex items-center justify-end gap-1">
                               <button onClick={() => openExpModal('edit', exp)} className="p-2 text-[var(--text-muted)] hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"><Pencil size={16} /></button>
-                              <button onClick={() => { if (confirm(`Delete expense "${exp.title}"?`)) { deleteExpense(exp.id); setExpenses(prev => prev.filter(e => e.id !== exp.id)); } }} className="p-2 text-[var(--text-muted)] hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"><Trash2 size={16} /></button>
+                              <button onClick={() => { if (confirm(`Delete expense "${exp.title}"?`)) { deleteExpense(exp.id); setExpenses(prev => prev.filter(e => e.id !== exp.id)); } }} className="p-2 text-[var(--text-muted)] hover:text-[var(--color-error)] hover:bg-[var(--color-error-bg)] rounded-lg transition-colors"><Trash2 size={16} /></button>
                             </div>
                           </td>
                         </tr>
@@ -596,15 +596,15 @@ export default function FinanceManagementPage() {
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                     <div className="p-4 bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-light)] shadow-sm">
                       <p className="text-sm text-[var(--text-muted)]">Collections</p>
-                      <p className="text-xl font-bold text-emerald-600 mt-1">৳ {(reportData as any).totalCollections?.toLocaleString() || 0}</p>
+                      <p className="text-xl font-bold text-[var(--color-success)] mt-1">৳ {(reportData as any).totalCollections?.toLocaleString() || 0}</p>
                     </div>
                     <div className="p-4 bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-light)] shadow-sm">
                       <p className="text-sm text-[var(--text-muted)]">Expenses</p>
-                      <p className="text-xl font-bold text-rose-600 mt-1">৳ {(reportData as any).totalExpenses?.toLocaleString() || 0}</p>
+                      <p className="text-xl font-bold text-[var(--color-error)] mt-1">৳ {(reportData as any).totalExpenses?.toLocaleString() || 0}</p>
                     </div>
                     <div className="p-4 bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-light)] shadow-sm">
                       <p className="text-sm text-[var(--text-muted)]">Net Income</p>
-                      <p className={`text-xl font-bold mt-1 ${(reportData as any).netIncome >= 0 ? 'text-[var(--text-primary)]' : 'text-rose-600'}`}>৳ {(reportData as any).netIncome?.toLocaleString() || 0}</p>
+                      <p className={`text-xl font-bold mt-1 ${(reportData as any).netIncome >= 0 ? 'text-[var(--text-primary)]' : 'text-[var(--color-error)]'}`}>৳ {(reportData as any).netIncome?.toLocaleString() || 0}</p>
                     </div>
                     <div className="p-4 bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-light)] shadow-sm">
                       <p className="text-sm text-[var(--text-muted)]">Transactions</p>
@@ -618,15 +618,15 @@ export default function FinanceManagementPage() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div className="p-4 bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-light)] shadow-sm">
                         <p className="text-sm text-[var(--text-muted)]">Total Revenue</p>
-                        <p className="text-xl font-bold text-emerald-600 mt-1">৳ {(reportData as any).totalRevenue?.toLocaleString() || 0}</p>
+                        <p className="text-xl font-bold text-[var(--color-success)] mt-1">৳ {(reportData as any).totalRevenue?.toLocaleString() || 0}</p>
                       </div>
                       <div className="p-4 bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-light)] shadow-sm">
                         <p className="text-sm text-[var(--text-muted)]">Total Expenses</p>
-                        <p className="text-xl font-bold text-rose-600 mt-1">৳ {(reportData as any).totalExpenses?.toLocaleString() || 0}</p>
+                        <p className="text-xl font-bold text-[var(--color-error)] mt-1">৳ {(reportData as any).totalExpenses?.toLocaleString() || 0}</p>
                       </div>
                       <div className="p-4 bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-light)] shadow-sm">
                         <p className="text-sm text-[var(--text-muted)]">Net Profit/Loss</p>
-                        <p className={`text-xl font-bold mt-1 ${(reportData as any).netProfit >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
+                        <p className={`text-xl font-bold mt-1 ${(reportData as any).netProfit >= 0 ? 'text-[var(--color-success)]' : 'text-[var(--color-error)]'}`}>
                           ৳ {(reportData as any).netProfit?.toLocaleString() || 0}
                         </p>
                       </div>
@@ -639,7 +639,7 @@ export default function FinanceManagementPage() {
                             {Object.entries((reportData as any).revenueByCategory).map(([cat, amt]) => (
                               <div key={cat} className="flex justify-between text-sm">
                                 <span className="text-[var(--text-secondary)]">{cat}</span>
-                                <span className="font-medium text-emerald-600">৳ {(amt as number).toLocaleString()}</span>
+                                <span className="font-medium text-[var(--color-success)]">৳ {(amt as number).toLocaleString()}</span>
                               </div>
                             ))}
                           </div>
@@ -652,7 +652,7 @@ export default function FinanceManagementPage() {
                             {Object.entries((reportData as any).expenseByCategory).map(([cat, amt]) => (
                               <div key={cat} className="flex justify-between text-sm">
                                 <span className="text-[var(--text-secondary)]">{cat}</span>
-                                <span className="font-medium text-rose-600">৳ {(amt as number).toLocaleString()}</span>
+                                <span className="font-medium text-[var(--color-error)]">৳ {(amt as number).toLocaleString()}</span>
                               </div>
                             ))}
                           </div>
@@ -676,7 +676,7 @@ export default function FinanceManagementPage() {
                           <th className="px-6 py-4 font-semibold text-right rounded-tr-xl">Status</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-100">
+                      <tbody className="divide-y divide-[var(--border-light)]">
                         {(reportData as Invoice[]).length === 0 ? (
                           <tr><td colSpan={7} className="px-6 py-12 text-center text-sm text-[var(--text-muted)]">No dues outstanding.</td></tr>
                         ) : (reportData as Invoice[]).map(inv => (
@@ -684,8 +684,8 @@ export default function FinanceManagementPage() {
                             <td className="px-6 py-4 font-medium text-[var(--text-primary)]">{inv.studentName}</td>
                             <td className="px-6 py-4 text-[var(--text-secondary)]">{inv.id}</td>
                             <td className="px-6 py-4 font-medium">৳ {inv.totalAmount.toLocaleString()}</td>
-                            <td className="px-6 py-4 text-emerald-600">৳ {inv.paidAmount.toLocaleString()}</td>
-                            <td className="px-6 py-4 font-bold text-rose-600">৳ {inv.dueAmount.toLocaleString()}</td>
+                            <td className="px-6 py-4 text-[var(--color-success)]">৳ {inv.paidAmount.toLocaleString()}</td>
+                            <td className="px-6 py-4 font-bold text-[var(--color-error)]">৳ {inv.dueAmount.toLocaleString()}</td>
                             <td className="px-6 py-4 text-[var(--text-muted)]">{new Date(inv.dueDate).toLocaleDateString()}</td>
                             <td className="px-6 py-4 text-right">{statusBadge(inv.status)}</td>
                           </tr>
@@ -747,7 +747,7 @@ export default function FinanceManagementPage() {
                         <button onClick={() => {
                           const items = (invModal.data.items || []).filter((_, i) => i !== idx);
                           setInvModal(p => ({ ...p, data: { ...p.data, items, totalAmount: items.reduce((s, i) => s + i.amount, 0) } }));
-                        }} className="p-1 text-[var(--text-muted)] hover:text-rose-600"><X size={14} /></button>
+                        }} className="p-1 text-[var(--text-muted)] hover:text-[var(--color-error)]"><X size={14} /></button>
                       </div>
                     ))}
                   </div>
@@ -791,7 +791,7 @@ export default function FinanceManagementPage() {
                 <div className="text-sm bg-[var(--bg-tertiary)] rounded-xl p-3 space-y-1">
                   <div className="flex justify-between"><span className="text-[var(--text-muted)]">Invoice:</span><span className="font-medium text-[var(--text-primary)]">{payModal.invoice.id}</span></div>
                   <div className="flex justify-between"><span className="text-[var(--text-muted)]">Student:</span><span className="font-medium text-[var(--text-primary)]">{payModal.invoice.studentName}</span></div>
-                  <div className="flex justify-between"><span className="text-[var(--text-muted)]">Total Due:</span><span className="font-bold text-rose-600">৳ {payModal.invoice.dueAmount.toLocaleString()}</span></div>
+                  <div className="flex justify-between"><span className="text-[var(--text-muted)]">Total Due:</span><span className="font-bold text-[var(--color-error)]">৳ {payModal.invoice.dueAmount.toLocaleString()}</span></div>
                 </div>
                 <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Amount <span className="text-rose-500">*</span></label>
                   <input type="number" value={payModal.data.amount || ''} onChange={e => setPayModal(p => ({ ...p, data: { ...p.data, amount: Number(e.target.value) } }))}
@@ -816,7 +816,7 @@ export default function FinanceManagementPage() {
               <div className="px-6 py-4 border-t border-[var(--border-light)] flex gap-3">
                 <button onClick={closePayModal} className="flex-1 px-4 py-2 bg-[var(--bg-tertiary)] hover:bg-[var(--bg-tertiary)]/80 text-[var(--text-primary)] rounded-xl text-sm font-medium transition-colors">Cancel</button>
                 <button onClick={handleReceivePayment} disabled={paySaving}
-                  className={`flex-1 px-4 py-2 rounded-xl text-sm font-medium text-white transition-colors flex items-center justify-center gap-2 ${paySaving ? 'bg-brand-mid/60 cursor-wait' : 'bg-emerald-600 hover:bg-emerald-700 shadow-sm'}`}>
+                  className={`flex-1 px-4 py-2 rounded-xl text-sm font-medium text-white transition-colors flex items-center justify-center gap-2 ${paySaving ? 'bg-brand-mid/60 cursor-wait' : 'bg-[var(--color-success)] hover:bg-[var(--color-success)]/80 shadow-sm'}`}>
                   {paySaving ? <Loader2 size={16} className="animate-spin" /> : <CheckCircle2 size={16} />}
                   Receive Payment
                 </button>
@@ -879,7 +879,7 @@ export default function FinanceManagementPage() {
                         </select>
                         <input type="number" value={item.amount || ''} onChange={e => handleFSItemChange(idx, 'amount', Number(e.target.value))}
                           placeholder="Amount" className="w-20 px-2 py-1 border border-[var(--border-light)] rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-brand-primary/20" />
-                        <button onClick={() => removeFSItem(idx)} className="p-1 text-[var(--text-muted)] hover:text-rose-600"><X size={14} /></button>
+                        <button onClick={() => removeFSItem(idx)} className="p-1 text-[var(--text-muted)] hover:text-[var(--color-error)]"><X size={14} /></button>
                       </div>
                     ))}
                   </div>

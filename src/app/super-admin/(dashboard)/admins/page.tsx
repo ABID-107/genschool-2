@@ -102,7 +102,7 @@ export default function AdminsPage() {
                 <tr key={admin.id} className="border-b border-[var(--border-light)] hover:bg-[var(--bg-tertiary)]/30 transition-colors">
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
+                      <div className="w-9 h-9 rounded-lg bg-[var(--color-warning-bg)] text-[var(--color-warning)] flex items-center justify-center">
                         <ShieldCheck size={18} />
                       </div>
                       <div>

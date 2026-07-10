@@ -236,9 +236,9 @@ export default function SchoolsPage() {
                                 className="w-full flex items-center gap-2 px-3 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] transition-colors text-left"
                               >
                                 {school.status === "active" ? (
-                                  <XCircle size={14} className="text-rose-500" />
+                                  <XCircle size={14} className="text-[var(--color-error)]" />
                                 ) : (
-                                  <CheckCircle2 size={14} className="text-emerald-500" />
+                                  <CheckCircle2 size={14} className="text-[var(--color-success)]" />
                                 )}
                                 {school.status === "active" ? "Deactivate" : "Activate"}
                               </button>

@@ -245,7 +245,7 @@ export default function AddAdminModal({
                     <motion.div
                       initial={{ opacity: 0, y: -4 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="flex items-start gap-2.5 p-3 mb-5 rounded-xl bg-rose-50 border border-rose-200 text-sm text-rose-700"
+                      className="flex items-start gap-2.5 p-3 mb-5 rounded-xl bg-[var(--color-error-bg)] border border-[var(--color-error)]/20 text-sm text-[var(--color-error)]"
                     >
                       <AlertCircle size={16} className="mt-0.5 shrink-0" />
                       <span>{error}</span>
@@ -255,7 +255,7 @@ export default function AddAdminModal({
                   <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">
-                        Full Name <span className="text-rose-400">*</span>
+                        Full Name <span className="text-[var(--color-error)]">*</span>
                       </label>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[var(--text-muted)]">
@@ -270,13 +270,13 @@ export default function AddAdminModal({
                         />
                       </div>
                       {getFieldError("name") && (
-                        <p className="text-xs text-rose-500 mt-1">{getFieldError("name")}</p>
+                        <p className="text-xs text-[var(--color-error)] mt-1">{getFieldError("name")}</p>
                       )}
                     </div>
 
                     <div>
                       <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">
-                        Email <span className="text-rose-400">*</span>
+                        Email <span className="text-[var(--color-error)]">*</span>
                       </label>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[var(--text-muted)]">
@@ -291,7 +291,7 @@ export default function AddAdminModal({
                         />
                       </div>
                       {getFieldError("email") && (
-                        <p className="text-xs text-rose-500 mt-1">{getFieldError("email")}</p>
+                        <p className="text-xs text-[var(--color-error)] mt-1">{getFieldError("email")}</p>
                       )}
                     </div>
 
@@ -312,7 +312,7 @@ export default function AddAdminModal({
                         />
                       </div>
                       {getFieldError("phone") && (
-                        <p className="text-xs text-rose-500 mt-1">{getFieldError("phone")}</p>
+                        <p className="text-xs text-[var(--color-error)] mt-1">{getFieldError("phone")}</p>
                       )}
                     </div>
 
@@ -344,7 +344,7 @@ export default function AddAdminModal({
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">
-                          Password <span className="text-rose-400">*</span>
+                          Password <span className="text-[var(--color-error)]">*</span>
                         </label>
                         <div className="relative">
                           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[var(--text-muted)]">
@@ -359,12 +359,12 @@ export default function AddAdminModal({
                           />
                         </div>
                         {getFieldError("password") && (
-                          <p className="text-xs text-rose-500 mt-1">{getFieldError("password")}</p>
+                          <p className="text-xs text-[var(--color-error)] mt-1">{getFieldError("password")}</p>
                         )}
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">
-                          Confirm Password <span className="text-rose-400">*</span>
+                          Confirm Password <span className="text-[var(--color-error)]">*</span>
                         </label>
                         <input
                           type="password"
@@ -374,7 +374,7 @@ export default function AddAdminModal({
                           className={inputClass("confirmPassword")}
                         />
                         {getFieldError("confirmPassword") && (
-                          <p className="text-xs text-rose-500 mt-1">{getFieldError("confirmPassword")}</p>
+                          <p className="text-xs text-[var(--color-error)] mt-1">{getFieldError("confirmPassword")}</p>
                         )}
                       </div>
                     </div>
@@ -390,7 +390,7 @@ export default function AddAdminModal({
                           formData.isActive ? "bg-[var(--brand-primary)]" : "bg-[var(--border-color)]"
                         } relative`}
                       >
-                        <div className={`w-4 h-4 bg-white rounded-full absolute top-1 transition-all ${
+                        <div className={`w-4 h-4 bg-[var(--bg-tertiary)] rounded-full absolute top-1 transition-all ${
                           formData.isActive ? "left-5" : "left-1"
                         }`} />
                       </div>

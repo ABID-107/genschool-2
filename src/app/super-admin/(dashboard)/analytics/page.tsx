@@ -44,18 +44,18 @@ export default function AnalyticsPage() {
                 <p className="text-sm font-medium text-[var(--text-muted)]">{metric.label}</p>
                 <div className={`w-9 h-9 rounded-lg ${
                   metric.color === "brand" ? "bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]" :
-                  "bg-amber-50 text-amber-600"
+                  "bg-[var(--color-warning-bg)] text-[var(--color-warning)]"
                 } flex items-center justify-center`}>
                   <Icon size={18} />
                 </div>
               </div>
               <p className="text-2xl font-bold text-[var(--text-primary)] tracking-tight">{metric.value}</p>
               <div className="flex items-center gap-1 mt-1">
-                {metric.trend === "up" && <TrendingUp size={14} className="text-emerald-500" />}
-                {metric.trend === "down" && <TrendingDown size={14} className="text-rose-500" />}
+                {metric.trend === "up" && <TrendingUp size={14} className="text-[var(--color-success)]" />}
+                {metric.trend === "down" && <TrendingDown size={14} className="text-[var(--color-error)]" />}
                 <span className={`text-xs font-medium ${
-                  metric.trend === "up" ? "text-emerald-600" :
-                  metric.trend === "down" ? "text-rose-600" :
+                  metric.trend === "up" ? "text-[var(--color-success)]" :
+                  metric.trend === "down" ? "text-[var(--color-error)]" :
                   "text-[var(--text-muted)]"
                 }`}>
                   {metric.change} from last month

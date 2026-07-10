@@ -535,7 +535,7 @@ export default function AdminDashboard() {
                       <div className="flex -space-x-2">
                         {item.participants.map((p, i) => (
                           <div key={i} className={`w-6 h-6 rounded-full border-2 border-[var(--bg-secondary)] flex items-center justify-center text-[9px] font-bold text-white shadow-sm ${
-                            ['bg-[var(--brand-primary)]', 'bg-[var(--brand-light)]', 'bg-[var(--brand-mid)]', 'bg-[var(--brand-deep)]', 'bg-amber-500'][i % 5]
+                            ['bg-[var(--brand-primary)]', 'bg-[var(--brand-light)]', 'bg-[var(--brand-mid)]', 'bg-[var(--brand-deep)]', 'bg-[var(--color-warning)]'][i % 5]
                           }`}>
                             {p.substring(0, 2).toUpperCase()}
                           </div>

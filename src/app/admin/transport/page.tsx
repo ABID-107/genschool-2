@@ -30,8 +30,8 @@ const TABS = [
 const statusBadge = (status: string) => {
   const map: Record<string, { bg: string; text: string; border: string; icon: any }> = {
     active: { bg: 'bg-[var(--green-50)]', text: 'text-[var(--green-800)]', border: 'border-[var(--green-200)]', icon: CheckCircle2 },
-    maintenance: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', icon: Wrench },
-    'out-of-service': { bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-200', icon: Ban },
+    maintenance: { bg: 'bg-[var(--color-warning-bg)]', text: 'text-[var(--color-warning)]', border: 'border-[var(--color-warning)]/20', icon: Wrench },
+    'out-of-service': { bg: 'bg-[var(--color-error-bg)]', text: 'text-[var(--color-error)]', border: 'border-[var(--color-error)]/20', icon: Ban },
   };
   const s = map[status] || map.active;
   return (
@@ -415,7 +415,7 @@ export default function TransportManagementPage() {
                       <button onClick={() => openRouteModal('edit', route)} className="p-2 rounded-lg hover:bg-[var(--bg-tertiary)] text-[var(--text-muted)] hover:text-brand-primary transition-colors" title="Edit">
                         <Pencil size={16} />
                       </button>
-                      <button onClick={() => handleDeleteRoute(route.id)} className="p-2 rounded-lg hover:bg-rose-50 text-[var(--text-muted)] hover:text-rose-600 transition-colors" title="Delete">
+                      <button onClick={() => handleDeleteRoute(route.id)} className="p-2 rounded-lg hover:bg-[var(--color-error-bg)] text-[var(--text-muted)] hover:text-[var(--color-error)] transition-colors" title="Delete">
                         <Trash2 size={16} />
                       </button>
                     </div>
@@ -445,7 +445,7 @@ export default function TransportManagementPage() {
                         {route.assignedStudents.map(s => (
                           <div key={s.studentId} className="flex items-center justify-between px-3 py-1.5 rounded-lg bg-[var(--bg-tertiary)] text-xs">
                             <span className="text-[var(--text-secondary)]">{s.studentName} <span className="text-[var(--text-muted)]">({s.class}/{s.section})</span></span>
-                            <button onClick={() => handleRemoveStudent(route.id, s.studentId)} className="text-rose-400 hover:text-rose-600 transition-colors">
+                            <button onClick={() => handleRemoveStudent(route.id, s.studentId)} className="text-[var(--color-error)] hover:text-[var(--color-error)] transition-colors">
                               <X size={12} />
                             </button>
                           </div>
@@ -497,7 +497,7 @@ export default function TransportManagementPage() {
                       <button onClick={() => openVehicleModal('edit', vehicle)} className="p-2 rounded-lg hover:bg-[var(--bg-tertiary)] text-[var(--text-muted)] hover:text-brand-primary transition-colors" title="Edit">
                         <Pencil size={16} />
                       </button>
-                      <button onClick={() => handleDeleteVehicle(vehicle.id)} className="p-2 rounded-lg hover:bg-rose-50 text-[var(--text-muted)] hover:text-rose-600 transition-colors" title="Delete">
+                      <button onClick={() => handleDeleteVehicle(vehicle.id)} className="p-2 rounded-lg hover:bg-[var(--color-error-bg)] text-[var(--text-muted)] hover:text-[var(--color-error)] transition-colors" title="Delete">
                         <Trash2 size={16} />
                       </button>
                     </div>
@@ -550,7 +550,7 @@ export default function TransportManagementPage() {
                             <td className="py-2">{s.dropStop}</td>
                             <td className="py-2 capitalize">{s.routeType}</td>
                             <td className="py-2 text-right">
-                              <button onClick={() => handleRemoveStudent(route.id, s.studentId)} className="p-1 rounded hover:bg-rose-50 text-[var(--text-muted)] hover:text-rose-600 transition-colors">
+                              <button onClick={() => handleRemoveStudent(route.id, s.studentId)} className="p-1 rounded hover:bg-[var(--color-error-bg)] text-[var(--text-muted)] hover:text-[var(--color-error)] transition-colors">
                                 <X size={14} />
                               </button>
                             </td>
@@ -641,7 +641,7 @@ export default function TransportManagementPage() {
                             <button onClick={() => openStopModal(0, idx)} className="p-1 rounded hover:bg-[var(--bg-secondary)] text-[var(--text-muted)] hover:text-brand-primary">
                               <Pencil size={12} />
                             </button>
-                            <button onClick={() => handleRemoveStop(idx)} className="p-1 rounded hover:bg-rose-50 text-[var(--text-muted)] hover:text-rose-600">
+                            <button onClick={() => handleRemoveStop(idx)} className="p-1 rounded hover:bg-[var(--color-error-bg)] text-[var(--text-muted)] hover:text-[var(--color-error)]">
                               <X size={12} />
                             </button>
                           </>

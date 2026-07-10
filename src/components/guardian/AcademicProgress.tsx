@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { useLanguage } from "@/lib/i18n";
+import { TrendingUp, Download, FileText, CheckCircle, Clock, AlertTriangle, MessageSquare } from "lucide-react";
 
 
 interface ExamResult {
@@ -34,33 +35,33 @@ export function GuardianAcademicProgressView() {
       {/* Header with Download Report Card Button */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[var(--brand-primary)] rounded-3xl p-6 text-white shadow-md relative overflow-hidden">
         <div className="absolute -right-10 -bottom-10 opacity-10">
-          <span className="material-symbols-outlined text-[150px]">military_tech</span>
+          <TrendingUp size={150} />
         </div>
         <div className="relative z-10">
           <h2 className="text-2xl font-bold">{lang === 'bn' ? 'একাডেমিক অগ্রগতি' : 'Academic Progress'}</h2>
-          <p className="text-[var(--green-100)] text-sm mt-1">{lang === 'bn' ? 'চলতি শিক্ষাবর্ষ ২০২৫' : 'Current Academic Year 2025'}</p>
+          <p className="text-[var(--color-success-bg)] text-sm mt-1">{lang === 'bn' ? 'চলতি শিক্ষাবর্ষ ২০২৫' : 'Current Academic Year 2025'}</p>
         </div>
-        <button className="relative z-10 w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-white text-[var(--brand-deep)] font-bold rounded-2xl hover:bg-[var(--green-50)] active:scale-95 transition-all shadow-sm">
-          <span className="material-symbols-outlined">download</span>
+        <button className="relative z-10 w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-[var(--bg-tertiary)] text-[var(--brand-mid)] font-bold rounded-2xl hover:bg-[var(--color-success-bg)] active:scale-95 transition-all shadow-sm">
+          <Download size={20} />
           {lang === 'bn' ? 'রিপোর্ট কার্ড ডাউনলোড' : 'Report Card PDF'}
         </button>
       </div>
 
       {/* Results Summary & GPA Trend */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
-          <h3 className="text-lg font-bold text-slate-900 mb-4">{lang === 'bn' ? 'পরীক্ষার ফলাফল' : 'Exam Results'}</h3>
+        <div className="bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-3xl p-6 shadow-sm">
+          <h3 className="text-lg font-bold text-[var(--text-primary)] mb-4">{lang === 'bn' ? 'পরীক্ষার ফলাফল' : 'Exam Results'}</h3>
           <div className="space-y-4">
             {results.map((res, idx) => (
-              <div key={idx} className="p-4 rounded-2xl border border-slate-100 bg-slate-50 flex flex-wrap sm:flex-nowrap justify-between items-center gap-4">
+              <div key={idx} className="p-4 rounded-2xl border border-[var(--border-light)] bg-[var(--bg-secondary)] flex flex-wrap sm:flex-nowrap justify-between items-center gap-4">
                 <div>
-                  <h4 className="font-bold text-slate-800">{lang === 'bn' ? res.termBn : res.term}</h4>
-                  <p className="text-xs text-slate-500 font-medium mt-1">
+                  <h4 className="font-bold text-[var(--text-secondary)]">{lang === 'bn' ? res.termBn : res.term}</h4>
+                  <p className="text-xs text-[var(--text-muted)] font-medium mt-1">
                     {lang === 'bn' ? `প্রাপ্ত নম্বর: ${res.obtainedMarks} / ${res.totalMarks}` : `Marks: ${res.obtainedMarks} / ${res.totalMarks}`}
                   </p>
                 </div>
                 <div className="text-right">
-                  <div className="text-xs font-bold text-slate-500 uppercase">{lang === 'bn' ? 'জিপিএ' : 'GPA'}</div>
+                  <div className="text-xs font-bold text-[var(--text-muted)] uppercase">{lang === 'bn' ? 'জিপিএ' : 'GPA'}</div>
                   <div className="text-2xl font-black text-[var(--brand-primary)]">{res.gpa}</div>
                 </div>
               </div>
@@ -68,25 +69,25 @@ export function GuardianAcademicProgressView() {
           </div>
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex flex-col justify-center">
-          <h3 className="text-lg font-bold text-slate-900 mb-4">{lang === 'bn' ? 'জিপিএ ট্রেন্ড' : 'GPA Trend'}</h3>
+        <div className="bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-3xl p-6 shadow-sm flex flex-col justify-center">
+          <h3 className="text-lg font-bold text-[var(--text-primary)] mb-4">{lang === 'bn' ? 'জিপিএ ট্রেন্ড' : 'GPA Trend'}</h3>
           {/* Simple simulated line chart */}
           <div className="relative h-32 w-full mt-4">
             <div className="absolute inset-0 flex items-end justify-between px-2">
-              <div className="w-full border-b-2 border-dashed border-slate-200 absolute bottom-0"></div>
-              <div className="w-full border-b-2 border-dashed border-slate-200 absolute bottom-1/2"></div>
-              <div className="w-full border-b-2 border-dashed border-slate-200 absolute top-0"></div>
+              <div className="w-full border-b-2 border-dashed border-[var(--border-color)] absolute bottom-0"></div>
+              <div className="w-full border-b-2 border-dashed border-[var(--border-color)] absolute bottom-1/2"></div>
+              <div className="w-full border-b-2 border-dashed border-[var(--border-color)] absolute top-0"></div>
               
               <div className="relative flex flex-col items-center justify-end h-full z-10">
-                <span className="text-xs font-bold text-[var(--brand-primary)] bg-white px-1 -translate-y-2">4.20</span>
+                <span className="text-xs font-bold text-[var(--brand-primary)] bg-[var(--bg-tertiary)] px-1 -translate-y-2">4.20</span>
                 <div className="w-3 h-3 bg-[var(--brand-primary)] rounded-full border-2 border-white mb-[-6px]"></div>
               </div>
               <div className="relative flex flex-col items-center justify-end h-full z-10 pb-8">
-                <span className="text-xs font-bold text-[var(--brand-primary)] bg-white px-1 -translate-y-2">4.85</span>
+                <span className="text-xs font-bold text-[var(--brand-primary)] bg-[var(--bg-tertiary)] px-1 -translate-y-2">4.85</span>
                 <div className="w-3 h-3 bg-[var(--brand-primary)] rounded-full border-2 border-white mb-[-6px]"></div>
               </div>
               <div className="relative flex flex-col items-center justify-end h-full z-10 pb-12">
-                <span className="text-xs font-bold text-[var(--brand-primary)] bg-white px-1 -translate-y-2">4.92</span>
+                <span className="text-xs font-bold text-[var(--brand-primary)] bg-[var(--bg-tertiary)] px-1 -translate-y-2">4.92</span>
                 <div className="w-3 h-3 bg-[var(--brand-primary)] rounded-full border-2 border-white mb-[-6px]"></div>
               </div>
             </div>
@@ -95,7 +96,7 @@ export function GuardianAcademicProgressView() {
               <path d="M 5,95 L 50,60 L 95,20" fill="none" stroke="var(--brand-primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
-          <div className="flex justify-between mt-4 px-2 text-xs font-bold text-slate-500">
+          <div className="flex justify-between mt-4 px-2 text-xs font-bold text-[var(--text-muted)]">
             <span>{lang === 'bn' ? 'প্রথম' : 'Term 1'}</span>
             <span>{lang === 'bn' ? 'অর্ধ' : 'Mid'}</span>
             <span>{lang === 'bn' ? 'বার্ষিক' : 'Final'}</span>
@@ -104,10 +105,10 @@ export function GuardianAcademicProgressView() {
       </div>
 
       {/* Assignment Tracking */}
-      <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
+      <div className="bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-3xl p-6 shadow-sm">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-            <span className="material-symbols-outlined text-rose-500">assignment</span>
+          <h3 className="text-lg font-bold text-[var(--text-primary)] flex items-center gap-2">
+            <FileText size={20} className="text-[var(--color-error)]" />
             {lang === 'bn' ? 'অ্যাসাইনমেন্ট ট্র্যাকিং' : 'Assignment Tracking'}
           </h3>
           <button className="text-sm font-bold text-[var(--brand-primary)]">{lang === 'bn' ? 'সব দেখুন' : 'View All'}</button>
@@ -115,26 +116,24 @@ export function GuardianAcademicProgressView() {
         
         <div className="space-y-3">
           {assignments.map(ass => (
-            <div key={ass.id} className="flex flex-wrap sm:flex-nowrap justify-between items-center gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:border-slate-200 transition-colors">
+            <div key={ass.id} className="flex flex-wrap sm:flex-nowrap justify-between items-center gap-4 p-4 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-light)] hover:border-[var(--border-color)] transition-colors">
               <div className="flex items-center gap-4 w-full sm:w-auto">
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
-                  ass.status === 'submitted' ? 'bg-green-100 text-green-600' :
-                  ass.status === 'pending' ? 'bg-amber-100 text-amber-600' :
-                  'bg-rose-100 text-rose-600'
+                  ass.status === 'submitted' ? 'bg-[var(--color-success-bg)] text-[var(--color-success)]' :
+                  ass.status === 'pending' ? 'bg-[var(--color-warning-bg)] text-[var(--color-warning)]' :
+                  'bg-[var(--color-error-bg)] text-[var(--color-error)]'
                 }`}>
-                  <span className="material-symbols-outlined text-lg">
-                    {ass.status === 'submitted' ? 'done_all' : ass.status === 'pending' ? 'hourglass_empty' : 'warning'}
-                  </span>
+                  {ass.status === 'submitted' ? <CheckCircle size={18} /> : ass.status === 'pending' ? <Clock size={18} /> : <AlertTriangle size={18} />}
                 </div>
                 <div>
-                  <h4 className="font-bold text-slate-900">{lang === 'bn' ? ass.topicBn : ass.topic}</h4>
-                  <p className="text-xs font-semibold text-slate-500 mt-0.5">{lang === 'bn' ? ass.subjectBn : ass.subject} • Due: {ass.dueDate}</p>
+                  <h4 className="font-bold text-[var(--text-primary)]">{lang === 'bn' ? ass.topicBn : ass.topic}</h4>
+                  <p className="text-xs font-semibold text-[var(--text-muted)] mt-0.5">{lang === 'bn' ? ass.subjectBn : ass.subject} • Due: {ass.dueDate}</p>
                 </div>
               </div>
               <div className={`px-3 py-1 rounded-lg text-xs font-bold ${
-                  ass.status === 'submitted' ? 'bg-green-50 text-green-700 border border-green-200' :
-                  ass.status === 'pending' ? 'bg-amber-50 text-amber-700 border border-amber-200' :
-                  'bg-rose-50 text-rose-700 border border-rose-200'
+                  ass.status === 'submitted' ? 'bg-[var(--color-success-bg)] text-[var(--color-success)] border border-[var(--color-success-bg)]' :
+                  ass.status === 'pending' ? 'bg-[var(--color-warning-bg)] text-[var(--color-warning)] border border-[var(--color-warning-bg)]' :
+                  'bg-[var(--color-error-bg)] text-[var(--color-error)] border border-[var(--color-error-bg)]'
                 }`}>
                 {ass.status === 'submitted' ? (lang === 'bn' ? 'জমা দেওয়া হয়েছে' : 'Submitted') :
                  ass.status === 'pending' ? (lang === 'bn' ? 'অপেক্ষমাণ' : 'Pending') :
@@ -146,35 +145,35 @@ export function GuardianAcademicProgressView() {
       </div>
 
       {/* Teacher Feedback */}
-      <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
-        <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2 mb-6">
-          <span className="material-symbols-outlined text-[var(--brand-primary)]">reviews</span>
+      <div className="bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-3xl p-6 shadow-sm">
+        <h3 className="text-lg font-bold text-[var(--text-primary)] flex items-center gap-2 mb-6">
+          <MessageSquare size={20} className="text-[var(--brand-primary)]" />
           {lang === 'bn' ? 'শিক্ষকদের মতামত' : 'Teacher Feedback'}
         </h3>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {teacherFeedback.map(feedback => (
-            <div key={feedback.id} className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition-shadow">
+            <div key={feedback.id} className="p-5 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-tertiary)] shadow-sm hover:shadow-md transition-shadow">
               <div className="flex justify-between items-start mb-4">
                 <div className="flex gap-3">
-                  <Image src={feedback.avatar} alt={feedback.teacher} className="w-10 h-10 rounded-full border border-slate-100 object-cover" width={40} height={40} />
+                  <Image src={feedback.avatar} alt={feedback.teacher} className="w-10 h-10 rounded-full border border-[var(--border-light)] object-cover" width={40} height={40} />
                   <div>
-                    <h4 className="font-bold text-slate-900 text-sm">{feedback.teacher}</h4>
+                    <h4 className="font-bold text-[var(--text-primary)] text-sm">{feedback.teacher}</h4>
                     <p className="text-xs font-semibold text-[var(--brand-primary)]">{lang === 'bn' ? feedback.subjectBn : feedback.subject}</p>
                   </div>
                 </div>
                 <span className={`px-2 py-1 text-[10px] font-bold rounded-md ${
-                  feedback.rating === 'Good' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
+                  feedback.rating === 'Good' ? 'bg-[var(--color-success-bg)] text-[var(--color-success)]' : 'bg-[var(--color-warning-bg)] text-[var(--color-warning)]'
                 }`}>
                   {lang === 'bn' ? feedback.ratingBn : feedback.rating}
                 </span>
               </div>
-              <div className="bg-slate-50 rounded-xl p-4 italic text-sm text-slate-600 border-l-4 border-[var(--brand-light)]">
+              <div className="bg-[var(--bg-secondary)] rounded-xl p-4 italic text-sm text-[var(--text-secondary)] border-l-4 border-[var(--brand-light)]">
                 "{lang === 'bn' ? feedback.feedbackBn : feedback.feedbackEn}"
               </div>
               <div className="mt-4 flex justify-end">
-                <button className="text-xs font-bold text-[var(--brand-primary)] hover:text-[var(--brand-deep)] transition-colors flex items-center gap-1">
-                  <span className="material-symbols-outlined text-[14px]">chat</span>
+                <button className="text-xs font-bold text-[var(--brand-primary)] hover:text-[var(--brand-mid)] transition-colors flex items-center gap-1">
+                  <MessageSquare size={14} />
                   {lang === 'bn' ? 'শিক্ষককে মেসেজ দিন' : 'Message Teacher'}
                 </button>
               </div>
@@ -185,4 +184,3 @@ export function GuardianAcademicProgressView() {
     </div>
   );
 }
-

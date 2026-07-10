@@ -116,7 +116,7 @@ export function Assignments({
   };
 
   return (
-    <div className="bg-white p-6 rounded-2xl border border-slate-200">
+    <div className="bg-[var(--bg-tertiary)] p-6 rounded-2xl border border-[var(--border-color)]">
       <h2 className="text-xl font-bold mb-4">Assignments Management</h2>
       {/* Re-implementing the UI logic here based on page.tsx */}
       <div className="space-y-4">
@@ -124,10 +124,10 @@ export function Assignments({
             <div key={asgn.id} className="p-4 border rounded-xl flex justify-between items-center">
                 <div>
                     <h3 className="font-bold">{asgn.title}</h3>
-                    <p className="text-sm text-slate-500">{asgn.subject} • {asgn.classGroup}</p>
+                    <p className="text-sm text-[var(--text-muted)]">{asgn.subject} • {asgn.classGroup}</p>
                 </div>
                 <div className="flex gap-2">
-                    <button className="text-sm px-3 py-1 bg-slate-100 rounded">View</button>
+                    <button className="text-sm px-3 py-1 bg-[var(--bg-secondary)] rounded">View</button>
                 </div>
             </div>
         ))}

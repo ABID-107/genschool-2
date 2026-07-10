@@ -90,7 +90,7 @@ export default function SuperAdminLoginPage() {
         >
           {/* Brand */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-[var(--brand-accent)] to-amber-400 shadow-lg shadow-amber-500/25 mb-4">
+            <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-[var(--brand-accent)] to-amber-400 shadow-lg shadow-[var(--color-warning)]/25 mb-4">
               <Shield size={28} className="text-white" />
             </div>
             <h1 className="text-2xl font-bold text-white tracking-tight">
@@ -107,7 +107,7 @@ export default function SuperAdminLoginPage() {
               <motion.div
                 initial={{ opacity: 0, y: -4 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-xs text-rose-400 bg-rose-500/10 border border-rose-500/20 rounded-xl px-4 py-2.5 mb-5"
+                className="text-xs text-[var(--color-error)] bg-[var(--color-error)]/10 border border-rose-500/20 rounded-xl px-4 py-2.5 mb-5"
               >
                 {error}
               </motion.div>
@@ -148,7 +148,7 @@ export default function SuperAdminLoginPage() {
                   <motion.p
                     initial={{ opacity: 0, y: -4 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="text-xs text-rose-400 mt-1"
+                    className="text-xs text-[var(--color-error)] mt-1"
                   >
                     {emailError}
                   </motion.p>
@@ -197,7 +197,7 @@ export default function SuperAdminLoginPage() {
                   <motion.p
                     initial={{ opacity: 0, y: -4 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="text-xs text-rose-400 mt-1"
+                    className="text-xs text-[var(--color-error)] mt-1"
                   >
                     {passwordError}
                   </motion.p>

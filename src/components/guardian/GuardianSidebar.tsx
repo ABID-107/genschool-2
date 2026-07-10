@@ -1,17 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   LayoutDashboard,
   ClipboardCheck,
-  BookOpen,
-  FolderOpen,
-  FileText,
-  Calendar,
-  MessageSquare,
-  Wallet,
   TrendingUp,
+  Wallet,
+  MessageSquare,
+  User,
   GraduationCap,
   ChevronLeft,
   ChevronRight,
@@ -22,16 +19,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 const NAV_ITEMS = [
   { id: 'dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { id: 'attendance', icon: ClipboardCheck, label: 'Attendance' },
-  { id: 'lessons', icon: BookOpen, label: 'Lessons' },
-  { id: 'materials', icon: FolderOpen, label: 'Materials' },
-  { id: 'assignments', icon: FileText, label: 'Assignments' },
-  { id: 'schedule', icon: Calendar, label: 'Schedule' },
-  { id: 'chat', icon: MessageSquare, label: 'Chat' },
-  { id: 'payments', icon: Wallet, label: 'Payments' },
-  { id: 'performance', icon: TrendingUp, label: 'Performance' },
+  { id: 'progress', icon: TrendingUp, label: 'Academic Progress' },
+  { id: 'fees', icon: Wallet, label: 'Fees & Payments' },
+  { id: 'messages', icon: MessageSquare, label: 'Messages' },
+  { id: 'profile', icon: User, label: 'Profile' },
 ];
 
-export function TeacherSidebar() {
+export function GuardianSidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const searchParams = useSearchParams();
@@ -49,6 +43,7 @@ export function TeacherSidebar() {
   const handleSignOut = () => {
     localStorage.removeItem("isAuthenticated");
     localStorage.removeItem("userRole");
+    localStorage.removeItem("childUsername");
     router.replace("/login");
   };
 

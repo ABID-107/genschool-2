@@ -259,7 +259,7 @@ export default function StudentManagementPage() {
                                   onClick={() => handleAction(action.id, student.id)}
                                   className={`w-full text-left px-3 py-2 text-sm rounded-lg flex items-center gap-3 transition-colors ${
                                     action.danger
-                                      ? 'text-rose-500 hover:bg-rose-50'
+                                      ? 'text-[var(--color-error)] hover:bg-[var(--color-error-bg)]'
                                       : 'text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'
                                   }`}
                                 >

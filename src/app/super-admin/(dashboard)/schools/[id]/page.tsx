@@ -64,7 +64,7 @@ export default function SchoolDetailPage() {
   if (error || !school) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-center">
-        <div className="w-14 h-14 rounded-full bg-rose-50 text-rose-400 flex items-center justify-center mb-4">
+        <div className="w-14 h-14 rounded-full bg-[var(--color-error-bg)] text-[var(--color-error)] flex items-center justify-center mb-4">
           <AlertCircle size={28} />
         </div>
         <h2 className="text-lg font-bold text-[var(--text-primary)] mb-1">School Not Found</h2>
@@ -171,7 +171,7 @@ export default function SchoolDetailPage() {
             className="bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-light)] p-6"
           >
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-9 h-9 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
+              <div className="w-9 h-9 rounded-lg bg-[var(--color-warning-bg)] text-[var(--color-warning)] flex items-center justify-center">
                 <ShieldCheck size={18} />
               </div>
               <h2 className="text-base font-semibold text-[var(--text-primary)]">School Administrators</h2>
@@ -186,7 +186,7 @@ export default function SchoolDetailPage() {
                     className="flex items-center justify-between p-3 rounded-xl bg-[var(--bg-tertiary)]/50 border border-[var(--border-light)]"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-xs font-bold">
+                      <div className="w-8 h-8 rounded-full bg-[var(--color-warning-bg)] text-[var(--color-warning)] flex items-center justify-center text-xs font-bold">
                         {admin.name.charAt(0)}
                       </div>
                       <div>
@@ -289,7 +289,7 @@ export default function SchoolDetailPage() {
               onClick={handleToggleStatus}
               className={`flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all ${
                 school.isActive
-                  ? "bg-rose-50 text-rose-600 border border-rose-200 hover:bg-rose-100"
+                  ? "bg-[var(--color-error-bg)] text-[var(--color-error)] border border-[var(--color-error)]/20 hover:bg-rose-100"
                   : "badge-green border"
               }`}
             >

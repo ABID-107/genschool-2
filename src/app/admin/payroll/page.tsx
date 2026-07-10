@@ -54,9 +54,9 @@ const TABS = [
 const statusBadge = (status: string) => {
   const map: Record<string, { bg: string; text: string; border: string; icon: any }> = {
     paid: { bg: 'bg-[var(--green-50)]', text: 'text-[var(--green-800)]', border: 'border-[var(--green-200)]', icon: CheckCircle2 },
-    pending: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', icon: Clock },
+    pending: { bg: 'bg-[var(--color-warning-bg)]', text: 'text-[var(--color-warning)]', border: 'border-[var(--color-warning)]/20', icon: Clock },
     approved: { bg: 'bg-[var(--bg-tertiary)]', text: 'text-brand-primary', border: 'border-[var(--border-light)]', icon: UserCheck },
-    cancelled: { bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-200', icon: Ban },
+    cancelled: { bg: 'bg-[var(--color-error-bg)]', text: 'text-[var(--color-error)]', border: 'border-[var(--color-error)]/20', icon: Ban },
   };
   const s = map[status.toLowerCase()] || map.pending;
   return (
@@ -269,12 +269,12 @@ export default function PayrollManagementPage() {
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="stat-card bg-[var(--bg-secondary)] p-5 rounded-2xl border border-[var(--border-light)] shadow-sm relative overflow-hidden group glass-card">
-          <div className="absolute top-0 right-0 p-4 opacity-10 text-emerald-500 transform group-hover:scale-110 transition-transform"><Banknote size={48} /></div>
+          <div className="absolute top-0 right-0 p-4 opacity-10 text-[var(--color-success)] transform group-hover:scale-110 transition-transform"><Banknote size={48} /></div>
           <p className="text-sm font-medium text-[var(--text-muted)] relative z-10">Total Payroll (MTD)</p>
           <p className="text-2xl font-bold text-[var(--text-primary)] mt-1 relative z-10">৳ {kpiData.totalPayroll.toLocaleString()}</p>
         </div>
         <div className="stat-card bg-[var(--bg-secondary)] p-5 rounded-2xl border border-[var(--border-light)] shadow-sm relative overflow-hidden group glass-card">
-          <div className="absolute top-0 right-0 p-4 opacity-10 text-amber-500 transform group-hover:scale-110 transition-transform"><FileText size={48} /></div>
+          <div className="absolute top-0 right-0 p-4 opacity-10 text-[var(--color-warning)] transform group-hover:scale-110 transition-transform"><FileText size={48} /></div>
           <p className="text-sm font-medium text-[var(--text-muted)] relative z-10">Pending Approvals</p>
           <p className="text-2xl font-bold text-[var(--text-primary)] mt-1 relative z-10">{kpiData.pendingCount}</p>
         </div>
@@ -316,7 +316,7 @@ export default function PayrollManagementPage() {
                           </div>
                           <div className="flex gap-1">
                             <button onClick={() => openStructModal('edit', s)} className="p-1.5 text-[var(--text-muted)] hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"><Pencil size={15} /></button>
-                            <button onClick={() => { if (confirm(`Delete salary structure for ${s.employeeName}?`)) handleDeleteStructure(s.id); }} className="p-1.5 text-[var(--text-muted)] hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"><Trash2 size={15} /></button>
+                            <button onClick={() => { if (confirm(`Delete salary structure for ${s.employeeName}?`)) handleDeleteStructure(s.id); }} className="p-1.5 text-[var(--text-muted)] hover:text-[var(--color-error)] hover:bg-[var(--color-error-bg)] rounded-lg transition-colors"><Trash2 size={15} /></button>
                           </div>
                         </div>
                         <div className="space-y-1.5">
@@ -324,8 +324,8 @@ export default function PayrollManagementPage() {
                           <div className="flex items-center justify-between text-sm"><span className="text-[var(--text-muted)]">House Rent</span><span className="font-medium text-[var(--text-primary)]">৳ {s.houseRent.toLocaleString()}</span></div>
                           <div className="flex items-center justify-between text-sm"><span className="text-[var(--text-muted)]">Medical</span><span className="font-medium text-[var(--text-primary)]">৳ {s.medical.toLocaleString()}</span></div>
                           <div className="flex items-center justify-between text-sm"><span className="text-[var(--text-muted)]">Transport</span><span className="font-medium text-[var(--text-primary)]">৳ {s.transport.toLocaleString()}</span></div>
-                          <div className="flex items-center justify-between text-sm"><span className="text-[var(--text-muted)]">Bonus</span><span className="font-medium text-emerald-600">৳ {s.bonus.toLocaleString()}</span></div>
-                          <div className="flex items-center justify-between text-sm"><span className="text-[var(--text-muted)]">Deductions</span><span className="font-medium text-rose-600">-৳ {s.deductions.toLocaleString()}</span></div>
+                          <div className="flex items-center justify-between text-sm"><span className="text-[var(--text-muted)]">Bonus</span><span className="font-medium text-[var(--color-success)]">৳ {s.bonus.toLocaleString()}</span></div>
+                          <div className="flex items-center justify-between text-sm"><span className="text-[var(--text-muted)]">Deductions</span><span className="font-medium text-[var(--color-error)]">-৳ {s.deductions.toLocaleString()}</span></div>
                         </div>
                         <div className="mt-3 pt-3 border-t border-[var(--border-light)] flex justify-between text-sm font-semibold">
                           <span className="text-[var(--text-primary)]">Total</span>
@@ -392,7 +392,7 @@ export default function PayrollManagementPage() {
                                 <button onClick={() => handleApproveSalary(d.id)} className="p-2 text-[var(--text-muted)] hover:text-brand-primary hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors" title="Approve"><UserCheck size={16} /></button>
                               )}
                               {(d.status === 'approved' || d.status === 'pending') && (
-                                <button onClick={() => openPayModal(d)} className="p-2 text-[var(--text-muted)] hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Mark as Paid"><CreditCard size={16} /></button>
+                                <button onClick={() => openPayModal(d)} className="p-2 text-[var(--text-muted)] hover:text-[var(--color-success)] hover:bg-[var(--color-success-bg)] rounded-lg transition-colors" title="Mark as Paid"><CreditCard size={16} /></button>
                               )}
                               {d.status === 'paid' && (
                                 <span className="text-xs text-[var(--text-muted)] italic px-2">Paid</span>
@@ -432,7 +432,7 @@ export default function PayrollManagementPage() {
                           <td className="px-6 py-4 font-medium text-[var(--text-primary)]">{d.employeeName}</td>
                           <td className="px-6 py-4 text-[var(--text-secondary)]">{MONTHS[d.month - 1]} {d.year}</td>
                           <td className="px-6 py-4 font-medium text-[var(--text-primary)]">৳ {d.totalPayable.toLocaleString()}</td>
-                          <td className="px-6 py-4 font-bold text-emerald-600">৳ {d.paidAmount.toLocaleString()}</td>
+                          <td className="px-6 py-4 font-bold text-[var(--color-success)]">৳ {d.paidAmount.toLocaleString()}</td>
                           <td className="px-6 py-4 text-[var(--text-muted)]">{d.paymentDate ? new Date(d.paymentDate).toLocaleDateString() : '—'}</td>
                           <td className="px-6 py-4 text-[var(--text-secondary)] capitalize">{d.paymentMethod.replace('-', ' ')}</td>
                         </tr>
@@ -458,7 +458,7 @@ export default function PayrollManagementPage() {
               </div>
               <div className="p-6 space-y-4">
                 <div className="space-y-1">
-                  <label className="text-sm font-medium text-[var(--text-primary)]">Employee <span className="text-rose-500">*</span></label>
+                  <label className="text-sm font-medium text-[var(--text-primary)]">Employee <span className="text-[var(--color-error)]">*</span></label>
                   <select value={structModal.data.employeeId || ''} onChange={e => {
                     const emp = employees.find(em => em.id === e.target.value);
                     setStructModal(p => ({ ...p, data: { ...p.data, employeeId: e.target.value, employeeName: emp?.name || '', employeeType: emp?.type || 'teacher' } }));
@@ -468,7 +468,7 @@ export default function PayrollManagementPage() {
                   </select>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Base Salary <span className="text-rose-500">*</span></label>
+                  <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Base Salary <span className="text-[var(--color-error)]">*</span></label>
                     <input type="number" value={structModal.data.baseSalary || ''} onChange={e => setStructModal(p => ({ ...p, data: { ...p.data, baseSalary: Number(e.target.value) } }))}
                       className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20" /></div>
                   <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">House Rent</label>
@@ -543,10 +543,10 @@ export default function PayrollManagementPage() {
                   </select></div>
 
                 {genResults.length > 0 && (
-                  <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
-                    <div className="flex items-center gap-2 text-emerald-700 font-medium mb-2"><CheckCircle2 size={16} /> Payroll Generated</div>
-                    <p className="text-sm text-emerald-600">{genResults.length} salary disbursement(s) created for {MONTHS[genMonth - 1]} {genYear}.</p>
-                    <p className="text-sm text-emerald-600 font-semibold mt-1">Total: ৳ {genResults.reduce((s, r) => s + r.totalPayable, 0).toLocaleString()}</p>
+                  <div className="bg-[var(--color-success-bg)] border border-[var(--color-success)]/20 rounded-xl p-4">
+                    <div className="flex items-center gap-2 text-[var(--color-success)] font-medium mb-2"><CheckCircle2 size={16} /> Payroll Generated</div>
+                    <p className="text-sm text-[var(--color-success)]">{genResults.length} salary disbursement(s) created for {MONTHS[genMonth - 1]} {genYear}.</p>
+                    <p className="text-sm text-[var(--color-success)] font-semibold mt-1">Total: ৳ {genResults.reduce((s, r) => s + r.totalPayable, 0).toLocaleString()}</p>
                   </div>
                 )}
 
@@ -566,7 +566,7 @@ export default function PayrollManagementPage() {
                 )}
                 {genResults.length > 0 && (
                   <button onClick={closeGenModal}
-                    className="flex-1 px-4 py-2 rounded-xl text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm transition-colors">
+                    className="flex-1 px-4 py-2 rounded-xl text-sm font-medium text-white bg-[var(--color-success)] hover:bg-[var(--color-success)] shadow-sm transition-colors">
                     Done
                   </button>
                 )}
@@ -590,9 +590,9 @@ export default function PayrollManagementPage() {
                 <div className="text-sm bg-[var(--bg-tertiary)] rounded-xl p-3 space-y-1">
                   <div className="flex justify-between"><span className="text-[var(--text-muted)]">Employee:</span><span className="font-medium text-[var(--text-primary)]">{payModal.disbursement.employeeName}</span></div>
                   <div className="flex justify-between"><span className="text-[var(--text-muted)]">Period:</span><span className="font-medium text-[var(--text-primary)]">{MONTHS[payModal.disbursement.month - 1]} {payModal.disbursement.year}</span></div>
-                  <div className="flex justify-between"><span className="text-[var(--text-muted)]">Total Payable:</span><span className="font-bold text-emerald-600">৳ {payModal.disbursement.totalPayable.toLocaleString()}</span></div>
+                  <div className="flex justify-between"><span className="text-[var(--text-muted)]">Total Payable:</span><span className="font-bold text-[var(--color-success)]">৳ {payModal.disbursement.totalPayable.toLocaleString()}</span></div>
                 </div>
-                <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Amount <span className="text-rose-500">*</span></label>
+                <div className="space-y-1"><label className="text-sm font-medium text-[var(--text-primary)]">Amount <span className="text-[var(--color-error)]">*</span></label>
                   <input type="number" value={payModal.data.paidAmount || ''} onChange={e => setPayModal(p => ({ ...p, data: { ...p.data, paidAmount: Number(e.target.value) } }))}
                     className="w-full px-3 py-2 border border-[var(--border-light)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20" /></div>
                 <div className="grid grid-cols-2 gap-4">
@@ -612,7 +612,7 @@ export default function PayrollManagementPage() {
               <div className="px-6 py-4 border-t border-[var(--border-light)] flex gap-3">
                 <button onClick={closePayModal} className="flex-1 px-4 py-2 bg-[var(--bg-tertiary)] hover:bg-[var(--bg-tertiary)]/80 text-[var(--text-primary)] rounded-xl text-sm font-medium transition-colors">Cancel</button>
                 <button onClick={handlePaySalary}
-                  className="flex-1 px-4 py-2 rounded-xl text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm transition-colors flex items-center justify-center gap-2">
+                  className="flex-1 px-4 py-2 rounded-xl text-sm font-medium text-white bg-[var(--color-success)] hover:bg-[var(--color-success)] shadow-sm transition-colors flex items-center justify-center gap-2">
                   <CheckCircle2 size={16} /> Confirm Payment
                 </button>
               </div>

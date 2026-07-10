@@ -19,7 +19,7 @@ export default function ReportsPage() {
 
   const getReportIcon = (type: string) => {
     switch (type) {
-      case 'financial': return <FileSpreadsheet size={20} className="text-emerald-500" />;
+      case 'financial': return <FileSpreadsheet size={20} className="text-[var(--color-success)]" />;
       case 'attendance': return <Calendar size={20} className="text-brand-primary" />;
       case 'academic': return <FileBarChart size={20} className="text-brand-primary" />;
       default: return <FileText size={20} className="text-[var(--text-muted)]" />;
@@ -125,7 +125,7 @@ export default function ReportsPage() {
                         </button>
                         <button 
                           onClick={() => deleteReport(report.id)}
-                          className="p-2 text-[var(--text-muted)] hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
+                          className="p-2 text-[var(--text-muted)] hover:text-[var(--color-error)] hover:bg-[var(--color-error-bg)] rounded-lg transition-colors"
                           title="Delete"
                         >
                           <Trash2 size={18} />

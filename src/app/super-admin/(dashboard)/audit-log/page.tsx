@@ -23,9 +23,9 @@ const logs = [
 ];
 
 const statusColors: Record<string, string> = {
-  success: "bg-emerald-50 text-emerald-600 border-emerald-200",
-  warning: "bg-amber-50 text-amber-600 border-amber-200",
-  error: "bg-rose-50 text-rose-600 border-rose-200",
+  success: "bg-[var(--color-success-bg)] text-[var(--color-success)] border-[var(--color-success)]/20",
+  warning: "bg-[var(--color-warning-bg)] text-[var(--color-warning)] border-[var(--color-warning)]/20",
+  error: "bg-[var(--color-error-bg)] text-[var(--color-error)] border-[var(--color-error)]/20",
 };
 
 const typeIcons: Record<string, React.ElementType> = {

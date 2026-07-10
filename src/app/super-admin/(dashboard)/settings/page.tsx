@@ -117,7 +117,7 @@ export default function SettingsPage() {
         {/* Security */}
         <div className="p-6">
           <div className="flex items-center gap-3 mb-5">
-            <div className="w-9 h-9 rounded-lg bg-rose-50 text-rose-500 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-lg bg-[var(--color-error-bg)] text-[var(--color-error)] flex items-center justify-center">
               <Shield size={18} />
             </div>
             <div>
@@ -137,7 +137,7 @@ export default function SettingsPage() {
                   form.twoFactorAuth ? "bg-[var(--brand-primary)]" : "bg-[var(--border-color)]"
                 } relative`}
               >
-                <div className={`w-4 h-4 bg-white rounded-full absolute top-1 transition-all ${
+                <div className={`w-4 h-4 bg-[var(--bg-tertiary)] rounded-full absolute top-1 transition-all ${
                   form.twoFactorAuth ? "left-5" : "left-1"
                 }`} />
               </div>
@@ -153,7 +153,7 @@ export default function SettingsPage() {
                   form.allowRegistration ? "bg-[var(--brand-primary)]" : "bg-[var(--border-color)]"
                 } relative`}
               >
-                <div className={`w-4 h-4 bg-white rounded-full absolute top-1 transition-all ${
+                <div className={`w-4 h-4 bg-[var(--bg-tertiary)] rounded-full absolute top-1 transition-all ${
                   form.allowRegistration ? "left-5" : "left-1"
                 }`} />
               </div>
@@ -164,7 +164,7 @@ export default function SettingsPage() {
         {/* Notifications */}
         <div className="p-6">
           <div className="flex items-center gap-3 mb-5">
-            <div className="w-9 h-9 rounded-lg bg-amber-50 text-amber-500 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-lg bg-[var(--color-warning-bg)] text-[var(--color-warning)] flex items-center justify-center">
               <Bell size={18} />
             </div>
             <div>
@@ -184,7 +184,7 @@ export default function SettingsPage() {
                   form.emailNotifications ? "bg-[var(--brand-primary)]" : "bg-[var(--border-color)]"
                 } relative`}
               >
-                <div className={`w-4 h-4 bg-white rounded-full absolute top-1 transition-all ${
+                <div className={`w-4 h-4 bg-[var(--bg-tertiary)] rounded-full absolute top-1 transition-all ${
                   form.emailNotifications ? "left-5" : "left-1"
                 }`} />
               </div>
@@ -197,10 +197,10 @@ export default function SettingsPage() {
               <div
                 onClick={() => setForm({ ...form, maintenanceMode: !form.maintenanceMode })}
                 className={`w-10 h-6 rounded-full transition-colors cursor-pointer ${
-                  form.maintenanceMode ? "bg-rose-500" : "bg-[var(--border-color)]"
+                  form.maintenanceMode ? "bg-[var(--color-error)]" : "bg-[var(--border-color)]"
                 } relative`}
               >
-                <div className={`w-4 h-4 bg-white rounded-full absolute top-1 transition-all ${
+                <div className={`w-4 h-4 bg-[var(--bg-tertiary)] rounded-full absolute top-1 transition-all ${
                   form.maintenanceMode ? "left-5" : "left-1"
                 }`} />
               </div>

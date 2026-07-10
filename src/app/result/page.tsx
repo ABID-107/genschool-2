@@ -48,7 +48,7 @@ export default function PublicResultPortal() {
 
       <main className="max-w-xl mx-auto px-4">
         {!result ? (
-          <div className="glass-card bg-[var(--bg-secondary)] rounded-3xl border border-[var(--border-light)] p-8 shadow-xl shadow-slate-200/50 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="glass-card bg-[var(--bg-secondary)] rounded-3xl border border-[var(--border-light)] p-8 shadow-xl shadow-[var(--border-color)]/50 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-2 text-center">ফলাফল দেখুন</h2>
             <p className="text-[var(--text-muted)] text-center text-sm mb-8">সঠিক তথ্য দিয়ে আপনার পরীক্ষার ফলাফল সংগ্রহ করুন</p>
             
@@ -147,7 +147,7 @@ export default function PublicResultPortal() {
               </div>
             </div>
 
-            <button onClick={() => setResult(null)} className="w-full py-4 bg-slate-900 text-white rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-all">
+            <button onClick={() => setResult(null)} className="w-full py-4 bg-[var(--text-primary)] text-white rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-all">
               <span className="material-symbols-outlined">print</span> প্রিন্ট / ডাউনলোড করুন
             </button>
             <button onClick={() => setResult(null)} className="w-full py-2 text-[var(--text-muted)] font-bold text-sm">নতুন করে সার্চ করুন</button>

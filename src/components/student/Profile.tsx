@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useLanguage } from "@/lib/i18n";
-import { useState } from "react";
+import { QrCode, GraduationCap, IdCard } from "lucide-react";
 
 interface ProfileProps {
   student: {
@@ -44,59 +44,59 @@ export function ProfileView({ student }: ProfileProps) {
             </div>
             <div>
               <p className="text-[10px] font-bold text-[var(--green-300)] uppercase tracking-wider mb-1">Blood Group</p>
-              <p className="text-sm font-bold text-rose-400">{student.bloodGroup}</p>
+              <p className="text-sm font-bold text-[var(--color-error)]">{student.bloodGroup}</p>
             </div>
             <div className="flex justify-end">
-              <div className="w-12 h-12 bg-white rounded-lg p-1.5 flex items-center justify-center">
-                <span className="material-symbols-outlined text-slate-900 text-3xl">qr_code_2</span>
+              <div className="w-12 h-12 bg-[var(--bg-tertiary)] rounded-lg p-1.5 flex items-center justify-center">
+                <QrCode size={28} className="text-[var(--text-primary)]" />
               </div>
             </div>
           </div>
         </div>
         <div className="absolute top-0 right-0 p-4 opacity-20">
-          <span className="material-symbols-outlined text-[80px]">school</span>
+          <GraduationCap size={80} />
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-slate-200/50 p-6 shadow-sm space-y-8">
+      <div className="bg-[var(--bg-tertiary)] rounded-2xl border border-[var(--border-color)]/50 p-6 shadow-sm space-y-8">
         <div>
-          <h3 className="text-lg font-bold text-slate-900 font-bangla mb-4 border-b border-slate-50 pb-2">ব্যক্তিগত তথ্য</h3>
+          <h3 className="text-lg font-bold text-[var(--text-primary)] font-bangla mb-4 border-b border-slate-50 pb-2">ব্যক্তিগত তথ্য</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Full Name (Bangla)</p>
-              <p className="text-sm font-bold text-slate-700 font-bangla">{student.nameBn}</p>
+              <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest mb-1">Full Name (Bangla)</p>
+              <p className="text-sm font-bold text-[var(--text-secondary)] font-bangla">{student.nameBn}</p>
             </div>
             <div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Full Name (English)</p>
-              <p className="text-sm font-bold text-slate-700">{student.nameEn}</p>
+              <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest mb-1">Full Name (English)</p>
+              <p className="text-sm font-bold text-[var(--text-secondary)]">{student.nameEn}</p>
             </div>
             <div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Date of Birth</p>
-              <p className="text-sm font-bold text-slate-700">{student.dob}</p>
+              <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest mb-1">Date of Birth</p>
+              <p className="text-sm font-bold text-[var(--text-secondary)]">{student.dob}</p>
             </div>
             <div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Mobile No.</p>
+              <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest mb-1">Mobile No.</p>
               <p className="text-sm font-bold text-[var(--brand-primary)]">{student.mobile}</p>
             </div>
           </div>
         </div>
 
         <div>
-          <h3 className="text-lg font-bold text-slate-900 font-bangla mb-4 border-b border-slate-50 pb-2">অভিভাবকের তথ্য</h3>
+          <h3 className="text-lg font-bold text-[var(--text-primary)] font-bangla mb-4 border-b border-slate-50 pb-2">অভিভাবকের তথ্য</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Guardian Name</p>
-              <p className="text-sm font-bold text-slate-700 font-bangla">{student.guardian}</p>
+              <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest mb-1">Guardian Name</p>
+              <p className="text-sm font-bold text-[var(--text-secondary)] font-bangla">{student.guardian}</p>
             </div>
             <div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Relation</p>
-              <p className="text-sm font-bold text-slate-700">Father</p>
+              <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest mb-1">Relation</p>
+              <p className="text-sm font-bold text-[var(--text-secondary)]">Father</p>
             </div>
           </div>
         </div>
 
-        <button className="w-full py-4 bg-slate-50 text-slate-600 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-[var(--green-50)] hover:text-[var(--brand-primary)] transition-all border border-slate-100">
-          <span className="material-symbols-outlined text-[20px]">badge</span>
+        <button className="w-full py-4 bg-[var(--bg-secondary)] text-[var(--text-secondary)] rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-[var(--green-50)] hover:text-[var(--brand-primary)] transition-all border border-[var(--border-light)]">
+          <IdCard size={20} />
           ডাউনলোড স্টুডেন্ট আইডি কার্ড (PDF)
         </button>
       </div>

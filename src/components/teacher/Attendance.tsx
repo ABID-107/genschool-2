@@ -12,7 +12,7 @@ export function Attendance() {
   };
 
   return (
-    <div className="bg-white p-6 rounded-2xl border border-slate-200">
+    <div className="bg-[var(--bg-tertiary)] p-6 rounded-2xl border border-[var(--border-color)]">
       <h2 className="text-xl font-bold mb-4">Class Attendance</h2>
       <div className="space-y-4">
         {attendanceData.map(student => (
@@ -23,7 +23,7 @@ export function Attendance() {
                 <button
                   key={status}
                   onClick={() => toggleStatus(student.id, status)}
-                  className={`px-3 py-1 rounded text-xs capitalize ${student.status === status ? 'bg-[var(--brand-primary)] text-white' : 'bg-slate-100'}`}
+                  className={`px-3 py-1 rounded text-xs capitalize ${student.status === status ? 'bg-[var(--brand-primary)] text-white' : 'bg-[var(--bg-secondary)]'}`}
                 >
                   {status}
                 </button>

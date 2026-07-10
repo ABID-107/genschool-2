@@ -16,8 +16,8 @@ import type { AttendanceRecord, AttendanceStatus } from '@/lib/attendance';
 const colorBarMap: Record<string, string> = {
   blue: 'bg-brand-primary',
   emerald: 'bg-[var(--brand-primary)]',
-  rose: 'bg-rose-500',
-  amber: 'bg-amber-500',
+  rose: 'bg-[var(--color-error)]',
+  amber: 'bg-[var(--color-warning)]',
 };
 
 export default function AttendanceManagementPage() {
@@ -240,21 +240,21 @@ export default function AttendanceManagementPage() {
                     <div className="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                       <button
                         onClick={() => handleMark(student.id, student.name, 'present')}
-                        className="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors border border-transparent hover:border-emerald-200"
+                        className="p-1.5 text-[var(--color-success)] hover:bg-[var(--color-success-bg)] rounded-lg transition-colors border border-transparent hover:border-[var(--color-success)]/20"
                         title="Mark Present"
                       >
                         <Check size={16} />
                       </button>
                       <button
                         onClick={() => handleMark(student.id, student.name, 'absent')}
-                        className="p-1.5 text-rose-600 hover:bg-rose-50 rounded-lg transition-colors border border-transparent hover:border-rose-200"
+                        className="p-1.5 text-[var(--color-error)] hover:bg-[var(--color-error-bg)] rounded-lg transition-colors border border-transparent hover:border-[var(--color-error)]/20"
                         title="Mark Absent"
                       >
                         <XCircle size={16} />
                       </button>
                       <button
                         onClick={() => handleMark(student.id, student.name, 'late')}
-                        className="p-1.5 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors border border-transparent hover:border-amber-200"
+                        className="p-1.5 text-[var(--color-warning)] hover:bg-[var(--color-warning-bg)] rounded-lg transition-colors border border-transparent hover:border-[var(--color-warning)]/20"
                         title="Mark Late"
                       >
                         <Clock size={16} />

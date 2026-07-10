@@ -140,7 +140,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-[6px] rounded-full bg-white/5 border border-white/10 text-[0.8rem] font-medium text-white/70 mb-6 backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 px-4 py-[6px] rounded-full bg-[var(--bg-tertiary)] border border-[var(--border-light)] text-[0.8rem] font-medium text-white/70 mb-6 backdrop-blur-md">
               <span className="w-[7px] h-[7px] rounded-full bg-[var(--brand-accent)] animate-pulse" />
               {t.heroBadge}
             </div>
@@ -170,7 +170,7 @@ export default function Home() {
                 {t.heroBtn2}
               </motion.button>
             </div>
-            <div className="flex gap-7 pt-8 border-t border-white/10">
+            <div className="flex gap-7 pt-8 border-t border-[var(--border-light)]">
               {[
                 { num: "500+", label: t.stat1 },
                 { num: "50K+", label: t.stat2 },
@@ -212,7 +212,7 @@ export default function Home() {
                 <motion.div
                   key={i}
                   whileHover={{ y: -2 }}
-                  className={`rounded-[14px] p-4 border border-white/10 transition-all ${card.gradient ? "bg-gradient-to-br from-[var(--brand-primary)] to-[var(--brand-deep)]" : "bg-white/5"}`}
+                  className={`rounded-[14px] p-4 border border-[var(--border-light)] transition-all ${card.gradient ? "bg-gradient-to-br from-[var(--brand-primary)] to-[var(--brand-deep)]" : "bg-[var(--bg-tertiary)]"}`}
                 >
                   <div className="text-[1.3rem] mb-2">{card.icon}</div>
                   <div className="font-heading text-[1.4rem] font-bold text-white">{card.num}</div>
@@ -229,7 +229,7 @@ export default function Home() {
               ].map((bar, i) => (
                 <div key={i} className="flex items-center gap-[10px] mb-2">
                   <div className="text-[0.75rem] text-white/40 w-14 flex-shrink-0">{bar.label}</div>
-                  <div className="flex-1 h-[7px] bg-white/10 rounded-full overflow-hidden">
+                  <div className="flex-1 h-[7px] bg-[var(--bg-tertiary)] rounded-full overflow-hidden">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${bar.w}%` }}
@@ -519,7 +519,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[var(--brand-deep)] text-white/70 py-12 px-[5%] border-t border-white/5">
+      <footer className="bg-[var(--brand-deep)] text-white/70 py-12 px-[5%] border-t border-[var(--border-light)]">
         <div className="max-w-[1100px] mx-auto flex items-center justify-between flex-wrap gap-5">
           <div className="font-heading text-[1.2rem] font-bold text-white">
             <div className="flex items-center gap-2.5">

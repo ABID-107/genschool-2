@@ -267,50 +267,50 @@ export default function NewStudentPage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-[var(--text-primary)]">First Name <span className="text-rose-500">*</span></label>
+                      <label className="text-sm font-medium text-[var(--text-primary)]">First Name <span className="text-[var(--color-error)]">*</span></label>
                       <input
                         type="text"
                         value={formData.firstName}
                         onChange={e => updateField('firstName', e.target.value)}
                         className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors ${
-                          errors.firstName ? 'border-rose-300 bg-rose-50/30' : 'border-[var(--border-light)]'
+                          errors.firstName ? 'border-[var(--color-error)]/20 bg-[var(--color-error-bg)]/30' : 'border-[var(--border-light)]'
                         }`}
                         placeholder="e.g. Aarav"
                       />
-                      {errors.firstName && <p className="text-xs text-rose-500 mt-0.5">{errors.firstName}</p>}
+                      {errors.firstName && <p className="text-xs text-[var(--color-error)] mt-0.5">{errors.firstName}</p>}
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-[var(--text-primary)]">Last Name <span className="text-rose-500">*</span></label>
+                      <label className="text-sm font-medium text-[var(--text-primary)]">Last Name <span className="text-[var(--color-error)]">*</span></label>
                       <input
                         type="text"
                         value={formData.lastName}
                         onChange={e => updateField('lastName', e.target.value)}
                         className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors ${
-                          errors.lastName ? 'border-rose-300 bg-rose-50/30' : 'border-[var(--border-light)]'
+                          errors.lastName ? 'border-[var(--color-error)]/20 bg-[var(--color-error-bg)]/30' : 'border-[var(--border-light)]'
                         }`}
                         placeholder="e.g. Rahman"
                       />
-                      {errors.lastName && <p className="text-xs text-rose-500 mt-0.5">{errors.lastName}</p>}
+                      {errors.lastName && <p className="text-xs text-[var(--color-error)] mt-0.5">{errors.lastName}</p>}
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-[var(--text-primary)]">Date of Birth <span className="text-rose-500">*</span></label>
+                      <label className="text-sm font-medium text-[var(--text-primary)]">Date of Birth <span className="text-[var(--color-error)]">*</span></label>
                       <input
                         type="date"
                         value={formData.dateOfBirth}
                         onChange={e => updateField('dateOfBirth', e.target.value)}
                         className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors text-[var(--text-secondary)] ${
-                          errors.dateOfBirth ? 'border-rose-300 bg-rose-50/30' : 'border-[var(--border-light)]'
+                          errors.dateOfBirth ? 'border-[var(--color-error)]/20 bg-[var(--color-error-bg)]/30' : 'border-[var(--border-light)]'
                         }`}
                       />
-                      {errors.dateOfBirth && <p className="text-xs text-rose-500 mt-0.5">{errors.dateOfBirth}</p>}
+                      {errors.dateOfBirth && <p className="text-xs text-[var(--color-error)] mt-0.5">{errors.dateOfBirth}</p>}
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-[var(--text-primary)]">Gender <span className="text-rose-500">*</span></label>
+                      <label className="text-sm font-medium text-[var(--text-primary)]">Gender <span className="text-[var(--color-error)]">*</span></label>
                       <select
                         value={formData.gender}
                         onChange={e => updateField('gender', e.target.value)}
                         className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors text-[var(--text-secondary)] bg-[var(--bg-secondary)] ${
-                          errors.gender ? 'border-rose-300 bg-rose-50/30' : 'border-[var(--border-light)]'
+                          errors.gender ? 'border-[var(--color-error)]/20 bg-[var(--color-error-bg)]/30' : 'border-[var(--border-light)]'
                         }`}
                       >
                         <option value="">Select Gender</option>
@@ -318,7 +318,7 @@ export default function NewStudentPage() {
                         <option value="Female">Female</option>
                         <option value="Other">Other</option>
                       </select>
-                      {errors.gender && <p className="text-xs text-rose-500 mt-0.5">{errors.gender}</p>}
+                      {errors.gender && <p className="text-xs text-[var(--color-error)] mt-0.5">{errors.gender}</p>}
                     </div>
                     <div className="space-y-1.5">
                       <label className="text-sm font-medium text-[var(--text-primary)]">Blood Group</label>
@@ -372,19 +372,19 @@ export default function NewStudentPage() {
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-[var(--text-primary)]">Admission Date <span className="text-rose-500">*</span></label>
+                      <label className="text-sm font-medium text-[var(--text-primary)]">Admission Date <span className="text-[var(--color-error)]">*</span></label>
                       <input
                         type="date"
                         value={formData.admissionDate}
                         onChange={e => updateField('admissionDate', e.target.value)}
                         className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors text-[var(--text-secondary)] ${
-                          errors.admissionDate ? 'border-rose-300 bg-rose-50/30' : 'border-[var(--border-light)]'
+                          errors.admissionDate ? 'border-[var(--color-error)]/20 bg-[var(--color-error-bg)]/30' : 'border-[var(--border-light)]'
                         }`}
                       />
-                      {errors.admissionDate && <p className="text-xs text-rose-500 mt-0.5">{errors.admissionDate}</p>}
+                      {errors.admissionDate && <p className="text-xs text-[var(--color-error)] mt-0.5">{errors.admissionDate}</p>}
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-[var(--text-primary)]">Academic Year <span className="text-rose-500">*</span></label>
+                      <label className="text-sm font-medium text-[var(--text-primary)]">Academic Year <span className="text-[var(--color-error)]">*</span></label>
                       <select
                         value={formData.academicYear}
                         onChange={e => updateField('academicYear', e.target.value)}
@@ -395,12 +395,12 @@ export default function NewStudentPage() {
                       </select>
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-[var(--text-primary)]">Class <span className="text-rose-500">*</span></label>
+                      <label className="text-sm font-medium text-[var(--text-primary)]">Class <span className="text-[var(--color-error)]">*</span></label>
                       <select
                         value={formData.className}
                         onChange={e => updateField('className', e.target.value)}
                         className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors text-[var(--text-secondary)] bg-[var(--bg-secondary)] ${
-                          errors.className ? 'border-rose-300 bg-rose-50/30' : 'border-[var(--border-light)]'
+                          errors.className ? 'border-[var(--color-error)]/20 bg-[var(--color-error-bg)]/30' : 'border-[var(--border-light)]'
                         }`}
                       >
                         <option value="">Select Class</option>
@@ -408,15 +408,15 @@ export default function NewStudentPage() {
                           <option key={c.id} value={c.name}>{c.name}</option>
                         ))}
                       </select>
-                      {errors.className && <p className="text-xs text-rose-500 mt-0.5">{errors.className}</p>}
+                      {errors.className && <p className="text-xs text-[var(--color-error)] mt-0.5">{errors.className}</p>}
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-[var(--text-primary)]">Section <span className="text-rose-500">*</span></label>
+                      <label className="text-sm font-medium text-[var(--text-primary)]">Section <span className="text-[var(--color-error)]">*</span></label>
                       <select
                         value={formData.section}
                         onChange={e => updateField('section', e.target.value)}
                         className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors text-[var(--text-secondary)] bg-[var(--bg-secondary)] ${
-                          errors.section ? 'border-rose-300 bg-rose-50/30' : 'border-[var(--border-light)]'
+                          errors.section ? 'border-[var(--color-error)]/20 bg-[var(--color-error-bg)]/30' : 'border-[var(--border-light)]'
                         }`}
                       >
                         <option value="">Select Section</option>
@@ -424,7 +424,7 @@ export default function NewStudentPage() {
                         <option value="B (Business Studies)">B (Business Studies)</option>
                         <option value="C (Humanities)">C (Humanities)</option>
                       </select>
-                      {errors.section && <p className="text-xs text-rose-500 mt-0.5">{errors.section}</p>}
+                      {errors.section && <p className="text-xs text-[var(--color-error)] mt-0.5">{errors.section}</p>}
                     </div>
                   </div>
                 </motion.div>
@@ -440,20 +440,20 @@ export default function NewStudentPage() {
                 >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-[var(--text-primary)]">Guardian Name <span className="text-rose-500">*</span></label>
+                      <label className="text-sm font-medium text-[var(--text-primary)]">Guardian Name <span className="text-[var(--color-error)]">*</span></label>
                       <input
                         type="text"
                         value={formData.guardianName}
                         onChange={e => updateField('guardianName', e.target.value)}
                         className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors ${
-                          errors.guardianName ? 'border-rose-300 bg-rose-50/30' : 'border-[var(--border-light)]'
+                          errors.guardianName ? 'border-[var(--color-error)]/20 bg-[var(--color-error-bg)]/30' : 'border-[var(--border-light)]'
                         }`}
                         placeholder="Full Name"
                       />
-                      {errors.guardianName && <p className="text-xs text-rose-500 mt-0.5">{errors.guardianName}</p>}
+                      {errors.guardianName && <p className="text-xs text-[var(--color-error)] mt-0.5">{errors.guardianName}</p>}
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-[var(--text-primary)]">Relationship <span className="text-rose-500">*</span></label>
+                      <label className="text-sm font-medium text-[var(--text-primary)]">Relationship <span className="text-[var(--color-error)]">*</span></label>
                       <select
                         value={formData.relationship}
                         onChange={e => updateField('relationship', e.target.value)}
@@ -466,17 +466,17 @@ export default function NewStudentPage() {
                       </select>
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-[var(--text-primary)]">Mobile Number (For SMS) <span className="text-rose-500">*</span></label>
+                      <label className="text-sm font-medium text-[var(--text-primary)]">Mobile Number (For SMS) <span className="text-[var(--color-error)]">*</span></label>
                       <input
                         type="tel"
                         value={formData.mobile}
                         onChange={e => updateField('mobile', e.target.value)}
                         className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors ${
-                          errors.mobile ? 'border-rose-300 bg-rose-50/30' : 'border-[var(--border-light)]'
+                          errors.mobile ? 'border-[var(--color-error)]/20 bg-[var(--color-error-bg)]/30' : 'border-[var(--border-light)]'
                         }`}
                         placeholder="+880 1XXX-XXXXXX"
                       />
-                      {errors.mobile && <p className="text-xs text-rose-500 mt-0.5">{errors.mobile}</p>}
+                      {errors.mobile && <p className="text-xs text-[var(--color-error)] mt-0.5">{errors.mobile}</p>}
                     </div>
                     <div className="space-y-1.5">
                       <label className="text-sm font-medium text-[var(--text-primary)]">Email Address</label>
@@ -489,16 +489,16 @@ export default function NewStudentPage() {
                       />
                     </div>
                     <div className="space-y-1.5 md:col-span-2">
-                      <label className="text-sm font-medium text-[var(--text-primary)]">Present Address <span className="text-rose-500">*</span></label>
+                      <label className="text-sm font-medium text-[var(--text-primary)]">Present Address <span className="text-[var(--color-error)]">*</span></label>
                       <textarea
                         value={formData.address}
                         onChange={e => updateField('address', e.target.value)}
                         className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-colors min-h-[100px] ${
-                          errors.address ? 'border-rose-300 bg-rose-50/30' : 'border-[var(--border-light)]'
+                          errors.address ? 'border-[var(--color-error)]/20 bg-[var(--color-error-bg)]/30' : 'border-[var(--border-light)]'
                         }`}
                         placeholder="Full present address..."
                       />
-                      {errors.address && <p className="text-xs text-rose-500 mt-0.5">{errors.address}</p>}
+                      {errors.address && <p className="text-xs text-[var(--color-error)] mt-0.5">{errors.address}</p>}
                     </div>
                   </div>
                 </motion.div>

@@ -93,18 +93,18 @@ export function LessonUpload({ onUploadSuccess }: LessonUploadProps) {
   };
 
   return (
-    <div className="bg-white/80 backdrop-blur-sm p-6 md:p-8 rounded-2xl border border-slate-200/50 shadow-sm">
-      <h3 className="text-2xl font-bold text-slate-900 mb-6 font-heading tracking-tight">Upload New Lesson</h3>
+    <div className="bg-[var(--bg-tertiary)] backdrop-blur-sm p-6 md:p-8 rounded-2xl border border-[var(--border-color)]/50 shadow-sm">
+      <h3 className="text-2xl font-bold text-[var(--text-primary)] mb-6 font-heading tracking-tight">Upload New Lesson</h3>
       
       {uploadingState === 'success' && (
-        <div className="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-3 text-emerald-700">
+        <div className="mb-6 p-4 bg-[var(--color-success-bg)] border border-[var(--color-success)]/20 rounded-xl flex items-center gap-3 text-[var(--color-success)]">
           <span className="material-symbols-outlined">check_circle</span>
           <p className="font-semibold text-sm">Lesson uploaded successfully!</p>
         </div>
       )}
 
       {uploadingState === 'error' && (
-        <div className="mb-6 p-4 bg-rose-50 border border-rose-200 rounded-xl flex items-center gap-3 text-rose-700">
+        <div className="mb-6 p-4 bg-[var(--color-error-bg)] border border-[var(--color-error)]/20 rounded-xl flex items-center gap-3 text-[var(--color-error)]">
           <span className="material-symbols-outlined">error</span>
           <p className="font-semibold text-sm">{errorMessage}</p>
         </div>
@@ -113,22 +113,22 @@ export function LessonUpload({ onUploadSuccess }: LessonUploadProps) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="space-y-5">
             <div className="space-y-1.5">
-                <label className="text-sm font-bold text-slate-700 ml-1">Lesson Title <span className="text-rose-500">*</span></label>
+                <label className="text-sm font-bold text-[var(--text-secondary)] ml-1">Lesson Title <span className="text-[var(--color-error)]">*</span></label>
                 <input
                 type="text"
                 placeholder="e.g., Introduction to CSS Grid"
-                className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-[var(--brand-primary)]/20 focus:border-[var(--brand-primary)] p-3.5 outline-none bg-slate-50/50 hover:bg-white transition-colors"
+                className="w-full border border-[var(--border-color)]/80 rounded-xl focus:ring-2 focus:ring-[var(--brand-primary)]/20 focus:border-[var(--brand-primary)] p-3.5 outline-none bg-[var(--bg-secondary)] hover:bg-[var(--bg-tertiary)] transition-colors"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 />
             </div>
             
             <div className="space-y-1.5">
-                <label className="text-sm font-bold text-slate-700 ml-1">Description <span className="text-xs font-normal text-slate-400">(Optional)</span></label>
+                <label className="text-sm font-bold text-[var(--text-secondary)] ml-1">Description <span className="text-xs font-normal text-[var(--text-muted)]">(Optional)</span></label>
                 <textarea
                 placeholder="Brief description of the lesson content..."
                 rows={4}
-                className="w-full border border-slate-200/80 rounded-xl focus:ring-2 focus:ring-[var(--brand-primary)]/20 focus:border-[var(--brand-primary)] p-3.5 outline-none bg-slate-50/50 hover:bg-white transition-colors resize-none"
+                className="w-full border border-[var(--border-color)]/80 rounded-xl focus:ring-2 focus:ring-[var(--brand-primary)]/20 focus:border-[var(--brand-primary)] p-3.5 outline-none bg-[var(--bg-secondary)] hover:bg-[var(--bg-tertiary)] transition-colors resize-none"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 ></textarea>
@@ -137,21 +137,21 @@ export function LessonUpload({ onUploadSuccess }: LessonUploadProps) {
 
         <div className="space-y-5">
             <div className="space-y-1.5">
-                <label className="text-sm font-bold text-slate-700 ml-1">Thumbnail Image <span className="text-xs font-normal text-slate-400">(Optional)</span></label>
+                <label className="text-sm font-bold text-[var(--text-secondary)] ml-1">Thumbnail Image <span className="text-xs font-normal text-[var(--text-muted)]">(Optional)</span></label>
                 <div className="flex items-center gap-4">
                     {thumbnail ? (
                         <div className="relative">
-                            <Image src={thumbnail} alt="Thumbnail Preview" width={80} height={80} className="w-20 h-20 object-cover rounded-xl border border-slate-200 shadow-sm" unoptimized />
-                            <button onClick={() => setThumbnail(null)} className="absolute -top-2 -right-2 bg-rose-100 text-rose-600 rounded-full p-1 hover:bg-rose-200 transition-colors shadow-sm">
+                            <Image src={thumbnail} alt="Thumbnail Preview" width={80} height={80} className="w-20 h-20 object-cover rounded-xl border border-[var(--border-color)] shadow-sm" unoptimized />
+                            <button onClick={() => setThumbnail(null)} className="absolute -top-2 -right-2 bg-[var(--color-error-bg)] text-[var(--color-error)] rounded-full p-1 hover:bg-rose-200 transition-colors shadow-sm">
                                 <span className="material-symbols-outlined text-[14px]">close</span>
                             </button>
                         </div>
                     ) : (
-                        <div className="w-20 h-20 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center text-slate-400">
+                        <div className="w-20 h-20 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl flex items-center justify-center text-[var(--text-muted)]">
                             <span className="material-symbols-outlined text-2xl">image</span>
                         </div>
                     )}
-                    <label className="cursor-pointer bg-white border border-slate-200 text-slate-600 font-semibold px-4 py-2 rounded-lg text-sm hover:bg-slate-50 transition-colors inline-block shadow-sm">
+                    <label className="cursor-pointer bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[var(--text-secondary)] font-semibold px-4 py-2 rounded-lg text-sm hover:bg-[var(--bg-secondary)] transition-colors inline-block shadow-sm">
                         Upload Image
                         <input type="file" accept="image/*" onChange={handleThumbnailUpload} className="hidden" />
                     </label>
@@ -159,7 +159,7 @@ export function LessonUpload({ onUploadSuccess }: LessonUploadProps) {
             </div>
 
             <div className="space-y-1.5">
-                <label className="text-sm font-bold text-slate-700 ml-1">Lesson File <span className="text-rose-500">*</span></label>
+                <label className="text-sm font-bold text-[var(--text-secondary)] ml-1">Lesson File <span className="text-[var(--color-error)]">*</span></label>
                 <div 
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={(e: DragEvent) => {
@@ -175,10 +175,10 @@ export function LessonUpload({ onUploadSuccess }: LessonUploadProps) {
                             setUploadingState("idle");
                         }
                     }}
-                    className="border-2 border-dashed border-slate-200 rounded-xl p-8 flex flex-col items-center text-center hover:border-[var(--green-300)] transition-colors bg-slate-50/50"
+                    className="border-2 border-dashed border-[var(--border-color)] rounded-xl p-8 flex flex-col items-center text-center hover:border-[var(--green-300)] transition-colors bg-[var(--bg-secondary)]"
                 >
-                    <span className="material-symbols-outlined text-slate-400 text-3xl mb-2">upload_file</span>
-                    <p className="text-sm font-semibold text-slate-600">Drag & Drop file here or</p>
+                    <span className="material-symbols-outlined text-[var(--text-muted)] text-3xl mb-2">upload_file</span>
+                    <p className="text-sm font-semibold text-[var(--text-secondary)]">Drag & Drop file here or</p>
                     <label className="text-[var(--brand-primary)] font-bold text-sm cursor-pointer hover:underline mt-1">
                         browse files
                         <input type="file" className="hidden" onChange={handleFileChange} />
@@ -189,7 +189,7 @@ export function LessonUpload({ onUploadSuccess }: LessonUploadProps) {
         </div>
       </div>
 
-      <div className="mt-8 pt-6 border-t border-slate-100 flex justify-end">
+      <div className="mt-8 pt-6 border-t border-[var(--border-light)] flex justify-end">
         <button
             onClick={submitUpload}
             disabled={uploadingState === 'uploading'}

@@ -426,7 +426,7 @@ export default function RegisterSchoolModal({
                     <motion.div
                       initial={{ opacity: 0, y: -4 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="flex items-start gap-2.5 p-3 mb-5 rounded-xl bg-rose-50 border border-rose-200 text-sm text-rose-700"
+                      className="flex items-start gap-2.5 p-3 mb-5 rounded-xl bg-[var(--color-error-bg)] border border-[var(--color-error)]/20 text-sm text-[var(--color-error)]"
                     >
                       <AlertCircle size={16} className="mt-0.5 shrink-0" />
                       <span>{error}</span>
@@ -448,7 +448,7 @@ export default function RegisterSchoolModal({
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="sm:col-span-2">
                               <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">
-                                School Name <span className="text-rose-400">*</span>
+                                School Name <span className="text-[var(--color-error)]">*</span>
                               </label>
                               <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[var(--text-muted)]">
@@ -463,13 +463,13 @@ export default function RegisterSchoolModal({
                                 />
                               </div>
                               {getFieldError("schoolName") && (
-                                <p className="text-xs text-rose-500 mt-1">{getFieldError("schoolName")}</p>
+                                <p className="text-xs text-[var(--color-error)] mt-1">{getFieldError("schoolName")}</p>
                               )}
                             </div>
 
                             <div className="sm:col-span-2">
                               <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">
-                                School Slug <span className="text-rose-400">*</span>
+                                School Slug <span className="text-[var(--color-error)]">*</span>
                               </label>
                               <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[var(--text-muted)]">
@@ -484,7 +484,7 @@ export default function RegisterSchoolModal({
                                 />
                               </div>
                               {getFieldError("schoolSlug") && (
-                                <p className="text-xs text-rose-500 mt-1">{getFieldError("schoolSlug")}</p>
+                                <p className="text-xs text-[var(--color-error)] mt-1">{getFieldError("schoolSlug")}</p>
                               )}
                               <p className="text-[11px] text-[var(--text-muted)] mt-1">
                                 Used in URLs: /{formData.schoolSlug || "school-slug"}
@@ -543,7 +543,7 @@ export default function RegisterSchoolModal({
                                 />
                               </div>
                               {getFieldError("email") && (
-                                <p className="text-xs text-rose-500 mt-1">{getFieldError("email")}</p>
+                                <p className="text-xs text-[var(--color-error)] mt-1">{getFieldError("email")}</p>
                               )}
                             </div>
 
@@ -564,7 +564,7 @@ export default function RegisterSchoolModal({
                                 />
                               </div>
                               {getFieldError("phone") && (
-                                <p className="text-xs text-rose-500 mt-1">{getFieldError("phone")}</p>
+                                <p className="text-xs text-[var(--color-error)] mt-1">{getFieldError("phone")}</p>
                               )}
                             </div>
 
@@ -640,12 +640,12 @@ export default function RegisterSchoolModal({
                           animate={{ opacity: 1, x: 0 }}
                           className="space-y-4"
                         >
-                          <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 mb-4">
+                          <div className="p-4 rounded-xl bg-[var(--color-warning-bg)] border border-[var(--color-warning)]/20 mb-4">
                             <div className="flex items-start gap-3">
-                              <ShieldCheck size={18} className="text-amber-600 mt-0.5 shrink-0" />
+                              <ShieldCheck size={18} className="text-[var(--color-warning)] mt-0.5 shrink-0" />
                               <div>
                                 <p className="text-sm font-semibold text-amber-800">School Admin Account</p>
-                                <p className="text-xs text-amber-700 mt-0.5">
+                                <p className="text-xs text-[var(--color-warning)] mt-0.5">
                                   This account will be created as the primary administrator for {formData.schoolName}.
                                 </p>
                               </div>
@@ -655,7 +655,7 @@ export default function RegisterSchoolModal({
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="sm:col-span-2">
                               <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">
-                                Full Name <span className="text-rose-400">*</span>
+                                Full Name <span className="text-[var(--color-error)]">*</span>
                               </label>
                               <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[var(--text-muted)]">
@@ -670,13 +670,13 @@ export default function RegisterSchoolModal({
                                 />
                               </div>
                               {getFieldError("adminName") && (
-                                <p className="text-xs text-rose-500 mt-1">{getFieldError("adminName")}</p>
+                                <p className="text-xs text-[var(--color-error)] mt-1">{getFieldError("adminName")}</p>
                               )}
                             </div>
 
                             <div className="sm:col-span-2">
                               <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">
-                                Email <span className="text-rose-400">*</span>
+                                Email <span className="text-[var(--color-error)]">*</span>
                               </label>
                               <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[var(--text-muted)]">
@@ -691,7 +691,7 @@ export default function RegisterSchoolModal({
                                 />
                               </div>
                               {getFieldError("adminEmail") && (
-                                <p className="text-xs text-rose-500 mt-1">{getFieldError("adminEmail")}</p>
+                                <p className="text-xs text-[var(--color-error)] mt-1">{getFieldError("adminEmail")}</p>
                               )}
                             </div>
 
@@ -715,7 +715,7 @@ export default function RegisterSchoolModal({
 
                             <div>
                               <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">
-                                Password <span className="text-rose-400">*</span>
+                                Password <span className="text-[var(--color-error)]">*</span>
                               </label>
                               <input
                                 type="password"
@@ -725,13 +725,13 @@ export default function RegisterSchoolModal({
                                 className={inputClass("adminPassword")}
                               />
                               {getFieldError("adminPassword") && (
-                                <p className="text-xs text-rose-500 mt-1">{getFieldError("adminPassword")}</p>
+                                <p className="text-xs text-[var(--color-error)] mt-1">{getFieldError("adminPassword")}</p>
                               )}
                             </div>
 
                             <div>
                               <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">
-                                Confirm Password <span className="text-rose-400">*</span>
+                                Confirm Password <span className="text-[var(--color-error)]">*</span>
                               </label>
                               <input
                                 type="password"
@@ -741,7 +741,7 @@ export default function RegisterSchoolModal({
                                 className={inputClass("confirmPassword")}
                               />
                               {getFieldError("confirmPassword") && (
-                                <p className="text-xs text-rose-500 mt-1">{getFieldError("confirmPassword")}</p>
+                                <p className="text-xs text-[var(--color-error)] mt-1">{getFieldError("confirmPassword")}</p>
                               )}
                             </div>
                           </div>
@@ -767,7 +767,7 @@ export default function RegisterSchoolModal({
                           </div>
 
                           {getFieldError("planId") && (
-                            <p className="text-xs text-rose-500">{getFieldError("planId")}</p>
+                            <p className="text-xs text-[var(--color-error)]">{getFieldError("planId")}</p>
                           )}
 
                           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -793,7 +793,7 @@ export default function RegisterSchoolModal({
                                   }`}
                                 >
                                   {plan.isPopular && (
-                                    <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-amber-500 text-[var(--text-primary)] text-[10px] font-bold rounded-full uppercase tracking-wider whitespace-nowrap">
+                                    <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-[var(--color-warning)] text-[var(--text-primary)] text-[10px] font-bold rounded-full uppercase tracking-wider whitespace-nowrap">
                                       Popular
                                     </div>
                                   )}

@@ -450,7 +450,7 @@ function StaffFormModal({
           <div className="flex flex-col items-center mb-4">
             <div
               onClick={() => fileInputRef.current?.click()}
-              className="relative w-20 h-20 rounded-full bg-[var(--bg-tertiary)] border-2 border-dashed border-slate-300 flex flex-col items-center justify-center cursor-pointer hover:border-brand-primary hover:bg-[var(--bg-tertiary)] transition-colors overflow-hidden group"
+              className="relative w-20 h-20 rounded-full bg-[var(--bg-tertiary)] border-2 border-dashed border-[var(--border-color)] flex flex-col items-center justify-center cursor-pointer hover:border-brand-primary hover:bg-[var(--bg-tertiary)] transition-colors overflow-hidden group"
             >
               {currentPhoto ? (
                 <Image src={currentPhoto} alt="" width={80} height={80} className="w-full h-full object-cover" unoptimized />
@@ -468,13 +468,13 @@ function StaffFormModal({
           {FORM_FIELDS.map(([field, label, required, type]) => (
             <div key={field} className="space-y-1">
               <label className="text-sm font-medium text-[var(--text-primary)]">
-                {label} {required && <span className="text-rose-500">*</span>}
+                {label} {required && <span className="text-[var(--color-error)]">*</span>}
               </label>
               {type === 'select' ? (
                 <select
                   value={String(data[field] || '')}
                   onChange={e => onFieldChange(field, e.target.value)}
-                  className={`w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary bg-[var(--bg-secondary)] ${errors[field] ? 'border-rose-300 bg-rose-50/30' : 'border-[var(--border-light)]'}`}
+                  className={`w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary bg-[var(--bg-secondary)] ${errors[field] ? 'border-[var(--color-error)]/20 bg-[var(--color-error-bg)]/30' : 'border-[var(--border-light)]'}`}
                 >
                   <option value="Active">Active</option>
                   <option value="On Leave">On Leave</option>
@@ -485,10 +485,10 @@ function StaffFormModal({
                   type={type}
                   value={String(data[field] || '')}
                   onChange={e => onFieldChange(field, e.target.value)}
-                  className={`w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary ${errors[field] ? 'border-rose-300 bg-rose-50/30' : 'border-[var(--border-light)]'}`}
+                  className={`w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary ${errors[field] ? 'border-[var(--color-error)]/20 bg-[var(--color-error-bg)]/30' : 'border-[var(--border-light)]'}`}
                 />
               )}
-              {errors[field] && <p className="text-xs text-rose-500 mt-0.5">{errors[field]}</p>}
+              {errors[field] && <p className="text-xs text-[var(--color-error)] mt-0.5">{errors[field]}</p>}
             </div>
           ))}
 

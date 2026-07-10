@@ -94,7 +94,7 @@ export default function Library({ books: propBooks }: LibraryProps) {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
                   <button
                     onClick={() => setSelectedBook(book)}
-                    className="w-full py-2.5 bg-white text-[var(--brand-primary)] rounded-xl text-xs font-bold shadow-lg hover:bg-[var(--bg-tertiary)] transition-all active:scale-95"
+                    className="w-full py-2.5 bg-[var(--bg-tertiary)] text-[var(--brand-primary)] rounded-xl text-xs font-bold shadow-lg hover:bg-[var(--bg-tertiary)] transition-all active:scale-95"
                   >
                     View Details
                   </button>

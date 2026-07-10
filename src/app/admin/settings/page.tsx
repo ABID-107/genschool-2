@@ -46,7 +46,7 @@ export default function SettingsPage() {
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                 activeTab === tab.id
-                  ? "bg-white text-[var(--text-primary)] shadow-sm"
+                  ? "bg-[var(--bg-tertiary)] text-[var(--text-primary)] shadow-sm"
                   : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
               }`}
             >
@@ -122,7 +122,7 @@ export default function SettingsPage() {
           <div>
             <label className="label mb-3">Accent Color</label>
             <div className="flex gap-3">
-              {["bg-[var(--brand-primary)]", "bg-[var(--brand-accent)]", "bg-blue-500", "bg-purple-500", "bg-green-500"].map((c) => (
+              {["bg-[var(--brand-primary)]", "bg-[var(--brand-accent)]", "bg-[var(--color-info)]", "bg-[var(--color-info)]", "bg-[var(--color-success)]"].map((c) => (
                 <button key={c} className={`w-8 h-8 rounded-full ${c} ring-2 ring-offset-2 ring-transparent hover:ring-[var(--green-300)] transition-all`} />
               ))}
             </div>

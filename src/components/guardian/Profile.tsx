@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useLanguage } from "@/lib/i18n";
-import { Phone, Mail, MapPin, UserPen, Plus, Unlink, Settings, Bell, Globe, Lock, ChevronRight } from "lucide-react";
+import { Phone, Mail, MapPin, UserPen, Plus, Unlink, Settings, Bell, Globe, Lock, ChevronRight, Users } from "lucide-react";
 
 interface Child {
   id: string;
@@ -67,9 +67,7 @@ export function GuardianProfileView({ childrenList }: { childrenList: Child[] })
         <div className="card p-6">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-lg font-bold text-[var(--text-primary)] flex items-center gap-2">
-              <span className="text-[var(--brand-primary)]">
-                <span className="material-symbols-outlined">family_restroom</span>
-              </span>
+              <Users size={20} className="text-[var(--brand-primary)]" />
               {lang === 'bn' ? 'যুক্ত সন্তানসমূহ' : 'Linked Children'}
             </h3>
             <button className="btn btn-ghost btn-sm">
@@ -88,7 +86,7 @@ export function GuardianProfileView({ childrenList }: { childrenList: Child[] })
                     <p className="text-xs text-[var(--text-muted)] font-medium">Class {child.class} &bull; Sec {child.section} &bull; Roll {child.roll}</p>
                   </div>
                 </div>
-                <button className="p-2 text-rose-500 hover:bg-rose-500/10 rounded-full transition-colors" aria-label="Unlink">
+                <button className="p-2 text-[var(--color-error)] hover:bg-[var(--color-error)]/10 rounded-full transition-colors" aria-label="Unlink">
                   <Unlink size={16} />
                 </button>
               </div>
@@ -113,7 +111,7 @@ export function GuardianProfileView({ childrenList }: { childrenList: Child[] })
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input type="checkbox" className="sr-only peer" defaultChecked />
-                <div className="w-11 h-6 bg-[var(--bg-tertiary)] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-[var(--border-color)] after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--brand-primary)]"></div>
+                <div className="w-11 h-6 bg-[var(--bg-tertiary)] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[var(--bg-tertiary)] after:border-[var(--border-color)] after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--brand-primary)]"></div>
               </label>
             </div>
 

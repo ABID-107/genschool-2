@@ -328,10 +328,10 @@ export const NOTICE_CATEGORIES: { value: NoticeCategory; label: string }[] = [
 ];
 
 export const NOTICE_PRIORITIES: { value: NoticePriority; label: string; color: string }[] = [
-  { value: 'low', label: 'Low', color: 'text-slate-500 bg-slate-100' },
-  { value: 'medium', label: 'Medium', color: 'text-blue-600 bg-blue-50' },
-  { value: 'high', label: 'High', color: 'text-amber-600 bg-amber-50' },
-  { value: 'urgent', label: 'Urgent', color: 'text-rose-600 bg-rose-50' },
+  { value: 'low', label: 'Low', color: 'text-[var(--text-muted)] bg-[var(--bg-secondary)]' },
+  { value: 'medium', label: 'Medium', color: 'text-[var(--color-info)] bg-[var(--color-info-bg)]' },
+  { value: 'high', label: 'High', color: 'text-[var(--color-warning)] bg-[var(--color-warning-bg)]' },
+  { value: 'urgent', label: 'Urgent', color: 'text-[var(--color-error)] bg-[var(--color-error-bg)]' },
 ];
 
 export const AUDIENCE_OPTIONS: { value: AudienceType | 'class' | 'section'; label: string }[] = [

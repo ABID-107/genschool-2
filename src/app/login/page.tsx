@@ -68,13 +68,13 @@ export default function LoginPage() {
         className="mt-8 sm:mx-auto sm:w-full sm:max-w-[420px] z-10"
       >
         <div className="glass-card py-10 px-6 sm:px-12">
-          <div className="flex bg-white/5 border border-white/10 p-1 rounded-xl mb-8 flex-wrap sm:flex-nowrap gap-1 sm:gap-0">
+          <div className="flex bg-[var(--bg-tertiary)] border border-[var(--border-light)] p-1 rounded-xl mb-8 flex-wrap sm:flex-nowrap gap-1 sm:gap-0">
             <button
               type="button"
               onClick={() => setRole("admin")}
               className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${
                 role === "admin"
-                  ? "bg-white/10 text-white shadow-sm border border-white/10"
+                  ? "bg-[var(--bg-tertiary)] text-white shadow-sm border border-[var(--border-light)]"
                   : "text-white/50 hover:text-white/80"
               }`}
             >
@@ -85,7 +85,7 @@ export default function LoginPage() {
               onClick={() => setRole("teacher")}
               className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${
                 role === "teacher"
-                  ? "bg-white/10 text-white shadow-sm border border-white/10"
+                  ? "bg-[var(--bg-tertiary)] text-white shadow-sm border border-[var(--border-light)]"
                   : "text-white/50 hover:text-white/80"
               }`}
             >
@@ -96,7 +96,7 @@ export default function LoginPage() {
               onClick={() => setRole("student")}
               className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${
                 role === "student"
-                  ? "bg-white/10 text-white shadow-sm border border-white/10"
+                  ? "bg-[var(--bg-tertiary)] text-white shadow-sm border border-[var(--border-light)]"
                   : "text-white/50 hover:text-white/80"
               }`}
             >
@@ -107,7 +107,7 @@ export default function LoginPage() {
               onClick={() => setRole("guardian")}
               className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${
                 role === "guardian"
-                  ? "bg-white/10 text-white shadow-sm border border-white/10"
+                  ? "bg-[var(--bg-tertiary)] text-white shadow-sm border border-[var(--border-light)]"
                   : "text-white/50 hover:text-white/80"
               }`}
             >
@@ -135,7 +135,7 @@ export default function LoginPage() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full bg-white/5 border border-white/10 text-white placeholder-white/30 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand-accent)]/40 focus:border-[var(--brand-accent)]/60 transition-all"
+                  className="block w-full bg-[var(--bg-tertiary)] border border-[var(--border-light)] text-white placeholder-white/30 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand-accent)]/40 focus:border-[var(--brand-accent)]/60 transition-all"
                   placeholder={role === "guardian" ? "student_username" : role === "admin" ? "admin@genschool.com" : role === "teacher" ? "teacher@genschool.com" : "student@genschool.com"}
                 />
               </div>
@@ -146,7 +146,7 @@ export default function LoginPage() {
                 <label htmlFor="password" className="block text-sm font-semibold text-white/80">
                   Password
                 </label>
-                <a href="#" className="text-sm font-medium text-[var(--brand-accent)] hover:text-amber-400 transition-colors">
+                <a href="#" className="text-sm font-medium text-[var(--brand-accent)] hover:text-[var(--color-warning)] transition-colors">
                   Forgot password?
                 </a>
               </div>
@@ -162,7 +162,7 @@ export default function LoginPage() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full bg-white/5 border border-white/10 text-white placeholder-white/30 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand-accent)]/40 focus:border-[var(--brand-accent)]/60 transition-all"
+                  className="block w-full bg-[var(--bg-tertiary)] border border-[var(--border-light)] text-white placeholder-white/30 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand-accent)]/40 focus:border-[var(--brand-accent)]/60 transition-all"
                   placeholder={role === "guardian" ? "DD-MM-YYYY" : "••••••••"}
                 />
               </div>
@@ -173,7 +173,7 @@ export default function LoginPage() {
                 id="remember-me"
                 name="remember-me"
                 type="checkbox"
-                className="h-4 w-4 rounded border-white/20 bg-white/5 text-[var(--brand-accent)] focus:ring-[var(--brand-accent)]/40"
+                className="h-4 w-4 rounded border-white/20 bg-[var(--bg-tertiary)] text-[var(--brand-accent)] focus:ring-[var(--brand-accent)]/40"
               />
               <label htmlFor="remember-me" className="ml-2 block text-sm text-white/50">
                 Remember me
@@ -198,7 +198,7 @@ export default function LoginPage() {
             <div className="mt-6">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-white/10" />
+                  <div className="w-full border-t border-[var(--border-light)]" />
                 </div>
                 <div className="relative flex justify-center text-sm">
                   <span className="bg-[var(--glass-bg)] px-2 text-white/40">Demo credentials</span>
@@ -210,10 +210,10 @@ export default function LoginPage() {
             </div>
           </form>
 
-          <div className="mt-6 pt-5 border-t border-white/10">
+          <div className="mt-6 pt-5 border-t border-[var(--border-light)]">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-white/10" />
+                <div className="w-full border-t border-[var(--border-light)]" />
               </div>
               <div className="relative flex justify-center text-xs">
                 <span className="bg-[var(--glass-bg)] px-2 text-white/40">Administrator access</span>
